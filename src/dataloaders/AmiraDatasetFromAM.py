@@ -3,6 +3,7 @@ from torch.utils.data import Dataset
 import h5py
 from pathlib import Path
 from src.dataloaders.utils import spatial_resample
+import numpy as np
 
 
 
@@ -15,7 +16,8 @@ class AmiraDatasetFromAM(Dataset):
         self.resample_mode = resample_mode
         
         for filepath in filepaths:
-            data = torch.from_numpy(self.read_amira_binary_mesh(filepath))
+            #print(filepath)
+            data = torch.from_numpy(self.read_amira_binary_mesh(filepath).copy())
             data = data[::timesample].permute(0,3,1,2)
             self.data_list.append(data)
             self.traj_list.append(torch.tensor(1))
@@ -23,7 +25,7 @@ class AmiraDatasetFromAM(Dataset):
                 self.ts = data.shape[0]
         
         self.data = torch.stack(self.data_list, dim=0)
-        print(self.data.shape)
+        #print(self.data.shape)
         self.traj = sum(self.traj_list)
 
     def read_amira_binary_mesh(self, filename):
