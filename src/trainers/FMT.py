@@ -32,25 +32,133 @@ from dataloaders.utils import get_dataset, ZeroShotSampler, spatial_resample
 from trainers.utils import animate_rollout, magnitude_vel, compute_energy_enstrophy_spectra
 from modelComp.utils import ACT_MAPPER, SKIPBLOCK_MAPPER
 
-from trainers.MTT import MTTtrainer, MTTmodel, MTTdata
-from trainers.utils import rollout_prb
+plt.style.use('dark_background')
+plt.rcParams['figure.facecolor'] = '#1F1F1F'
+plt.rcParams['axes.facecolor'] = '#1F1F1F'
+plt.rcParams['savefig.facecolor'] = '#1F1F1F'
 
 
+# following is a gpu mig bug fix
+if "MIG" in subprocess.check_output(["nvidia-smi", "-L"], text=True):
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    print('MIG GPU detected, using GPU 0')
+else:
+    print('No MIG GPU detected, using all available GPUs')
 
-class FMTtrainer(MTTtrainer):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        print('Initializing FlowMatching Trainer')
+torch.set_float32_matmul_precision('medium')
 
-    
+
+class FMTtrainer(L.LightningModule):
+    def __init__(self, cb, cd, cm, ct):
+        super().__init__()
+        self.cb = cb
+        self.cd = cd
+        self.cm = cm
+        self.ct = ct
+
     def init_modules(self):
-        print('Initializing FlowMatching Modules')
         self.modelmodule = FMTmodel(self.cb, self.cd, self.cm, self.ct)
         self.datamodule = FMTdata(self.cb, self.cd, self.cm, self.ct)
 
-class FMTmodel(MTTmodel):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def train(self):
+        self.init_modules()
+        self.modelmodule._initialize_model()
+        
+        num_gpus = torch.cuda.device_count()
+        print(f"Number of GPUs: {num_gpus} of type {torch.cuda.get_device_name(0)}")
+        wandb_logger = WandbLogger(project="FluidGPT", 
+                                   config = self.build_wandb_config(), 
+                                   name=self.cb.wandb_name, 
+                                   save_dir=self.cb.save_path + self.cb.folder_out
+                                   )
+        
+        callbacks = []
+        if self.cb.save_on:
+            
+            self.checkpoint_path = self.cb.save_path + self.cb.folder_out + self.cm.model_name + '/' + str(wandb_logger.experiment.id)
+            if not os.path.exists(self.checkpoint_path):
+                os.makedirs(self.checkpoint_path)
+            if not os.path.exists(self.cb.save_path + self.cb.folder_out):
+                os.makedirs(self.cb.save_path + self.cb.folder_out)
+            manualCheckpoint = ModelCheckpoint(
+                dirpath= self.checkpoint_path,
+                filename = "{epoch:04d}-{val_SS_loss_checkpoint:.6f}",
+                #filename=r"{epoch:04d}-val_SS_loss_dataloader_idx_0={val_SS_loss/dataloader_idx_0:.4f}",
+                monitor="val_SS_loss_checkpoint",#/dataloader_idx_0",
+                mode="min",  
+                save_top_k=5,           
+                every_n_epochs=1,       
+                save_weights_only=False,
+            )       
+            callbacks.append(manualCheckpoint)
+        else:
+            manualCheckpoint = None
+
+        trainer = L.Trainer(
+            precision="bf16-mixed" if platform.system() != "Windows" else "16-mixed",
+            accelerator="gpu",
+            devices= 'auto',
+            logger=wandb_logger,
+            strategy = self.ct.strategy if platform.system() != "Windows" else "auto",
+            max_epochs=self.ct.epochs,
+            num_sanity_val_steps=0, 
+            callbacks=callbacks
+        )
+        if self.cb.save_on:
+            print(f"Manual checkpointing and zero-shot split saving at {self.checkpoint_path}")
+        else:
+            print("No manual checkpointing or zero-shot split saving enabled")
+        trainer.fit(self.modelmodule, self.datamodule)
+
+    def build_wandb_config(self):
+        wandb_config = {}
+        configs = {
+        'cb': self.cb,
+        'cd': self.cd,
+        'cm': self.cm,
+        'ct': self.ct
+        }
+        def flatten_dict(d, parent_key=''):
+            items = []
+            for k, v in d.items():
+                new_key = f"{parent_key}.{k}" if parent_key else k
+                if isinstance(v, dict):
+                    items.extend(flatten_dict(v, new_key).items())
+                else:
+                    items.append((new_key, v))
+            return dict(items)
+
+        for prefix, config in configs.items():
+            flat_config = flatten_dict(config)
+            for key, value in flat_config.items():
+                wandb_config[f"{prefix}.{key}"] = value
+
+        return wandb_config
+
+class FMTmodel(L.LightningModule):
+    def __init__(self, cb, cd, cm, ct):
+        super().__init__()
+
+        self.cb = cb
+        self.cd = cd
+        self.cm = cm
+        self.ct = ct
+
+        self.base_path = self.cb.save_path + self.cb.folder_out
+        self.out_0 = self.base_path + self.ct.plottrain_out
+        self.out_1 = self.base_path + self.ct.plotval_out
+        self.out_2 = self.base_path + self.ct.plotvalf_out
+        self.out_3 = self.base_path + self.ct.anim_out
+        self.out_4 = self.base_path + self.ct.spectra_out
+
+        self.train_losses = []
+        self.val_SS_losses = []
+        self.val_FS_losses = []
+        self.epoch_time = None
+        self.log_time = None
+        
+        #self._initialize_model()   
+        self.counter = 0
         self.automatic_optimization = False
     
     def _initialize_model(self):
@@ -149,6 +257,156 @@ class FMTmodel(MTTmodel):
         """
         return val_loss
 
+    def configure_optimizers(self):
+        optimizer = torch.optim.AdamW(
+            self.model.parameters(),
+            lr=self.ct.init_lr,
+            weight_decay=self.ct.weight_decay
+        )
+        
+        scheduler = {
+            "scheduler": ReduceLROnPlateau(
+                optimizer,
+                mode='min', 
+                factor=0.1,
+                patience=self.ct.patience,
+                min_lr=1e-7
+            ),
+            "monitor": "val_SS_loss/dataloader_idx_0",
+            "interval": "epoch",
+            "frequency": 1
+        }
+        return {"optimizer": optimizer, "lr_scheduler": scheduler}
+
+    def on_train_epoch_start(self):
+        if not self.trainer.sanity_checking:#print(self.device)
+            dataloader = self.trainer.datamodule.train_dataloader()
+            if isinstance(dataloader.sampler, DistributedSampler):
+                dataloader.sampler.set_epoch(self.current_epoch)
+            
+                self.epoch_time = time.time()
+
+    
+    def on_validation_epoch_end(self):
+        val_SS_loss = np.mean(self.val_SS_losses)
+        self.log("val_SS_loss_checkpoint", val_SS_loss)
+
+        if not self.trainer.sanity_checking and rank_zero_only.rank == 0:
+            epoch = self.trainer.current_epoch
+            self.epoch_time = time.time() - self.epoch_time
+            self.log_time = time.time()
+
+            train_loss = np.mean(self.train_losses)
+            #val_SS_loss = np.mean(self.val_SS_losses)
+            #val_FS_loss = np.mean(self.val_FS_losses)
+            #self.log("val_SS_loss_checkpoint", val_SS_loss)
+
+            self.global_mean = self.trainer.datamodule.global_mean
+            self.global_std = self.trainer.datamodule.global_std
+
+            '''
+            self.log_dict({
+                "val_SS_loss": val_SS_loss,
+            }, prog_bar=False)
+            '''
+            
+            visuals = self.cb.viz and epoch % self.cb.viz_freq == 0
+            if visuals:
+                device = 'cuda' if torch.cuda.is_available() else 'cpu'
+                self.make_plot(self.out_1, mode='val', device=device)
+                self.make_plot(self.out_0, mode='train', device=device)
+                #self.make_plot(self.out_2, mode='val_forward', device=device)
+                stacked_pred, stacked_true, dataset_name = self.random_rollout(device=device)
+                self.make_anim(stacked_pred, stacked_true, dataset_name, self.out_3)
+                self.spectra_plot(stacked_pred, stacked_true, dataset_name, self.out_4)
+            
+            self.log_time = time.time() - self.log_time
+            self.logger.experiment.log({
+                "epoch": epoch,
+                "train_loss": train_loss,
+                "val_SS_loss": val_SS_loss,
+                #"val_FS_loss": val_FS_loss,
+                "Learning Rate": self.trainer.optimizers[0].param_groups[0]['lr'],
+                "Epoch Time": self.epoch_time,
+                "train_plot": wandb.Image(self.out_0) if visuals else None,
+                "val_plot": wandb.Image(self.out_1) if visuals else None,
+                #"val_forward_plot": wandb.Image(self.out_2) if visuals and os.path.exists(self.out_2) else None,
+                "val_anim": wandb.Video(self.out_3, format="gif") if visuals else None,
+                "val_spectra": wandb.Image(self.out_4) if visuals else None,
+                "Log Time": self.log_time
+            })
+
+        self.train_losses = []
+        self.val_SS_losses = []
+        #self.val_FS_losses = []
+
+    def spectra_plot(self, stacked_pred, stacked_true, dataset_name, output_path):
+        #clock = time.time()
+        stacked_pred, stacked_true = stacked_pred.squeeze(0), stacked_true.squeeze(0)
+        tmax = min(stacked_pred.shape[0], stacked_true.shape[0])
+        t1 = tmax // 4
+        tmax = tmax - 1
+        #print('maxt:', tmax)
+        #print('stacked_pred:', stacked_pred.shape)
+        #print('stacked_true:', stacked_true.shape)
+        #print()
+        #print('\nstarting spectra calculation ', time.time() - clock, '\n')
+        kinit, Einit, Zinit = compute_energy_enstrophy_spectra(stacked_true[0,0], stacked_true[0,1], dataset_name, Lx=1.0, Ly=1.0)
+        ktrue0, Etrue0, Ztrue0 = compute_energy_enstrophy_spectra(stacked_true[t1,0], stacked_true[t1,1], dataset_name, Lx=1.0, Ly=1.0)
+        kpred0, Epred0, Zpred0 = compute_energy_enstrophy_spectra(stacked_pred[t1,0], stacked_pred[t1,1], dataset_name, Lx=1.0, Ly=1.0)
+        ktrue1, Etrue1, Ztrue1 = compute_energy_enstrophy_spectra(stacked_true[tmax,0], stacked_true[tmax,1], dataset_name, Lx=1.0, Ly=1.0)
+        kpred1, Epred1, Zpred1 = compute_energy_enstrophy_spectra(stacked_pred[tmax,0], stacked_pred[tmax,1], dataset_name, Lx=1.0, Ly=1.0)
+        #print('\ncalculated spectra', time.time() - clock, '\n')
+
+        kinit, Einit, Zinit = kinit.cpu().numpy(), Einit.cpu().numpy(), Zinit.cpu().numpy()
+        ktrue0, Etrue0, Ztrue0 = ktrue0.cpu().numpy(), Etrue0.cpu().numpy(), Ztrue0.cpu().numpy()
+        kpred0, Epred0, Zpred0 = kpred0.cpu().numpy(), Epred0.cpu().numpy(), Zpred0.cpu().numpy()
+        ktrue1, Etrue1, Ztrue1 = ktrue1.cpu().numpy(), Etrue1.cpu().numpy(), Ztrue1.cpu().numpy()
+        kpred1, Epred1, Zpred1 = kpred1.cpu().numpy(), Epred1.cpu().numpy(), Zpred1.cpu().numpy()
+
+        fig, axs = plt.subplots(1, 2, figsize=(14, 5)) 
+        colors = ['#AA0140', '#D1205A', '#08457E', '#2D6FBF']
+    
+        ref_k = np.array([7,70])
+        ref_E_53 = (ref_k / ref_k[0])**(-5/3) * Etrue1[5]
+        ref_Z_3 = (ref_k / ref_k[0])**(-3) * Ztrue1[5]
+        
+        # energy spectrum with ref k^{-5/3}
+        axs[0].loglog(kinit, Einit, label='Init', color='gray')
+        axs[0].loglog(ktrue0, Etrue0, label=f'True (t={t1})', color=colors[0])
+        axs[0].loglog(kpred0, Epred0, label=f'Pred (t={t1})', color=colors[2])
+        axs[0].loglog(ktrue1, Etrue1, label=f'True (t={tmax})', color=colors[1])
+        axs[0].loglog(kpred1, Epred1, label=f'Pred (t={tmax})', color=colors[3])
+        
+        axs[0].loglog(ref_k, ref_E_53, 'k--', label=r'$k^{-5/3}$', color='white')
+        
+        axs[0].set_xlabel(r"Wavenumber $k$ [1/m]")
+        axs[0].set_ylabel(r"Energy [$\mathrm{m}^2/\mathrm{s}^2$]")
+        axs[0].set_title(r"Energy Spectrum ")
+        axs[0].legend()
+        axs[0].grid(True, color='gray')
+        
+        # now same for enstrophy
+        axs[1].loglog(kinit, Zinit, label='Init', color='gray')
+        axs[1].loglog(ktrue0, Ztrue0, label=f'True (t={t1})', color=colors[0])
+        axs[1].loglog(kpred0, Zpred0, label=f'Pred (t={t1})', color=colors[2])
+        axs[1].loglog(ktrue1, Ztrue1, label=f'True (t={tmax})', color=colors[1])
+        axs[1].loglog(kpred1, Zpred1, label=f'Pred (t={tmax})', color=colors[3])
+
+        axs[1].loglog(ref_k, ref_Z_3, 'k--', label=r'$k^{-3}$', color='white')
+        
+        axs[1].set_xlabel(r"Wavenumber $k$ [1/m]")
+        axs[1].set_ylabel(r"Enstrophy [$\mathrm{s}^{-2}/\mathrm{m}$]")
+        axs[1].set_title(r"Enstrophy Spectrum")
+        axs[1].legend()
+        axs[1].grid(True, color='gray')
+        
+        plt.suptitle("Isotropic Energy & Enstrophy Spectra with Theoretical Slopes, dataset: " + dataset_name, fontsize=20)
+        plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+        #print('\nsaving spectra to:', output_path, '- ', time.time() - clock, '\n')
+        plt.savefig(output_path, bbox_inches='tight')
+        #print('\nsaved spectra to:', output_path, '- ', time.time() - clock, '\n')
+        plt.close()
 
     def random_rollout(self, device='cuda'):
         self.model.eval()
@@ -211,6 +469,7 @@ class FMTmodel(MTTmodel):
             steps = self.ct.int_steps
             xt = self.random_fft_perturb(front, perturbation_strength=self.ct.perturbation_strength)
             if mode == 'val_forward':
+                pass
                 for _ in range(self.ct.forward_steps_loss):
                     for i, t in enumerate(torch.linspace(0, 1, steps), start=1):
                         pred = self(xt, t.to(label.device).expand(xt.size(0)))
@@ -268,84 +527,114 @@ class FMTmodel(MTTmodel):
         plt.close()
 
     
-class FMTdata(MTTdata):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+class FMTdata(L.LightningDataModule):
+    def __init__(self, cb, cd, cm, ct):
+        super().__init__()
+        self.cb = cb
+        self.cd = cd 
+        self.cm = cm  
+        self.ct = ct 
+    
+    def prepare_data(self): 
+
+        for item in self.cd.datasets:
+            
+            preproc_savepath = str(self.cb.data_base + 'preproc_' + item["name"])
+
+            if not os.path.exists(preproc_savepath):
+                print("preprocessing dataset", item["name"] , "at path", preproc_savepath, "...")
+                get_dataset(
+                    dataset_obj=PREPROC_MAPPER[item['ppclass']],
+                    preproc_savepath=preproc_savepath,
+                    folderPath=str(self.cb.data_base + item["path"]),
+                    file_ext=item["file_ext"],
+                    resample_shape=self.cd.resample_shape,
+                    resample_mode=self.cd.resample_mode,
+                    timesample=item["timesample"],
+                    dataset_name=item["name"]
+                )
+                
+            else:
+                print("folder", item["name"], "already exists, skipping preproccessing")
+
+        if hasattr(self.cd, 'preproc_only'):
+            if self.cd.preproc_only:
+                raise ValueError("Preprocessing only mode is enabled, stopping after preprocessing.")
 
     def setup(self, stage=None):
     
-            self.train_datasets = []
-            self.val_datasets = []
-            #self.val_forward_datasets = []
-            self.train_samplers = []
-            self.val_samplers = []
-            #self.val_forward_samplers = []
+        self.train_datasets = []
+        self.val_datasets = []
+        #self.val_forward_datasets = []
+        self.train_samplers = []
+        self.val_samplers = []
+        #self.val_forward_samplers = []
+        
+        means, stds, sizes = [], [], []
+                
+        for item in self.cd.datasets:
+            preproc_savepath = str(self.cb.data_base + 'preproc_' + item["name"])
+            dataset_SS = DiskDatasetDivFM(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=1)
+            #dataset_FS = DiskDatasetDivFM(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=self.ct.forward_steps_loss)
+
+            # generate random seed
+            random_seed = random.randint(0, 10000)
+            train_sampler = ZeroShotSampler(dataset_SS, train_ratio=self.ct.train_ratio, split="train", seed=random_seed, forward_steps=1)
+            val_sampler = ZeroShotSampler(dataset_SS, train_ratio=self.ct.train_ratio, split="val", seed=random_seed, forward_steps=1)
+            #val_forward_sampler = ZeroShotSampler(dataset_FS, train_ratio=self.ct.train_ratio, split="val", seed=random_seed, forward_steps=self.ct.forward_steps_loss)
+
+            self.train_datasets.append(Subset(dataset_SS, train_sampler.indices))
+            self.val_datasets.append(Subset(dataset_SS, val_sampler.indices))
+            #self.val_forward_datasets.append(Subset(dataset_FS, val_forward_sampler.indices))
+            self.train_samplers.append(train_sampler)
+            self.val_samplers.append(val_sampler)
+            #self.val_forward_samplers.append(val_forward_sampler)
             
-            means, stds, sizes = [], [], []
-                    
-            for item in self.cd.datasets:
-                preproc_savepath = str(self.cb.data_base + 'preproc_' + item["name"])
-                dataset_SS = DiskDatasetDivFM(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=1)
-                #dataset_FS = DiskDatasetDivFM(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=self.ct.forward_steps_loss)
-    
-                # generate random seed
-                random_seed = random.randint(0, 10000)
-                train_sampler = ZeroShotSampler(dataset_SS, train_ratio=self.ct.train_ratio, split="train", seed=random_seed, forward_steps=1)
-                val_sampler = ZeroShotSampler(dataset_SS, train_ratio=self.ct.train_ratio, split="val", seed=random_seed, forward_steps=1)
-                #val_forward_sampler = ZeroShotSampler(dataset_FS, train_ratio=self.ct.train_ratio, split="val", seed=random_seed, forward_steps=self.ct.forward_steps_loss)
-    
-                self.train_datasets.append(Subset(dataset_SS, train_sampler.indices))
-                self.val_datasets.append(Subset(dataset_SS, val_sampler.indices))
-                #self.val_forward_datasets.append(Subset(dataset_FS, val_forward_sampler.indices))
-                self.train_samplers.append(train_sampler)
-                self.val_samplers.append(val_sampler)
-                #self.val_forward_samplers.append(val_forward_sampler)
+            #torch.synchronize() 
+            split = {
+                "name": item["name"],
+                "seed": random_seed,
+                "train_trajs": train_sampler.train_trajs,
+                "val_trajs": val_sampler.val_trajs,
+            #    "val_forward_trajs": val_forward_sampler.val_trajs,
+                "train_idxs": train_sampler.indices,
+                "val_idxs": val_sampler.indices,
+            #    "val_forward_idxs": val_forward_sampler.indices,
+            }
+            if self.cb.save_on:
+                for callback in self.trainer.callbacks:
+                    if isinstance(callback, ModelCheckpoint): # include the rank
+                        save_split_path = os.path.join(callback.dirpath, "traj_split_" + item["name"] + "rank" + str(dist.get_rank())+ ".json")
+                if save_split_path is None:
+                    raise ValueError("ModelCheckpoint callback not found, unable to save trajectory split.")
+                with open(save_split_path, "w") as f:
+                    json.dump(split, f, indent=0)
+                if wandb.run is not None:
+                    wandb.save(save_split_path)
+            
+            mean_i = dataset_SS.avg
+            std_i = dataset_SS.std
+            N_i = np.prod(dataset_SS.datashape)
+
+            means.append(mean_i)
+            stds.append(std_i)
+            sizes.append(N_i)
+            print("dataset", item["name"], "loaded,", np.prod(dataset_SS.datashape), "elements")
+
+        means = np.array(means)
+        stds = np.array(stds)
+        sizes = np.array(sizes)
+
+        self.global_mean = np.sum(sizes * means) / np.sum(sizes)
+        self.global_std = np.sqrt(np.sum(sizes * (stds**2 + (means - self.global_mean)**2)) / np.sum(sizes))
+        if self.ct.normalize:
+            for dataset_list in [self.train_datasets, self.val_datasets]:#, self.val_forward_datasets]:
+                for subset in dataset_list:
+                    subset.dataset.avgnorm = self.global_mean
+                    subset.dataset.stdnorm = self.global_std
                 
-                #torch.synchronize() 
-                split = {
-                    "name": item["name"],
-                    "seed": random_seed,
-                    "train_trajs": train_sampler.train_trajs,
-                    "val_trajs": val_sampler.val_trajs,
-                #    "val_forward_trajs": val_forward_sampler.val_trajs,
-                    "train_idxs": train_sampler.indices,
-                    "val_idxs": val_sampler.indices,
-                #    "val_forward_idxs": val_forward_sampler.indices,
-                }
-                if self.cb.save_on:
-                    for callback in self.trainer.callbacks:
-                        if isinstance(callback, ModelCheckpoint): # include the rank
-                            save_split_path = os.path.join(callback.dirpath, "traj_split_" + item["name"] + "rank" + str(dist.get_rank())+ ".json")
-                    if save_split_path is None:
-                        raise ValueError("ModelCheckpoint callback not found, unable to save trajectory split.")
-                    with open(save_split_path, "w") as f:
-                        json.dump(split, f, indent=0)
-                    if wandb.run is not None:
-                        wandb.save(save_split_path)
-                
-                mean_i = dataset_SS.avg
-                std_i = dataset_SS.std
-                N_i = np.prod(dataset_SS.datashape)
-    
-                means.append(mean_i)
-                stds.append(std_i)
-                sizes.append(N_i)
-                print("dataset", item["name"], "loaded,", np.prod(dataset_SS.datashape), "elements")
-    
-            means = np.array(means)
-            stds = np.array(stds)
-            sizes = np.array(sizes)
-    
-            self.global_mean = np.sum(sizes * means) / np.sum(sizes)
-            self.global_std = np.sqrt(np.sum(sizes * (stds**2 + (means - self.global_mean)**2)) / np.sum(sizes))
-            if self.ct.normalize:
-                for dataset_list in [self.train_datasets, self.val_datasets]:#, self.val_forward_datasets]:
-                    for subset in dataset_list:
-                        subset.dataset.avgnorm = self.global_mean
-                        subset.dataset.stdnorm = self.global_std
-                    
-            self.train_dataset = ConcatDataset(self.train_datasets)
-            self.val_dataset = ConcatDataset(self.val_datasets)
-            #self.val_forward_dataset = ConcatDataset(self.val_forward_datasets)
-            print("datasets ready")
+        self.train_dataset = ConcatDataset(self.train_datasets)
+        self.val_dataset = ConcatDataset(self.val_datasets)
+        #self.val_forward_dataset = ConcatDataset(self.val_forward_datasets)
+        print("datasets ready")
 
