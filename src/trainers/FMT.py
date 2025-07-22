@@ -35,10 +35,13 @@ from modelComp.utils import ACT_MAPPER, SKIPBLOCK_MAPPER
 from trainers.MTT import MTTtrainer, MTTmodel, MTTdata
 from trainers.utils import rollout_prb
 
+
+
 class FMTtrainer(MTTtrainer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         print('Initializing FlowMatching Trainer')
+
     
     def init_modules(self):
         print('Initializing FlowMatching Modules')
