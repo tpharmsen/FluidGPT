@@ -31,6 +31,7 @@ from dataloaders import PREPROC_MAPPER
 from dataloaders.utils import get_dataset, ZeroShotSampler, spatial_resample
 from trainers.utils import animate_rollout, magnitude_vel, compute_energy_enstrophy_spectra
 from modelComp.utils import ACT_MAPPER, SKIPBLOCK_MAPPER
+from trainers.utils import rollout_prb
 
 plt.style.use('dark_background')
 plt.rcParams['figure.facecolor'] = '#1F1F1F'
@@ -200,7 +201,8 @@ class FMTmodel(L.LightningModule):
         #print('prior:', prior.shape, 'target:', target.shape)
         total_loss = 0.0
 
-        for _ in range(self.ct.train_steps_per_batch):
+        for counter in range(self.ct.train_steps_per_batch):
+            print(f"Training step {counter} for batch {batch_idx}")
             opt.zero_grad()
             #xnoise = self.random_fft_perturb(ta, self.ct.perturbation_strength)
             tf = torch.rand(target.shape[0], device=target.device) #* (1 - eps) + eps
@@ -221,17 +223,17 @@ class FMTmodel(L.LightningModule):
         return avg_loss
         #return train_loss
 
-    def validation_step(self, batch, batch_idx, dataloader_idx):
+    def validation_step(self, batch, batch_idx):#, dataloader_idx):
 
         prior, target = batch
 
-        if dataloader_idx == 0:
+        #if dataloader_idx == 0:
             #xprior = self.random_fft_perturb(front, self.ct.perturbation_strength)
-            tf = torch.rand(target.size(0), device=target.device)
-            xt = (1 - tf[:, None, None, None, None]) * prior + tf[:, None, None, None, None] * target
-            target_vector = target - prior
-            pred = self(xt, tf)
-            val_loss = F.mse_loss(pred, target_vector, reduction='mean')
+        tf = torch.rand(target.size(0), device=target.device)
+        xt = (1 - tf[:, None, None, None, None]) * prior + tf[:, None, None, None, None] * target
+        target_vector = target - prior
+        pred = self(xt, tf)
+        val_loss = F.mse_loss(pred, target_vector, reduction='mean')
         #elif dataloader_idx == 1: # no forward step loss in flowmatching training
             
         """

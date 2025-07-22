@@ -184,9 +184,9 @@ class FluidGPT_FM(nn.Module):
 
         # flowmatching stuff
         t = gen_t_embedding(t, self.flowmatching_emb_dim)
-        t = self.flowt_proj(t)
-        t = t.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1], x.shape[2], 1)  
-        x = x + t
+        t1 = self.flowt_proj(t)
+        t1 = t1.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1], x.shape[2], 1)  
+        x = x + t1
 
         # ===== DOWN =====
         for i, module_list in enumerate(self.blockDown):
