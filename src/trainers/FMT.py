@@ -638,3 +638,58 @@ class FMTdata(L.LightningDataModule):
         #self.val_forward_dataset = ConcatDataset(self.val_forward_datasets)
         print("datasets ready")
 
+
+    def create_sampler(self, dataset, shuffle):
+        if dist.is_available() and dist.is_initialized():
+            return DistributedSampler(
+                dataset,
+                shuffle=shuffle,
+                drop_last=False,
+                rank=dist.get_rank(),
+                num_replicas=dist.get_world_size()
+            )
+        return None
+
+    def train_dataloader(self):
+        train_sampler = self.create_sampler(self.train_dataset, shuffle=True)
+        
+        return DataLoader(
+            self.train_dataset,
+            batch_size=self.ct.batch_size,
+            shuffle=(train_sampler is None),
+            sampler=train_sampler,
+            pin_memory=self.ct.pin_memory, 
+            num_workers=self.ct.num_workers,
+            persistent_workers=self.ct.persistent_workers if self.ct.num_workers > 0 else False,
+            prefetch_factor=self.ct.prefetch_factor if self.ct.num_workers > 0 else None
+        )
+
+    def val_dataloader(self):
+        val_SS_sampler = self.create_sampler(self.val_dataset, shuffle=True)
+        #val_FS_sampler = self.create_sampler(self.val_forward_dataset, shuffle=True)
+
+        val_SS_loader = DataLoader(
+            self.val_dataset,
+            batch_size=self.ct.batch_size,
+            shuffle=(val_SS_sampler is None),
+            sampler=val_SS_sampler, 
+            pin_memory=self.ct.pin_memory, 
+            num_workers=self.ct.num_workers,
+            persistent_workers=self.ct.persistent_workers if self.ct.num_workers > 0 else False,
+            prefetch_factor=self.ct.prefetch_factor if self.ct.num_workers > 0 else None
+        )
+        """
+        val_FS_loader = DataLoader(
+            self.val_forward_dataset,
+            batch_size=self.ct.batch_size,
+            shuffle=(val_FS_sampler is None),
+            sampler=val_FS_sampler,
+            pin_memory=self.ct.pin_memory, 
+            num_workers=self.ct.num_workers,
+            persistent_workers=self.ct.persistent_workers if self.ct.num_workers > 0 else False,
+            prefetch_factor=self.ct.prefetch_factor if self.ct.num_workers > 0 else None
+        )
+        return [val_SS_loader, val_FS_loader]
+        """
+        return val_SS_loader
+
