@@ -202,7 +202,7 @@ class FMTmodel(L.LightningModule):
         total_loss = 0.0
 
         for counter in range(self.ct.train_steps_per_batch):
-            print(f"Training step {counter} for batch {batch_idx}")
+            #print(f"Training step {counter} for batch {batch_idx}")
             opt.zero_grad()
             #xnoise = self.random_fft_perturb(ta, self.ct.perturbation_strength)
             tf = torch.rand(target.shape[0], device=target.device) #* (1 - eps) + eps
@@ -435,6 +435,14 @@ class FMTmodel(L.LightningModule):
             #print('stacked_pred:', stacked_pred.shape)
             #print('stacked_true:', stacked_true.shape)
             return stacked_pred, stacked_true, dataset_name
+
+    def make_anim(self, stacked_pred, stacked_true, dataset_name, output_path):
+        stacked_pred = magnitude_vel(stacked_pred)
+        stacked_true = magnitude_vel(stacked_true)
+        #print('stacked_pred:', stacked_pred.shape)
+        #print('stacked_true:', stacked_true.shape)
+        animate_rollout(stacked_pred.squeeze(0), stacked_true.squeeze(0), dataset_name, output_path)
+
         
     def make_plot(self, output_path, mode='val', device='cuda'):
         self.model.eval()
