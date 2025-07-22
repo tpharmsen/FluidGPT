@@ -89,6 +89,7 @@ class FMTmodel(MTTmodel):
         
 
         prior, target = batch
+        #print('prior:', prior.shape, 'target:', target.shape)
         total_loss = 0.0
 
         for _ in range(self.ct.train_steps_per_batch):
@@ -270,4 +271,81 @@ class FMTmodel(MTTmodel):
 class FMTdata(MTTdata):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    def setup(self, stage=None):
+    
+            self.train_datasets = []
+            self.val_datasets = []
+            #self.val_forward_datasets = []
+            self.train_samplers = []
+            self.val_samplers = []
+            #self.val_forward_samplers = []
+            
+            means, stds, sizes = [], [], []
+                    
+            for item in self.cd.datasets:
+                preproc_savepath = str(self.cb.data_base + 'preproc_' + item["name"])
+                dataset_SS = DiskDatasetDivFM(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=1)
+                #dataset_FS = DiskDatasetDivFM(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=self.ct.forward_steps_loss)
+    
+                # generate random seed
+                random_seed = random.randint(0, 10000)
+                train_sampler = ZeroShotSampler(dataset_SS, train_ratio=self.ct.train_ratio, split="train", seed=random_seed, forward_steps=1)
+                val_sampler = ZeroShotSampler(dataset_SS, train_ratio=self.ct.train_ratio, split="val", seed=random_seed, forward_steps=1)
+                #val_forward_sampler = ZeroShotSampler(dataset_FS, train_ratio=self.ct.train_ratio, split="val", seed=random_seed, forward_steps=self.ct.forward_steps_loss)
+    
+                self.train_datasets.append(Subset(dataset_SS, train_sampler.indices))
+                self.val_datasets.append(Subset(dataset_SS, val_sampler.indices))
+                #self.val_forward_datasets.append(Subset(dataset_FS, val_forward_sampler.indices))
+                self.train_samplers.append(train_sampler)
+                self.val_samplers.append(val_sampler)
+                #self.val_forward_samplers.append(val_forward_sampler)
+                
+                #torch.synchronize() 
+                split = {
+                    "name": item["name"],
+                    "seed": random_seed,
+                    "train_trajs": train_sampler.train_trajs,
+                    "val_trajs": val_sampler.val_trajs,
+                #    "val_forward_trajs": val_forward_sampler.val_trajs,
+                    "train_idxs": train_sampler.indices,
+                    "val_idxs": val_sampler.indices,
+                #    "val_forward_idxs": val_forward_sampler.indices,
+                }
+                if self.cb.save_on:
+                    for callback in self.trainer.callbacks:
+                        if isinstance(callback, ModelCheckpoint): # include the rank
+                            save_split_path = os.path.join(callback.dirpath, "traj_split_" + item["name"] + "rank" + str(dist.get_rank())+ ".json")
+                    if save_split_path is None:
+                        raise ValueError("ModelCheckpoint callback not found, unable to save trajectory split.")
+                    with open(save_split_path, "w") as f:
+                        json.dump(split, f, indent=0)
+                    if wandb.run is not None:
+                        wandb.save(save_split_path)
+                
+                mean_i = dataset_SS.avg
+                std_i = dataset_SS.std
+                N_i = np.prod(dataset_SS.datashape)
+    
+                means.append(mean_i)
+                stds.append(std_i)
+                sizes.append(N_i)
+                print("dataset", item["name"], "loaded,", np.prod(dataset_SS.datashape), "elements")
+    
+            means = np.array(means)
+            stds = np.array(stds)
+            sizes = np.array(sizes)
+    
+            self.global_mean = np.sum(sizes * means) / np.sum(sizes)
+            self.global_std = np.sqrt(np.sum(sizes * (stds**2 + (means - self.global_mean)**2)) / np.sum(sizes))
+            if self.ct.normalize:
+                for dataset_list in [self.train_datasets, self.val_datasets]:#, self.val_forward_datasets]:
+                    for subset in dataset_list:
+                        subset.dataset.avgnorm = self.global_mean
+                        subset.dataset.stdnorm = self.global_std
+                    
+            self.train_dataset = ConcatDataset(self.train_datasets)
+            self.val_dataset = ConcatDataset(self.val_datasets)
+            #self.val_forward_dataset = ConcatDataset(self.val_forward_datasets)
+            print("datasets ready")
 
