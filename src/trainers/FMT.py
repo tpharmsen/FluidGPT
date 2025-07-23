@@ -58,7 +58,7 @@ class FMTtrainer(L.LightningModule):
         self.cd = cd
         self.cm = cm
         self.ct = ct
-        self.automatic_optimization = False
+        #self.automatic_optimization = False
 
     def init_modules(self):
         self.modelmodule = FMTmodel(self.cb, self.cd, self.cm, self.ct)
@@ -163,7 +163,7 @@ class FMTmodel(L.LightningModule):
         
         #self._initialize_model()   
         self.counter = 0
-        self.automatic_optimization = False
+        #self.automatic_optimization = False
     
     def _initialize_model(self):
         #print()
@@ -191,6 +191,7 @@ class FMTmodel(L.LightningModule):
         return self.model(x, t)
 
     def training_step(self, batch, batch_idx):
+        """
         #print("Automatic opt:", self.automatic_optimization)
         opt = self.optimizers()
         prior, target = batch
@@ -219,7 +220,7 @@ class FMTmodel(L.LightningModule):
             self.train_losses.append(train_loss.item())
 
         avg_loss = total_loss / self.ct.train_steps_per_batch
-        return avg_loss
+        
         """
         prior, target = batch
         tf = torch.rand(target.size(0), device=target.device)
@@ -233,7 +234,8 @@ class FMTmodel(L.LightningModule):
         #train_loss = train_loss.item()
         self.train_losses.append(train_loss.item())
         return train_loss
-        """"
+        #"""
+        #return avg_loss
 
     def validation_step(self, batch, batch_idx):#, dataloader_idx):
 
@@ -311,18 +313,12 @@ class FMTmodel(L.LightningModule):
             visuals = self.cb.viz and epoch % self.cb.viz_freq == 0
             if visuals:
                 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-                #print("flag 0\n")
                 self.make_plot(self.out_1, mode='val', device=device)
-                #print("flag 1\n")
                 self.make_plot(self.out_0, mode='train', device=device)
-                #print("flag 2\n")
                 #self.make_plot(self.out_2, mode='val_forward', device=device)
-                stacked_pred, stacked_true, dataset_name = self.random_rollout(device=device)
-                #print("flag 3\n")
-                self.make_anim(stacked_pred, stacked_true, dataset_name, self.out_3)
-                #print("flag 4\n")
-                self.spectra_plot(stacked_pred, stacked_true, dataset_name, self.out_4)
-                #print("flag 5\n")
+                #stacked_pred, stacked_true, dataset_name = self.random_rollout(device=device)
+                #self.make_anim(stacked_pred, stacked_true, dataset_name, self.out_3)
+                #self.spectra_plot(stacked_pred, stacked_true, dataset_name, self.out_4)
             
             self.log_time = time.time() - self.log_time
             self.logger.experiment.log({
@@ -335,8 +331,8 @@ class FMTmodel(L.LightningModule):
                 "train_plot": wandb.Image(self.out_0) if visuals else None,
                 "val_plot": wandb.Image(self.out_1) if visuals else None,
                 #"val_forward_plot": wandb.Image(self.out_2) if visuals and os.path.exists(self.out_2) else None,
-                "val_anim": wandb.Video(self.out_3, format="gif") if visuals else None,
-                "val_spectra": wandb.Image(self.out_4) if visuals else None,
+                #"val_anim": wandb.Video(self.out_3, format="gif") if visuals else None,
+                #"val_spectra": wandb.Image(self.out_4) if visuals else None,
                 "Log Time": self.log_time
             })
 

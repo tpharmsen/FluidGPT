@@ -1,7 +1,7 @@
 epochs: 100
 batch_size: 16
-init_lr: 5.0e-4
-patience: 2
+init_lr: 1.0e-3
+patience: 10
 weight_decay: 0.01
 inj_noise: False
 train_ratio: 0.8
@@ -15,7 +15,7 @@ strategy: "ddp"
 
 perturbation_strength: 0.4
 int_steps: 25
-train_steps_per_batch: 10
+train_steps_per_batch: 20
 
 plottrain_out: "plot_train.png"
 plotval_out: "plot_val.png"
