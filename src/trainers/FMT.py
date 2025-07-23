@@ -191,7 +191,7 @@ class FMTmodel(L.LightningModule):
         return self.model(x, t)
 
     def training_step(self, batch, batch_idx):
-        print("Automatic opt:", self.automatic_optimization)
+        #print("Automatic opt:", self.automatic_optimization)
         opt = self.optimizers()
         prior, target = batch
         #print('prior:', prior.shape, 'target:', target.shape)
@@ -208,7 +208,8 @@ class FMTmodel(L.LightningModule):
             xt = t_expand * target.clone() + (1 - t_expand) * prior.clone()
             target_vector = target.clone() - prior.clone()
             pred = self(xt, tf)
-            train_loss = F.mse_loss(pred, target_vector, reduction='mean')
+            #train_loss = F.mse_loss(pred, target_vector, reduction='mean')
+            train_loss = ((pred - target_vector)**2).mean()
             
             # not sure if correct loss is returned
             opt.zero_grad()
@@ -219,7 +220,20 @@ class FMTmodel(L.LightningModule):
 
         avg_loss = total_loss / self.ct.train_steps_per_batch
         return avg_loss
-        #return train_loss
+        """
+        prior, target = batch
+        tf = torch.rand(target.size(0), device=target.device)
+        t_expand = tf.view(-1, 1, 1, 1, 1).repeat(
+            1, target.shape[1], target.shape[2], target.shape[3], target.shape[4]
+        )
+        xt = t_expand * target.clone() + (1 - t_expand) * prior.clone()
+        target_vector = target.clone() - prior.clone()
+        pred = self(xt, tf)
+        train_loss = ((pred - target_vector)**2).mean()
+        #train_loss = train_loss.item()
+        self.train_losses.append(train_loss.item())
+        return train_loss
+        """"
 
     def validation_step(self, batch, batch_idx):#, dataloader_idx):
 
@@ -235,7 +249,8 @@ class FMTmodel(L.LightningModule):
         target_vector = target.clone() - prior.clone()
         pred = self(xt, tf)
         #print(pred.shape, target_vector.shape, target.shape)
-        val_loss = F.mse_loss(pred, target_vector, reduction='mean')
+        #val_loss = F.mse_loss(pred, target_vector, reduction='mean')
+        val_loss = ((pred - target_vector)**2).mean()
         val_loss = val_loss.item()
         self.val_SS_losses.append(val_loss)
         return val_loss
@@ -255,7 +270,7 @@ class FMTmodel(L.LightningModule):
                 patience=self.ct.patience,
                 min_lr=1e-7
             ),
-            "monitor": "val_SS_loss",
+            "monitor": "val_SS_loss_checkpoint",
             "interval": "epoch",
             "frequency": 1
         }
