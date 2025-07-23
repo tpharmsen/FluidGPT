@@ -156,7 +156,7 @@ class FMTmodel(L.LightningModule):
 
         self.train_losses = []
         self.val_SS_losses = []
-        self.val_FS_losses = []
+        #self.val_FS_losses = []
         self.epoch_time = None
         self.log_time = None
         
@@ -230,8 +230,10 @@ class FMTmodel(L.LightningModule):
         xt = t_expand * target.clone() + (1 - t_expand) * prior.clone()
         target_vector = target.clone() - prior.clone()
         pred = self(xt, tf)
+        print(pred.shape, target_vector.shape, target.shape)
         val_loss = F.mse_loss(pred, target_vector, reduction='mean')
         val_loss = val_loss.item()
+        self.val_SS_losses.append(val_loss)
         return val_loss
 
     def configure_optimizers(self):
