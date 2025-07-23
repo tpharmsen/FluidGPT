@@ -228,12 +228,12 @@ def rollout_det(front, model, steps):
     preds = torch.cat(preds, dim=1)
     return preds
 
-def rollout_prb(front, model, steps, perturb_func, perturbation_strength, int_steps):
+def rollout_prb(front, model, steps, int_steps):
     model.eval()
     preds = []
     preds.append(front)
     with torch.no_grad():
-        xt = perturb_func(front, perturbation_strength=perturbation_strength)
+        xt = front.clone()
         for _ in range(steps - 1):
             for i, t in enumerate(torch.linspace(0, 1, int_steps), start=1):
                 pred = model(xt, t.to(xt.device).expand(xt.size(0)))

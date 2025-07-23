@@ -188,22 +188,14 @@ class FMTmodel(L.LightningModule):
         
     def forward(self, x, t):
         return self.model(x, t)
-        
-    def random_fft_perturb(self, x, perturbation_strength):
-        x_fft = torch.fft.fftshift(torch.fft.fft2(x, dim=(-2, -1)))
-        x_fft = x_fft * torch.exp(1j * torch.randn_like(x_fft) * perturbation_strength)
-        x_recon = torch.fft.ifft2(torch.fft.ifftshift(x_fft)).real
-        return x_recon
 
     def training_step(self, batch, batch_idx):
         opt = self.optimizers()
-        
-
         prior, target = batch
         #print('prior:', prior.shape, 'target:', target.shape)
         total_loss = 0.0
 
-        for counter in range(self.ct.train_steps_per_batch):
+        for _ in range(self.ct.train_steps_per_batch):
             #print(f"Training step {counter} for batch {batch_idx}")
             opt.zero_grad()
             #xnoise = self.random_fft_perturb(ta, self.ct.perturbation_strength)
@@ -232,33 +224,14 @@ class FMTmodel(L.LightningModule):
         #if dataloader_idx == 0:
             #xprior = self.random_fft_perturb(front, self.ct.perturbation_strength)
         tf = torch.rand(target.size(0), device=target.device)
-        xt = (1 - tf[:, None, None, None, None]) * prior + tf[:, None, None, None, None] * target
-        target_vector = target - prior
+        t_expand = tf.view(-1, 1, 1, 1, 1).repeat(
+                    1, target.shape[1], target.shape[2], target.shape[3], target.shape[4]
+                )
+        xt = t_expand * target.clone() + (1 - t_expand) * prior.clone()
+        target_vector = target.clone() - prior.clone()
         pred = self(xt, tf)
         val_loss = F.mse_loss(pred, target_vector, reduction='mean')
-        #elif dataloader_idx == 1: # no forward step loss in flowmatching training
-            
-        """
-        steps = self.ct.int_steps
-        if dataloader_idx == 0:
-            xt = self.random_fft_perturb(front, self.ct.perturbation_strength)
-            for i, t in enumerate(torch.linspace(0, 1, steps), start=1):
-                pred = self(xt, t.to(label.device).expand(xt.size(0)))
-                xt = xt + (1 / steps) * pred
-            val_loss = F.mse_loss(pred, label, reduction='mean')
-            self.val_SS_losses.append(val_loss.item())
-            self.log("val_SS_loss", val_loss, on_epoch=True, prog_bar=False, sync_dist=True)
-        elif dataloader_idx == 1:
-            # a few forward steps for the forward step loss
-            xt = self.random_fft_perturb(front, self.ct.perturbation_strength)
-            for _ in range(self.ct.forward_steps_loss):
-                for i, t in enumerate(torch.linspace(0, 1, steps), start=1):
-                    pred = self(xt, t.to(label.device).expand(xt.size(0)))
-                    xt = xt + (1 / steps) * pred
-            val_loss = F.mse_loss(xt, label, reduction='mean')
-            self.val_FS_losses.append(val_loss.item())
-            #self.log("val_FS_loss", val_loss, on_epoch=True, prog_bar=False, sync_dist=True)
-        """
+        val_loss = val_loss.item()
         return val_loss
 
     def configure_optimizers(self):
@@ -276,7 +249,7 @@ class FMTmodel(L.LightningModule):
                 patience=self.ct.patience,
                 min_lr=1e-7
             ),
-            "monitor": "val_SS_loss/dataloader_idx_0",
+            "monitor": "val_SS_loss",
             "interval": "epoch",
             "frequency": 1
         }
@@ -317,12 +290,18 @@ class FMTmodel(L.LightningModule):
             visuals = self.cb.viz and epoch % self.cb.viz_freq == 0
             if visuals:
                 device = 'cuda' if torch.cuda.is_available() else 'cpu'
+                print("flag 0\n")
                 self.make_plot(self.out_1, mode='val', device=device)
+                print("flag 1\n")
                 self.make_plot(self.out_0, mode='train', device=device)
+                print("flag 2\n")
                 #self.make_plot(self.out_2, mode='val_forward', device=device)
                 stacked_pred, stacked_true, dataset_name = self.random_rollout(device=device)
+                print("flag 3\n")
                 self.make_anim(stacked_pred, stacked_true, dataset_name, self.out_3)
+                print("flag 4\n")
                 self.spectra_plot(stacked_pred, stacked_true, dataset_name, self.out_4)
+                print("flag 5\n")
             
             self.log_time = time.time() - self.log_time
             self.logger.experiment.log({
@@ -419,13 +398,9 @@ class FMTmodel(L.LightningModule):
             traj_idx = self.trainer.datamodule.val_samplers[dataset_idx].random_val_traj()
             val_traj = self.trainer.datamodule.val_datasets[dataset_idx].dataset.get_single_traj(traj_idx)
             #print('val_traj:', val_traj.shape)
-            if self.ct.strategy == "deepspeed":
-                front = val_traj[:self.cm.temporal_bundling].unsqueeze(0).to(device).to(torch.bfloat16)
-            else:
-                front = val_traj[:self.cm.temporal_bundling].unsqueeze(0).float().to(device)#.to(torch.bfloat16)
+            front = val_traj[:self.cm.temporal_bundling].unsqueeze(0).float().to(device)#.to(torch.bfloat16)
             #print('len:', len(val_traj) // self.cm.temporal_bundling)
             stacked_pred = rollout_prb(front, self.model, len(val_traj) // self.cm.temporal_bundling, 
-                                       self.random_fft_perturb, self.ct.perturbation_strength,
                                        self.ct.int_steps)
             stacked_pred = stacked_pred.float() #.to(torch.bfloat16) 
             #print('stacked_pred:', stacked_pred.shape)
@@ -472,14 +447,11 @@ class FMTmodel(L.LightningModule):
             raise ValueError('PLOTMODE NOT RECOGNIZED')
 
         front, label = front.to(device).unsqueeze(0), label.to(device).unsqueeze(0)
-        if self.ct.strategy == "deepspeed":
-            front, label = front[0].unsqueeze(0).to(torch.bfloat16), label[0].unsqueeze(0).to(torch.bfloat16)
-        else:
-            front, label = front[0].unsqueeze(0).float(), label[0].unsqueeze(0).float()  # .to(torch.bfloat16)
+        front, label = front[0].unsqueeze(0).float(), label[0].unsqueeze(0).float()  # .to(torch.bfloat16)
         #front, label = front[0].unsqueeze(0).to(torch.bfloat16), label[0].unsqueeze(0).to(torch.bfloat16)
         with torch.no_grad():
             steps = self.ct.int_steps
-            xt = self.random_fft_perturb(front, perturbation_strength=self.ct.perturbation_strength)
+            xt = front.clone()
             if mode == 'val_forward':
                 pass
                 for _ in range(self.ct.forward_steps_loss):
