@@ -316,8 +316,8 @@ class FMTmodel(L.LightningModule):
                 self.make_plot(self.out_1, mode='val', device=device)
                 self.make_plot(self.out_0, mode='train', device=device)
                 #self.make_plot(self.out_2, mode='val_forward', device=device)
-                #stacked_pred, stacked_true, dataset_name = self.random_rollout(device=device)
-                #self.make_anim(stacked_pred, stacked_true, dataset_name, self.out_3)
+                stacked_pred, stacked_true, dataset_name = self.random_rollout(device=device)
+                self.make_anim(stacked_pred, stacked_true, dataset_name, self.out_3)
                 #self.spectra_plot(stacked_pred, stacked_true, dataset_name, self.out_4)
             
             self.log_time = time.time() - self.log_time
@@ -331,7 +331,7 @@ class FMTmodel(L.LightningModule):
                 "train_plot": wandb.Image(self.out_0) if visuals else None,
                 "val_plot": wandb.Image(self.out_1) if visuals else None,
                 #"val_forward_plot": wandb.Image(self.out_2) if visuals and os.path.exists(self.out_2) else None,
-                #"val_anim": wandb.Video(self.out_3, format="gif") if visuals else None,
+                "val_anim": wandb.Video(self.out_3, format="gif") if visuals else None,
                 #"val_spectra": wandb.Image(self.out_4) if visuals else None,
                 "Log Time": self.log_time
             })
