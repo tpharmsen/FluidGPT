@@ -82,4 +82,5 @@ class DiskDatasetDivFM(Dataset):
             full = f['data'][::self.dt]
         if self.avgnorm is not None:
             full = (full - self.avgnorm) / self.stdnorm
-        return torch.tensor(full, dtype=torch.float32)
+        prior = self.prior_prefix(full, fromframe=4, sigma=4.5, scale=0.8)
+        return torch.tensor(prior, dtype=torch.float32), torch.tensor(full, dtype=torch.float32)

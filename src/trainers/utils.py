@@ -231,14 +231,14 @@ def rollout_det(front, model, steps):
 def rollout_prb(front, model, steps, int_steps):
     model.eval()
     preds = []
-    preds.append(front)
+    #preds.append(front)
     with torch.no_grad():
         xt = front.clone()
-        for _ in range(steps - 1):
-            for i, t in enumerate(torch.linspace(0, 1, int_steps), start=1):
+        for _ in range(steps):
+            for i, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
                 pred = model(xt, t.to(xt.device).expand(xt.size(0)))
-                xt = xt + (1 / steps) * pred
-            preds.append(xt)
+                xt = xt.clone() + (1 / steps) * pred.clone()
+            preds.append(xt.clone())
     preds = torch.cat(preds, dim=1)
     return preds
 

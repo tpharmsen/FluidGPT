@@ -58,6 +58,7 @@ class FMTtrainer(L.LightningModule):
         self.cd = cd
         self.cm = cm
         self.ct = ct
+        self.automatic_optimization = False
 
     def init_modules(self):
         self.modelmodule = FMTmodel(self.cb, self.cd, self.cm, self.ct)
@@ -190,6 +191,7 @@ class FMTmodel(L.LightningModule):
         return self.model(x, t)
 
     def training_step(self, batch, batch_idx):
+        print("Automatic opt:", self.automatic_optimization)
         opt = self.optimizers()
         prior, target = batch
         #print('prior:', prior.shape, 'target:', target.shape)
@@ -197,7 +199,7 @@ class FMTmodel(L.LightningModule):
 
         for _ in range(self.ct.train_steps_per_batch):
             #print(f"Training step {counter} for batch {batch_idx}")
-            opt.zero_grad()
+            
             #xnoise = self.random_fft_perturb(ta, self.ct.perturbation_strength)
             tf = torch.rand(target.shape[0], device=target.device) #* (1 - eps) + eps
             t_expand = tf.view(-1, 1, 1, 1, 1).repeat(
@@ -207,11 +209,13 @@ class FMTmodel(L.LightningModule):
             target_vector = target.clone() - prior.clone()
             pred = self(xt, tf)
             train_loss = F.mse_loss(pred, target_vector, reduction='mean')
-            self.train_losses.append(train_loss.item())
+            
             # not sure if correct loss is returned
+            opt.zero_grad()
             self.manual_backward(train_loss)
             opt.step()
             total_loss += train_loss
+            self.train_losses.append(train_loss.item())
 
         avg_loss = total_loss / self.ct.train_steps_per_batch
         return avg_loss
@@ -230,7 +234,7 @@ class FMTmodel(L.LightningModule):
         xt = t_expand * target.clone() + (1 - t_expand) * prior.clone()
         target_vector = target.clone() - prior.clone()
         pred = self(xt, tf)
-        print(pred.shape, target_vector.shape, target.shape)
+        #print(pred.shape, target_vector.shape, target.shape)
         val_loss = F.mse_loss(pred, target_vector, reduction='mean')
         val_loss = val_loss.item()
         self.val_SS_losses.append(val_loss)
@@ -292,18 +296,18 @@ class FMTmodel(L.LightningModule):
             visuals = self.cb.viz and epoch % self.cb.viz_freq == 0
             if visuals:
                 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-                print("flag 0\n")
+                #print("flag 0\n")
                 self.make_plot(self.out_1, mode='val', device=device)
-                print("flag 1\n")
+                #print("flag 1\n")
                 self.make_plot(self.out_0, mode='train', device=device)
-                print("flag 2\n")
+                #print("flag 2\n")
                 #self.make_plot(self.out_2, mode='val_forward', device=device)
                 stacked_pred, stacked_true, dataset_name = self.random_rollout(device=device)
-                print("flag 3\n")
+                #print("flag 3\n")
                 self.make_anim(stacked_pred, stacked_true, dataset_name, self.out_3)
-                print("flag 4\n")
+                #print("flag 4\n")
                 self.spectra_plot(stacked_pred, stacked_true, dataset_name, self.out_4)
-                print("flag 5\n")
+                #print("flag 5\n")
             
             self.log_time = time.time() - self.log_time
             self.logger.experiment.log({
@@ -398,11 +402,12 @@ class FMTmodel(L.LightningModule):
         with torch.no_grad():
             dataset_idx = torch.randint(0, len(self.trainer.datamodule.val_datasets), (1,)).item()
             traj_idx = self.trainer.datamodule.val_samplers[dataset_idx].random_val_traj()
-            val_traj = self.trainer.datamodule.val_datasets[dataset_idx].dataset.get_single_traj(traj_idx)
+            prior_traj, val_traj = self.trainer.datamodule.val_datasets[dataset_idx].dataset.get_single_traj(traj_idx)
             #print('val_traj:', val_traj.shape)
             front = val_traj[:self.cm.temporal_bundling].unsqueeze(0).float().to(device)#.to(torch.bfloat16)
+            prior_traj = prior_traj[:self.cm.temporal_bundling].unsqueeze(0).float().to(device)#.to(torch.bfloat16)
             #print('len:', len(val_traj) // self.cm.temporal_bundling)
-            stacked_pred = rollout_prb(front, self.model, len(val_traj) // self.cm.temporal_bundling, 
+            stacked_pred = rollout_prb(prior_traj, self.model, len(val_traj) // self.cm.temporal_bundling, 
                                        self.ct.int_steps)
             stacked_pred = stacked_pred.float() #.to(torch.bfloat16) 
             #print('stacked_pred:', stacked_pred.shape)
@@ -457,15 +462,15 @@ class FMTmodel(L.LightningModule):
             if mode == 'val_forward':
                 pass
                 for _ in range(self.ct.forward_steps_loss):
-                    for i, t in enumerate(torch.linspace(0, 1, steps), start=1):
+                    for i, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
                         pred = self(xt, t.to(label.device).expand(xt.size(0)))
                         xt = xt + (1 / steps) * pred
             else:
-                for i, t in enumerate(torch.linspace(0, 1, steps), start=1):
+                for i, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
                     pred = self(xt, t.to(label.device).expand(xt.size(0)))
-                    xt = xt + (1 / steps) * pred
+                    xt = xt.clone() + (1 / steps) * pred.clone()
 
-        
+        pred = xt.clone()
         front = front.float() * self.global_std + self.global_mean #.to(torch.bfloat16)
         pred = pred.float() * self.global_std + self.global_mean #.to(torch.bfloat16)
         label = label.float() * self.global_std + self.global_mean #.to(torch.bfloat16)
@@ -484,7 +489,7 @@ class FMTmodel(L.LightningModule):
         fig.suptitle(f"Epoch {self.trainer.current_epoch} on dataset {dataset_name}", fontsize=20)
         gs = gridspec.GridSpec(tb, total_cols, wspace=0.1, hspace=0.1)
 
-        titles = ["Front", "Pred", "True", "Diff"]
+        titles = ["Prior", "Pred", "True", "Diff"]
 
         for t in range(tb):
             for i, (img_x, img_y) in enumerate(zip(
