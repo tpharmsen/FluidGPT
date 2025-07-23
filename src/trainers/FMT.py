@@ -576,7 +576,8 @@ class FMTdata(L.LightningDataModule):
                 
         for item in self.cd.datasets:
             preproc_savepath = str(self.cb.data_base + 'preproc_' + item["name"])
-            dataset_SS = DiskDatasetDivFM(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=1)
+            dataset_SS = DiskDatasetDivFM(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=1,
+                from_frame=self.ct.from_frame, noise_sigma=self.ct.noise_sigma, noise_strength=self.ct.noise_strength)
             #dataset_FS = DiskDatasetDivFM(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=self.ct.forward_steps_loss)
 
             # generate random seed

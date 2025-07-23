@@ -8,8 +8,11 @@ from dataloaders.utils import spatial_resample
 from scipy.ndimage import gaussian_filter
 
 class DiskDatasetDivFM(Dataset):
-    def __init__(self, preproc_path, temporal_bundling = 1, forward_steps = 1):
+    def __init__(self, preproc_path, temporal_bundling = 1, forward_steps = 1, from_frame = 4, noise_sigma = 4, noise_strength = 0.4):
         self.filepath = preproc_path
+        self.noise_strength = noise_strength
+        self.from_frame = from_frame
+        self.noise_sigma = noise_sigma
         self._file = None
         # If the file ends with .h5, remove it
         if self.filepath.endswith('.h5'):
@@ -57,7 +60,7 @@ class DiskDatasetDivFM(Dataset):
             #print('normalising\n')
             target = (target - self.avgnorm) / self.stdnorm
         #print(target.shape)
-        prior = self.prior_prefix(target, fromframe=4, sigma=4.5, scale=0.8)
+        prior = self.prior_prefix(target, fromframe=self.from_frame, sigma=self.noise_sigma, scale=self.noise_strength)
 
         #label = (label - self.avgnorm) / self.stdnorm
         return torch.tensor(prior, dtype=torch.float32), torch.tensor(target, dtype=torch.float32)
@@ -82,5 +85,5 @@ class DiskDatasetDivFM(Dataset):
             full = f['data'][::self.dt]
         if self.avgnorm is not None:
             full = (full - self.avgnorm) / self.stdnorm
-        prior = self.prior_prefix(full, fromframe=4, sigma=4.5, scale=0.8)
+        prior = self.prior_prefix(full, fromframe=self.from_frame, sigma=self.noise_sigma, scale=self.noise_strength)
         return torch.tensor(prior, dtype=torch.float32), torch.tensor(full, dtype=torch.float32)
