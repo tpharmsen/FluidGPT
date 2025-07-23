@@ -39,12 +39,14 @@ plt.rcParams['axes.facecolor'] = '#1F1F1F'
 plt.rcParams['savefig.facecolor'] = '#1F1F1F'
 
 
-# following is a gpu mig bug fix
-if "MIG" in subprocess.check_output(["nvidia-smi", "-L"], text=True):
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-    print('MIG GPU detected, using GPU 0')
-else:
-    print('No MIG GPU detected, using all available GPUs')
+# following is a gpu mig bug fix 
+# if not distributed if else
+if not dist.is_available() and not dist.is_initialized():
+    if "MIG" in subprocess.check_output(["nvidia-smi", "-L"], text=True):
+        os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+        print('MIG GPU detected, using GPU 0')
+    else:
+        print('No MIG GPU detected, using all available GPUs')
 
 torch.set_float32_matmul_precision('medium')
 
@@ -163,8 +165,8 @@ class FMTmodel(L.LightningModule):
         self.automatic_optimization = False
     
     def _initialize_model(self):
-        print()
-        print(self.cm.model_name)
+        #print()
+        #print(self.cm.model_name)
         if self.cm.model_name == "FluidGPT_FM":
             from modelComp.FluidGPT_FM import FluidGPT_FM   
             self.model = FluidGPT_FM(emb_dim=self.cm.emb_dim,
