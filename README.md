@@ -20,7 +20,7 @@ for i in {1..10}; do sbatch submit/jhs-2hr-$i.sh; done
 
 # runcommands spike
 
-torchrun --nproc-per-node=4 src/train.py --CB spike-test --CD spike-testFM --CM fm-21 --CT fm-test --trainer FM --out out0
+torchrun --nproc-per-node=4 src/train.py --CB spike-test --CD spike-test --CM fm-10 --CT fm-test --trainer FM --out out0
 
 # runcommands docker:
 docker build -t _username_/_imagename_:_version_ .
