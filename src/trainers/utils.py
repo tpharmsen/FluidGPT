@@ -160,8 +160,7 @@ def create_gif2(stacked_true, stacked_pred, output_path, timesteps='all', vertic
 def animate_rollout(stacked_pred, stacked_true, dataset_name, output_path="output/rollout.gif"):
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     timesteps, _, x_dim, y_dim = stacked_pred.shape
-    if timesteps > stacked_true.shape[0]:
-        timesteps = stacked_true.shape[0]
+    timesteps = min(timesteps, stacked_true.shape[0])
     stacked_pred, stacked_true = stacked_pred.squeeze(1).cpu().numpy(), stacked_true.squeeze(1).cpu().numpy()
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
     titles = ["Pred", "True", "Diff"]

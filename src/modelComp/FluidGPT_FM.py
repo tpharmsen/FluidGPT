@@ -30,9 +30,10 @@ class FluidGPT_FM(nn.Module):
         self.skip_connects = nn.ModuleList()
         # TODO: implement act
          
-        self.flowmatching_emb_dim = flowmatching_emb_dim
-        self.flowt_proj = nn.Linear(flowmatching_emb_dim, emb_dim) 
-        self.flowt_proj2 = nn.Linear(flowmatching_emb_dim, 2**depth * emb_dim)
+        #self.flowmatching_emb_dim = flowmatching_emb_dim
+        #self.flowt_proj = nn.Linear(flowmatching_emb_dim, emb_dim) 
+        self.flowt_proj_easy = nn.Linear(1, emb_dim) 
+        #self.flowt_proj2 = nn.Linear(flowmatching_emb_dim, 2**depth * emb_dim)
         
         self.depth = depth
         self.middleblocklen = stage_depths[depth]
@@ -183,9 +184,12 @@ class FluidGPT_FM(nn.Module):
         x = self.pos_encoding(x)
 
         # flowmatching stuff
-        t = gen_t_embedding(t, self.flowmatching_emb_dim)
-        t1 = self.flowt_proj(t)
-        t1 = t1.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1], x.shape[2], 1)  
+        #t = gen_t_embedding(t, self.flowmatching_emb_dim)
+        #t1 = self.flowt_proj(t)
+        #t1 = t1.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1], x.shape[2], 1)  
+        #x = x + t1
+        t1 = self.flowt_proj_easy(t.unsqueeze(-1))
+        t1 = t1.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1], x.shape[2], 1)
         x = x + t1
 
         # ===== DOWN =====
@@ -205,11 +209,11 @@ class FluidGPT_FM(nn.Module):
             x = self.patchMerges[i](x)
 
         # ===== MIDDLE =====
-        t2 = self.flowt_proj2(t)
+        #t2 = self.flowt_proj2(t)
         #print('t2 shape', t2.shape)
-        t2 = t2.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1], x.shape[2], 1)  
+        #t2 = t2.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1], x.shape[2], 1)  
         #print('t2 shape', t2.shape)
-        x = x + t2
+        #x = x + t2
         
         if self.gradient_flowthrough[1]:
             residual = x

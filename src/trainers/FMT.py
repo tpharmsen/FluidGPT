@@ -474,11 +474,11 @@ class FMTmodel(L.LightningModule):
                 pass
                 for _ in range(self.ct.forward_steps_loss):
                     for i, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
-                        pred = self(xt, t.to(label.device).expand(xt.size(0)))
+                        pred = self(xt.clone(), t.to(label.device).expand(xt.size(0)))
                         xt = xt + (1 / steps) * pred
             else:
                 for i, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
-                    pred = self(xt, t.to(label.device).expand(xt.size(0)))
+                    pred = self(xt.clone(), t.to(label.device).expand(xt.size(0)))
                     xt = xt.clone() + (1 / steps) * pred.clone()
 
         pred = xt.clone()
@@ -555,7 +555,6 @@ class FMTdata(L.LightningDataModule):
                     timesample=item["timesample"],
                     dataset_name=item["name"]
                 )
-                
             else:
                 print("folder", item["name"], "already exists, skipping preproccessing")
 
