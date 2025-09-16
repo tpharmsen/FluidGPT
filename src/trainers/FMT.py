@@ -25,6 +25,7 @@ import os
 import subprocess
 import platform
 import json
+import sys
 
 from dataloaders import *
 from dataloaders import PREPROC_MAPPER
@@ -40,13 +41,11 @@ plt.rcParams['savefig.facecolor'] = '#1F1F1F'
 
 
 # following is a gpu mig bug fix 
-# if not distributed if else
-if not dist.is_available() and not dist.is_initialized():
-    if "MIG" in subprocess.check_output(["nvidia-smi", "-L"], text=True):
-        os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-        print('MIG GPU detected, using GPU 0')
-    else:
-        print('No MIG GPU detected, using all available GPUs')
+if "MIG" in subprocess.check_output(["nvidia-smi", "-L"], text=True):
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    print('MIG GPU detected, using GPU 0')
+else:
+    print('No MIG GPU detected, using all available GPUs')
 
 torch.set_float32_matmul_precision('medium')
 
@@ -69,6 +68,8 @@ class FMTtrainer(L.LightningModule):
         self.modelmodule._initialize_model()
         
         num_gpus = torch.cuda.device_count()
+        #print(torch.cuda.is_available())
+        print(f"Using {num_gpus} GPUs")
         print(f"Number of GPUs: {num_gpus} of type {torch.cuda.get_device_name(0)}")
         wandb_logger = WandbLogger(project="FluidGPT", 
                                    config = self.build_wandb_config(), 
@@ -169,26 +170,41 @@ class FMTmodel(L.LightningModule):
         #print()
         #print(self.cm.model_name)
         if self.cm.model_name == "FluidGPT_FM":
-            from modelComp.FluidGPT_FM import FluidGPT_FM   
-            self.model = FluidGPT_FM(emb_dim=self.cm.emb_dim,
-                            data_dim=[self.ct.batch_size, self.cm.temporal_bundling, self.cm.in_channels, self.cd.resample_shape, self.cd.resample_shape],
-                            patch_size=(self.cm.patch_size, self.cm.patch_size),
-                            hiddenout_dim=self.cm.hiddenout_dim,
-                            flowmatching_emb_dim=self.cm.flowmatching_emb_dim,
-                            depth=self.cm.depth,
-                            stage_depths=self.cm.stage_depths,
-                            num_heads=self.cm.num_heads,
-                            window_size=self.cm.window_size,
-                            use_flex_attn=self.cm.use_flex_attn,
-                            act=ACT_MAPPER[self.cm.act],
-                            skip_connect=SKIPBLOCK_MAPPER[self.cm.skipblock],
-                            gradient_flowthrough=self.cm.gradient_flowthrough,
-                            )
+            
+            sys.path.append('flow_matching/')
+            '''
+            print()
+            print(sys.path)
+            print(os.listdir(sys.path[0]))
+            
+            print(sys.path[-1])
+            print(os.listdir(sys.path[-1]))
+            print()
+            '''
+            
+            from examples.image.models.unet import UNetModel
+            self.model = UNetModel(in_channels = 2,
+                    model_channels = 48,
+                    out_channels = 2,
+                    num_res_blocks = 1,
+                    attention_resolutions = [0,0,8],#[2, 4, 8],
+                    dropout = 0.1,
+                    channel_mult = [1, 2, 2, 2],
+                    num_classes = None,
+                    use_checkpoint = False,
+                    num_heads = 4,
+                    num_head_channels = 48,
+                    use_scale_shift_norm = True,
+                    resblock_updown = True,
+                    use_new_attention_order = True,
+                    with_fourier_features = False,
+                    dims = 3
+            )
         else:
             raise ValueError('MODEL NOT RECOGNIZED') 
         
     def forward(self, x, t):
-        return self.model(x, t)
+        return self.model(x, t, {None})
 
     def training_step(self, batch, batch_idx):
         """
@@ -223,6 +239,7 @@ class FMTmodel(L.LightningModule):
         
         """
         prior, target = batch
+        #print('prior:', prior.shape, 'target:', target.shape)
         tf = torch.rand(target.size(0), device=target.device)
         t_expand = tf.view(-1, 1, 1, 1, 1).repeat(
             1, target.shape[1], target.shape[2], target.shape[3], target.shape[4]
@@ -234,19 +251,16 @@ class FMTmodel(L.LightningModule):
         #train_loss = train_loss.item()
         self.train_losses.append(train_loss.item())
         return train_loss
-        #"""
-        #return avg_loss
 
     def validation_step(self, batch, batch_idx):#, dataloader_idx):
 
         prior, target = batch
-
         #if dataloader_idx == 0:
             #xprior = self.random_fft_perturb(front, self.ct.perturbation_strength)
         tf = torch.rand(target.size(0), device=target.device)
         t_expand = tf.view(-1, 1, 1, 1, 1).repeat(
-                    1, target.shape[1], target.shape[2], target.shape[3], target.shape[4]
-                )
+            1, target.shape[1], target.shape[2], target.shape[3], target.shape[4]
+        )
         xt = t_expand * target.clone() + (1 - t_expand) * prior.clone()
         target_vector = target.clone() - prior.clone()
         pred = self(xt, tf)
@@ -295,7 +309,6 @@ class FMTmodel(L.LightningModule):
             epoch = self.trainer.current_epoch
             self.epoch_time = time.time() - self.epoch_time
             self.log_time = time.time()
-
             train_loss = np.mean(self.train_losses)
             #val_SS_loss = np.mean(self.val_SS_losses)
             #val_FS_loss = np.mean(self.val_FS_losses)
@@ -312,12 +325,13 @@ class FMTmodel(L.LightningModule):
             
             visuals = self.cb.viz and epoch % self.cb.viz_freq == 0
             if visuals:
+                #print('time for visuals')
                 device = 'cuda' if torch.cuda.is_available() else 'cpu'
                 self.make_plot(self.out_1, mode='val', device=device)
                 self.make_plot(self.out_0, mode='train', device=device)
                 #self.make_plot(self.out_2, mode='val_forward', device=device)
-                stacked_pred, stacked_true, dataset_name = self.random_rollout(device=device)
-                self.make_anim(stacked_pred, stacked_true, dataset_name, self.out_3)
+                #stacked_pred, stacked_true, dataset_name = self.random_rollout(device=device)
+                #self.make_anim(stacked_pred, stacked_true, dataset_name, self.out_3)
                 #self.spectra_plot(stacked_pred, stacked_true, dataset_name, self.out_4)
             
             self.log_time = time.time() - self.log_time
@@ -331,7 +345,7 @@ class FMTmodel(L.LightningModule):
                 "train_plot": wandb.Image(self.out_0) if visuals else None,
                 "val_plot": wandb.Image(self.out_1) if visuals else None,
                 #"val_forward_plot": wandb.Image(self.out_2) if visuals and os.path.exists(self.out_2) else None,
-                "val_anim": wandb.Video(self.out_3, format="gif") if visuals else None,
+                #"val_anim": wandb.Video(self.out_3, format="gif") if visuals else None,
                 #"val_spectra": wandb.Image(self.out_4) if visuals else None,
                 "Log Time": self.log_time
             })
@@ -486,9 +500,9 @@ class FMTmodel(L.LightningModule):
         pred = pred.float() * self.global_std + self.global_mean #.to(torch.bfloat16)
         label = label.float() * self.global_std + self.global_mean #.to(torch.bfloat16)
 
-        front_x, front_y = front[0, :, 0].cpu(), front[0, :, 1].cpu()
-        pred_x, pred_y = pred[0, :, 0].cpu(), pred[0, :, 1].cpu()
-        label_x, label_y = label[0, :, 0].cpu(), label[0, :, 1].cpu()
+        front_x, front_y = front[0, 0, :].cpu(), front[0, 1, :].cpu()
+        pred_x, pred_y = pred[0, 0, :].cpu(), pred[0, 1, :].cpu()
+        label_x, label_y = label[0, 0, :].cpu(), label[0, 1, :].cpu()
         diff_x, diff_y = (label_x - pred_x).abs(), (label_y - pred_y).abs()
 
         tb = self.cm.temporal_bundling
@@ -501,6 +515,7 @@ class FMTmodel(L.LightningModule):
         gs = gridspec.GridSpec(tb, total_cols, wspace=0.1, hspace=0.1)
 
         titles = ["Prior", "Pred", "True", "Diff"]
+        #print(front_x.shape, pred_x.shape, label_x.shape, diff_x.shape)
 
         for t in range(tb):
             for i, (img_x, img_y) in enumerate(zip(
@@ -576,7 +591,7 @@ class FMTdata(L.LightningDataModule):
         for item in self.cd.datasets:
             preproc_savepath = str(self.cb.data_base + 'preproc_' + item["name"])
             dataset_SS = DiskDatasetDivFM(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=1,
-                from_frame=self.ct.from_frame, noise_sigma=self.ct.noise_sigma, noise_strength=self.ct.noise_strength)
+                from_frame=self.ct.from_frame)
             #dataset_FS = DiskDatasetDivFM(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=self.ct.forward_steps_loss)
 
             # generate random seed

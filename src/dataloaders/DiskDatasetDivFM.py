@@ -8,11 +8,9 @@ from dataloaders.utils import spatial_resample
 from scipy.ndimage import gaussian_filter
 
 class DiskDatasetDivFM(Dataset):
-    def __init__(self, preproc_path, temporal_bundling = 1, forward_steps = 1, from_frame = 4, noise_sigma = 4, noise_strength = 0.4):
+    def __init__(self, preproc_path, temporal_bundling = 1, forward_steps = 1, from_frame = 4):
         self.filepath = preproc_path
-        self.noise_strength = noise_strength
         self.from_frame = from_frame
-        self.noise_sigma = noise_sigma
         self._file = None
         # If the file ends with .h5, remove it
         if self.filepath.endswith('.h5'):
@@ -36,7 +34,7 @@ class DiskDatasetDivFM(Dataset):
         #print(f"reshape method: {self.resample_mode}, shape: {self.resample_shape}")
         self.tb = temporal_bundling
         self.fs = forward_steps
-        self.lenpertraj = 1 #self.ts - (1 + self.fs) * self.dt * self.tb + self.dt
+        self.lenpertraj = self.ts - (1 + self.fs) * self.dt * self.tb + self.dt
         self.idx_window = self.dt * self.tb
         self.avgnorm = None
         self.stdnorm = None
@@ -60,21 +58,21 @@ class DiskDatasetDivFM(Dataset):
             #print('normalising\n')
             target = (target - self.avgnorm) / self.stdnorm
         #print(target.shape)
-        prior = self.prior_prefix(target, fromframe=self.from_frame, sigma=self.noise_sigma, scale=self.noise_strength)
+        prior = self.prior_purenoise(target, fromframe=self.from_frame)
 
-        #label = (label - self.avgnorm) / self.stdnorm
-        return torch.tensor(prior, dtype=torch.float32), torch.tensor(target, dtype=torch.float32)
+        #label = (label - self.avgnorm) / self.stdnorm)
+        return (
+            torch.tensor(prior, dtype=torch.float32).permute(1,0,2,3), 
+            torch.tensor(target, dtype=torch.float32).permute(1,0,2,3)
+        )
+
     
-    def prior_prefix(self, x, fromframe=3, sigma=4.0, scale=1):
-            xnoise = x.copy()
-            #print('function called')
-            sigma = (0, sigma, sigma)
-            for i in range(fromframe, xnoise.shape[0]):
-                noise = xnoise[i-1] + scale * np.random.normal(size = xnoise[i].shape) #* torch.randn_like(xnoise[i])
-                #print(noise.shape)
-                noise = gaussian_filter(noise, sigma=sigma)
-                xnoise[i, :] = noise
-            return xnoise
+    def prior_purenoise(self, data, fromframe=4):
+        # generate pure gaussian noise
+        noise = np.random.normal(size=data[fromframe:].shape)
+        prior = data.copy()
+        prior[fromframe:] = noise
+        return prior
 
     def get_single_traj(self, idx):
         #f = self._get_file()
@@ -85,5 +83,5 @@ class DiskDatasetDivFM(Dataset):
             full = f['data'][::self.dt]
         if self.avgnorm is not None:
             full = (full - self.avgnorm) / self.stdnorm
-        prior = self.prior_prefix(full, fromframe=self.from_frame, sigma=self.noise_sigma, scale=self.noise_strength)
-        return torch.tensor(prior, dtype=torch.float32), torch.tensor(full, dtype=torch.float32)
+        #prior = self.prior_prefix(full, fromframe=self.from_frame)
+        return torch.tensor(full, dtype=torch.float32)
