@@ -8,7 +8,7 @@ from dataloaders.utils import spatial_resample
 from scipy.ndimage import gaussian_filter
 
 class DiskDatasetDivFM(Dataset):
-    def __init__(self, preproc_path, temporal_bundling = 1, forward_steps = 1, from_frame = 4):
+    def __init__(self, preproc_path, temporal_bundling = 1, from_frame = 4):
         self.filepath = preproc_path
         self.from_frame = from_frame
         self._file = None
@@ -33,11 +33,11 @@ class DiskDatasetDivFM(Dataset):
         #print(f"Dataset {self.name} loaded with {self.traj} trajectories, each with {self.ts} time steps.")
         #print(f"reshape method: {self.resample_mode}, shape: {self.resample_shape}")
         self.tb = temporal_bundling
-        self.fs = forward_steps
-        self.lenpertraj = self.ts - (1 + self.fs) * self.dt * self.tb + self.dt
+        self.lenpertraj = self.ts - self.dt * self.tb
         self.idx_window = self.dt * self.tb
         self.avgnorm = None
         self.stdnorm = None
+        print(self.ts, self.idx_window, self.lenpertraj, self.dt, self.tb)
         
     def __len__(self):
         return self.traj * self.lenpertraj
