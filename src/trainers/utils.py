@@ -227,18 +227,29 @@ def rollout_det(front, model, steps):
     preds = torch.cat(preds, dim=1)
     return preds
 
-def rollout_prb(front, model, steps, int_steps):
+def rollout_prb(front, model, steps, int_steps, from_frame):
     model.eval()
     preds = []
     #preds.append(front)
     with torch.no_grad():
         xt = front.clone()
+        preds.append(front[:,:,:from_frame])
+        #print('\ntest\n')
+        #print(steps)
         for _ in range(steps):
-            for i, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
-                pred = model(xt, t.to(xt.device).expand(xt.size(0)))
-                xt = xt.clone() + (1 / steps) * pred.clone()
-            preds.append(xt.clone())
-    preds = torch.cat(preds, dim=1)
+            #print('\ntest2\n')
+            for i, t in enumerate(torch.linspace(0, 1, int_steps+1)[:-1], start=1):
+                #print('\n')
+                #print(i, end='\r')
+                pred = model(xt, t.to(xt.device).expand(xt.shape[0]), {None})
+                #print(pred.shape)
+                xt = xt.clone() + (1 / int_steps) * pred.clone()
+            preds.append(xt[:,:,from_frame:].clone())
+            #print(xt.shape, xt[:, :, -from_frame:].shape, torch.randn([xt.shape[0], xt.shape[1], 3 *from_frame, xt.shape[3], xt.shape[4]]).shape)
+            xt = torch.cat((xt[:, :, -from_frame:], torch.randn([xt.shape[0], xt.shape[1], 3 *from_frame, xt.shape[3], xt.shape[4]]).to(xt.device)), dim=2)
+            print(xt.shape)
+    preds = torch.cat(preds, dim=2)
+    print(preds.shape)
     return preds
 
 def compute_energy_enstrophy_spectra(u, v, dataset_name="", Lx=1.0, Ly=1.0):

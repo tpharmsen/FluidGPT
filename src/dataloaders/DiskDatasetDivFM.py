@@ -33,7 +33,7 @@ class DiskDatasetDivFM(Dataset):
         #print(f"Dataset {self.name} loaded with {self.traj} trajectories, each with {self.ts} time steps.")
         #print(f"reshape method: {self.resample_mode}, shape: {self.resample_shape}")
         self.tb = temporal_bundling
-        self.lenpertraj = self.ts - self.dt * self.tb
+        self.lenpertraj = 1#self.ts - self.dt * self.tb
         self.idx_window = self.dt * self.tb
         self.avgnorm = None
         self.stdnorm = None
@@ -41,6 +41,8 @@ class DiskDatasetDivFM(Dataset):
         
     def __len__(self):
         return self.traj * self.lenpertraj
+        #return 1
+            
 
     def __getitem__(self, idx):
         
@@ -83,5 +85,9 @@ class DiskDatasetDivFM(Dataset):
             full = f['data'][::self.dt]
         if self.avgnorm is not None:
             full = (full - self.avgnorm) / self.stdnorm
-        #prior = self.prior_prefix(full, fromframe=self.from_frame)
-        return torch.tensor(full, dtype=torch.float32)
+        #print(full.shape)
+        prior = self.prior_purenoise(full[:self.tb], fromframe=self.from_frame)
+        return (
+            torch.tensor(prior, dtype=torch.float32).permute(1,0,2,3),
+            torch.tensor(full, dtype=torch.float32).permute(1,0,2,3).unsqueeze(0)
+        )

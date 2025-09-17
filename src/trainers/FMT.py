@@ -330,8 +330,8 @@ class FMTmodel(L.LightningModule):
                 self.make_plot(self.out_1, mode='val', device=device)
                 self.make_plot(self.out_0, mode='train', device=device)
                 #self.make_plot(self.out_2, mode='val_forward', device=device)
-                #stacked_pred, stacked_true, dataset_name = self.random_rollout(device=device)
-                #self.make_anim(stacked_pred, stacked_true, dataset_name, self.out_3)
+                stacked_pred, stacked_true, dataset_name = self.random_rollout(device=device)
+                self.make_anim(stacked_pred, stacked_true, dataset_name, self.out_3)
                 #self.spectra_plot(stacked_pred, stacked_true, dataset_name, self.out_4)
             
             self.log_time = time.time() - self.log_time
@@ -432,9 +432,10 @@ class FMTmodel(L.LightningModule):
             front = val_traj[:self.cm.temporal_bundling].unsqueeze(0).float().to(device)#.to(torch.bfloat16)
             prior_traj = prior_traj[:self.cm.temporal_bundling].unsqueeze(0).float().to(device)#.to(torch.bfloat16)
             #print('len:', len(val_traj) // self.cm.temporal_bundling)
-            stacked_pred = rollout_prb(prior_traj, self.model, len(val_traj) // self.cm.temporal_bundling, 
-                                       self.ct.int_steps)
-            stacked_pred = stacked_pred.float() #.to(torch.bfloat16) 
+            #print('\nprior_traj:', prior_traj.shape, 'val_traj:', val_traj.shape)
+            stacked_pred = rollout_prb(prior_traj, self.model, int(np.ceil((val_traj.shape[2] - self.ct.from_frame) / (self.cm.temporal_bundling - self.ct.from_frame))), 
+                                       self.ct.int_steps, self.ct.from_frame)
+            stacked_pred = stacked_pred[:,:,:val_traj.shape[2]].float() #.to(torch.bfloat16) 
             #print('stacked_pred:', stacked_pred.shape)
             stacked_true = val_traj.unsqueeze(0).float()
             #print('stacked_true:', stacked_true.shape)
