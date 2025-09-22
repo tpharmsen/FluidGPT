@@ -200,8 +200,12 @@ class FMTmodel(L.LightningModule):
                     with_fourier_features = False,
                     dims = 3
             )
+            checkpoint = torch.load('output/1709-14hr/FluidGPT_FM/1k592osu/epoch=0011-val_SS_loss_checkpoint=0.009457.ckpt', map_location='cpu')
+            new_state_dict = {k.replace('model.', ''): v for k, v in checkpoint['state_dict'].items()}
+            self.model.load_state_dict(new_state_dict, strict = True)
+            print('\n...model loaded from some previous session...\n')
         else:
-            raise ValueError('MODEL NOT RECOGNIZED') 
+            raise ValueError('MODEL NOT RECOGNIZED')
         
     def forward(self, x, t):
         return self.model(x, t, {None})
@@ -329,10 +333,10 @@ class FMTmodel(L.LightningModule):
                 device = 'cuda' if torch.cuda.is_available() else 'cpu'
                 self.make_plot(self.out_1, mode='val', device=device)
                 self.make_plot(self.out_0, mode='train', device=device)
-                #self.make_plot(self.out_2, mode='val_forward', device=device)
                 stacked_pred, stacked_true, dataset_name = self.random_rollout(device=device)
+                stacked_pred, stacked_true = stacked_pred.permute(0,2,1,3,4), stacked_true.permute(0,2,1,3,4)
                 self.make_anim(stacked_pred, stacked_true, dataset_name, self.out_3)
-                #self.spectra_plot(stacked_pred, stacked_true, dataset_name, self.out_4)
+                self.spectra_plot(stacked_pred, stacked_true, dataset_name, self.out_4)
             
             self.log_time = time.time() - self.log_time
             self.logger.experiment.log({
@@ -345,8 +349,8 @@ class FMTmodel(L.LightningModule):
                 "train_plot": wandb.Image(self.out_0) if visuals else None,
                 "val_plot": wandb.Image(self.out_1) if visuals else None,
                 #"val_forward_plot": wandb.Image(self.out_2) if visuals and os.path.exists(self.out_2) else None,
-                #"val_anim": wandb.Video(self.out_3, format="gif") if visuals else None,
-                #"val_spectra": wandb.Image(self.out_4) if visuals else None,
+                "val_anim": wandb.Video(self.out_3, format="gif") if visuals else None,
+                "val_spectra": wandb.Image(self.out_4) if visuals else None,
                 "Log Time": self.log_time
             })
 
@@ -437,7 +441,7 @@ class FMTmodel(L.LightningModule):
                                        self.ct.int_steps, self.ct.from_frame)
             stacked_pred = stacked_pred[:,:,:val_traj.shape[2]].float() #.to(torch.bfloat16) 
             #print('stacked_pred:', stacked_pred.shape)
-            stacked_true = val_traj.unsqueeze(0).float()
+            stacked_true = val_traj.float()
             #print('stacked_true:', stacked_true.shape)
             dataset_name = str(self.trainer.datamodule.val_datasets[dataset_idx].dataset.name)
             #print('dataset_name:', dataset_name)
@@ -447,6 +451,7 @@ class FMTmodel(L.LightningModule):
             return stacked_pred, stacked_true, dataset_name
 
     def make_anim(self, stacked_pred, stacked_true, dataset_name, output_path):
+        #print(stacked_pred.shape, stacked_true.shape)
         stacked_pred = magnitude_vel(stacked_pred)
         stacked_true = magnitude_vel(stacked_true)
         #print('stacked_pred:', stacked_pred.shape)

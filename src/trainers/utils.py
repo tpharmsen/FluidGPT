@@ -163,6 +163,8 @@ def animate_rollout(stacked_pred, stacked_true, dataset_name, output_path="outpu
     timesteps = min(timesteps, stacked_true.shape[0])
     stacked_pred, stacked_true = stacked_pred.squeeze(1).cpu().numpy(), stacked_true.squeeze(1).cpu().numpy()
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+
+    #print(stacked_pred.shape, stacked_true.shape)
     titles = ["Pred", "True", "Diff"]
     imgs = []
     vmin, vmax = min(stacked_pred.min(), stacked_true.min()), max(stacked_pred.max(), stacked_true.max())
@@ -247,9 +249,9 @@ def rollout_prb(front, model, steps, int_steps, from_frame):
             preds.append(xt[:,:,from_frame:].clone())
             #print(xt.shape, xt[:, :, -from_frame:].shape, torch.randn([xt.shape[0], xt.shape[1], 3 *from_frame, xt.shape[3], xt.shape[4]]).shape)
             xt = torch.cat((xt[:, :, -from_frame:], torch.randn([xt.shape[0], xt.shape[1], 3 *from_frame, xt.shape[3], xt.shape[4]]).to(xt.device)), dim=2)
-            print(xt.shape)
+            #print(xt.shape)
     preds = torch.cat(preds, dim=2)
-    print(preds.shape)
+    #print(preds.shape)
     return preds
 
 def compute_energy_enstrophy_spectra(u, v, dataset_name="", Lx=1.0, Ly=1.0):
