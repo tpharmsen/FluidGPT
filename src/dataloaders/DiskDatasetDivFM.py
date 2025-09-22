@@ -33,7 +33,7 @@ class DiskDatasetDivFM(Dataset):
         #print(f"Dataset {self.name} loaded with {self.traj} trajectories, each with {self.ts} time steps.")
         #print(f"reshape method: {self.resample_mode}, shape: {self.resample_shape}")
         self.tb = temporal_bundling
-        self.lenpertraj = 1#self.ts - self.dt * self.tb
+        self.lenpertraj = self.ts - self.dt * self.tb
         self.idx_window = self.dt * self.tb
         self.avgnorm = None
         self.stdnorm = None
