@@ -200,10 +200,10 @@ class FMTmodel(L.LightningModule):
                     with_fourier_features = False,
                     dims = 3
             )
-            checkpoint = torch.load('output/1709-14hr/FluidGPT_FM/1k592osu/epoch=0011-val_SS_loss_checkpoint=0.009457.ckpt', map_location='cpu')
-            new_state_dict = {k.replace('model.', ''): v for k, v in checkpoint['state_dict'].items()}
-            self.model.load_state_dict(new_state_dict, strict = True)
-            print('\n...model loaded from some previous session...\n')
+            #checkpoint = torch.load('output/1709-14hr/FluidGPT_FM/1k592osu/epoch=0011-val_SS_loss_checkpoint=0.009457.ckpt', map_location='cpu')
+            #new_state_dict = {k.replace('model.', ''): v for k, v in checkpoint['state_dict'].items()}
+            #self.model.load_state_dict(new_state_dict, strict = True)
+            #print('\n...model loaded from some previous session...\n')
         else:
             raise ValueError('MODEL NOT RECOGNIZED')
         
