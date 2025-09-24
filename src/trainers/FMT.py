@@ -29,7 +29,7 @@ import sys
 
 from dataloaders import *
 from dataloaders import PREPROC_MAPPER
-from dataloaders.utils import get_dataset, ZeroShotSampler, spatial_resample
+from dataloaders.utils import get_dataset, ZeroShotSamplerReduced, spatial_resample
 from trainers.utils import animate_rollout, magnitude_vel, compute_energy_enstrophy_spectra
 from modelComp.utils import ACT_MAPPER, SKIPBLOCK_MAPPER
 from trainers.utils import rollout_prb
@@ -602,8 +602,10 @@ class FMTdata(L.LightningDataModule):
 
             # generate random seed
             random_seed = random.randint(0, 10000)
-            train_sampler = ZeroShotSampler(dataset_SS, train_ratio=self.ct.train_ratio, split="train", seed=random_seed, forward_steps=1)
-            val_sampler = ZeroShotSampler(dataset_SS, train_ratio=self.ct.train_ratio, split="val", seed=random_seed, forward_steps=1)
+            train_sampler = ZeroShotSamplerReduced(dataset_SS, train_ratio=self.ct.train_ratio, 
+                                                   split="train", seed=random_seed, skip_timesteps=item["timesample"])
+            val_sampler = ZeroShotSamplerReduced(dataset_SS, train_ratio=self.ct.train_ratio, 
+                                                 split="val", seed=random_seed, skip_timesteps=item["timesample"])
             #val_forward_sampler = ZeroShotSampler(dataset_FS, train_ratio=self.ct.train_ratio, split="val", seed=random_seed, forward_steps=self.ct.forward_steps_loss)
 
             self.train_datasets.append(Subset(dataset_SS, train_sampler.indices))

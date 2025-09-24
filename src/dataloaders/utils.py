@@ -20,6 +20,24 @@ class ZeroShotSampler(torch.utils.data.Sampler):
     def random_val_traj(self):
         return self.val_trajs[torch.randint(0, len(self.val_trajs), (1,)).item()]
   
+
+class ZeroShotSamplerReduced(torch.utils.data.Sampler):
+    def __init__(self, dataset, train_ratio=0.8, split="train", seed=227, skip_timesteps=1):
+        torch.manual_seed(seed) 
+        num_train = int(dataset.traj * train_ratio)
+        shuffled_trajs = torch.randperm(dataset.traj).tolist() 
+        self.train_trajs = shuffled_trajs[:num_train]
+        self.val_trajs = shuffled_trajs[num_train:]
+        train_indices = [t * dataset.lenpertraj + ts for t in self.train_trajs for ts in range(0, dataset.lenpertraj, skip_timesteps)]
+        val_indices = [t * dataset.lenpertraj + ts for t in self.val_trajs for ts in range(0, dataset.lenpertraj, skip_timesteps)]
+        self.indices = train_indices if split == "train" else val_indices
+    def __iter__(self):
+        return iter(self.indices)
+    def __len__(self):
+        return len(self.indices)
+    def random_val_traj(self):
+        return self.val_trajs[torch.randint(0, len(self.val_trajs), (1,)).item()]
+    
 def bicubic_resample(data, target_shape, device):
     assert data.dim() >= 2, "Input must have at least 2 dimensions"
     assert data.shape[-2] == data.shape[-1], 'Only square images supported'
