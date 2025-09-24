@@ -12,3 +12,5 @@ ipykernel
 ffmpeg-python
 scipy
 notebook
+torchdiffeq
+scikit-learn
