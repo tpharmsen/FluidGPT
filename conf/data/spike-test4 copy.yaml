@@ -1,0 +1,15 @@
+resample_shape: 128
+resample_mode: "fourier"
+
+datasets:
+  - name: "pdegym-gauss"
+    path: "PDEGym-NSGauss"
+    ppclass: "PDEGymPreProcDiv"
+    file_ext: "nc"
+    timesample: 1
+
+  - name: "pdebench-comp"
+    path: "PDEBench-Comp/"
+    ppclass: "PDEBenchCompPreProcDiv"
+    file_ext: "hdf5"
+    timesample: 1
