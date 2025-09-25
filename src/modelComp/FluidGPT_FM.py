@@ -177,6 +177,8 @@ class FluidGPT_FM(nn.Module):
             raise ValueError(f"Input tensor must be 5D, but got {x.ndim}D")
         if x.shape[1] != self.embedding.T or x.shape[2] != self.embedding.C or x.shape[3] != self.embedding.H or x.shape[4] != self.embedding.W:
             raise ValueError(f"Input tensor must be of shape (B, {self.embedding.T}, {self.embedding.C}, {self.embedding.H}, {self.embedding.W}), but got {x.shape}")
+        x = x.permute(0,2,1,3,4).contiguous()
+        
         skips = []
         #print('module_list', self.blockDown)
         #print('block up', self.blockUp)
@@ -245,5 +247,6 @@ class FluidGPT_FM(nn.Module):
                     x = module(x)
         
         x = self.embedding.decode(x, proj=True)
+        x = x.permute(0,2,1,3,4).contiguous()
         return x
 

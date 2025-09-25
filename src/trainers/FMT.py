@@ -172,38 +172,44 @@ class FMTmodel(L.LightningModule):
         if self.cm.model_name == "FluidGPT_FM":
             
             sys.path.append('flow_matching/')
-            '''
-            print()
-            print(sys.path)
-            print(os.listdir(sys.path[0]))
-            
-            print(sys.path[-1])
-            print(os.listdir(sys.path[-1]))
-            print()
-            '''
-            
             from examples.image.models.unet import UNetModel
-            self.model = UNetModel(in_channels = 2,
-                    model_channels = 64,
-                    out_channels = 2,
-                    num_res_blocks = 1,
-                    attention_resolutions = [0,4,8],#[2, 4, 8],
-                    dropout = 0.1,
-                    channel_mult = [1, 2, 2, 2],
-                    num_classes = None,
-                    use_checkpoint = False,
-                    num_heads = 4,
-                    num_head_channels = 64,
-                    use_scale_shift_norm = True,
-                    resblock_updown = True,
-                    use_new_attention_order = True,
-                    with_fourier_features = False,
-                    dims = 3
+            self.model = UNetModel(in_channels = self.cm.in_channels,
+                    model_channels = self.cm.model_channels,
+                    out_channels = self.cm.out_channels,
+                    num_res_blocks = self.cm.num_res_blocks,
+                    attention_resolutions = self.cm.attention_resolutions,
+                    dropout = self.cm.dropout,
+                    channel_mult = self.cm.channel_mult,
+                    num_classes = self.cm.num_classes,
+                    use_checkpoint = self.cm.use_checkpoint,
+                    num_heads = self.cm.num_heads,
+                    num_head_channels = self.cm.num_head_channels,
+                    use_scale_shift_norm = self.cm.use_scale_shift_norm,
+                    resblock_updown = self.cm.resblock_updown,
+                    use_new_attention_order = self.cm.use_new_attention_order,
+                    with_fourier_features = self.cm.with_fourier_features,
+                    dims = self.cm.dims
             )
             #checkpoint = torch.load('output/1709-14hr/FluidGPT_FM/1k592osu/epoch=0011-val_SS_loss_checkpoint=0.009457.ckpt', map_location='cpu')
             #new_state_dict = {k.replace('model.', ''): v for k, v in checkpoint['state_dict'].items()}
             #self.model.load_state_dict(new_state_dict, strict = True)
             #print('\n...model loaded from some previous session...\n')
+        if self.cm.model_name == "FluidGPT":
+            from modelComp.FluidGPT_FM import FluidGPT_FM
+            self.model = FluidGPT_FM(emb_dim=self.cm.emb_dim,
+                            data_dim=[self.ct.batch_size, self.cm.temporal_bundling, self.cm.in_channels, self.cd.resample_shape, self.cd.resample_shape],
+                            patch_size=(self.cm.patch_size, self.cm.patch_size),
+                            hiddenout_dim=self.cm.hiddenout_dim, 
+                            flowmatching_emb_dim=self.cm.flowmatching_emb_dim,
+                            depth=self.cm.depth,
+                            stage_depths=self.cm.stage_depths,
+                            num_heads=self.cm.num_heads,
+                            window_size=self.cm.window_size,
+                            use_flex_attn=self.cm.use_flex_attn,
+                            act=ACT_MAPPER[self.cm.act],
+                            skip_connect=SKIPBLOCK_MAPPER[self.cm.skipblock],
+                            gradient_flowthrough=self.cm.gradient_flowthrough,
+                            )
         else:
             raise ValueError('MODEL NOT RECOGNIZED')
         

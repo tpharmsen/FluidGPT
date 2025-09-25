@@ -68,11 +68,10 @@ class DiskDatasetDivFM(Dataset):
             torch.tensor(target, dtype=torch.float32).permute(1,0,2,3)
         )
 
-    
     def prior_purenoise(self, data, fromframe=4):
         # generate pure gaussian noise
-        noise = np.random.normal(size=data[fromframe:].shape)
-        prior = data.copy()
+        noise = torch.randn(size=data[fromframe:].shape)
+        prior = data.clone()
         prior[fromframe:] = noise
         return prior
 
