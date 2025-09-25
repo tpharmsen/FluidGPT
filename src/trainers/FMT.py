@@ -187,7 +187,7 @@ class FMTmodel(L.LightningModule):
                     model_channels = 64,
                     out_channels = 2,
                     num_res_blocks = 1,
-                    attention_resolutions = [2,4,8],#[2, 4, 8],
+                    attention_resolutions = [0,4,8],#[2, 4, 8],
                     dropout = 0.1,
                     channel_mult = [1, 2, 2, 2],
                     num_classes = None,
