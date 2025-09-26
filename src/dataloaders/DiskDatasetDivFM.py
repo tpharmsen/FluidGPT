@@ -81,7 +81,7 @@ class DiskDatasetDivFM(Dataset):
         filename = Path(filename)
         filename = filename / f'traj{idx:05d}.h5'
         with h5py.File(filename, 'r') as f:
-            full = f['data'][::self.dt]
+            full = torch.from_numpy(f['data'][::self.dt])
         if self.avgnorm is not None:
             full = (full - self.avgnorm) / self.stdnorm
         #print(full.shape)
