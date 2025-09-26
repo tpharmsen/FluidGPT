@@ -54,7 +54,7 @@ class DiskDatasetDivFM(Dataset):
         filename = Path(filename)
         filename = filename / f'traj{traj_idx:05d}.h5'
         with h5py.File(filename, 'r') as f:
-            target = f['data'][ts_idx : ts_idx + self.idx_window : self.dt]
+            target = torch.from_numpy(f['data'][ts_idx : ts_idx + self.idx_window : self.dt])
             #label = f['data'][ts_idx + self.fs * self.idx_window : ts_idx + (self.fs + 1) * self.idx_window : self.dt]
         if self.avgnorm is not None:
             #print('normalising\n')

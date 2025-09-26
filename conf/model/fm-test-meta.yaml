@@ -6,7 +6,7 @@ num_res_blocks: 1
 attention_resolutions: [0,4,8]
 dropout: 0.1
 channel_mult: [1, 2, 2, 2]
-num_classes: None
+num_classes: null
 use_checkpoint: False
 num_heads: 4
 num_head_channels: 64
@@ -15,3 +15,4 @@ resblock_updown: True
 use_new_attention_order: True
 with_fourier_features: False
 dims: 3
+temporal_bundling: 16

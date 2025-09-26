@@ -173,6 +173,7 @@ class FMTmodel(L.LightningModule):
             
             sys.path.append('flow_matching/')
             from examples.image.models.unet import UNetModel
+            #print(type(self.cm.in_channels))
             self.model = UNetModel(in_channels = self.cm.in_channels,
                     model_channels = self.cm.model_channels,
                     out_channels = self.cm.out_channels,
@@ -194,7 +195,7 @@ class FMTmodel(L.LightningModule):
             #new_state_dict = {k.replace('model.', ''): v for k, v in checkpoint['state_dict'].items()}
             #self.model.load_state_dict(new_state_dict, strict = True)
             #print('\n...model loaded from some previous session...\n')
-        if self.cm.model_name == "FluidGPT":
+        elif self.cm.model_name == "FluidGPT":
             from modelComp.FluidGPT_FM import FluidGPT_FM
             self.model = FluidGPT_FM(emb_dim=self.cm.emb_dim,
                             data_dim=[self.ct.batch_size, self.cm.temporal_bundling, self.cm.in_channels, self.cd.resample_shape, self.cd.resample_shape],
