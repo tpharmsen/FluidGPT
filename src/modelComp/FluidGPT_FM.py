@@ -217,7 +217,7 @@ class FluidGPT_FM(nn.Module):
 
         # ===== DOWN =====
         for i, module_list in enumerate(self.blockDown):
-            print(i)
+            #print(i)
             
             if self.gradient_flowthrough[0]:
                 #residual = x
