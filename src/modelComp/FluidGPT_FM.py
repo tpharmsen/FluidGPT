@@ -30,10 +30,15 @@ class FluidGPT_FM(nn.Module):
         self.skip_connects = nn.ModuleList()
         # TODO: implement act
          
-        #self.flowmatching_emb_dim = flowmatching_emb_dim
-        #self.flowt_proj = nn.Linear(flowmatching_emb_dim, emb_dim) 
-        self.flowt_proj_easy = nn.Linear(1, emb_dim) 
-        #self.flowt_proj2 = nn.Linear(flowmatching_emb_dim, 2**depth * emb_dim)
+        self.flowmatching_emb_dim = flowmatching_emb_dim
+        self.flowt_proj = nn.Linear(flowmatching_emb_dim, flowmatching_emb_dim) 
+        self.flowt_act = nn.SiLU()
+        #self.flowt_proj_easy = nn.Linear(1, emb_dim) 
+        self.flowt_proj2 = nn.Linear(flowmatching_emb_dim, flowmatching_emb_dim) #2**depth * emb_dim
+
+        self.flow_d1 = nn.Linear(flowmatching_emb_dim, emb_dim)
+        self.flow_d2 = nn.Linear(flowmatching_emb_dim, 2 * emb_dim)
+        self.flow_d3 = nn.Linear(flowmatching_emb_dim, 4 * emb_dim)
         
         self.depth = depth
         self.middleblocklen = stage_depths[depth]
@@ -191,15 +196,32 @@ class FluidGPT_FM(nn.Module):
         #t1 = self.flowt_proj(t)
         #t1 = t1.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1], x.shape[2], 1)  
         #x = x + t1
-        t1 = self.flowt_proj_easy(t.unsqueeze(-1))
+        #t1 = self.flowt_proj_easy(t.unsqueeze(-1))
+        t = gen_t_embedding(t, self.flowmatching_emb_dim)
+        t0 = self.flowt_proj(t)
+        t0 = self.flowt_act(t0)
+        t0 = self.flowt_proj2(t0)
+
+        t1 = self.flowt_act(t0)
+        t1 = self.flow_d1(t1)
         t1 = t1.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1], x.shape[2], 1)
-        x = x + t1
+
+        t2 = self.flowt_act(t0)
+        t2 = self.flow_d2(t2)
+        t2 = t2.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1] // 2, x.shape[2] // 2, 1)
+
+        t3 = self.flowt_act(t0)
+        t3 = self.flow_d3(t3)
+        t3 = t3.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1] // 4, x.shape[2] // 4, 1)
+        #x = x + t1
 
         # ===== DOWN =====
         for i, module_list in enumerate(self.blockDown):
             
             if self.gradient_flowthrough[0]:
                 residual = x
+                if i==0: x = x + t1
+                else: x = x + t2 ################# WIP
                 for module in module_list:
                     x = module(x)
                 skips.append(x)
@@ -221,6 +243,7 @@ class FluidGPT_FM(nn.Module):
         if self.gradient_flowthrough[1]:
             residual = x
 
+        x = x + t3
         for module in self.blockMiddle:
             #print(module)
             x = module(x)
