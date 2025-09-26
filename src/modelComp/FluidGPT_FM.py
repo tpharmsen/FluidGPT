@@ -208,24 +208,27 @@ class FluidGPT_FM(nn.Module):
 
         t2 = self.flowt_act(t0)
         t2 = self.flow_d2(t2)
-        t2 = t2.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1] // 2, x.shape[2] // 2, 1)
+        t2 = t2.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1], x.shape[2] // 4, 1)
 
         t3 = self.flowt_act(t0)
         t3 = self.flow_d3(t3)
-        t3 = t3.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1] // 4, x.shape[2] // 4, 1)
+        t3 = t3.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1], x.shape[2] // 16, 1)
         #x = x + t1
 
         # ===== DOWN =====
         for i, module_list in enumerate(self.blockDown):
+            print(i)
             
             if self.gradient_flowthrough[0]:
-                residual = x
+                #residual = x
                 if i==0: x = x + t1
                 else: x = x + t2 ################# WIP
                 for module in module_list:
+                    residual = x
                     x = module(x)
+                    x = x + residual
                 skips.append(x)
-                x = x + residual
+                #x = x + residual
             else:
                 for module in module_list:
                     x = module(x)
@@ -260,10 +263,14 @@ class FluidGPT_FM(nn.Module):
             x = x + (self.skip_connects[i](skip) if self.skip_connect is not None else skip)
             #print('\n______________________3________\n')
             if self.gradient_flowthrough[2]:
-                residual = x
+                #residual = x
+                if i==0: x = x + t2
+                else: x = x + t1 ################# WIP
                 for module in module_list:
+                    residual = x
                     x = module(x)
-                x = x + residual
+                    x = x + residual
+                #x = x + residual
             else:
                 for module in module_list:
                     #print(module)

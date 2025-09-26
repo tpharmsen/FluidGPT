@@ -1,6 +1,6 @@
 fourierfeatures-linear-silu-linear global embeddings for time embeddings
 then silu-linear custom for each layer
-res connect for each block instead of layer
+res connect for each block instead of for each depthlayer
 
 
 run with
