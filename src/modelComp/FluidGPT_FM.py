@@ -222,10 +222,10 @@ class FluidGPT_FM(nn.Module):
             
             if self.gradient_flowthrough[0]:
                 #residual = x
-                if i==0: x = x + t1
-                else: x = x + t2 ################# WIP
                 for module in module_list:
                     residual = x
+                    if i==0: x = x + t1
+                    else: x = x + t2 ################# WIP
                     x = module(x)
                     x = x + residual
                 skips.append(x)
@@ -245,15 +245,18 @@ class FluidGPT_FM(nn.Module):
         #x = x + t2
         
         if self.gradient_flowthrough[1]:
-            residual = x
+            for module in self.blockMiddle:
+                residual = x
+                x = x + t3
+                x = module(x)
+                x = x + residual
+        else:
+            for module in self.blockMiddle:
+                x = x + t3
+                x = module(x)
+        
+        
 
-        x = x + t3
-        for module in self.blockMiddle:
-            #print(module)
-            x = module(x)
-
-        if self.gradient_flowthrough[1]:
-            x = x + residual
         #print('\n___________________1_________________\n')
         # ===== UP =====
         for i, module_list in enumerate(self.blockUp):
@@ -265,10 +268,10 @@ class FluidGPT_FM(nn.Module):
             #print('\n______________________3________\n')
             if self.gradient_flowthrough[2]:
                 #residual = x
-                if i==0: x = x + t2
-                else: x = x + t1 ################# WIP
                 for module in module_list:
                     residual = x
+                    if i==0: x = x + t2
+                    else: x = x + t1 ################# WIP
                     x = module(x)
                     x = x + residual
                 #x = x + residual
