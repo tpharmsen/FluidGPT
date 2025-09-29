@@ -198,7 +198,7 @@ class FluidGPT_FM(nn.Module):
         #x = x + t1
         #t1 = self.flowt_proj_easy(t.unsqueeze(-1))
         t = gen_t_embedding(t, self.flowmatching_emb_dim)
-        print(t.shape)
+        #print(t.shape)
         t0 = self.flowt_proj(t)
         t0 = self.flowt_act(t0)
         t0 = self.flowt_proj2(t0)
