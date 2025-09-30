@@ -9,6 +9,51 @@ def gen_t_embedding(t, emb_dim, max_positions=10000):
     emb = torch.cat([emb.sin(), emb.cos()], dim=1)
     return emb
 
+class ConvEmbedding(nn.Module):
+    def __init__(self, emb_dim=96, data_dim=(1,5,4,128,128), patch_size=(8,8), hiddenout_dim=256, act=nn.GELU):
+        super().__init__()
+
+        self.B, self.T, self.C, self.H, self.W = data_dim
+        self.emb_dim = emb_dim
+        self.pH, self.pW = patch_size
+        self.hiddenout_dim = hiddenout_dim
+        self.patch_grid_res = (self.H // self.pH, self.W // self.pW)
+
+        assert self.H % self.pH == 0 and self.W % self.pW == 0, "spatial input dim must be divisible by patch_size"
+        assert self.H == self.W, "must be square"
+
+        # Encoder: Conv -> Norm -> Act -> Conv -> Embedding
+        self.encoder = nn.Sequential(
+            nn.Conv2d(self.C, hiddenout_dim, kernel_size=patch_size, stride=patch_size),  # downsample
+            nn.GroupNorm(32, hiddenout_dim),
+            act(),
+            nn.Conv2d(hiddenout_dim, emb_dim, kernel_size=1),
+        )
+
+        # Decoder: Conv -> Norm -> Act -> ConvTranspose
+        self.decoder = nn.Sequential(
+            nn.Conv2d(emb_dim, hiddenout_dim, kernel_size=1),
+            nn.GroupNorm(32, hiddenout_dim),
+            act(),
+            nn.ConvTranspose2d(hiddenout_dim, self.C, kernel_size=patch_size, stride=patch_size),
+        )
+
+    def encode(self, x, proj=True):
+        B, T, C, H, W = x.shape
+        x = rearrange(x, "b t c h w -> (b t) c h w")
+        x = self.encoder(x)  # (B*T, D, H/p, W/p)
+        Hn, Wn = x.shape[-2:]
+        x = rearrange(x, "(b t) d h w -> b t (h w) d", b=B, t=T)  # patch tokens
+        return x
+
+    def decode(self, x, proj=True):
+        B, T, N, D = x.shape
+        h, w = self.patch_grid_res
+        x = rearrange(x, "b t (h w) d -> (b t) d h w", h=h, w=w)
+        x = self.decoder(x)  # (B*T, C, H, W)
+        x = rearrange(x, "(b t) c h w -> b t c h w", b=B, t=T)
+        return x
+
 class FluidGPT_FM(nn.Module):
     def __init__(self, emb_dim=96, data_dim=[64,3,2,128,128], patch_size=(8,8), hiddenout_dim=128, flowmatching_emb_dim=256,
                  depth=2, stage_depths=[6,6,10,6,6], num_heads=[6,6,12,6,6], window_size=4, mlp_ratio=4., 
@@ -19,7 +64,8 @@ class FluidGPT_FM(nn.Module):
         # assert that every element in stage_depths is divisible by 3 except for the middle element
         assert all(stage_depths[i] % 3 == 0 for i in range(len(stage_depths)) if i != depth), "stage depth must be divisible by 3 at non-middle elements"
         assert stage_depths[depth] % 2 == 0, "stage depth must be divisible by 2 at middle element"
-        self.embedding = LinearEmbedding(emb_dim, data_dim, patch_size, hiddenout_dim, act)
+        #self.embedding = LinearEmbedding(emb_dim, data_dim, patch_size, hiddenout_dim, act)
+        self.embedding = ConvEmbedding(emb_dim, data_dim, patch_size, hiddenout_dim, act)
         self.pos_encoding = SpatiotemporalPositionalEncoding(emb_dim, data_dim[3] // patch_size[0], data_dim[4] // patch_size[1], data_dim[1])
         #print(data_dim[2] // patch_size[0], data_dim[2] // patch_size[0], data_dim[1])
         self.blockDown = nn.ModuleList(nn.ModuleList() for i in range(depth))
