@@ -4,9 +4,9 @@ temporal_bundling: 16
 emb_dim: 96
 patch_size: 8
 hiddenout_dim: 512
-flowmatching_emb_dim: 512
+flowmatching_emb_dim: 256
 depth: 2
-stage_depths: [12,12,12,12,12]
+stage_depths: [9,9,10,9,9]
 num_heads: [32,32,64,32,32]
 window_size: 4
 use_flex_attn: True

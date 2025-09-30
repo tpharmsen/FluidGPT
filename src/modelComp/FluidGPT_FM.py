@@ -100,10 +100,10 @@ class FluidGPT_FM(nn.Module):
         for i in range(stage_depths[depth]):
             
             if i % 2 == 0:
-                self.resnorms_middle.append(nn.LayerNorm((emb_dim + 128) * 2**depth))
+                self.resnorms_middle.append(nn.LayerNorm((emb_dim + 32) * 2**depth))
                 self.blockMiddle.append(
                     SpatialSwinBlock(
-                        (emb_dim + 128) * 2**depth,
+                        (emb_dim + 32) * 2**depth,
                         patch_grid_res=patch_grid_res,
                         num_heads=num_heads[depth],
                         window_size = full_window_size,
@@ -121,7 +121,7 @@ class FluidGPT_FM(nn.Module):
             if i % 2 == 1:
                 self.blockMiddle.append(
                     TemporalBlock(
-                        emb_dim=(emb_dim + 128) * 2**depth,
+                        emb_dim=(emb_dim + 32) * 2**depth,
                         num_heads=num_heads[depth],
                         max_timesteps=data_dim[1],
                         mlp_ratio=mlp_ratio,
@@ -257,8 +257,11 @@ class FluidGPT_FM(nn.Module):
         for j, module in enumerate(self.blockMiddle):
             if j % 2 == 0:
                 residual = x if self.gradient_flowthrough[1] else None
+                #print('middle before', x.shape, t3.shape)
                 x = torch.concat((x, t3), dim=3)
+                #print(x.shape, t3.shape)
                 x = self.resnorms_middle[j // 2](x)
+                #print(x.shape)
             x = module(x)
             if j % 2 == 1:
                 x = x[:,:,:,:-128]
