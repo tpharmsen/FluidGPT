@@ -3,8 +3,8 @@ in_channels: 2
 temporal_bundling: 16
 emb_dim: 96
 patch_size: 8
-hiddenout_dim: 256
-flowmatching_emb_dim: 256
+hiddenout_dim: 512
+flowmatching_emb_dim: 512
 depth: 2
 stage_depths: [12,12,12,12,12]
 num_heads: [32,32,64,32,32]

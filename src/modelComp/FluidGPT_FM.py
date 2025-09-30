@@ -45,6 +45,10 @@ class FluidGPT_FM(nn.Module):
         self.gradient_flowthrough = gradient_flowthrough
         self.skip_connect = skip_connect
 
+        self.resnorms_down = nn.ModuleList(nn.ModuleList() for _ in range(depth))
+        self.resnorms_middle = nn.ModuleList()
+        self.resnorms_up = nn.ModuleList(nn.ModuleList() for _ in range(depth))
+
         for i in range(depth):
             patch_grid_res = (data_dim[3] // (patch_size[0] * 2**i), data_dim[4] // (patch_size[1] * 2**i))
             for j in range(stage_depths[i]):
@@ -83,6 +87,7 @@ class FluidGPT_FM(nn.Module):
                             norm_layer=norm_layer
                         )
                     )
+                self.resnorms_down[i].append(nn.LayerNorm(emb_dim * 2**i))
                 
 
             self.patchMerges.append(PatchMerge(emb_dim * 2**i))
@@ -127,7 +132,8 @@ class FluidGPT_FM(nn.Module):
                         norm_layer=norm_layer
                     )
                 )
-            
+
+            self.resnorms_middle.append(nn.LayerNorm(emb_dim * 2**depth))
 
         for i in reversed(range(depth)):
             #print(i)
@@ -169,7 +175,7 @@ class FluidGPT_FM(nn.Module):
                             norm_layer=norm_layer
                         )
                     )
-                
+                self.resnorms_up[depth - i - 1].append(nn.LayerNorm(emb_dim * 2**i))
                     
             self.patchUnmerges.append(PatchUnMerge(emb_dim * 2**(i+1)))
             self.skip_connects.append(skip_connect(emb_dim * 2**i)) if skip_connect is not None else None
@@ -197,6 +203,7 @@ class FluidGPT_FM(nn.Module):
         #t1 = t1.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1], x.shape[2], 1)  
         #x = x + t1
         #t1 = self.flowt_proj_easy(t.unsqueeze(-1))
+        #print(t.shape)
         t = gen_t_embedding(t, self.flowmatching_emb_dim)
         #print(t.shape)
         t0 = self.flowt_proj(t)
@@ -218,68 +225,44 @@ class FluidGPT_FM(nn.Module):
 
         # ===== DOWN =====
         for i, module_list in enumerate(self.blockDown):
-            #print(i)
-            
-            if self.gradient_flowthrough[0]:
-                #residual = x
-                for module in module_list:
-                    residual = x
-                    if i==0: x = x + t1
-                    else: x = x + t2 ################# WIP
-                    x = module(x)
+            for j, module in enumerate(module_list):
+                residual = x if self.gradient_flowthrough[0] else None
+                if i == 0:
+                    x = x + t1
+                else:
+                    x = x + t2
+                x = self.resnorms_down[i][j](x)
+                x = module(x)
+                if residual is not None:
                     x = x + residual
-                skips.append(x)
-                #x = x + residual
-            else:
-                for module in module_list:
-                    x = module(x)
-                skips.append(x)
-
+            skips.append(x)
             x = self.patchMerges[i](x)
 
-        # ===== MIDDLE =====
-        #t2 = self.flowt_proj2(t)
-        #print('t2 shape', t2.shape)
-        #t2 = t2.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1], x.shape[2], 1)  
-        #print('t2 shape', t2.shape)
-        #x = x + t2
-        
-        if self.gradient_flowthrough[1]:
-            for module in self.blockMiddle:
-                residual = x
-                x = x + t3
-                x = module(x)
+         # ===== MIDDLE =====
+        for j, module in enumerate(self.blockMiddle):
+            residual = x if self.gradient_flowthrough[1] else None
+            x = x + t3
+            x = self.resnorms_middle[j](x)
+            x = module(x)
+            if residual is not None:
                 x = x + residual
-        else:
-            for module in self.blockMiddle:
-                x = x + t3
-                x = module(x)
-        
-        
 
-        #print('\n___________________1_________________\n')
         # ===== UP =====
         for i, module_list in enumerate(self.blockUp):
             x = self.patchUnmerges[i](x)
-            #print('\n______________________2________\n')
-            #x = x + self.skip_connects[i](skips[self.depth - i - 1])
             skip = skips[self.depth - i - 1]
             x = x + (self.skip_connects[i](skip) if self.skip_connect is not None else skip)
-            #print('\n______________________3________\n')
-            if self.gradient_flowthrough[2]:
-                #residual = x
-                for module in module_list:
-                    residual = x
-                    if i==0: x = x + t2
-                    else: x = x + t1 ################# WIP
-                    x = module(x)
+
+            for j, module in enumerate(module_list):
+                residual = x if self.gradient_flowthrough[2] else None
+                if i == 0:
+                    x = x + t2
+                else:
+                    x = x + t1
+                x = self.resnorms_up[i][j](x)
+                x = module(x)
+                if residual is not None:
                     x = x + residual
-                #x = x + residual
-            else:
-                for module in module_list:
-                    #print(module)
-                    #print('\n______________________n________\n')
-                    x = module(x)
         
         x = self.embedding.decode(x, proj=True)
         x = x.permute(0,2,1,3,4).contiguous()
