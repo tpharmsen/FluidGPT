@@ -39,7 +39,9 @@ class FluidGPT_FM(nn.Module):
         self.flow_d1 = nn.Linear(flowmatching_emb_dim, emb_dim)
         self.flow_d2 = nn.Linear(flowmatching_emb_dim, 2 * emb_dim)
         self.flow_d3 = nn.Linear(flowmatching_emb_dim, 4 * emb_dim)
-        
+        self.flow_d4 = nn.Linear(flowmatching_emb_dim, 2 * emb_dim)
+        self.flow_d5 = nn.Linear(flowmatching_emb_dim, emb_dim)
+
         self.depth = depth
         self.middleblocklen = stage_depths[depth]
         self.gradient_flowthrough = gradient_flowthrough
@@ -52,9 +54,9 @@ class FluidGPT_FM(nn.Module):
         for i in range(depth):
             patch_grid_res = (data_dim[3] // (patch_size[0] * 2**i), data_dim[4] // (patch_size[1] * 2**i))
             for j in range(stage_depths[i]):
-                #print(j)
-                
+
                 if j % 3 == 0:
+                    self.resnorms_down[i].append(nn.LayerNorm(emb_dim * 2**i))
                     self.blockDown[i].append(
                         SwinStage(
                             emb_dim * 2**i, 
@@ -87,7 +89,7 @@ class FluidGPT_FM(nn.Module):
                             norm_layer=norm_layer
                         )
                     )
-                self.resnorms_down[i].append(nn.LayerNorm(emb_dim * 2**i))
+                
                 
 
             self.patchMerges.append(PatchMerge(emb_dim * 2**i))
@@ -99,7 +101,7 @@ class FluidGPT_FM(nn.Module):
         for i in range(stage_depths[depth]):
             
             if i % 2 == 0:
-
+                self.resnorms_middle.append(nn.LayerNorm(emb_dim * 2**depth))
                 self.blockMiddle.append(
                     SpatialSwinBlock(
                         emb_dim * 2**depth,
@@ -133,7 +135,6 @@ class FluidGPT_FM(nn.Module):
                     )
                 )
 
-            self.resnorms_middle.append(nn.LayerNorm(emb_dim * 2**depth))
 
         for i in reversed(range(depth)):
             #print(i)
@@ -143,6 +144,7 @@ class FluidGPT_FM(nn.Module):
                 #print(i, emb_dim * 2**i)
                 
                 if j % 3 == 0:
+                    self.resnorms_up[depth - i - 1].append(nn.LayerNorm(emb_dim * 2**i))
                     self.blockUp[depth - i - 1].append(
                         SwinStage(
                             emb_dim * 2**i, 
@@ -175,7 +177,7 @@ class FluidGPT_FM(nn.Module):
                             norm_layer=norm_layer
                         )
                     )
-                self.resnorms_up[depth - i - 1].append(nn.LayerNorm(emb_dim * 2**i))
+                
                     
             self.patchUnmerges.append(PatchUnMerge(emb_dim * 2**(i+1)))
             self.skip_connects.append(skip_connect(emb_dim * 2**i)) if skip_connect is not None else None
@@ -221,31 +223,42 @@ class FluidGPT_FM(nn.Module):
         t3 = self.flowt_act(t0)
         t3 = self.flow_d3(t3)
         t3 = t3.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1], x.shape[2] // 16, 1)
-        #x = x + t1
+        
+        t4 = self.flowt_act(t0)
+        t4 = self.flow_d4(t4)
+        t4 = t4.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1], x.shape[2] // 4, 1)
+
+        t5 = self.flowt_act(t0)
+        t5 = self.flow_d5(t5)
+        t5 = t5.unsqueeze(1).unsqueeze(2).repeat(1, x.shape[1], x.shape[2], 1)
 
         # ===== DOWN =====
         for i, module_list in enumerate(self.blockDown):
             for j, module in enumerate(module_list):
-                residual = x if self.gradient_flowthrough[0] else None
-                if i == 0:
-                    x = x + t1
-                else:
-                    x = x + t2
-                x = self.resnorms_down[i][j](x)
+                if j % 3 == 0:
+                    residual = x if self.gradient_flowthrough[0] else None
+                    if i == 0:
+                        x = x + t1
+                    else:
+                        x = x + t2
+                    x = self.resnorms_down[i][j // 3](x)
                 x = module(x)
-                if residual is not None:
-                    x = x + residual
+                if j % 3 == 2:
+                    if residual is not None:
+                        x = x + residual
             skips.append(x)
             x = self.patchMerges[i](x)
 
          # ===== MIDDLE =====
         for j, module in enumerate(self.blockMiddle):
-            residual = x if self.gradient_flowthrough[1] else None
-            x = x + t3
-            x = self.resnorms_middle[j](x)
+            if j % 2 == 0:
+                residual = x if self.gradient_flowthrough[1] else None
+                x = x + t3
+                x = self.resnorms_middle[j // 2](x)
             x = module(x)
-            if residual is not None:
-                x = x + residual
+            if j % 2 == 1:
+                if residual is not None:
+                    x = x + residual
 
         # ===== UP =====
         for i, module_list in enumerate(self.blockUp):
@@ -254,15 +267,17 @@ class FluidGPT_FM(nn.Module):
             x = x + (self.skip_connects[i](skip) if self.skip_connect is not None else skip)
 
             for j, module in enumerate(module_list):
-                residual = x if self.gradient_flowthrough[2] else None
-                if i == 0:
-                    x = x + t2
-                else:
-                    x = x + t1
-                x = self.resnorms_up[i][j](x)
+                if j % 3 == 0:
+                    residual = x if self.gradient_flowthrough[2] else None
+                    if i == 0:
+                        x = x + t4
+                    else:
+                        x = x + t5
+                    x = self.resnorms_up[i][j // 3](x)
                 x = module(x)
-                if residual is not None:
-                    x = x + residual
+                if j % 3 == 2:
+                    if residual is not None:
+                        x = x + residual
         
         x = self.embedding.decode(x, proj=True)
         x = x.permute(0,2,1,3,4).contiguous()
