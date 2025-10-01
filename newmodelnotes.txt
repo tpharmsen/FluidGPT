@@ -5,3 +5,5 @@ res connect for each block instead of for each depthlayer
 
 run with
 python src/train.py --trainer FM --CB surf-high --CD surf-test --CM fm-test-own --CT fm-h100_highlr --out newmodeltest
+
+decreased data with intersampling rate!!

@@ -9,6 +9,14 @@ def gen_t_embedding(t, emb_dim, max_positions=10000):
     emb = torch.cat([emb.sin(), emb.cos()], dim=1)
     return emb
 
+# RECENT CHANGES:
+# added final 3 kerel conv layer to spread noisy output
+# disabled skip connections
+# Conv embedder instead of linear
+# Concat time embedding instead of add
+# Normlization
+# Try checkerboard noise ??????????????????????
+
 class ConvEmbedding(nn.Module):
     def __init__(self, emb_dim=96, data_dim=(1,5,4,128,128), patch_size=(8,8), hiddenout_dim=256, act=nn.GELU):
         super().__init__()
@@ -227,6 +235,8 @@ class FluidGPT_FM(nn.Module):
             self.patchUnmerges.append(PatchUnMerge(emb_dim * 2**(i+1)))
             self.skip_connects.append(skip_connect(emb_dim * 2**i)) if skip_connect is not None else None
 
+            self.final_layer = nn.Conv3d(2, 2, kernel_size=3, padding=1)
+
     def forward(self, x, t, extra={None}):
         # shape checks
         x = x.permute(0,2,1,3,4).contiguous()
@@ -296,7 +306,7 @@ class FluidGPT_FM(nn.Module):
                     #print('after remove', x.shape)
                     if residual is not None:
                         x = x + residual
-            skips.append(x)
+            #skips.append(x)
             x = self.patchMerges[i](x)
 
          # ===== MIDDLE =====
@@ -317,8 +327,8 @@ class FluidGPT_FM(nn.Module):
         # ===== UP =====
         for i, module_list in enumerate(self.blockUp):
             x = self.patchUnmerges[i](x)
-            skip = skips[self.depth - i - 1]
-            x = x + (self.skip_connects[i](skip) if self.skip_connect is not None else skip)
+            #skip = skips[self.depth - i - 1]
+            #x = x + (self.skip_connects[i](skip) if self.skip_connect is not None else skip)
 
             for j, module in enumerate(module_list):
                 if j % 2 == 0:
@@ -338,5 +348,6 @@ class FluidGPT_FM(nn.Module):
         
         x = self.embedding.decode(x, proj=True)
         x = x.permute(0,2,1,3,4).contiguous()
+        x = self.final_layer(x)
         return x
 
