@@ -15,6 +15,7 @@ def gen_t_embedding(t, emb_dim, max_positions=10000):
 # Conv embedder instead of linear
 # Concat time embedding instead of add
 # Normlization
+# Try causal noise (conditioning gets lost)
 # Try checkerboard noise ??????????????????????
 
 class ConvEmbedding(nn.Module):
@@ -139,6 +140,7 @@ class FluidGPT_FM(nn.Module):
                             drop=drop,
                             attn_drop=attn_drop,
                             use_flex_attn=use_flex_attn,
+                            causal=True,
                             act_layer=act,
                             norm_layer=norm_layer
                         )
@@ -183,6 +185,7 @@ class FluidGPT_FM(nn.Module):
                         drop=drop,
                         attn_drop=attn_drop,
                         use_flex_attn=use_flex_attn,
+                        causal=True,
                         act_layer=act,
                         norm_layer=norm_layer
                     )
@@ -226,6 +229,7 @@ class FluidGPT_FM(nn.Module):
                             drop=drop,
                             attn_drop=attn_drop,
                             use_flex_attn=use_flex_attn,
+                            causal=True,
                             act_layer=act,
                             norm_layer=norm_layer
                         )

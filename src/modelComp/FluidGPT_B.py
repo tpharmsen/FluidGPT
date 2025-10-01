@@ -345,11 +345,12 @@ class SpatialSwinBlock(nn.Module): #change name to something else
 class TemporalBlock(nn.Module):
     def __init__(self, emb_dim, num_heads, max_timesteps=5, mlp_ratio=4.0,
                  qkv_bias=True, drop=0.0, attn_drop=0.0, use_flex_attn=True,
-                 act_layer=nn.GELU, norm_layer=nn.LayerNorm):
+                 causal=False, act_layer=nn.GELU, norm_layer=nn.LayerNorm):
         super().__init__()
         self.emb_dim = emb_dim
         self.num_heads = num_heads
         self.max_timesteps = max_timesteps
+        self.causal = causal
 
         self.norm1 = norm_layer(emb_dim)
         self.qkv = nn.Linear(emb_dim, emb_dim * 3, bias=qkv_bias)
@@ -409,6 +410,21 @@ class TemporalBlock(nn.Module):
         bias = self.relative_position_bias_table[self.relative_position_index[:T, :T].reshape(-1)]
         bias = bias.view(T, T, self.num_heads).permute(2, 0, 1)  # (heads, T, T)
         attn = attn + bias.unsqueeze(0)
+
+        # -------------------------
+        # Causal masking
+        # -------------------------
+        if self.causal:
+            # lower-triangular mask (causal)
+            causal_mask = torch.triu(torch.ones((T, T), device=x.device, dtype=torch.bool), diagonal=1)
+            # mask out the first 4 timesteps as keys (cannot be attended to)
+            forbid_mask = torch.zeros((T, T), device=x.device, dtype=torch.bool)
+            forbid_mask[:, :4] = True
+
+            full_mask = causal_mask | forbid_mask  # combine
+            attn = attn.masked_fill(full_mask.unsqueeze(0).unsqueeze(0), float('-inf'))
+            print(attn)
+        # -------------------------
 
         attn = F.softmax(attn, dim=-1)
         attn = self.attn_drop(attn)
