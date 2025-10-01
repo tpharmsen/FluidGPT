@@ -414,17 +414,13 @@ class TemporalBlock(nn.Module):
         # -------------------------
         # Causal masking
         # -------------------------
-        if self.causal:
-            # lower-triangular mask (causal)
-            causal_mask = torch.triu(torch.ones((T, T), device=x.device, dtype=torch.bool), diagonal=1)
-            # mask out the first 4 timesteps as keys (cannot be attended to)
+        if self.causal:  # can keep flag or rename to something like 'mask_first4'
+            T = attn.size(-1)
             forbid_mask = torch.zeros((T, T), device=x.device, dtype=torch.bool)
-            forbid_mask[:, :4] = True
-
-            full_mask = causal_mask | forbid_mask  # combine
-            attn = attn.masked_fill(full_mask.unsqueeze(0).unsqueeze(0), float('-inf'))
-            print(attn)
-        # -------------------------
+            forbid_mask[0:4, 0:4] = True
+            forbid_mask[4:T, 0:4] = True  # tokens 4-15 cannot attend to 0-3
+            attn = attn.masked_fill(forbid_mask.unsqueeze(0).unsqueeze(0), float('-inf'))
+        # -----------------------
 
         attn = F.softmax(attn, dim=-1)
         attn = self.attn_drop(attn)

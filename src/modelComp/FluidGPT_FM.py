@@ -66,7 +66,7 @@ class ConvEmbedding(nn.Module):
 class FluidGPT_FM(nn.Module):
     def __init__(self, emb_dim=96, data_dim=[64,3,2,128,128], patch_size=(8,8), hiddenout_dim=128, flowmatching_emb_dim=256,
                  depth=2, stage_depths=[6,6,10,6,6], num_heads=[6,6,12,6,6], window_size=4, mlp_ratio=4., 
-                 qkv_bias=True, drop=0., attn_drop=0., use_flex_attn=True, norm_layer=nn.LayerNorm,
+                 qkv_bias=True, drop=0., attn_drop=0., use_flex_attn=True, causal_attn = True, norm_layer=nn.LayerNorm,
                  act=nn.GELU, skip_connect=ConvNeXtBlock, gradient_flowthrough=[True, False, False]):
         super().__init__()
 
@@ -101,6 +101,7 @@ class FluidGPT_FM(nn.Module):
         self.middleblocklen = stage_depths[depth]
         self.gradient_flowthrough = gradient_flowthrough
         self.skip_connect = skip_connect
+        #self.causal_attn = causal_attn  
 
         self.resnorms_down = nn.ModuleList(nn.ModuleList() for _ in range(depth))
         self.resnorms_middle = nn.ModuleList()
@@ -140,12 +141,11 @@ class FluidGPT_FM(nn.Module):
                             drop=drop,
                             attn_drop=attn_drop,
                             use_flex_attn=use_flex_attn,
-                            causal=True,
+                            causal=causal_attn,
                             act_layer=act,
                             norm_layer=norm_layer
                         )
                     )
-                
                 
             self.patchMerges.append(PatchMerge(emb_dim * 2**i))
 
@@ -185,7 +185,7 @@ class FluidGPT_FM(nn.Module):
                         drop=drop,
                         attn_drop=attn_drop,
                         use_flex_attn=use_flex_attn,
-                        causal=True,
+                        causal=causal_attn,
                         act_layer=act,
                         norm_layer=norm_layer
                     )
@@ -229,7 +229,7 @@ class FluidGPT_FM(nn.Module):
                             drop=drop,
                             attn_drop=attn_drop,
                             use_flex_attn=use_flex_attn,
-                            causal=True,
+                            causal=causal_attn,
                             act_layer=act,
                             norm_layer=norm_layer
                         )
