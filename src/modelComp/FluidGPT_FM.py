@@ -15,6 +15,8 @@ def gen_t_embedding(t, emb_dim, max_positions=10000):
 # Conv embedder instead of linear
 # Concat time embedding instead of add
 # Normlization
+# Try some form of FILM
+# Try different conditioning method
 # Try causal noise (conditioning gets lost)
 # Try checkerboard noise ??????????????????????
 
