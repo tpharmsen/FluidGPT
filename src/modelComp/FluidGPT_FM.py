@@ -75,8 +75,8 @@ class FluidGPT_FM(nn.Module):
         # assert that every element in stage_depths is divisible by 3 except for the middle element
         assert all(stage_depths[i] % 3 == 0 for i in range(len(stage_depths)) if i != depth), "stage depth must be divisible by 3 at non-middle elements"
         assert stage_depths[depth] % 2 == 0, "stage depth must be divisible by 2 at middle element"
-        #self.embedding = LinearEmbedding(emb_dim, data_dim, patch_size, hiddenout_dim, act)
-        self.embedding = ConvEmbedding(emb_dim, data_dim, patch_size, hiddenout_dim, act)
+        self.embedding = LinearEmbedding(emb_dim, data_dim, patch_size, hiddenout_dim, act)
+        #self.embedding = ConvEmbedding(emb_dim, data_dim, patch_size, hiddenout_dim, act)
         self.pos_encoding = SpatiotemporalPositionalEncoding(emb_dim, data_dim[3] // patch_size[0], data_dim[4] // patch_size[1], data_dim[1])
         #print(data_dim[2] // patch_size[0], data_dim[2] // patch_size[0], data_dim[1])
         self.blockDown = nn.ModuleList(nn.ModuleList() for i in range(depth))
