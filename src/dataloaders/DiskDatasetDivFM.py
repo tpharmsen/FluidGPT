@@ -61,6 +61,7 @@ class DiskDatasetDivFM(Dataset):
             target = (target - self.avgnorm) / self.stdnorm
         #print(target.shape)
         #prior = self.prior_purenoise(target, fromframe=self.from_frame)
+        #print(self.from_frame)
         prior = self.checkerboard_noise(target.clone(), fromframe=self.from_frame)
 
         #label = (label - self.avgnorm) / self.stdnorm)
@@ -76,7 +77,7 @@ class DiskDatasetDivFM(Dataset):
         prior[fromframe:] = noise
         return prior
 
-    def checkerboard_noise(data, fromframe=4):
+    def checkerboard_noise(self, data, fromframe=4):
         # generate checkerboard noise
         noise = torch.randn(size=(data.shape[0] - fromframe, data.shape[1], data.shape[2] // 8, data.shape[3] // 8), device=data.device)
         noise = noise.repeat_interleave(8, dim=2).repeat_interleave(8, dim=3)
