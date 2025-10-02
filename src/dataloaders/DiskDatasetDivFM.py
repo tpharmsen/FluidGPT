@@ -94,7 +94,8 @@ class DiskDatasetDivFM(Dataset):
         if self.avgnorm is not None:
             full = (full - self.avgnorm) / self.stdnorm
         #print(full.shape)
-        prior = self.prior_purenoise(full[:self.tb], fromframe=self.from_frame)
+        #prior = self.prior_purenoise(full[:self.tb], fromframe=self.from_frame)
+        prior = self.checkerboard_noise(full[:self.tb].clone(), fromframe=self.from_frame)
         return (
             torch.tensor(prior, dtype=torch.float32).permute(1,0,2,3),
             torch.tensor(full, dtype=torch.float32).permute(1,0,2,3).unsqueeze(0)
