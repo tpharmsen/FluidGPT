@@ -84,9 +84,9 @@ class ConvEmbeddingV2(nn.Module):
     def __init__(
         self,
         emb_dim=96,
-        data_dim=(1,5,4,128,128),
+        data_dim=(1,16,2,128,128),
         patch_size=(8,8),
-        hidden_dims=[128, 256],
+        hidden_dims=128,
         num_res_blocks=2,
         act=nn.GELU,
         norm=nn.GroupNorm
@@ -102,28 +102,26 @@ class ConvEmbeddingV2(nn.Module):
 
         # --- Encoder ---
         encoder_layers = [
-            nn.Conv2d(self.C, hidden_dims[0], kernel_size=patch_size, stride=patch_size),
-            norm(32, hidden_dims[0]),
+            nn.Conv2d(self.C, hidden_dims, kernel_size=patch_size, stride=patch_size),
+            norm(32, hidden_dims),
             act()
         ]
-        for hdim in hidden_dims:
-            for _ in range(num_res_blocks):
-                encoder_layers.append(ResidualBlock(hdim, act=act, norm=norm))
-        
-        encoder_layers.append(nn.Conv2d(hidden_dims[-1], emb_dim, kernel_size=1))
+        for _ in range(num_res_blocks):
+            encoder_layers.append(ResidualBlock(hidden_dims, act=act, norm=norm))
+
+        encoder_layers.append(nn.Conv2d(hidden_dims, emb_dim, kernel_size=1))
         self.encoder = nn.Sequential(*encoder_layers)
 
         # --- Decoder ---
         decoder_layers = [
-            nn.Conv2d(emb_dim, hidden_dims[-1], kernel_size=1),
-            norm(32, hidden_dims[-1]),
+            nn.Conv2d(emb_dim, hidden_dims, kernel_size=1),
+            norm(32, hidden_dims),
             act()
         ]
-        for hdim in reversed(hidden_dims):
-            for _ in range(num_res_blocks):
-                decoder_layers.append(ResidualBlock(hdim, act=act, norm=norm))
-        
-        decoder_layers.append(nn.ConvTranspose2d(hidden_dims[0], self.C, kernel_size=patch_size, stride=patch_size))
+        for _ in range(num_res_blocks):
+            decoder_layers.append(ResidualBlock(hidden_dims, act=act, norm=norm))
+
+        decoder_layers.append(nn.ConvTranspose2d(hidden_dims, self.C, kernel_size=patch_size, stride=patch_size))
         self.decoder = nn.Sequential(*decoder_layers)
 
     def encode(self, x):
