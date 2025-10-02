@@ -312,7 +312,7 @@ class FluidGPT_FM(nn.Module):
                     #print('after remove', x.shape)
                     if residual is not None:
                         x = x + residual
-            #skips.append(x)
+            skips.append(x)
             x = self.patchMerges[i](x)
 
          # ===== MIDDLE =====
@@ -333,8 +333,8 @@ class FluidGPT_FM(nn.Module):
         # ===== UP =====
         for i, module_list in enumerate(self.blockUp):
             x = self.patchUnmerges[i](x)
-            #skip = skips[self.depth - i - 1]
-            #x = x + (self.skip_connects[i](skip) if self.skip_connect is not None else skip)
+            skip = skips[self.depth - i - 1]
+            x = x + (self.skip_connects[i](skip) if self.skip_connect is not None else skip)
 
             for j, module in enumerate(module_list):
                 if j % 2 == 0:
