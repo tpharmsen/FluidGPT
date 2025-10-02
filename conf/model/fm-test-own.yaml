@@ -10,6 +10,7 @@ stage_depths: [12,12,12,12,12]
 num_heads: [32,32,64,32,32]
 window_size: 4
 use_flex_attn: True
+causal_attn: True
 act: "gelu"
 skipblock: "convnext"
 gradient_flowthrough: [True, True, True]

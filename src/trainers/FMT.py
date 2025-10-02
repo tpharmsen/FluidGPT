@@ -207,6 +207,7 @@ class FMTmodel(L.LightningModule):
                             num_heads=self.cm.num_heads,
                             window_size=self.cm.window_size,
                             use_flex_attn=self.cm.use_flex_attn,
+                            causal_attn=self.cm.causal_attn,
                             act=ACT_MAPPER[self.cm.act],
                             skip_connect=SKIPBLOCK_MAPPER[self.cm.skipblock],
                             gradient_flowthrough=self.cm.gradient_flowthrough,
