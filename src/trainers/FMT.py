@@ -199,7 +199,7 @@ class FMTmodel(L.LightningModule):
             from modelComp.FluidGPT_FM import FluidGPT_FM
             self.model = FluidGPT_FM(emb_dim=self.cm.emb_dim,
                             data_dim=[self.ct.batch_size, self.cm.temporal_bundling, self.cm.in_channels, self.cd.resample_shape, self.cd.resample_shape],
-                            embedder_type=self.cm.embedder_type
+                            embedder_type=self.cm.embedder_type,
                             patch_size=(self.cm.patch_size, self.cm.patch_size),
                             hiddenout_dim=self.cm.hiddenout_dim, 
                             flowmatching_emb_dim=self.cm.flowmatching_emb_dim,
