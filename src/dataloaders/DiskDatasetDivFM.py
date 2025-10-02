@@ -8,9 +8,10 @@ from dataloaders.utils import spatial_resample
 from scipy.ndimage import gaussian_filter
 
 class DiskDatasetDivFM(Dataset):
-    def __init__(self, preproc_path, temporal_bundling = 1, from_frame = 4):
+    def __init__(self, preproc_path, temporal_bundling = 1, noisetype='puregaussian', from_frame = 4):
         self.filepath = preproc_path
         self.from_frame = from_frame
+        self.noisetype = noisetype
         self._file = None
         # If the file ends with .h5, remove it
         if self.filepath.endswith('.h5'):
@@ -62,8 +63,12 @@ class DiskDatasetDivFM(Dataset):
         #print(target.shape)
         #prior = self.prior_purenoise(target, fromframe=self.from_frame)
         #print(self.from_frame)
-        prior = self.checkerboard_noise(target.clone(), fromframe=self.from_frame)
-
+        if self.noisetype == 'puregaussian':
+            prior = self.prior_purenoise(target.clone(), fromframe=self.from_frame)
+        elif self.noisetype == 'checkerboard':
+            prior = self.checkerboard_noise(target.clone(), fromframe=self.from_frame)
+        else:
+            raise ValueError(f"Unknown noisetype {self.noisetype}")
         #label = (label - self.avgnorm) / self.stdnorm)
         return (
             torch.tensor(prior, dtype=torch.float32).permute(1,0,2,3), 
@@ -73,9 +78,8 @@ class DiskDatasetDivFM(Dataset):
     def prior_purenoise(self, data, fromframe=4):
         # generate pure gaussian noise
         noise = torch.randn(size=data[fromframe:].shape)
-        prior = data.clone()
-        prior[fromframe:] = noise
-        return prior
+        data[fromframe:] = noise
+        return data
 
     def checkerboard_noise(self, data, fromframe=4):
         # generate checkerboard noise
@@ -95,7 +99,10 @@ class DiskDatasetDivFM(Dataset):
             full = (full - self.avgnorm) / self.stdnorm
         #print(full.shape)
         #prior = self.prior_purenoise(full[:self.tb], fromframe=self.from_frame)
-        prior = self.checkerboard_noise(full[:self.tb].clone(), fromframe=self.from_frame)
+        if self.noisetype == 'puregaussian':
+            prior = self.prior_purenoise(full[:self.tb].clone(), fromframe=self.from_frame)
+        elif self.noisetype == 'checkerboard':
+            prior = self.checkerboard_noise(full[:self.tb].clone(), fromframe=self.from_frame)
         return (
             torch.tensor(prior, dtype=torch.float32).permute(1,0,2,3),
             torch.tensor(full, dtype=torch.float32).permute(1,0,2,3).unsqueeze(0)

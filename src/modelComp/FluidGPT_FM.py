@@ -20,7 +20,7 @@ def gen_t_embedding(t, emb_dim, max_positions=10000):
 # Try causal noise (conditioning gets lost)
 # Try checkerboard noise ??????????????????????
 
-class ConvEmbedding(nn.Module):
+class ConvEmbeddingV1(nn.Module):
     def __init__(self, emb_dim=96, data_dim=(1,5,4,128,128), patch_size=(8,8), hiddenout_dim=256, act=nn.GELU):
         super().__init__()
 
@@ -64,19 +64,103 @@ class ConvEmbedding(nn.Module):
         x = self.decoder(x)  # (B*T, C, H, W)
         x = rearrange(x, "(b t) c h w -> b t c h w", b=B, t=T)
         return x
+    
+class ResidualBlock(nn.Module):
+    def __init__(self, dim, hidden_dim=None, act=nn.GELU, norm=nn.GroupNorm):
+        super().__init__()
+        hidden_dim = hidden_dim or dim
+        self.block = nn.Sequential(
+            nn.Conv2d(dim, hidden_dim, kernel_size=3, padding=1),
+            norm(32, hidden_dim),
+            act(),
+            nn.Conv2d(hidden_dim, dim, kernel_size=3, padding=1),
+            norm(32, dim),
+        )
+
+    def forward(self, x):
+        return x + self.block(x)
+
+class ConvEmbeddingV2(nn.Module):
+    def __init__(
+        self,
+        emb_dim=96,
+        data_dim=(1,5,4,128,128),
+        patch_size=(8,8),
+        hidden_dims=[128, 256],
+        num_res_blocks=2,
+        act=nn.GELU,
+        norm=nn.GroupNorm
+    ):
+        super().__init__()
+        self.B, self.T, self.C, self.H, self.W = data_dim
+        self.emb_dim = emb_dim
+        self.pH, self.pW = patch_size
+        self.patch_grid_res = (self.H // self.pH, self.W // self.pW)
+
+        assert self.H % self.pH == 0 and self.W % self.pW == 0, "spatial input dim must be divisible by patch_size"
+        assert self.H == self.W, "must be square"
+
+        # --- Encoder ---
+        encoder_layers = [
+            nn.Conv2d(self.C, hidden_dims[0], kernel_size=patch_size, stride=patch_size),
+            norm(32, hidden_dims[0]),
+            act()
+        ]
+        for hdim in hidden_dims:
+            for _ in range(num_res_blocks):
+                encoder_layers.append(ResidualBlock(hdim, act=act, norm=norm))
+        
+        encoder_layers.append(nn.Conv2d(hidden_dims[-1], emb_dim, kernel_size=1))
+        self.encoder = nn.Sequential(*encoder_layers)
+
+        # --- Decoder ---
+        decoder_layers = [
+            nn.Conv2d(emb_dim, hidden_dims[-1], kernel_size=1),
+            norm(32, hidden_dims[-1]),
+            act()
+        ]
+        for hdim in reversed(hidden_dims):
+            for _ in range(num_res_blocks):
+                decoder_layers.append(ResidualBlock(hdim, act=act, norm=norm))
+        
+        decoder_layers.append(nn.ConvTranspose2d(hidden_dims[0], self.C, kernel_size=patch_size, stride=patch_size))
+        self.decoder = nn.Sequential(*decoder_layers)
+
+    def encode(self, x):
+        B, T, C, H, W = x.shape
+        x = rearrange(x, "b t c h w -> (b t) c h w")
+        x = self.encoder(x)
+        Hn, Wn = x.shape[-2:]
+        x = rearrange(x, "(b t) d h w -> b t (h w) d", b=B, t=T)
+        return x
+
+    def decode(self, x):
+        B, T, N, D = x.shape
+        h, w = self.patch_grid_res
+        x = rearrange(x, "b t (h w) d -> (b t) d h w", h=h, w=w)
+        x = self.decoder(x)
+        x = rearrange(x, "(b t) c h w -> b t c h w", b=B, t=T)
+        return x
+
 
 class FluidGPT_FM(nn.Module):
-    def __init__(self, emb_dim=96, data_dim=[64,3,2,128,128], patch_size=(8,8), hiddenout_dim=128, flowmatching_emb_dim=256,
+    def __init__(self, emb_dim=96, embedder_type="linear", data_dim=[64,3,2,128,128], patch_size=(8,8), hiddenout_dim=128, flowmatching_emb_dim=256,
                  depth=2, stage_depths=[6,6,10,6,6], num_heads=[6,6,12,6,6], window_size=4, mlp_ratio=4., 
                  qkv_bias=True, drop=0., attn_drop=0., use_flex_attn=True, causal_attn = True, norm_layer=nn.LayerNorm,
-                 act=nn.GELU, skip_connect=ConvNeXtBlock, gradient_flowthrough=[True, False, False]):
+                 act=nn.GELU, skip_enable=True, skip_connect=ConvNeXtBlock, gradient_flowthrough=[True, False, False]):
         super().__init__()
 
         # assert that every element in stage_depths is divisible by 3 except for the middle element
         assert all(stage_depths[i] % 3 == 0 for i in range(len(stage_depths)) if i != depth), "stage depth must be divisible by 3 at non-middle elements"
         assert stage_depths[depth] % 2 == 0, "stage depth must be divisible by 2 at middle element"
-        self.embedding = LinearEmbedding(emb_dim, data_dim, patch_size, hiddenout_dim, act)
-        #self.embedding = ConvEmbedding(emb_dim, data_dim, patch_size, hiddenout_dim, act)
+        if embedder_type == "linear":
+            self.embedding = LinearEmbedding(emb_dim, data_dim, patch_size, hiddenout_dim, act)
+        elif embedder_type == "conv_v1":
+            self.embedding = ConvEmbeddingV1(emb_dim, data_dim, patch_size, hiddenout_dim, act)
+        elif embedder_type == "conv_v2":
+            self.embedding = ConvEmbeddingV2(emb_dim, data_dim, patch_size, hiddenout_dim, act)
+        else:
+            raise ValueError(f"Unknown embedder_type {embedder_type}, must be 'linear' or 'conv'")
         self.pos_encoding = SpatiotemporalPositionalEncoding(emb_dim, data_dim[3] // patch_size[0], data_dim[4] // patch_size[1], data_dim[1])
         #print(data_dim[2] // patch_size[0], data_dim[2] // patch_size[0], data_dim[1])
         self.blockDown = nn.ModuleList(nn.ModuleList() for i in range(depth))
@@ -84,7 +168,8 @@ class FluidGPT_FM(nn.Module):
         self.blockUp = nn.ModuleList(nn.ModuleList() for i in range(depth))
         self.patchMerges = nn.ModuleList()
         self.patchUnmerges = nn.ModuleList()
-        self.skip_connects = nn.ModuleList()
+        if skip_enable:
+            self.skip_connects = nn.ModuleList()
         # TODO: implement act
          
         self.flowmatching_emb_dim = flowmatching_emb_dim
@@ -103,7 +188,8 @@ class FluidGPT_FM(nn.Module):
         self.middleblocklen = stage_depths[depth]
         self.gradient_flowthrough = gradient_flowthrough
         self.skip_connect = skip_connect
-        #self.causal_attn = causal_attn  
+        #self.causal_attn = causal_attn
+        self.skip_enable = skip_enable
 
         self.resnorms_down = nn.ModuleList(nn.ModuleList() for _ in range(depth))
         self.resnorms_middle = nn.ModuleList()
@@ -239,9 +325,9 @@ class FluidGPT_FM(nn.Module):
                 
                     
             self.patchUnmerges.append(PatchUnMerge(emb_dim * 2**(i+1)))
-            self.skip_connects.append(skip_connect(emb_dim * 2**i)) if skip_connect is not None else None
-
-            self.final_layer = nn.Conv3d(2, 2, kernel_size=3, padding=1)
+            if self.skip_enable:
+                self.skip_connects.append(skip_connect(emb_dim * 2**i)) if skip_connect is not None else None
+            #self.final_layer = nn.Conv3d(2, 2, kernel_size=3, padding=1)
 
     def forward(self, x, t, extra={None}):
         # shape checks
@@ -251,9 +337,9 @@ class FluidGPT_FM(nn.Module):
             raise ValueError(f"Input tensor must be 5D, but got {x.ndim}D")
         if x.shape[1] != self.embedding.T or x.shape[2] != self.embedding.C or x.shape[3] != self.embedding.H or x.shape[4] != self.embedding.W:
             raise ValueError(f"Input tensor must be of shape (B, {self.embedding.T}, {self.embedding.C}, {self.embedding.H}, {self.embedding.W}), but got {x.shape}")
-        
-        
-        skips = []
+
+        if self.skip_enable:
+            skips = []
         #print('module_list', self.blockDown)
         #print('block up', self.blockUp)
         x = self.embedding.encode(x, proj=True)
@@ -312,7 +398,8 @@ class FluidGPT_FM(nn.Module):
                     #print('after remove', x.shape)
                     if residual is not None:
                         x = x + residual
-            skips.append(x)
+            if self.skip_enable:
+                skips.append(x)
             x = self.patchMerges[i](x)
 
          # ===== MIDDLE =====
@@ -333,8 +420,9 @@ class FluidGPT_FM(nn.Module):
         # ===== UP =====
         for i, module_list in enumerate(self.blockUp):
             x = self.patchUnmerges[i](x)
-            skip = skips[self.depth - i - 1]
-            x = x + (self.skip_connects[i](skip) if self.skip_connect is not None else skip)
+            if self.skip_enable:
+                skip = skips[self.depth - i - 1]
+                x = x + (self.skip_connects[i](skip) if self.skip_connect is not None else skip)
 
             for j, module in enumerate(module_list):
                 if j % 2 == 0:
@@ -354,6 +442,6 @@ class FluidGPT_FM(nn.Module):
         
         x = self.embedding.decode(x, proj=True)
         x = x.permute(0,2,1,3,4).contiguous()
-        x = self.final_layer(x)
+        #x = self.final_layer(x)
         return x
 

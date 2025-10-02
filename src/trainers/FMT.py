@@ -199,6 +199,7 @@ class FMTmodel(L.LightningModule):
             from modelComp.FluidGPT_FM import FluidGPT_FM
             self.model = FluidGPT_FM(emb_dim=self.cm.emb_dim,
                             data_dim=[self.ct.batch_size, self.cm.temporal_bundling, self.cm.in_channels, self.cd.resample_shape, self.cd.resample_shape],
+                            embedder_type=self.cm.embedder_type
                             patch_size=(self.cm.patch_size, self.cm.patch_size),
                             hiddenout_dim=self.cm.hiddenout_dim, 
                             flowmatching_emb_dim=self.cm.flowmatching_emb_dim,
@@ -605,7 +606,7 @@ class FMTdata(L.LightningDataModule):
         for item in self.cd.datasets:
             preproc_savepath = str(self.cb.data_base + 'preproc_' + item["name"])
             dataset_SS = DiskDatasetDivFM(preproc_savepath, temporal_bundling=self.cm.temporal_bundling,
-                from_frame=self.ct.from_frame)
+                noisetype=self.ct.noise_type, from_frame=self.ct.from_frame)
             
 
             # generate random seed
