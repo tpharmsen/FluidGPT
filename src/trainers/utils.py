@@ -256,7 +256,7 @@ def rollout_prb(front, model, steps, int_steps, from_frame, noisetype='puregauss
                 xt = torch.cat((old, new), dim=2)
             else:
                 raise ValueError(f"Unknown noisetype {noisetype}")
-            print(xt.shape)
+            #print(xt.shape)
     preds = torch.cat(preds, dim=2)
     return preds
 
