@@ -254,6 +254,26 @@ def rollout_prb(front, model, steps, int_steps, from_frame, noisetype='puregauss
                 new = torch.randn(size=(xt.shape[0], xt.shape[1], xt.shape[2] - from_frame, xt.shape[3] // 8, xt.shape[4] // 8), device=xt.device)
                 new = new.repeat_interleave(8, dim=3).repeat_interleave(8, dim=4)
                 xt = torch.cat((old, new), dim=2)
+            elif noisetype == "smoothgaussian":
+                old = xt[:, :, -from_frame:]
+
+                noise = torch.randn((xt.shape[0], xt.shape[1], xt.shape[2] - from_frame, xt.shape[3], xt.shape[4]), device=xt.device, dtype=xt.dtype)
+                def circular_avg_pool3d(x, kernel_size=(5,5,5), stride=1, passes=1):
+                    pad_t, pad_h, pad_w = kernel_size[0]//2, kernel_size[1]//2, kernel_size[2]//2
+                    x = F.pad(x, (pad_w, pad_w, pad_h, pad_h, pad_t, pad_t), mode="circular")
+                    x = F.avg_pool3d(x, kernel_size=kernel_size, stride=stride)
+                    return x
+                smooth_passes=3
+                for _ in range(smooth_passes):
+                    #print(noise.shape)
+                    noise = circular_avg_pool3d(
+                        noise,
+                        kernel_size=(5, 5, 5),
+                        stride=1,
+                    )
+                noise = noise / noise.std()  # Normalize to std=1
+                xt = torch.cat((old, noise), dim=2)
+                print(noise.shape, noise.std(), noise.mean())
             else:
                 raise ValueError(f"Unknown noisetype {noisetype}")
             #print(xt.shape)
