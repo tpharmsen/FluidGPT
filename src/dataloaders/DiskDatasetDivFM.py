@@ -92,7 +92,7 @@ class DiskDatasetDivFM(Dataset):
         data[fromframe:] = noise
         return data
     
-    def prior_smoothnoise(data, fromframe=4, smooth_passes=3):
+    def prior_smoothnoise(self, data, fromframe=4, smooth_passes=3):
         noise = torch.randn((data.shape[0] - fromframe, data.shape[1], data.shape[2], data.shape[3]), device=data.device, dtype=data.dtype)
         def circular_avg_pool3d(x, kernel_size=(5,5,5), stride=1, passes=1):
             pad_t, pad_h, pad_w = kernel_size[0]//2, kernel_size[1]//2, kernel_size[2]//2
@@ -101,7 +101,7 @@ class DiskDatasetDivFM(Dataset):
             return x
         noise = noise.permute(1,0,2,3)
         for _ in range(smooth_passes):
-            print(noise.shape)
+            #print(noise.shape)
             noise = circular_avg_pool3d(
                 noise,
                 kernel_size=(5, 5, 5),
