@@ -38,7 +38,7 @@ class DiskDatasetDivFM(Dataset):
         self.idx_window = self.dt * self.tb
         self.avgnorm = None
         self.stdnorm = None
-        print(self.ts, self.idx_window, self.lenpertraj, self.dt, self.tb)
+        #print(self.ts, self.idx_window, self.lenpertraj, self.dt, self.tb)
         
     def __len__(self):
         return self.traj * self.lenpertraj

@@ -1,6 +1,12 @@
 fourierfeatures-linear-silu-linear global embeddings for time embeddings
 then silu-linear custom for each layer
 res connect for each block instead of for each depthlayer
+checkerboard noise + pure gaussian noise implementation
+causal temporal attention 0-3 4-15 (impl fromframe TODO)
+option to remove UNET-style skip connects
+Linear/ConvV1/ConvV2 embedder types
+
+Try smooth noise
 
 
 run with
