@@ -229,7 +229,7 @@ def rollout_det(front, model, steps):
     preds = torch.cat(preds, dim=1)
     return preds
 
-def rollout_prb(front, model, steps, int_steps, from_frame):
+def rollout_prb(front, model, steps, int_steps, from_frame, noisetype='puregaussian'):
     model.eval()
     preds = []
     #preds.append(front)
@@ -247,11 +247,17 @@ def rollout_prb(front, model, steps, int_steps, from_frame):
                 #print(pred.shape)
                 xt = xt.clone() + (1 / int_steps) * pred.clone()
             preds.append(xt[:,:,from_frame:].clone())
-            #print(xt.shape, xt[:, :, -from_frame:].shape, torch.randn([xt.shape[0], xt.shape[1], 3 *from_frame, xt.shape[3], xt.shape[4]]).shape)
-            xt = torch.cat((xt[:, :, -from_frame:], torch.randn([xt.shape[0], xt.shape[1], 3 *from_frame, xt.shape[3], xt.shape[4]]).to(xt.device)), dim=2)
-            #print(xt.shape)
+            if noisetype == "puregaussian":
+                xt = torch.cat((xt[:, :, -from_frame:], torch.randn([xt.shape[0], xt.shape[1], xt.shape[2] - from_frame, xt.shape[3], xt.shape[4]]).to(xt.device)), dim=2)
+            elif noisetype == "checkerboard":
+                old = xt[:, :, -from_frame:]
+                new = torch.randn(size=(xt.shape[0], xt.shape[1], xt.shape[2] - from_frame, xt.shape[3] // 8, xt.shape[4] // 8), device=xt.device)
+                new = new.repeat_interleave(8, dim=3).repeat_interleave(8, dim=4)
+                xt = torch.cat((old, new), dim=2)
+            else:
+                raise ValueError(f"Unknown noisetype {noisetype}")
+            print(xt.shape)
     preds = torch.cat(preds, dim=2)
-    #print(preds.shape)
     return preds
 
 def compute_energy_enstrophy_spectra(u, v, dataset_name="", Lx=1.0, Ly=1.0):
