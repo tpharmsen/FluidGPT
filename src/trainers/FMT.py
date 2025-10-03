@@ -169,7 +169,7 @@ class FMTmodel(L.LightningModule):
     def _initialize_model(self):
         #print()
         #print(self.cm.model_name)
-        if self.cm.model_name == "FluidGPT_FM":
+        if self.cm.model_name == "META":
             
             sys.path.append('flow_matching/')
             from examples.image.models.unet import UNetModel

@@ -87,8 +87,8 @@ class ConvEmbeddingV2(nn.Module):
         data_dim=(1,16,2,128,128),
         patch_size=(8,8),
         hidden_dims=128,
-        num_res_blocks=2,
         act=nn.GELU,
+        num_res_blocks=2,
         norm=nn.GroupNorm
     ):
         super().__init__()
@@ -124,7 +124,7 @@ class ConvEmbeddingV2(nn.Module):
         decoder_layers.append(nn.ConvTranspose2d(hidden_dims, self.C, kernel_size=patch_size, stride=patch_size))
         self.decoder = nn.Sequential(*decoder_layers)
 
-    def encode(self, x):
+    def encode(self, x, proj=True):
         B, T, C, H, W = x.shape
         x = rearrange(x, "b t c h w -> (b t) c h w")
         x = self.encoder(x)
@@ -132,7 +132,7 @@ class ConvEmbeddingV2(nn.Module):
         x = rearrange(x, "(b t) d h w -> b t (h w) d", b=B, t=T)
         return x
 
-    def decode(self, x):
+    def decode(self, x, proj=True):
         B, T, N, D = x.shape
         h, w = self.patch_grid_res
         x = rearrange(x, "b t (h w) d -> (b t) d h w", h=h, w=w)
