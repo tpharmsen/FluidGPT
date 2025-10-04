@@ -412,7 +412,7 @@ class TemporalBlock(nn.Module):
         attn = attn + bias.unsqueeze(0)
 
         # -------------------------
-        # Causal masking
+        # Custom V1-only masking
         # -------------------------
         if self.causal == "custom":
             T = attn.size(-1)
@@ -421,6 +421,15 @@ class TemporalBlock(nn.Module):
             forbid_mask[4:T, 0:4] = True  # tokens 4-15 cannot attend to 0-3
             attn = attn.masked_fill(forbid_mask.unsqueeze(0).unsqueeze(0), float('-inf'))
 
+        # -------------------------
+        # Custom V2-only masking
+        # -------------------------
+        if self.causal == "custom_v2":
+            T = attn.size(-1)
+            forbid_mask = torch.zeros((T, T), device=x.device, dtype=torch.bool)
+            #forbid_mask[0:4, 0:4] = True
+            forbid_mask[0:4, 4:T] = True  # tokens 0-3 cannot attend to 4-15
+            attn = attn.masked_fill(forbid_mask.unsqueeze(0).unsqueeze(0), float('-inf'))
         # -------------------------
         # Forward-only masking
         # -------------------------
