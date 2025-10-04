@@ -418,7 +418,7 @@ class TemporalBlock(nn.Module):
             T = attn.size(-1)
             forbid_mask = torch.zeros((T, T), device=x.device, dtype=torch.bool)
             forbid_mask[0:4, 0:4] = True # no changes in conditioning layer
-            forbid_mask[0:4, 4:T] = True  # tokens 4-15 cannot attend to 0-3
+            forbid_mask[0:4, 4:T] = True  # this prevents passing information from predicted future to conditioning layer
             attn = attn.masked_fill(forbid_mask.unsqueeze(0).unsqueeze(0), float('-inf'))
 
         # -------------------------
