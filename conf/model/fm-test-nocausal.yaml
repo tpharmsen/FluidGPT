@@ -8,7 +8,7 @@ hiddenout_dim: 128
 flowmatching_emb_dim: 512
 depth: 2
 stage_depths: [6,6,8,6,6]
-num_heads: [3,6,12,6,3]
+num_heads: [4,8,16,8,4]
 window_size: 4
 use_flex_attn: True
 causal_attn: False
