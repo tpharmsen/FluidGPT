@@ -1,0 +1,21 @@
+resample_shape: 128
+resample_mode: "fourier"
+
+datasets:
+  - name: "amira"
+    path: "AmiraSet/"
+    ppclass: "AmiraPreProcDiv"
+    file_ext: "am"
+    timesample: 5
+
+  - name: "pdegym-gauss"
+    path: "PDEGym-Gauss"
+    ppclass: "PDEGymPreProcDiv"
+    file_ext: "nc"
+    timesample: 1
+
+  - name: "pdebench-comp"
+    path: "PDEBench-Comp/"
+    ppclass: "PDEBenchCompPreProcDiv"
+    file_ext: "hdf5"
+    timesample: 1
