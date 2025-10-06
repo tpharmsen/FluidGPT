@@ -14,7 +14,7 @@ While foundational models are often designed for accuracy of spatial structures,
 The approach to stability is two-fold;
 
 \textbf{Short-Term Deterministic Prediction (Auto-regressive):} This scheme utilizes an Auto-regressive (AR) approach, predicting a few (bundled) time-steps into the future. This method is computationally straightforward and highly accurate for very short horizons. However, when deployed for long-sequence generation, this system is inherently susceptible to compounding errors: the small error in one predicted state is fed directly as input to predict the next, leading to an inevitable, potentially exponential, accumulation of error and, ultimately, divergence from the true physical trajectory.
-
+  
 
 \textbf{Long-Sequence Probabilistic Generation (Flow Matching):} This method shifts the focus from a short deterministic future to modeling the complex transition probability distribution over longer time steps. This shift is motivated by the physical nature of turbulent flows; the Navier-Stokes system is naturally diverging (sensitive to initial conditions), meaning small variations can lead to vastly different system states over time. Specifically, the breaking of the same high-energy vortex can result in vastly different small-energy vortex distributions. As Flow Matching is able to learn probability density distributions rather than single input-output pairs, this approach is naturally able to account for branches in the state space.
 
