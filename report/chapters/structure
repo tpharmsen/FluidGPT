@@ -1,0 +1,127 @@
+ Introduction
+
+This section establishes the context and the problem your work addresses.
+
+1.1. Background and Motivation:
+
+Briefly introduce Computational Fluid Dynamics (CFD) and its computational cost.
+
+Motivate the need for AI surrogate models (e.g., speed, real-time control, large-scale design optimization).
+
+1.2. The Foundational Model Goal:
+
+Detail the aspiration to create a single, foundational AI model capable of generalizing across a wide variety of Navier-Stokes systems (compressible/incompressible, various boundary conditions, different simulation parameters). Highlight this as a major challenge in physics-informed AI.
+
+1.3. Dual Approach to System State Prediction:
+
+Introduce the two distinct approaches: the Deterministic Autoregressive method and the Probabilistic Flow Matching method.
+
+State the core objective: to compare the performance and characteristics of these two time-stepping methodologies using a very similar underlying model architecture.
+
+1.4. Report Structure:
+
+Briefly outline what the reader can expect in the following sections.
+
+2. Methodologies and Model Architecture
+
+This section details the common foundational model and the two unique temporal prediction techniques.
+
+2.1. Foundational Model Architecture (The Common Base):
+
+Describe the shared Swin-Transformer based model architecture (or a very similar variant).
+
+Explain why this architecture was chosen (e.g., superior performance on high-resolution image/field data, effective capture of local and global spatial dependencies, computational efficiency).
+
+Discuss the common input and output format (e.g., gridded field data u(x,t)).
+
+2.2. Approach 1: Short-Term Deterministic Autoregressive Predictor:
+
+Explain the Autoregressive (AR) prediction scheme: u(t+Δt)=F(u(t)).
+
+Focus on its nature as a short-term, deterministic predictor.
+
+Describe the training objective (e.g., L2 loss minimization on the next state) and the procedure for long-sequence rollout (iterative, cumulative error).
+
+2.3. Approach 2: Probabilistic Flow Matching for Long-Sequence Generation:
+
+Explain the focus on probabilistic modeling for better long-term stability and uncertainty quantification.
+
+Detail the Flow Matching technique (or Conditional Flow Matching) and how it's used to model the complex transition distribution P(u(t+τ)∣u(t)) for longer sequences (τ>Δt).
+
+Describe the training objective (e.g., minimizing the transport cost/loss) and how it differs conceptually from the deterministic AR method.
+
+3. Experimental Setup and Generalization Benchmarks
+
+This section outlines the data and the testing procedures that validate the "foundational" aspect of the model.
+
+3.1. Data Generation and Diversity:
+
+Describe the training dataset composition. Emphasize the diversity required for the foundational model goal (e.g., distribution of Reynolds numbers, Mach numbers, boundary shapes, initial conditions).
+
+3.2. Evaluation Metrics (Spatial Accuracy):
+
+Define the standard metrics used to assess the spatial accuracy of the predicted fields (e.g., Root Mean Square Error (RMSE), normalized RMSE, correlation coefficients).
+
+3.3. Generalization Testing:
+
+Detail the specific out-of-distribution (OOD) tests used to validate the foundational model concept:
+
+OOD Physics: Testing on unseen parameters (e.g., Re or Ma outside the training range).
+
+OOD Geometry/BCs: Testing on new obstacle shapes or boundary conditions not seen during training.
+
+4. Results and Comparative Analysis
+
+This is the core results section, directly comparing the two temporal prediction approaches.
+
+4.1. Short-Term Prediction Performance:
+
+Present the spatial accuracy metrics for both models on a single time-step prediction (Δt). (Likely very similar due to shared architecture, establishing a baseline).
+
+4.2. Long-Sequence Prediction and Stability:
+
+Compare the long-term rollout stability and error accumulation for the two methods.
+
+Show plots of error vs. time for both the deterministic AR and the probabilistic Flow Matching methods.
+
+Key Focus: The AR method should show rapid error accumulation/instability (divergence), while the Flow Matching should exhibit better stability over extended periods.
+
+4.3. Computational Performance:
+
+Compare the inference time for generating a sequence of a given length (e.g., 100 timesteps) for both models.
+
+Compare the training time/cost of the two distinct approaches.
+
+4.4. Uncertainty Quantification (UQ) (Flow Matching Only):
+
+Present results demonstrating the probabilistic model's ability to provide prediction confidence intervals or a distribution of possible future states (a feature unavailable in the deterministic AR approach).
+
+5. Discussion and Conclusion
+
+This section synthesizes the findings and discusses their implications.
+
+5.1. Synthesis of Findings:
+
+Reiterate the successful generalization across the diverse dataset, confirming the foundational model feasibility.
+
+Summarize the core trade-off: Deterministic AR is simple, accurate for Δt, but highly unstable for long rollouts. Probabilistic Flow Matching is more complex but offers superior long-term stability and Uncertainty Quantification.
+
+5.2. Implications for CFD Modeling:
+
+Discuss when each approach is most appropriate (e.g., AR for control loops or very short forecasts; Flow Matching for long-term climate/design simulation and reliability assessment).
+
+5.3. Future Work:
+
+Suggest avenues for improvement (e.g., hybrid models, improving the AR stability, scaling to 3D, integration of domain knowledge).
+
+5.4. Conclusion:
+
+Provide a concise summary of the entire work and its contribution.
+
+References
+
+List all cited works, including papers on Swin Transformers, Autoregressive models, Flow Matching, and relevant CFD literature.
+
+Appendix (Optional)
+
+Include supplementary materials like detailed network hyperparameters, additional data generation setup, or extended result plots.
