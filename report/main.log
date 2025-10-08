@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.6)  6 OCT 2025 15:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.6)  8 OCT 2025 21:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1186,13 +1186,25 @@ Package hyperref Info: Link coloring OFF on input line 52.
  (./frontmatter/titlepage.tex [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texlive/texmf-di
-st/fonts/enc/dvips/base/8r.enc}]) (./chapters/intro/introduction.tex)
+st/fonts/enc/dvips/base/8r.enc}]) (./chapters/intro/introduction.tex
+Overfull \hbox (3.02016pt too wide) in paragraph at lines 7--8
+\T1/ptm/m/n/10.95 The cre-ation of an ef-fec-tive AI sur-ro-gate model presents
+ a crit-i-cal chal-lenge: achiev-
+ []
+
+[1
+
+]
+Overfull \hbox (5.63808pt too wide) in paragraph at lines 17--18
+[]\T1/ptm/b/n/10.95 Long-Sequence Prob-a-bilis-tic Gen-er-a-tion (Flow Match-in
+g): \T1/ptm/m/n/10.95 This method shifts
+ []
+
+)
 
 LaTeX Warning: Empty bibliography on input line 79.
 
-(./appendices/appendices.tex [1
-
-]) [2
+(./appendices/appendices.tex [2]) [3
 
 ] (./main.aux)
  ***********
@@ -1200,25 +1212,25 @@ LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
+(rerunfilecheck)             Checksum: 78872F55A19C24F0BB9CD6AB921E11EF;554.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 37036 strings out of 474222
- 751960 string characters out of 5748733
- 1927975 words of memory out of 5000000
- 58751 multiletter control sequences out of 15000+600000
- 575591 words of font info for 49 fonts, out of 8000000 for 9000
+ 37049 strings out of 474222
+ 752088 string characters out of 5748733
+ 1931975 words of memory out of 5000000
+ 58759 multiletter control sequences out of 15000+600000
+ 580038 words of font info for 52 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 101i,6n,107p,1473b,5052s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 101i,7n,107p,1473b,5052s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/t
 exlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on main.pdf (3 pages, 28216 bytes).
+Output written on main.pdf (4 pages, 42906 bytes).
 PDF statistics:
- 73 PDF objects out of 1000 (max. 8388607)
- 39 compressed objects within 1 object stream
- 6 named destinations out of 1000 (max. 500000)
- 157 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 92 PDF objects out of 1000 (max. 8388607)
+ 57 compressed objects within 1 object stream
+ 10 named destinations out of 1000 (max. 500000)
+ 181 words of extra memory for PDF output out of 10000 (max. 10000000)
 
