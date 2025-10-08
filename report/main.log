@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.6)  8 OCT 2025 21:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.6)  9 OCT 2025 01:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1200,11 +1200,62 @@ Overfull \hbox (5.63808pt too wide) in paragraph at lines 17--18
 g): \T1/ptm/m/n/10.95 This method shifts
  []
 
+) (./chapters/problem/problemformulation.tex [2]
+LaTeX Font Info:    Trying to load font information for OT1+ztmcm on input line
+ 11.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ztmcm.fd
+File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
 )
+LaTeX Font Info:    Trying to load font information for OML+ztmcm on input line
+ 11.
 
-LaTeX Warning: Empty bibliography on input line 79.
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlztmcm.fd
+File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
+)
+LaTeX Font Info:    Trying to load font information for OMS+ztmcm on input line
+ 11.
 
-(./appendices/appendices.tex [2]) [3
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsztmcm.fd
+File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
+)
+LaTeX Font Info:    Trying to load font information for OMX+ztmcm on input line
+ 11.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/omxztmcm.fd
+File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
+)
+LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 1
+1.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
+)
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 11.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 11.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 11.
+ [3
+
+] [4] [5]
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
+14.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+) [6]
+Overfull \hbox (31.58987pt too wide) in paragraph at lines 152--153
+\T1/ptm/m/n/10.95 The core phys-i-cal sys-tem ad-dressed by this re-search is f
+low gov-erned by the Navier^^UStokes
+ []
+
+[7] [8] [9])
+
+LaTeX Warning: Empty bibliography on input line 81.
+
+(./appendices/appendices.tex [10]) [11
 
 ] (./main.aux)
  ***********
@@ -1212,25 +1263,33 @@ LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 78872F55A19C24F0BB9CD6AB921E11EF;554.
+(rerunfilecheck)             Checksum: 7B03A9959ACFBA538CB860220D203DB1;1455.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 37049 strings out of 474222
- 752088 string characters out of 5748733
- 1931975 words of memory out of 5000000
- 58759 multiletter control sequences out of 15000+600000
- 580038 words of font info for 52 fonts, out of 8000000 for 9000
+ 37268 strings out of 474222
+ 755581 string characters out of 5748733
+ 1933975 words of memory out of 5000000
+ 58888 multiletter control sequences out of 15000+600000
+ 611809 words of font info for 107 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 101i,7n,107p,1473b,5052s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on main.pdf (4 pages, 42906 bytes).
+ 101i,10n,107p,1473b,5052s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/rsfs/rsfs10.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/symbol
+/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (12 pages, 131618 bytes).
 PDF statistics:
- 92 PDF objects out of 1000 (max. 8388607)
- 57 compressed objects within 1 object stream
- 10 named destinations out of 1000 (max. 500000)
- 181 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 221 PDF objects out of 1000 (max. 8388607)
+ 159 compressed objects within 2 object streams
+ 44 named destinations out of 1000 (max. 500000)
+ 221 words of extra memory for PDF output out of 10000 (max. 10000000)
 
