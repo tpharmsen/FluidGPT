@@ -18,6 +18,19 @@ The approach to stability is two-fold;
 
 A significant gap exists in current literature, where reported results often focus on single-step accuracy rather than long-term temporal stability and physical consistency over extended rollouts. Yet, for any real-world application—be it aerodynamic design, weather forecasting, or control—the ability of the surrogate to remain stable and accurate over hundreds or thousands of steps is fundamental. By comparing these two methods, we directly address this critical stability and fidelity challenge.
 
-\section{Report structure}
 
-TODO
+\textbf{Research Questions}
+
+\begin{tcolorbox}[
+	colback=gray!10,
+	colframe= gray!10,
+	boxrule=0pt,
+	sharp corners,
+	enhanced
+	]
+	\begin{enumerate}
+		\item \textbf{Short-Term Deterministic Modeling:} Can we develop a rollout-stable and physics-consistent deterministic model that generalizes across diverse Navier–Stokes scenarios using only velocity-field inputs, trained on large-scale, multi-source pretraining data?
+		\item \textbf{Long-Term Probabilistic Modeling:} Can a probabilistic model that captures bifurcative behaviors in high-dimensional systems outperform the deterministic approach in both qualitative and physics-consistent metrics over long sequences?
+		\item \textbf{Performance Comparison:} How do the short-term deterministic and long-term probabilistic models compare in terms of computational cost and inference time for full sequence generation?
+	\end{enumerate}
+\end{tcolorbox}

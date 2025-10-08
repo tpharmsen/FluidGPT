@@ -1,6 +1,6 @@
 \chapter*{Problem Formulation}
 
-This chapter formally defines the research problem, establishing the specific physical system under investigation, the constraints imposed by large-scale pretraining data, and the mathematical framework for the two proposed AI surrogate models.
+This chapter formally defines the research problem, establishing the specific physical PDE system, the constraints imposed by large-scale pretraining data, and the mathematical framework for the two proposed AI surrogate models.
 
 \section{Navier-Stokes System}
 
@@ -65,10 +65,6 @@ $$
 \mathcal{M}(\mathbf{S}_{\text{in}}) \approx \mathcal{P}_{\mathbf{c}}(\mathbf{S}_{\text{in}})
 $$
 
-\subsection{Dual Modelling approach}
-
-This problem is tackled using two distinct modeling approaches, which define the specific mathematical targets of the prediction:
-
 \subsection{Dual Modelling Approach}
 
 This problem is tackled using two distinct modeling approaches, which define the specific mathematical targets of the prediction. Both models now condition their output on a sequence of the $k$ most recent past states, $\mathbf{S}_{\text{hist}} = \{ \mathbf{U}_{i-k+1}, \ldots, \mathbf{U}_i \}$, and are trained to predict a bundle of $\Delta T$ future states, $\mathbf{S}_{\text{pred}} = \{ \mathbf{U}_{i+1}, \ldots, \mathbf{U}_{i+\Delta T} \}$.
@@ -101,7 +97,7 @@ $$
 
 \subsection{Summary of Mathematical Target}
 
-TODO
+TODO 
 
 The foundation model $\mathcal{M}$ must achieve \textbf{generalization} over the parameter space $\mathcal{C}$ by learning the fundamental, parameter-conditioned evolution $\mathcal{P}_{\mathbf{c}}$. The success will be measured not only by the $\text{L}_2$ error of the predicted states (short-term) but critically by the \textbf{temporal stability} and \textbf{statistical fidelity} (e.g., kinetic energy spectra preservation) of the generated $\mathbf{S}_{\text{out}}$ sequence over extended rollouts $T$.
 
