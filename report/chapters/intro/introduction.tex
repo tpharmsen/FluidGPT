@@ -6,7 +6,7 @@ Computational Fluid Dynamics (CFD) is the indispensable tool for designing and o
  
 The creation of an effective AI surrogate model presents a critical challenge: achieving generalization across the vast parameter space of PDEs. Traditional models are often trained and locked to a single set of simulation parameters for multiple PDE systems. Our work tackles this limitation by including a wide domain of simulation parameters for a single PDE system; Navier Stokes. The primary goal is to design a single, unified AI architecture capable of accurately predicting future states across a wide variety of Navier-Stokes systems, including compressible and incompressible flows, diverse geometric constraints, and varying simulation settings from multi-source large-scale pretraining data.
 
-\section{Dual approach to system state prediction}
+\section{Dual approach to temporal stability}
 
 While foundational models are often designed for accuracy of spatial structures, the accuracy of temporal progression of generated system states dictate its usability in the real world. To account for this gap in literature, this research focuses on stable time-progression of system states.
 The approach to stability is two-fold;
@@ -19,7 +19,7 @@ The approach to stability is two-fold;
 A significant gap exists in current literature, where reported results often focus on single-step accuracy rather than long-term temporal stability and physical consistency over extended rollouts. Yet, for any real-world application—be it aerodynamic design, weather forecasting, or control—the ability of the surrogate to remain stable and accurate over hundreds or thousands of steps is fundamental. By comparing these two methods, we directly address this critical stability and fidelity challenge.
 
 
-\textbf{Research Questions}
+\section{Research Questions}
 
 \begin{tcolorbox}[
 	colback=gray!10,
@@ -29,8 +29,8 @@ A significant gap exists in current literature, where reported results often foc
 	enhanced
 	]
 	\begin{enumerate}
-		\item \textbf{Short-Term Deterministic Modeling:} Can we develop a rollout-stable and physics-consistent deterministic model that generalizes across diverse Navier–Stokes scenarios using only velocity-field inputs, trained on large-scale, multi-source pretraining data?
-		\item \textbf{Long-Term Probabilistic Modeling:} Can a probabilistic model that captures bifurcative behaviors in high-dimensional systems outperform the deterministic approach in both qualitative and physics-consistent metrics over long sequences?
-		\item \textbf{Performance Comparison:} How do the short-term deterministic and long-term probabilistic models compare in terms of computational cost and inference time for full sequence generation?
+		\item Can we develop a rollout-stable and physics-consistent deterministic model that generalizes across diverse Navier–Stokes scenarios using only velocity-field inputs, trained on large-scale, multi-source pretraining data?
+		\item Can a probabilistic model outperform the above approach in both qualitative and physics-consistency metrics over long sequences?
+		\item How do the short-term deterministic and long-term probabilistic models compare in terms of computational cost and inference time for full sequence generation?
 	\end{enumerate}
 \end{tcolorbox}

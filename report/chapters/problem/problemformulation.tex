@@ -32,7 +32,7 @@ The Navier–Stokes system shows complex dynamical behavior characterized by cre
 \vspace{1em}
 \noindent
 
-\section{Problem Definition}
+\section{Learning Objective}
 
 The objective of this work is to construct a model $\mathcal{M}$ that predicts the future evolution of a continuous-time, partial differential equation (PDE) system, specifically the \textbf{Navier-Stokes equations}, across a wide and diverse parameter space.
 
@@ -78,7 +78,7 @@ The predicted sequence of states is:
 $$
 \hat{\mathbf{S}}_{\text{out}} = f_{\theta}(\mathbf{S}_{\text{in}}).
 $$
-For long rollouts, the prediction system is \textbf{auto-regressive}: the predicted sequence $\hat{\mathbf{S}}_{\text{pred}}$ is sequentially shifted and fed back as the new historical input $\mathbf{S}_{\text{hist}}$ to predict the next $\Delta T$ steps.
+For long rollouts, the prediction system is auto-regressive: the predicted sequence $\hat{\mathbf{S}}_{\text{out}}$ is sequentially reused as the new input $\mathbf{S}_{\text{hist}}$ to predict the next $\Delta T$ steps.
 
 The learning objective for the model parameters $\theta$ is the minimization of a mean-squared error (MSE) loss $\mathcal{L}_{\text{AR}}$, measuring the error over the entire predicted sequence bundle:
 $$
@@ -91,139 +91,86 @@ Given the turbulent nature of the system, the evolution over a long horizon $T$ 
 
 The goal is to train a model $\mathcal{M}_{\phi}$ with parameters $\phi$ that effectively models this conditional probability distribution:
 $$
-\mathcal{M}_{\phi}(\mathbf{S}_{\text{in}}) \approx p(\mathbf{U}_{T_0+T} | \mathbf{S}_{\text{in}}).
+\mathcal{M}_{\phi}(\mathbf{S}_{\text{in}}) \approx p( \mathbf{S}_{\text{out}} | \mathbf{S}_{\text{in}}).
 $$
-\textbf{Flow Matching} achieves this by learning the \textbf{velocity field} $\mathbf{v}_{\phi}(\mathbf{z}, \tau)$ that transforms a simple prior distribution (like Gaussian noise) into the complex target distribution $p$ via a continuous-time ordinary differential equation (ODE) trajectory: $\frac{d\mathbf{z}}{d\tau} = \mathbf{v}_{\phi}(\mathbf{z}, \tau)$, where $\tau \in [0, 1]$ is an artificial time. By conditioning on the previous system states $\mathbf{S}_{\text{in}}$, the model can better identify the appropriate statistical flow regime, allowing it to efficiently sample from the manifold of physically plausible solutions and ensuring long-term temporal stability and statistical fidelity. Note that the velocity field and artificial time in this context are different definitions than the velocity field and time of the physical Navier-Stokes system.
+\textbf{Flow Matching} achieves this by learning the velocity field $\mathbf{v}_{\phi}(\mathbf{z}, \tau)$ that transforms a simple prior distribution (like Gaussian noise) into the complex target distribution $p$ via a continuous-time ordinary differential equation (ODE) trajectory: $\frac{d\mathbf{z}}{d\tau} = \mathbf{v}_{\phi}(\mathbf{z}, \tau)$, where $\tau \in [0, 1]$ is an artificial time. By conditioning on the previous system states $\mathbf{S}_{\text{in}}$, the model can better identify the appropriate statistical flow regime, allowing it to efficiently sample from the manifold of physically plausible solutions and ensuring long-term temporal stability and statistical fidelity. Note that the velocity field and artificial time in this context are different definitions than the velocity field and time of the physical Navier-Stokes system. 
 
-\subsection{Summary of Mathematical Target}
+Denote the loss term for the Flow Matching model as $\mathcal{L}_{\text{FM}}$. Following the conditional formulation, this objective measures how well the learned velocity field $\mathbf{v}_{\phi}(\mathbf{z}, \tau)$ approximates the target transport field $\tilde{\mathbf{v}}(\mathbf{z}, \tau)$, which defines the transformation between the source and target distributions along the artificial time dimension $\tau \in [0, 1]$. The training loss is defined as the mean-squared deviation between the predicted and target velocities:
+$$
+	\mathcal{L}_{\text{FM}}(\phi) = 
+	\mathbb{E}_{\tau,\,(\mathbf{z}, \tilde{\mathbf{v}}) \sim \mathcal{D}} 
+	\left[
+	\big\| 
+	\mathbf{v}_{\phi}(\mathbf{z}, \tau \mid \mathbf{S}_{\text{in}}) 
+	- 
+	\tilde{\mathbf{v}}(\mathbf{z}, \tau)
+	\big\|_2^2
+	\right].
+$$
 
-TODO 
+This probabilistic formulation allows the model to capture the inherent stochasticity and multimodality of long-term system evolution, complementing the deterministic short-sequence model and enabling stable extrapolation over extended horizons.
 
-The foundation model $\mathcal{M}$ must achieve \textbf{generalization} over the parameter space $\mathcal{C}$ by learning the fundamental, parameter-conditioned evolution $\mathcal{P}_{\mathbf{c}}$. The success will be measured not only by the $\text{L}_2$ error of the predicted states (short-term) but critically by the \textbf{temporal stability} and \textbf{statistical fidelity} (e.g., kinetic energy spectra preservation) of the generated $\mathbf{S}_{\text{out}}$ sequence over extended rollouts $T$.
+\section{Include section about energy spectrum and enstrophy, and define MSE metric}
 
+\section{Pre-training Datasets and Domain Coverage}
 
+To enable the model to generalise across the full range of Navier–Stokes regimes, a diverse ensemble of pre-training datasets is selected. The Navier–Stokes equation exhibits a broad spectrum of behaviour depending on flow type (laminar or turbulent), compressibility, boundary conditions, and external forcing. Capturing these variations requires data originating from multiple numerical solvers, simulation conditions, and initialisation schemes.
 
-
-\noindent
-\textbf{Pre-training Data and Generalization Strategy.}
-To ensure robustness and generalization, we construct a large-scale, multi-source pretraining corpus covering a wide diversity of Navier–Stokes regimes. This includes data from \textit{PDEGym (Poseidon)}, \textit{PDEBench}, and an in-house dataset by Jakob et al. (hereafter referred to as \textit{Amiraset}).
-Across these datasets, we incorporate variations in:
-\begin{itemize}
-	\item Compressible vs. incompressible Navier–Stokes formulations,
-	\item Homogeneous vs. inhomogeneous domains,
-	\item Periodic vs. Dirichlet boundary conditions,
-	\item Different numerical solvers and time-integration schemes,
-	\item Laminar and turbulent flow regimes,
-	\item External forcing and initialization methods,
-	\item Diverse spatial resolutions and temporal sampling rates.
-\end{itemize}
-
-\noindent
-All datasets are normalized using global mean–standard deviation scaling and combined with an 80/20 random training–validation split. Validation is performed in a strictly zero-shot manner, ensuring that the model’s extrapolative ability can be measured across unseen flow types and parameter combinations.
-
-\vspace{1em}
-\noindent
-\textbf{Spatial and Temporal Resampling.}
-Due to differing native resolutions, spatial and temporal resampling are applied to ensure consistent data shape across datasets. For spatial alignment, a spectral Fourier-based interpolation method is employed, preserving flow smoothness and physical coherence. Bicubic interpolation is provided as an alternative option for computational efficiency. Temporally, trajectories are resampled to enforce a constant $\Delta t$ across datasets, ensuring a uniform temporal evolution scale for training and evaluation.
-
-\vspace{1em}
-\noindent
-\textbf{Hardware and Training Setup.}
-All experiments are conducted on the NVIDIA DGX B-200 platform. The unified dataset and dual modeling approach serve as a foundation for exploring generalization and stability in large-scale AI surrogates of fluid dynamics.
-
-Would you like me to include a concise table reference paragraph at the end (summarizing the dataset table
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Governing System and Data Scope}
-
-The core physical system addressed by this research is flow governed by the Navier–Stokes equations. The problem formulation must account for the complexity and variability inherent in large-scale pretraining data sources, which necessitates generalization across diverse flow regimes and boundary conditions.
-
-\subsection{Governing Partial Differential Equations (PDEs)}
-
-The foundational model is tasked with learning the dynamics of the incompressible Navier–Stokes equations, defined by the conservation of momentum and mass. Given a spatial domain $\Omega$ and time $t \in [0, T]$, the system state $\mathbf{u}(x, t) = (u_x, u_y, P)$ (velocity components and pressure) is governed by:
-
-\begin{align*}
-	\frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} \cdot \nabla)\mathbf{u} &= - \frac{1}{\rho} \nabla P + \nu \nabla^2 \mathbf{u} + \mathbf{f} \quad & \text{(Momentum)} \\
-	\nabla \cdot \mathbf{u} &= 0 \quad & \text{(Continuity)}
-\end{align*}
-
-where $\rho$ is the fluid density, $P$ is the pressure field, $\nu$ is the kinematic viscosity (inversely related to the Reynolds number $Re$), and $\mathbf{f}$ represents external body forces.
-
-\subsection{Generalization Space and Data Abstraction}
-
-The primary objective is to develop a model $F$ capable of generalization across a wide domain of system parameters $\mathbf{P}$, including:
+In total, nine datasets were selected from four sources: PDEGym (Poseidon), Amiraset (J. Jakob et al.), and two from PDEBench. Together, these cover a wide range of physical and numerical conditions, including:
 \begin{enumerate}
-	\item \textbf{Geometric Constraints:} Varying obstacle shapes (e.g., airfoils, cylinders) and domain boundaries.
-	\item \textbf{Inflow Conditions ($u_\text{in}$):} Diverse velocities and boundary layer specifications.
-	\item \textbf{Viscosity ($\nu$):} Parameterized flow regimes spanning laminar ($Re \sim 10^2$) to highly turbulent ($Re \sim 10^5$).
+	\item Compressible and incompressible formulations
+	
+	\item Laminar and turbulent regimes
+	
+	\item Periodic and Dirichlet boundary conditions
+	
+	\item Homogeneous and inhomogeneous forcing terms
+	
+	\item Distinct initialisation methods (Gaussian, sine, piecewise constant, etc.)
+	
+	\item Variations in viscosity, pressure, and density
+	
+	\item Different solvers
 \end{enumerate}
+This combination provides the model with a foundation for learning invariant representations that are robust across solver implementations and physical configurations.
 
-The model is formulated as a mapping
-\[
-F : \mathbf{U}_t, \mathbf{P} \mapsto \mathbf{U}_{t+\Delta t},
-\]
-where $\mathbf{U}$ is the discrete, gridded state tensor of $(\mathbf{u}, P)$ and $\mathbf{P}$ is an embedding of the non-spatial system parameters.
+Data Harmonisation
 
-\section{The Temporal Stability Problem}
+The datasets originate from different storage formats and spatial/temporal sampling resolutions. To unify them into a common dataset interface, custom loaders were implemented:
 
-The fundamental problem addressed is the inherent instability of conventional deterministic (auto-regressive) AI surrogates in simulating chaotic, high–Reynolds number flows over extended time horizons.
+Amiraset: binary .am parsing
 
-\subsection{Computational Objective: Minimizing Cumulative Error}
+PDEBench (compressible): .hdf5 files
 
-Given an arbitrary initial state $\mathbf{U}_0$ and system parameters $\mathbf{P}$, the prediction task is to generate a sequence of states $\hat{\mathbf{U}}^1, \hat{\mathbf{U}}^2, \dots, \hat{\mathbf{U}}^N$ that accurately approximates the ground truth states $\mathbf{U}^1, \mathbf{U}^2, \dots, \mathbf{U}^N$.
+PDEBench (incompressible): .h5 files
 
-The deterministic autoregressive approach minimizes the $\ell_2$ loss at each step:
-\[
-\mathcal{L}_{\text{AR}} = \sum_{t=0}^{N-1} \left\| F_{\theta}(\mathbf{U}_t, \mathbf{P}) - \mathbf{U}_{t+\Delta t} \right\|_2^2.
-\]
-However, in actual deployment, the surrogate is recursively applied:
-\[
-\hat{\mathbf{U}}_{t+1} = F_{\theta}(\hat{\mathbf{U}}_t, \mathbf{P}).
-\]
-The problem of \textbf{cumulative error propagation} is defined as the rapid divergence of the rollout error $E_{\text{rollout}}(N)$ as $N$ increases:
-\[
-E_{\text{rollout}}(N) = \left\| \hat{\mathbf{U}}_N - \mathbf{U}_N \right\|_2.
-\]
-This divergence renders the surrogate unusable for real-world applications requiring long time rollouts, which is the central limitation this research aims to overcome.
+PDEGym: .nc files
 
-\subsection{Probabilistic Formulation for Stability}
+All datasets are normalised using a global mean and standard deviation. The training/validation split is randomised at an 80/20 ratio, with zero-shot evaluation applied for validation.
 
-To mitigate the cumulative error problem, the second approach formulates the prediction as modeling the transition probability distribution $p(\mathbf{U}_{t+\Delta t} \mid \mathbf{U}_t, \mathbf{P})$. This recognizes the chaotic nature of Navier–Stokes dynamics, where multiple physical outcomes $\mathbf{U}_{t+\Delta t}$ are valid given $\mathbf{U}_t$.
+Spatial Re-sampling
 
-The Flow Matching objective is to learn a noise-conditioned score function $s_\phi$ that transforms a simple prior distribution into the complex target distribution $p(\mathbf{U}_{t+\Delta t} \mid \mathbf{U}_t, \mathbf{P})$:
+Given that the smallest physically meaningful scale in fluid dynamics is tied to the simulation resolution, spatial re-sampling requires careful consideration. Upsampling may introduce unphysical artefacts, whereas downsampling reduces the fidelity of small-scale features. To balance these trade-offs, the final training resolution was chosen based on the modal overlap across datasets—most data were provided at 
+5122
+512
+2
+or 
+1282
+128
+2
+grid resolutions.
 
-\[
-\min_{\phi} \, \mathbb{E}_{\mathbf{U}_t, \mathbf{P}, t, \mathbf{x}} 
-\left[ 
-\left\| 
-s_{\phi}(\mathbf{x}, t \mid \mathbf{U}_t, \mathbf{P}) 
-- \nabla_{\mathbf{x}} \log p(\mathbf{x}, t \mid \mathbf{U}_t, \mathbf{P}) 
-\right\|_2^2 
-\right].
-\]
+To reconcile these differences, a spectral Fourier interpolation approach was implemented for spatial re-sampling, following the operator-learning perspective that emphasises frequency-space consistency. Since PyTorch’s built-in FFT functions extend arrays beyond the unit domain, a custom bounded Fourier resampling function was developed. Optionally, a bicubic interpolation fallback is provided for computational efficiency.
 
-This shifts the metric of success from a single deterministic prediction to the fidelity of the generated ensemble statistics, ensuring \textbf{physical consistency} rather than point-to-point accuracy over long time horizons.
+Temporal Re-sampling
 
-\section{Definition of Success Metrics}
+The temporal sampling rate ($\delta t$) varies significantly across datasets. For consistent autoregressive prediction, all trajectories were resampled such that consecutive frames represent a uniform timestep across datasets. This ensures the learned temporal operator generalises over consistent physical evolution intervals.
 
-To rigorously compare the AR and Flow Matching approaches, success will be evaluated across three critical dimensions:
+Hardware and Implementation
 
-\begin{enumerate}
-	\item \textbf{Short-Term Fidelity ($\text{Fidelity}_1$):} The step-wise $\ell_2$ error (Equation 1) for the first $K = 5$ predictions. This measures baseline predictive capacity.
-	\item \textbf{Long-Term Temporal Stability ($\text{Stability}_N$):} The maximum rollout horizon $N$ (e.g., $N > 100$ steps) before the $\ell_2$ rollout error (Equation 2) exceeds a defined tolerance threshold $\epsilon$.
-	\item \textbf{Physical Consistency ($\text{Consistency}_{KE}$):} The preservation of key physical quantities over the full rollout $N$. Specifically, the error in the kinetic energy spectrum, e.g., the cumulative error in the time-average of kinetic energy
-	\[
-	\sum_{t=0}^{N} \mathbb{E}\left[\tfrac{1}{2}\rho \|\mathbf{u}_t\|_2^2\right].
-	\]
-\end{enumerate}
+All experiments and preprocessing pipelines were executed on the NVIDIA DGX B-200 platform, leveraging multi-GPU parallelisation for spectral operations and data loading.
+
+Dataset Coverage Overview
+
+Table \ref{table:datasets} summarises the characteristics of each dataset, including PDE type, numerical solver, resolution, and boundary conditions. Collectively, they provide comprehensive coverage across the Navier–Stokes landscape, ensuring that the foundational model is not biased toward a specific solver, resolution, or boundary configuration.
+
