@@ -1,4 +1,6 @@
 import torch
+import torch.nn as nn
+import torch.nn.functional as F
 import h5py
 from torch.utils.data import Dataset
 import numpy as np
@@ -67,6 +69,8 @@ class DiskDatasetDivFM(Dataset):
             prior = self.prior_purenoise(target.clone(), fromframe=self.from_frame)
         elif self.noisetype == 'checkerboard':
             prior = self.checkerboard_noise(target.clone(), fromframe=self.from_frame)
+        elif self.noisetype == 'smoothgaussian':
+            prior = self.prior_smoothnoise(target.clone(), fromframe=self.from_frame, smooth_passes=3)
         else:
             raise ValueError(f"Unknown noisetype {self.noisetype}")
         #label = (label - self.avgnorm) / self.stdnorm)
@@ -87,6 +91,26 @@ class DiskDatasetDivFM(Dataset):
         noise = noise.repeat_interleave(8, dim=2).repeat_interleave(8, dim=3)
         data[fromframe:] = noise
         return data
+    
+    def prior_smoothnoise(self, data, fromframe=4, smooth_passes=3):
+        noise = torch.randn((data.shape[0] - fromframe, data.shape[1], data.shape[2], data.shape[3]), device=data.device, dtype=data.dtype)
+        def circular_avg_pool3d(x, kernel_size=(5,5,5), stride=1, passes=1):
+            pad_t, pad_h, pad_w = kernel_size[0]//2, kernel_size[1]//2, kernel_size[2]//2
+            x = F.pad(x, (pad_w, pad_w, pad_h, pad_h, pad_t, pad_t), mode="circular")
+            x = F.avg_pool3d(x, kernel_size=kernel_size, stride=stride)
+            return x
+        noise = noise.permute(1,0,2,3)
+        for _ in range(smooth_passes):
+            #print(noise.shape)
+            noise = circular_avg_pool3d(
+                noise,
+                kernel_size=(5, 5, 5),
+                stride=1,
+            )
+        noise = noise.permute(1,0,2,3)
+        noise = noise / noise.std()  # Normalize to std=1
+        data[fromframe:] = noise
+        return data
 
     def get_single_traj(self, idx):
         #f = self._get_file()
@@ -103,6 +127,10 @@ class DiskDatasetDivFM(Dataset):
             prior = self.prior_purenoise(full[:self.tb].clone(), fromframe=self.from_frame)
         elif self.noisetype == 'checkerboard':
             prior = self.checkerboard_noise(full[:self.tb].clone(), fromframe=self.from_frame)
+        elif self.noisetype == 'smoothgaussian':
+            prior = self.prior_smoothnoise(full[:self.tb].clone(), fromframe=self.from_frame, smooth_passes=3)
+        else:
+            raise ValueError(f"Unknown noisetype {self.noisetype}")
         return (
             torch.tensor(prior, dtype=torch.float32).permute(1,0,2,3),
             torch.tensor(full, dtype=torch.float32).permute(1,0,2,3).unsqueeze(0)

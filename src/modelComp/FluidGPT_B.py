@@ -412,17 +412,39 @@ class TemporalBlock(nn.Module):
         attn = attn + bias.unsqueeze(0)
 
         # -------------------------
-        # Causal masking
+        # Custom masking (no changes in conditioning layer 0-3)
         # -------------------------
-        if self.causal:  # can keep flag or rename to something like 'mask_first4'
+        if self.causal == "custom":
             T = attn.size(-1)
             forbid_mask = torch.zeros((T, T), device=x.device, dtype=torch.bool)
-            forbid_mask[0:4, 0:4] = True
-            forbid_mask[4:T, 0:4] = True  # tokens 4-15 cannot attend to 0-3
+            forbid_mask[0:4, 0:4] = True # no changes in conditioning layer
+            forbid_mask[0:4, 4:T] = True  # this prevents passing information from predicted future to conditioning layer
             attn = attn.masked_fill(forbid_mask.unsqueeze(0).unsqueeze(0), float('-inf'))
-        # -----------------------
+
+        # -------------------------
+        # Forward-only masking
+        # -------------------------
+        if self.causal == "forward":
+            T = attn.size(-1)
+            forward_mask = torch.triu(
+                torch.ones(T, T, device=x.device, dtype=torch.bool), diagonal=1
+            )  # True = forbidden (future only)
+            attn = attn.masked_fill(forward_mask.unsqueeze(0).unsqueeze(0), float('-inf'))
+
+        # -------------------------
+        # Backward-only masking
+        # -------------------------
+        if self.causal == "backward":
+            T = attn.size(-1)
+            backward_mask = torch.tril(
+                torch.ones(T, T, device=x.device, dtype=torch.bool), diagonal=1
+            )  # True = allowed backward positions
+            attn = attn.masked_fill(backward_mask.unsqueeze(0).unsqueeze(0), float('-inf'))
+
 
         attn = F.softmax(attn, dim=-1)
+        if self.causal == "custom":
+            attn = torch.nan_to_num(attn, nan=0.0) # nans are returned at conditioning layer due to strict -inf masking
         attn = self.attn_drop(attn)
 
         attn_out = (attn @ v).transpose(1, 2).reshape(B * E, T, C)

@@ -1,0 +1,88 @@
+% Main document
+\documentclass[11pt,a4paper]{report}
+%\documentclass[openany]{report}
+% Section numbering without chapter prefix
+\renewcommand{\thesection}{\arabic{section}}
+
+% Roman numerals
+\newcommand{\RNum}[1]{\uppercase\expandafter{\romannumeral #1\relax}}
+
+
+% Required packages
+\usepackage{mathptmx}
+\usepackage[most]{tcolorbox}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{xltabular}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[style=apa,backend=biber]{biblatex}
+\usepackage{hyperref}
+\hypersetup{hidelinks, colorlinks=false}
+\usepackage{cleveref}
+\usepackage{lipsum}
+\usepackage{eso-pic}
+\usepackage{transparent}
+\usepackage{xcolor}
+
+%\usepackage{titlesec}
+
+%\titlespacing*{\chapter}{0pt}{0pt}{20pt}
+
+% Bibliography file
+\addbibresource{references.bib}
+
+% Document settings
+\setlength{\parindent}{1em}
+\setlength{\parskip}{1em}
+\setcounter{tocdepth}{1}
+
+% Page numbering (roman)
+\pagenumbering{roman}
+
+% set colors inverted for dev 
+\definecolor{mydark}{HTML}{1F1F1F}
+%\pagecolor{mydark}
+%\color{white}
+
+
+\begin{document}
+
+% Front matter
+\input{frontmatter/titlepage}
+%\input{frontmatter/declaration}
+%\input{frontmatter/acknowledgements}
+%\input{frontmatter/summary}
+
+% Table of contents and lists
+%\tableofcontents
+%\clearpage
+%\listoftables
+%\clearpage
+%\listoffigures
+%\clearpage
+
+% Page numbering (arabic)
+\pagenumbering{arabic}
+
+% Main chapters
+\input{chapters/intro/introduction}
+\input{chapters/problem/problemformulation}
+
+%\input{chapters/chapter1/chapter1}
+%\input{chapters/chapter2/chapter2}
+%\input{chapters/chapter3/chapter3}
+%\input{chapters/chapter4/chapter4}
+% Bibliography
+\begin{sloppypar}
+    \printbibliography[heading=bibintoc,title=References]
+\end{sloppypar}
+
+% Appendices
+\appendix
+\input{appendices/appendices}
+
+\end{document}

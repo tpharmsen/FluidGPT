@@ -1,0 +1,36 @@
+\chapter*{Introduction}
+
+Computational Fluid Dynamics (CFD) is the indispensable tool for designing and optimizing systems across virtually every engineering discipline, from aerospace and turbomachinery to climate modeling and biomedical devices. However, high-fidelity CFD simulations of complex, turbulent, or multi-physics systems remain computationally prohibitive, often requiring days or weeks of processing time. Recent years have shown that computational cost can be greatly reduced with the use of AI surrogate models. These models learn the underlying PDE behaviour directly from simulation data, promising to reduce prediction time from hours to milliseconds. Specifically, so called 'foundation' models can learn the dynamics of multiple PDE systems bundled in a single model. 
+
+\section{Foundational model goal}
+ 
+The creation of an effective AI surrogate model presents a critical challenge: achieving generalization across the vast parameter space of PDEs. Traditional models are often trained and locked to a single set of simulation parameters for multiple PDE systems. Our work tackles this limitation by including a wide domain of simulation parameters for a single PDE system; Navier Stokes. The primary goal is to design a single, unified AI architecture capable of accurately predicting future states across a wide variety of Navier-Stokes systems, including compressible and incompressible flows, diverse geometric constraints, and varying simulation settings from multi-source large-scale pretraining data.
+
+\section{Dual approach to temporal stability}
+
+While foundational models are often designed for accuracy of spatial structures, the accuracy of temporal progression of generated system states dictate its usability in the real world. To account for this gap in literature, this research focuses on stable time-progression of system states.
+The approach to stability is two-fold;
+
+\textbf{Short-Term Deterministic Prediction (Auto-regressive):} This scheme utilizes an Auto-regressive (AR) approach, predicting a few (bundled) time-steps into the future. This method is computationally straightforward and highly accurate for very short horizons. However, when deployed for long-sequence generation, this system is inherently susceptible to compounding errors: the small error in one predicted state is fed directly as input to predict the next, leading to an accumulation of error and divergence from the true physical trajectory.
+  
+
+\textbf{Long-Sequence Probabilistic Generation (Flow Matching):} This method shifts the focus from a short deterministic future to modeling the complex transition probability distribution over longer time steps. This shift is motivated by the physical nature of turbulent flows; the Navier-Stokes system is naturally diverging (sensitive to initial conditions), meaning small variations can lead to vastly different system states over time. Specifically, the breaking of the same high-energy vortex can result in vastly different small-energy vortex distributions. As Flow Matching is able to learn probability density distributions rather than single input-output pairs, this approach is naturally able to account for branches in the state space.
+
+A significant gap exists in current literature, where reported results often focus on single-step accuracy rather than long-term temporal stability and physical consistency over extended rollouts. Yet, for any real-world application—be it aerodynamic design, weather forecasting, or control—the ability of the surrogate to remain stable and accurate over hundreds or thousands of steps is fundamental. By comparing these two methods, we directly address this critical stability and fidelity challenge.
+
+
+\section{Research Questions}
+
+\begin{tcolorbox}[
+	colback=gray!10,
+	colframe= gray!10,
+	boxrule=0pt,
+	sharp corners,
+	enhanced
+	]
+	\begin{enumerate}
+		\item Can we develop a rollout-stable and physics-consistent deterministic model that generalizes across diverse Navier–Stokes scenarios using only velocity-field inputs, trained on large-scale, multi-source pretraining data?
+		\item Can a probabilistic model outperform the above approach in both qualitative and physics-consistency metrics over long sequences?
+		\item How do the short-term deterministic and long-term probabilistic models compare in terms of computational cost and inference time for full sequence generation?
+	\end{enumerate}
+\end{tcolorbox}

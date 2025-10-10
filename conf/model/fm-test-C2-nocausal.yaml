@@ -14,5 +14,5 @@ use_flex_attn: True
 causal_attn: False
 act: "gelu"
 skip_enable: True
-skipblock: "convnext"
+skipblock: "none"
 gradient_flowthrough: [True, True, True]
