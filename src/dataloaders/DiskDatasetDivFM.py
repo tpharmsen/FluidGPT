@@ -171,6 +171,8 @@ class DiskDatasetDivFM(Dataset):
             prior = self.checkerboard_noise(full[:self.tb].clone(), fromframe=self.from_frame)
         elif self.noisetype == 'smoothgaussian':
             prior = self.prior_smoothnoise(full[:self.tb].clone(), fromframe=self.from_frame, smooth_passes=3)
+        elif self.noisetype == 'gaussiangaussian':
+            prior = self.prior_gaussiangaussian(full[:self.tb].clone(), fromframe=self.from_frame, sigma_time=self.sigma_time, sigma_space=self.sigma_space)
         else:
             raise ValueError(f"Unknown noisetype {self.noisetype}")
         return (
