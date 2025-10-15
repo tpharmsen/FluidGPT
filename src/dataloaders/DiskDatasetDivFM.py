@@ -128,7 +128,7 @@ class DiskDatasetDivFM(Dataset):
         noise = torch.randn((C, T - fromframe, X, Y), device=data.device)
         #print(noise.shape)
         noise = F.pad(noise, (pad_y, pad_y, pad_x, pad_x, pad_t, pad_t), mode='circular')
-        noise = F.conv3d(noise.unsqueeze(0), kernel3d, stride=1, padding=0, groups=C).squeeze(0)
+        noise = F.conv3d(noise, kernel3d, stride=1, padding=0, groups=C)
         noise = noise.permute(1,0,2,3)
         noise = noise / noise.std()
         data[fromframe:] = noise

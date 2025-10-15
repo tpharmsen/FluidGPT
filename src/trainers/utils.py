@@ -294,8 +294,8 @@ def rollout_prb(front, model, steps, int_steps, from_frame, noisetype='puregauss
                 #print(data.shape)
                 B, C, T, X, Y = xt.shape
                 kernel3d = make_gaussian_kernel3d(sigma_time, sigma_space, xt.device) 
-                kernel3d = kernel3d.unsqueeze(0).unsqueeze(0).unsqueeze(0)
-                kernel3d = kernel3d.repeat(C, 1, 1, 1, 1, 1)   
+                kernel3d = kernel3d.unsqueeze(0).unsqueeze(0)
+                kernel3d = kernel3d.repeat(C, 1, 1, 1, 1)   
                 pad_t = kernel3d.shape[-3] // 2
                 pad_x = kernel3d.shape[-2] // 2
                 pad_y = kernel3d.shape[-1] // 2
@@ -303,7 +303,7 @@ def rollout_prb(front, model, steps, int_steps, from_frame, noisetype='puregauss
                 noise = torch.randn((B, C, T - 4, X, Y), device=xt.device)
                 #print(noise.shape)
                 noise = F.pad(noise, (pad_y, pad_y, pad_x, pad_x, pad_t, pad_t), mode='circular')
-                noise = F.conv3d(noise.unsqueeze(0), kernel3d, stride=1, padding=0, groups=C).squeeze(0)
+                noise = F.conv3d(noise, kernel3d, stride=1, padding=0, groups=C)
                 noise = noise / noise.std()
                 xt = torch.cat((old, noise), dim=2)
             else:
