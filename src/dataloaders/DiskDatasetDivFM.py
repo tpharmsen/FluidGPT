@@ -19,9 +19,6 @@ class DiskDatasetDivFM(Dataset):
         if self.noisetype == "gaussiangaussian":
             self.sigma_time = kwargs.get("sigma_time", 1.0)
             self.sigma_space = kwargs.get("sigma_space", 1.0)
-        else:
-            self.sigma_time = None
-            self.sigma_space = None
 
         # If the file ends with .h5, remove it
         if self.filepath.endswith('.h5'):

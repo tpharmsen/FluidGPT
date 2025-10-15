@@ -15,7 +15,9 @@ strategy: "ddp"
 
 from_frame: 4
 int_steps: 25
-noise_type: 'avggaussian'  # options: 'puregaussian', 'checkerboard'
+noise_type: 'gaussiangaussian'  # options: 'puregaussian', 'checkerboard'
+sigma_time: 2.0
+sigma_space: 2.0
 
 plottrain_out: "plot_train.png"
 plotval_out: "plot_val.png"

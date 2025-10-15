@@ -448,7 +448,8 @@ class FMTmodel(L.LightningModule):
             #print('\nprior_traj:', prior_traj.shape, 'val_traj:', val_traj.shape)
             #print(val_traj.shape)
             stacked_pred = rollout_prb(prior_traj, self.model, int(np.ceil((val_traj.shape[2] - self.ct.from_frame) / (self.cm.temporal_bundling - self.ct.from_frame))), 
-                                       self.ct.int_steps, self.ct.from_frame, noisetype=self.ct.noise_type)
+                                       self.ct.int_steps, self.ct.from_frame, noisetype=self.ct.noise_type,
+                                       sigma_time = self.ct.sigma_time if self.ct.noise_type == 'gaussiangaussian' else None, sigma_space = self.ct.sigma_space if self.ct.noise_type == 'gaussiangaussian' else None)
             stacked_pred = stacked_pred[:,:,:val_traj.shape[2]].float() #.to(torch.bfloat16) 
             #print('stacked_pred:', stacked_pred.shape)
             stacked_true = val_traj.float()
