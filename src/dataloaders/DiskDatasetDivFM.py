@@ -10,11 +10,19 @@ from dataloaders.utils import spatial_resample
 from scipy.ndimage import gaussian_filter
 
 class DiskDatasetDivFM(Dataset):
-    def __init__(self, preproc_path, temporal_bundling = 1, noisetype='puregaussian', from_frame = 4):
+    def __init__(self, preproc_path, temporal_bundling = 1, noisetype='puregaussian', from_frame = 4, **kwargs):
         self.filepath = preproc_path
         self.from_frame = from_frame
         self.noisetype = noisetype
         self._file = None
+
+        if self.noisetype == "gaussiangaussian":
+            self.sigma_time = kwargs.get("sigma_time", 1.0)
+            self.sigma_space = kwargs.get("sigma_space", 1.0)
+        else:
+            self.sigma_time = None
+            self.sigma_space = None
+
         # If the file ends with .h5, remove it
         if self.filepath.endswith('.h5'):
             self.filepath = self.filepath[:-3]
@@ -69,8 +77,12 @@ class DiskDatasetDivFM(Dataset):
             prior = self.prior_purenoise(target.clone(), fromframe=self.from_frame)
         elif self.noisetype == 'checkerboard':
             prior = self.checkerboard_noise(target.clone(), fromframe=self.from_frame)
-        elif self.noisetype == 'smoothgaussian':
-            prior = self.prior_smoothnoise(target.clone(), fromframe=self.from_frame, smooth_passes=3)
+        elif self.noisetype == 'avggaussian':
+            prior = self.prior_avggaussian(target.clone(), fromframe=self.from_frame, smooth_passes=3)
+        elif self.noisetype == 'gaussiangaussian':
+            #target_clone = target.clone().permute(1,0,2,3)
+            prior = self.prior_gaussiangaussian(target.clone(), fromframe=self.from_frame, sigma_time=self.sigma_time, sigma_space=self.sigma_space)
+            #prior = prior.permute(1,0,2,3)
         else:
             raise ValueError(f"Unknown noisetype {self.noisetype}")
         #label = (label - self.avgnorm) / self.stdnorm)
@@ -92,7 +104,40 @@ class DiskDatasetDivFM(Dataset):
         data[fromframe:] = noise
         return data
     
-    def prior_smoothnoise(self, data, fromframe=4, smooth_passes=3):
+
+    def prior_gaussiangaussian(self, data, fromframe=4, sigma_time=1.0, sigma_space=1.0):
+
+        def make_gaussian_kernel3d(sigma_t, sigma_s, device):
+            size_t = int(2 * round(3 * sigma_t) + 1)
+            size_s = int(2 * round(3 * sigma_s) + 1)
+
+            t = torch.arange(size_t, device=device) - size_t // 2
+            x = torch.arange(size_s, device=device) - size_s // 2
+            y = torch.arange(size_s, device=device) - size_s // 2
+
+            tt, xx, yy = torch.meshgrid(t, x, y, indexing='ij')
+            kernel = torch.exp(-0.5 * ((tt / sigma_t) ** 2 + (xx / sigma_s) ** 2 + (yy / sigma_s) ** 2))
+            kernel /= kernel.sum()
+            return kernel
+        #print(data.shape)
+        T, C, X, Y = data.shape
+        kernel3d = make_gaussian_kernel3d(sigma_time, sigma_space, data.device) 
+        kernel3d = kernel3d.unsqueeze(0).unsqueeze(0)  
+        kernel3d = kernel3d.repeat(C, 1, 1, 1, 1)   
+        pad_t = kernel3d.shape[-3] // 2
+        pad_x = kernel3d.shape[-2] // 2
+        pad_y = kernel3d.shape[-1] // 2
+
+        noise = torch.randn((C, T - fromframe, X, Y), device=data.device)
+        #print(noise.shape)
+        noise = F.pad(noise, (pad_y, pad_y, pad_x, pad_x, pad_t, pad_t), mode='circular')
+        noise = F.conv3d(noise.unsqueeze(0), kernel3d, stride=1, padding=0, groups=C).squeeze(0)
+        noise = noise.permute(1,0,2,3)
+        noise = noise / noise.std()
+        data[fromframe:] = noise
+        return data
+        
+    def prior_avggaussian(self, data, fromframe=4, smooth_passes=3):
         noise = torch.randn((data.shape[0] - fromframe, data.shape[1], data.shape[2], data.shape[3]), device=data.device, dtype=data.dtype)
         def circular_avg_pool3d(x, kernel_size=(5,5,5), stride=1, passes=1):
             pad_t, pad_h, pad_w = kernel_size[0]//2, kernel_size[1]//2, kernel_size[2]//2

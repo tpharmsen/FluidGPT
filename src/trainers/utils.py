@@ -229,7 +229,10 @@ def rollout_det(front, model, steps):
     preds = torch.cat(preds, dim=1)
     return preds
 
-def rollout_prb(front, model, steps, int_steps, from_frame, noisetype='puregaussian'):
+def rollout_prb(front, model, steps, int_steps, from_frame, noisetype='puregaussian', **kwargs):
+    if noisetype == "gaussiangaussian":
+        sigma_time = kwargs.get("sigma_time", 1.0)
+        sigma_space = kwargs.get("sigma_space", 1.0)
     model.eval()
     preds = []
     #preds.append(front)
@@ -254,7 +257,7 @@ def rollout_prb(front, model, steps, int_steps, from_frame, noisetype='puregauss
                 new = torch.randn(size=(xt.shape[0], xt.shape[1], xt.shape[2] - from_frame, xt.shape[3] // 8, xt.shape[4] // 8), device=xt.device)
                 new = new.repeat_interleave(8, dim=3).repeat_interleave(8, dim=4)
                 xt = torch.cat((old, new), dim=2)
-            elif noisetype == "smoothgaussian":
+            elif noisetype == "avggaussian":
                 old = xt[:, :, -from_frame:]
 
                 noise = torch.randn((xt.shape[0], xt.shape[1], xt.shape[2] - from_frame, xt.shape[3], xt.shape[4]), device=xt.device, dtype=xt.dtype)
@@ -274,6 +277,35 @@ def rollout_prb(front, model, steps, int_steps, from_frame, noisetype='puregauss
                 noise = noise / noise.std()  # Normalize to std=1
                 xt = torch.cat((old, noise), dim=2)
                 #print(noise.shape, noise.std(), noise.mean())
+            elif noisetype == "gaussiangaussian":
+                old = xt[:, :, -from_frame:]
+                def make_gaussian_kernel3d(sigma_t, sigma_s, device):
+                    size_t = int(2 * round(3 * sigma_t) + 1)
+                    size_s = int(2 * round(3 * sigma_s) + 1)
+
+                    t = torch.arange(size_t, device=device) - size_t // 2
+                    x = torch.arange(size_s, device=device) - size_s // 2
+                    y = torch.arange(size_s, device=device) - size_s // 2
+
+                    tt, xx, yy = torch.meshgrid(t, x, y, indexing='ij')
+                    kernel = torch.exp(-0.5 * ((tt / sigma_t) ** 2 + (xx / sigma_s) ** 2 + (yy / sigma_s) ** 2))
+                    kernel /= kernel.sum()
+                    return kernel
+                #print(data.shape)
+                B, C, T, X, Y = xt.shape
+                kernel3d = make_gaussian_kernel3d(sigma_time, sigma_space, xt.device) 
+                kernel3d = kernel3d.unsqueeze(0).unsqueeze(0).unsqueeze(0)
+                kernel3d = kernel3d.repeat(C, 1, 1, 1, 1, 1)   
+                pad_t = kernel3d.shape[-3] // 2
+                pad_x = kernel3d.shape[-2] // 2
+                pad_y = kernel3d.shape[-1] // 2
+
+                noise = torch.randn((B, C, T - 4, X, Y), device=xt.device)
+                #print(noise.shape)
+                noise = F.pad(noise, (pad_y, pad_y, pad_x, pad_x, pad_t, pad_t), mode='circular')
+                noise = F.conv3d(noise.unsqueeze(0), kernel3d, stride=1, padding=0, groups=C).squeeze(0)
+                noise = noise / noise.std()
+                xt = torch.cat((old, noise), dim=2)
             else:
                 raise ValueError(f"Unknown noisetype {noisetype}")
             #print(xt.shape)
