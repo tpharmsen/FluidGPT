@@ -608,9 +608,10 @@ class FMTdata(L.LightningDataModule):
         for item in self.cd.datasets:
             preproc_savepath = str(self.cb.data_base + 'preproc_' + item["name"])
             dataset_SS = DiskDatasetDivFM(preproc_savepath, temporal_bundling=self.cm.temporal_bundling,
-                noisetype=self.ct.noise_type, from_frame=self.ct.from_frame)
+                noisetype=self.ct.noise_type, from_frame=self.ct.from_frame, sigma_time=self.ct.sigma_time if self.ct.noise_type == 'gaussiangaussian' else None,
+                sigma_space=self.ct.sigma_space if self.ct.noise_type == 'gaussiangaussian' else None
+                )
             
-
             # generate random seed
             random_seed = random.randint(0, 10000)
             train_sampler = ZeroShotSamplerReduced(dataset_SS, train_ratio=self.ct.train_ratio, 
