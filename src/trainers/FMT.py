@@ -31,6 +31,7 @@ from dataloaders import *
 from dataloaders import PREPROC_MAPPER
 from dataloaders.utils import get_dataset, ZeroShotSamplerReduced, spatial_resample
 from trainers.utils import animate_rollout, magnitude_vel, compute_energy_enstrophy_spectra
+from trainers.utils import prior_purenoise, prior_avggaussian, prior_gaussiangaussian, prior_checkerboardnoise
 from modelComp.utils import ACT_MAPPER, SKIPBLOCK_MAPPER
 from trainers.utils import rollout_prb
 
@@ -218,41 +219,26 @@ class FMTmodel(L.LightningModule):
         
     def forward(self, x, t):
         return self.model(x, t, {None})
+    
+    def _generate_prior(self, target):
+        if self.ct.noise_type == 'puregaussian':
+            prior = prior_purenoise(target.clone(), fromframe=self.ct.from_frame)
+        elif self.ct.noise_type == 'checkerboard':
+            prior = prior_checkerboardnoise(target.clone(), fromframe=self.ct.from_frame)
+        elif self.ct.noise_type == 'avggaussian':
+            prior = prior_avggaussian(target.clone(), fromframe=self.ct.from_frame, smooth_passes=3)
+        elif self.ct.noise_type == 'gaussiangaussian':
+            prior = prior_gaussiangaussian(target.clone(), fromframe=self.ct.from_frame, 
+                                           sigma_time=self.ct.sigma_time, sigma_space=self.ct.sigma_space)
+        else:
+            raise ValueError(f"Unknown noisetype {self.ct.noise_type}")
+        return prior
 
     def training_step(self, batch, batch_idx):
-        """
-        #print("Automatic opt:", self.automatic_optimization)
-        opt = self.optimizers()
-        prior, target = batch
-        #print('prior:', prior.shape, 'target:', target.shape)
-        total_loss = 0.0
 
-        for _ in range(self.ct.train_steps_per_batch):
-            #print(f"Training step {counter} for batch {batch_idx}")
-            
-            #xnoise = self.random_fft_perturb(ta, self.ct.perturbation_strength)
-            tf = torch.rand(target.shape[0], device=target.device) #* (1 - eps) + eps
-            t_expand = tf.view(-1, 1, 1, 1, 1).repeat(
-                        1, target.shape[1], target.shape[2], target.shape[3], target.shape[4]
-                    )
-            xt = t_expand * target.clone() + (1 - t_expand) * prior.clone()
-            target_vector = target.clone() - prior.clone()
-            pred = self(xt, tf)
-            #train_loss = F.mse_loss(pred, target_vector, reduction='mean')
-            train_loss = ((pred - target_vector)**2).mean()
-            
-            # not sure if correct loss is returned
-            opt.zero_grad()
-            self.manual_backward(train_loss)
-            opt.step()
-            total_loss += train_loss
-            self.train_losses.append(train_loss.item())
-
-        avg_loss = total_loss / self.ct.train_steps_per_batch
-        
-        """
-        prior, target = batch
-        #print('prior:', prior.shape, 'target:', target.shape)
+        #prior, target = batch
+        target = batch
+        prior = self._generate_prior(target)
         tf = torch.rand(target.size(0), device=target.device)
         t_expand = tf.view(-1, 1, 1, 1, 1).repeat(
             1, target.shape[1], target.shape[2], target.shape[3], target.shape[4]
@@ -267,9 +253,8 @@ class FMTmodel(L.LightningModule):
 
     def validation_step(self, batch, batch_idx):#, dataloader_idx):
 
-        prior, target = batch
-        #if dataloader_idx == 0:
-            #xprior = self.random_fft_perturb(front, self.ct.perturbation_strength)
+        target = batch
+        prior = self._generate_prior(target)
         tf = torch.rand(target.size(0), device=target.device)
         t_expand = tf.view(-1, 1, 1, 1, 1).repeat(
             1, target.shape[1], target.shape[2], target.shape[3], target.shape[4]
@@ -440,9 +425,10 @@ class FMTmodel(L.LightningModule):
         with torch.no_grad():
             dataset_idx = torch.randint(0, len(self.trainer.datamodule.val_datasets), (1,)).item()
             traj_idx = self.trainer.datamodule.val_samplers[dataset_idx].random_val_traj()
-            prior_traj, val_traj = self.trainer.datamodule.val_datasets[dataset_idx].dataset.get_single_traj(traj_idx)
+            val_traj = self.trainer.datamodule.val_datasets[dataset_idx].dataset.get_single_traj(traj_idx)
+            prior_traj = self._generate_prior(val_traj)
             #print('val_traj:', val_traj.shape)
-            front = val_traj[:self.cm.temporal_bundling].unsqueeze(0).float().to(device)#.to(torch.bfloat16)
+            #front = val_traj[:self.cm.temporal_bundling].unsqueeze(0).float().to(device)#.to(torch.bfloat16)
             prior_traj = prior_traj[:self.cm.temporal_bundling].unsqueeze(0).float().to(device)#.to(torch.bfloat16)
             #print('len:', len(val_traj) // self.cm.temporal_bundling)
             #print('\nprior_traj:', prior_traj.shape, 'val_traj:', val_traj.shape)
