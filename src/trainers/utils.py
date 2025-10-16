@@ -10,20 +10,20 @@ import numpy as np
 from matplotlib.widgets import Slider
 import os
 
-def prior_purenoise(self, data, fromframe=4):
+def prior_purenoise(data, fromframe=4):
     # generate pure gaussian noise
     noise = torch.randn(size=data[fromframe:].shape)
     data[fromframe:] = noise
     return data
 
-def prior_checkerboardnoise(self, data, fromframe=4):
+def prior_checkerboardnoise(data, fromframe=4):
     # generate checkerboard noise
     noise = torch.randn(size=(data.shape[0] - fromframe, data.shape[1], data.shape[2] // 8, data.shape[3] // 8), device=data.device)
     noise = noise.repeat_interleave(8, dim=2).repeat_interleave(8, dim=3)
     data[fromframe:] = noise
     return data
 
-def prior_gaussiangaussian(self, data, fromframe=4, sigma_time=1.0, sigma_space=1.0):
+def prior_gaussiangaussian(data, fromframe=4, sigma_time=1.0, sigma_space=1.0):
 
     def make_gaussian_kernel3d(sigma_t, sigma_s, device):
         size_t = int(2 * round(3 * sigma_t) + 1)
@@ -37,25 +37,28 @@ def prior_gaussiangaussian(self, data, fromframe=4, sigma_time=1.0, sigma_space=
         kernel = torch.exp(-0.5 * ((tt / sigma_t) ** 2 + (xx / sigma_s) ** 2 + (yy / sigma_s) ** 2))
         kernel /= kernel.sum()
         return kernel
-    #print(data.shape)
-    T, C, X, Y = data.shape
+    print(data.shape)
+    B, C, T, X, Y = data.shape
     kernel3d = make_gaussian_kernel3d(sigma_time, sigma_space, data.device) 
-    kernel3d = kernel3d.unsqueeze(0).unsqueeze(0)  
+    kernel3d = kernel3d.unsqueeze(0).unsqueeze(0)
     kernel3d = kernel3d.repeat(C, 1, 1, 1, 1)   
+    print(kernel3d.shape)
     pad_t = kernel3d.shape[-3] // 2
     pad_x = kernel3d.shape[-2] // 2
     pad_y = kernel3d.shape[-1] // 2
 
-    noise = torch.randn((C, T - fromframe, X, Y), device=data.device)
-    #print(noise.shape)
+    noise = torch.randn((B, C, T - fromframe, X, Y), device=data.device)
+    print(noise.shape)
     noise = F.pad(noise, (pad_y, pad_y, pad_x, pad_x, pad_t, pad_t), mode='circular')
     noise = F.conv3d(noise, kernel3d, stride=1, padding=0, groups=C)
-    noise = noise.permute(1,0,2,3)
+    #noise = noise.permute(1,0,2,3)
     noise = noise / noise.std()
+    print(noise.shape)
     data[fromframe:] = noise
+    print(data.shape)
     return data
     
-def prior_avggaussian(self, data, fromframe=4, smooth_passes=3):
+def prior_avggaussian(data, fromframe=4, smooth_passes=3):
     noise = torch.randn((data.shape[0] - fromframe, data.shape[1], data.shape[2], data.shape[3]), device=data.device, dtype=data.dtype)
     def circular_avg_pool3d(x, kernel_size=(5,5,5), stride=1, passes=1):
         pad_t, pad_h, pad_w = kernel_size[0]//2, kernel_size[1]//2, kernel_size[2]//2
