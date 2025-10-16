@@ -13,3 +13,6 @@ run with
 python src/train.py --trainer FM --CB surf-high --CD surf-test --CM fm-test-own2 --CT fm-b200-smoothgaussian --out newmodeltest
 
 decreased data with intersampling rate!!
+
+runai cli
+
