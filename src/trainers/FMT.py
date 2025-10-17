@@ -426,10 +426,10 @@ class FMTmodel(L.LightningModule):
             dataset_idx = torch.randint(0, len(self.trainer.datamodule.val_datasets), (1,)).item()
             traj_idx = self.trainer.datamodule.val_samplers[dataset_idx].random_val_traj()
             val_traj = self.trainer.datamodule.val_datasets[dataset_idx].dataset.get_single_traj(traj_idx)
-            prior_traj = self._generate_prior(val_traj)
+            prior_traj = self._generate_prior(val_traj[:,:,:self.cm.temporal_bundling])
             #print('val_traj:', val_traj.shape)
             #front = val_traj[:self.cm.temporal_bundling].unsqueeze(0).float().to(device)#.to(torch.bfloat16)
-            prior_traj = prior_traj[:self.cm.temporal_bundling].unsqueeze(0).float().to(device)#.to(torch.bfloat16)
+            prior_traj = prior_traj.float().to(device)#.to(torch.bfloat16)
             #print('len:', len(val_traj) // self.cm.temporal_bundling)
             #print('\nprior_traj:', prior_traj.shape, 'val_traj:', val_traj.shape)
             #print(val_traj.shape)
@@ -463,40 +463,26 @@ class FMTmodel(L.LightningModule):
             dataset_idx = torch.randint(0, len(self.trainer.datamodule.val_datasets), (1,)).item()
             indices = list(self.trainer.datamodule.val_samplers[dataset_idx].indices)
             sample = random.choice(indices)
-            front, label = self.trainer.datamodule.val_datasets[dataset_idx].dataset.__getitem__(sample)
+            label = self.trainer.datamodule.val_datasets[dataset_idx].dataset.__getitem__(sample)
             dataset_name = self.trainer.datamodule.val_datasets[dataset_idx].dataset.name
         elif mode == 'train':
             dataset_idx = torch.randint(0, len(self.trainer.datamodule.train_datasets), (1,)).item()
             indices = list(self.trainer.datamodule.train_samplers[dataset_idx].indices)
             sample = random.choice(indices)
-            front, label = self.trainer.datamodule.train_datasets[dataset_idx].dataset.__getitem__(sample)
+            label = self.trainer.datamodule.train_datasets[dataset_idx].dataset.__getitem__(sample)
             dataset_name = self.trainer.datamodule.train_datasets[dataset_idx].dataset.name
-        elif mode == 'val_forward':
-            pass
-            dataset_idx = torch.randint(0, len(self.trainer.datamodule.val_forward_datasets), (1,)).item()
-            indices = list(self.trainer.datamodule.val_forward_samplers[dataset_idx].indices)
-            sample = random.choice(indices)
-            front, label = self.trainer.datamodule.val_forward_datasets[dataset_idx].dataset.__getitem__(sample)
-            dataset_name = self.trainer.datamodule.val_forward_datasets[dataset_idx].dataset.name
         else:
             raise ValueError('PLOTMODE NOT RECOGNIZED')
-
-        front, label = front.to(device).unsqueeze(0), label.to(device).unsqueeze(0)
+        front = self._generate_prior(label.unsqueeze(0))
+        front, label = front.to(device), label.to(device).unsqueeze(0)
         front, label = front[0].unsqueeze(0).float(), label[0].unsqueeze(0).float()  # .to(torch.bfloat16)
         #front, label = front[0].unsqueeze(0).to(torch.bfloat16), label[0].unsqueeze(0).to(torch.bfloat16)
         with torch.no_grad():
             steps = self.ct.int_steps
             xt = front.clone()
-            if mode == 'val_forward':
-                pass
-                for _ in range(self.ct.forward_steps_loss):
-                    for i, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
-                        pred = self(xt.clone(), t.to(label.device).expand(xt.size(0)))
-                        xt = xt + (1 / steps) * pred
-            else:
-                for i, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
-                    pred = self(xt.clone(), t.to(label.device).expand(xt.size(0)))
-                    xt = xt.clone() + (1 / steps) * pred.clone()
+            for i, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
+                pred = self(xt.clone(), t.to(label.device).expand(xt.size(0)))
+                xt = xt.clone() + (1 / steps) * pred.clone()
 
         pred = xt.clone()
         front = front.float() * self.global_std + self.global_mean #.to(torch.bfloat16)

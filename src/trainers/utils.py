@@ -37,25 +37,20 @@ def prior_gaussiangaussian(data, fromframe=4, sigma_time=1.0, sigma_space=1.0):
         kernel = torch.exp(-0.5 * ((tt / sigma_t) ** 2 + (xx / sigma_s) ** 2 + (yy / sigma_s) ** 2))
         kernel /= kernel.sum()
         return kernel
-    print(data.shape)
     B, C, T, X, Y = data.shape
     kernel3d = make_gaussian_kernel3d(sigma_time, sigma_space, data.device) 
     kernel3d = kernel3d.unsqueeze(0).unsqueeze(0)
     kernel3d = kernel3d.repeat(C, 1, 1, 1, 1)   
-    print(kernel3d.shape)
     pad_t = kernel3d.shape[-3] // 2
     pad_x = kernel3d.shape[-2] // 2
     pad_y = kernel3d.shape[-1] // 2
 
     noise = torch.randn((B, C, T - fromframe, X, Y), device=data.device)
-    print(noise.shape)
     noise = F.pad(noise, (pad_y, pad_y, pad_x, pad_x, pad_t, pad_t), mode='circular')
     noise = F.conv3d(noise, kernel3d, stride=1, padding=0, groups=C)
     #noise = noise.permute(1,0,2,3)
     noise = noise / noise.std()
-    print(noise.shape)
-    data[fromframe:] = noise
-    print(data.shape)
+    data[:, :, fromframe:] = noise
     return data
     
 def prior_avggaussian(data, fromframe=4, smooth_passes=3):
@@ -346,6 +341,7 @@ def rollout_prb(front, model, steps, int_steps, from_frame, noisetype='puregauss
                 #print(noise.shape, noise.std(), noise.mean())
             elif noisetype == "gaussiangaussian":
                 old = xt[:, :, -from_frame:]
+
                 def make_gaussian_kernel3d(sigma_t, sigma_s, device):
                     size_t = int(2 * round(3 * sigma_t) + 1)
                     size_s = int(2 * round(3 * sigma_s) + 1)
