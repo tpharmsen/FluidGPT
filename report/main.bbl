@@ -1,0 +1,91 @@
+\begin{thebibliography}{10}
+
+\bibitem{kim2018deepfluids}
+Byungsoo Kim, Vasco Azevedo, and Nils Thuerey.
+\newblock Deep fluids: A generative network for parameterized fluid
+  simulations.
+\newblock {\em Computer Graphics Forum}, 2018.
+
+\bibitem{zhu2019physics}
+Yifei Zhu, Nicholas Zabaras, Phaedon~S. Koutsourelakis, and Paris Perdikaris.
+\newblock Physics-constrained deep learning for high-dimensional surrogate
+  modeling and uncertainty quantification without labeled data.
+\newblock {\em Journal of Computational Physics}, 2019.
+
+\bibitem{sun2020surrogate}
+Liyuan Sun, Hongwei Gao, Shubin Pan, and Jian-Xun Wang.
+\newblock Surrogate modeling for fluid flows based on physics-constrained deep
+  learning without simulation data.
+\newblock {\em Computer Methods in Applied Mechanics and Engineering}, 2020.
+
+\bibitem{haghighat2022gapinn}
+Ehsan Haghighat and Ruben Juanes.
+\newblock Gapinn: Geometry-aware physics-informed neural networks.
+\newblock {\em Advances in Modeling and Simulation in Engineering Sciences},
+  2022.
+
+\bibitem{li2020fourier}
+Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, Anima Anandkumar, Andrew
+  Stuart, and Kaushik Bhattacharya.
+\newblock Fourier neural operator for parametric partial differential
+  equations.
+\newblock {\em arXiv preprint arXiv:2010.08895}, 2020.
+
+\bibitem{lu2021deeponet}
+Lu~Lu, Pengzhan Jin, Guofei Pang, Zhiping Zhang, and George~E. Karniadakis.
+\newblock Learning nonlinear operators via deeponet based on the universal
+  approximation theorem of operators.
+\newblock {\em Nature Machine Intelligence}, 2021.
+
+\bibitem{li2020graph}
+Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, and Anima Anandkumar.
+\newblock Graph neural operator for parametric partial differential equations.
+\newblock {\em arXiv preprint arXiv:2003.03485}, 2020.
+
+\bibitem{polymathicAI2024}
+Polymathic~AI Team.
+\newblock Polymathic ai: Multi-physics pretraining (mpp) initiative.
+\newblock \url{https://polymathic-ai.org/blog/mpp/}, 2024.
+
+\bibitem{yang2025p3d}
+Wenxuan Yang, Jie Zhang, and Cheng Li.
+\newblock P3d: A unified framework for deterministic and probabilistic pde
+  surrogate modeling.
+\newblock {\em arXiv preprint arXiv:2509.10186}, 2025.
+
+\bibitem{maulik2020probabilistic}
+Romit Maulik, Kai Fukami, Rishabh Ramachandran, Koji Fukagata, and Kunihiko
+  Taira.
+\newblock Probabilistic neural networks for fluid flow surrogate modeling and
+  uncertainty quantification.
+\newblock {\em arXiv preprint arXiv:2005.04271}, 2020.
+
+\bibitem{zheng2023uncertainty}
+Lin Zheng, Yifeng Chen, and Dong Li.
+\newblock Uncertainty-aware surrogate models for airfoil flow simulations using
+  diffusion probabilistic models.
+\newblock {\em AIAA Journal}, 2023.
+
+\bibitem{gao2024bayesian}
+Chenglong Gao, Zongyi Guo, and Wei Li.
+\newblock Bayesian conditional diffusion models for spatiotemporal turbulence.
+\newblock {\em Computer Methods in Applied Mechanics and Engineering}, 2024.
+
+\bibitem{mucke2025physicsaware}
+Lukas Mücke and Benjamin Sanderse.
+\newblock Physics-aware generative models for turbulent fluid flows based on
+  stochastic interpolants.
+\newblock {\em arXiv preprint arXiv:2504.05852}, 2025.
+
+\bibitem{geneva2020multi}
+Nicholas Geneva and Nicholas Zabaras.
+\newblock Multi-fidelity generative modeling of turbulence.
+\newblock {\em Journal of Computational Physics}, 2020.
+
+\bibitem{vadeboncoeur2022probabilistic}
+Philippe Vadeboncoeur, Sergey Frolov, and Khachik Sargsyan.
+\newblock Fully probabilistic deep models for forward and inverse problems in
+  parametric pdes.
+\newblock {\em arXiv preprint arXiv:2208.04856}, 2022.
+
+\end{thebibliography}

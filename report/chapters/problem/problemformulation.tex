@@ -174,3 +174,19 @@ Dataset Coverage Overview
 
 Table \ref{table:datasets} summarises the characteristics of each dataset, including PDE type, numerical solver, resolution, and boundary conditions. Collectively, they provide comprehensive coverage across the Navier–Stokes landscape, ensuring that the foundational model is not biased toward a specific solver, resolution, or boundary configuration.
 
+
+\section{Research Questions}
+
+\begin{tcolorbox}[
+	colback=gray!10,
+	colframe= gray!10,
+	boxrule=0pt,
+	sharp corners,
+	enhanced
+	]
+	\begin{enumerate}
+		\item Can we develop a rollout-stable and physics-consistent deterministic model that generalizes across diverse Navier–Stokes scenarios using only velocity-field inputs, trained on large-scale, multi-source pretraining data?
+		\item Can a probabilistic model outperform the above approach in both qualitative and physics-consistency metrics over long sequences?
+		\item How do the short-term deterministic and long-term probabilistic models compare in terms of computational cost and inference time for full sequence generation?
+	\end{enumerate}
+\end{tcolorbox}

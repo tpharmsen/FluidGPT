@@ -3059,6 +3059,21 @@
     <bcf:datasource type="file" datatype="bibtex" glob="false">references.bib</bcf:datasource>
   </bcf:bibdata>
   <bcf:section number="0">
+    <bcf:citekey order="1" intorder="1">kim2018deepfluids</bcf:citekey>
+    <bcf:citekey order="2" intorder="1">zhu2019physics</bcf:citekey>
+    <bcf:citekey order="3" intorder="1">sun2020surrogate</bcf:citekey>
+    <bcf:citekey order="4" intorder="1">haghighat2022gapinn</bcf:citekey>
+    <bcf:citekey order="5" intorder="1">li2020fourier</bcf:citekey>
+    <bcf:citekey order="5" intorder="2">lu2021deeponet</bcf:citekey>
+    <bcf:citekey order="5" intorder="3">li2020graph</bcf:citekey>
+    <bcf:citekey order="6" intorder="1">polymathicAI2024</bcf:citekey>
+    <bcf:citekey order="7" intorder="1">yang2025p3d</bcf:citekey>
+    <bcf:citekey order="8" intorder="1">maulik2020probabilistic</bcf:citekey>
+    <bcf:citekey order="9" intorder="1">zheng2023uncertainty</bcf:citekey>
+    <bcf:citekey order="10" intorder="1">gao2024bayesian</bcf:citekey>
+    <bcf:citekey order="11" intorder="1">mucke2025physicsaware</bcf:citekey>
+    <bcf:citekey order="12" intorder="1">geneva2020multi</bcf:citekey>
+    <bcf:citekey order="13" intorder="1">vadeboncoeur2022probabilistic</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="apa">
