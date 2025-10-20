@@ -61,19 +61,3 @@ From this survey, several gaps remain, which our work directly addresses:
 
 In this work, by comparing an auto-regressive deterministic surrogate and a probabilistic generative model (via flow matching) within a shared foundational framework, we aim to illuminate the trade-offs between accuracy, rollout stability, and efficiency. Moreover, by training across a wide parameter regime of Navier–Stokes flows and emphasizing temporal stability beyond single-step metrics, we contribute a more rigorous evaluation of surrogate modeling for real-world CFD applications.
 
-
-\section{Research Questions}
-
-\begin{tcolorbox}[
-	colback=gray!10,
-	colframe= gray!10,
-	boxrule=0pt,
-	sharp corners,
-	enhanced
-	]
-	\begin{enumerate}
-		\item Can we develop a rollout-stable and physics-consistent deterministic model that generalizes across diverse Navier–Stokes scenarios using only velocity-field inputs, trained on large-scale, multi-source pretraining data?
-		\item Can a probabilistic model outperform the above approach in both qualitative and physics-consistency metrics over long sequences?
-		\item How do the short-term deterministic and long-term probabilistic models compare in terms of computational cost and inference time for full sequence generation?
-	\end{enumerate}
-\end{tcolorbox}
