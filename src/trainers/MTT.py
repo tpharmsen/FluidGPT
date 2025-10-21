@@ -546,10 +546,11 @@ class MTTdata(L.LightningDataModule):
             dataset_FS = DiskDatasetDiv(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=self.ct.forward_steps_loss)
 
             # generate random seed
-            random_seed = random.randint(0, 10000)
-            train_sampler = ZeroShotSampler(dataset_SS, train_ratio=self.ct.train_ratio, split="train", seed=random_seed, forward_steps=1)
-            val_sampler = ZeroShotSampler(dataset_SS, train_ratio=self.ct.train_ratio, split="val", seed=random_seed, forward_steps=1)
-            val_forward_sampler = ZeroShotSampler(dataset_FS, train_ratio=self.ct.train_ratio, split="val", seed=random_seed, forward_steps=self.ct.forward_steps_loss)
+            seed = self.cb.seed
+            #random_seed = random.randint(0, 10000)
+            train_sampler = ZeroShotSampler(dataset_SS, train_ratio=self.ct.train_ratio, split="train", seed=seed, forward_steps=1)
+            val_sampler = ZeroShotSampler(dataset_SS, train_ratio=self.ct.train_ratio, split="val", seed=seed, forward_steps=1)
+            val_forward_sampler = ZeroShotSampler(dataset_FS, train_ratio=self.ct.train_ratio, split="val", seed=seed, forward_steps=self.ct.forward_steps_loss)
 
             self.train_datasets.append(Subset(dataset_SS, train_sampler.indices))
             self.val_datasets.append(Subset(dataset_SS, val_sampler.indices))

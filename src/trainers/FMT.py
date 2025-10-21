@@ -586,11 +586,11 @@ class FMTdata(L.LightningDataModule):
                 )
             
             # generate random seed
-            random_seed = random.randint(0, 10000)
+            seed = self.cb.seed
             train_sampler = ZeroShotSamplerReduced(dataset_SS, train_ratio=self.ct.train_ratio, 
-                                                   split="train", seed=random_seed, skip_timesteps=item["timesample"])
+                                                   split="train", seed=seed, skip_timesteps=item["timesample"])
             val_sampler = ZeroShotSamplerReduced(dataset_SS, train_ratio=self.ct.train_ratio, 
-                                                 split="val", seed=random_seed, skip_timesteps=item["timesample"])
+                                                 split="val", seed=seed, skip_timesteps=item["timesample"])
             #val_forward_sampler = ZeroShotSampler(dataset_FS, train_ratio=self.ct.train_ratio, split="val", seed=random_seed, forward_steps=self.ct.forward_steps_loss)
 
             self.train_datasets.append(Subset(dataset_SS, train_sampler.indices))
