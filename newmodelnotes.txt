@@ -11,6 +11,7 @@ try non normalisation of noise?
 
 
 Try smooth noise
+implement MTT val_error calc
 
 
 run with
