@@ -443,8 +443,6 @@ class FluidGPT_FM(nn.Module):
         
         x = self.embedding.decode(x, proj=True)
         x = x.permute(0,2,1,3,4).contiguous()
-        print(x.shape)
         if self.enable_final_layer:
             x = self.final_layer(x)
         return x
-
