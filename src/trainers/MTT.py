@@ -562,7 +562,7 @@ class MTTdata(L.LightningDataModule):
             #torch.synchronize() 
             split = {
                 "name": item["name"],
-                "seed": random_seed,
+                "seed": seed,
                 "train_trajs": train_sampler.train_trajs,
                 "val_trajs": val_sampler.val_trajs,
                 "val_forward_trajs": val_forward_sampler.val_trajs,
