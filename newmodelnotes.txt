@@ -5,6 +5,10 @@ checkerboard noise + pure gaussian noise implementation
 causal temporal attention 0-3 4-15 (impl fromframe TODO)
 option to remove UNET-style skip connects
 Linear/ConvV1/ConvV2 embedder types
+4-4sigma doublegauss noise best
+convv2 layer embedder best
+try non normalisation of noise?
+
 
 Try smooth noise
 
