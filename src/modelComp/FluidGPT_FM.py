@@ -145,7 +145,8 @@ class FluidGPT_FM(nn.Module):
     def __init__(self, emb_dim=96, embedder_type="linear", data_dim=[64,3,2,128,128], patch_size=(8,8), hiddenout_dim=128, flowmatching_emb_dim=256,
                  depth=2, stage_depths=[6,6,10,6,6], num_heads=[6,6,12,6,6], window_size=4, mlp_ratio=4., 
                  qkv_bias=True, drop=0., attn_drop=0., use_flex_attn=True, causal_attn = True, norm_layer=nn.LayerNorm,
-                 act=nn.GELU, skip_enable=True, skip_connect=ConvNeXtBlock, gradient_flowthrough=[True, False, False], enable_final_layer=False):
+                 act=nn.GELU, skip_enable=True, skip_connect=ConvNeXtBlock, gradient_flowthrough=[True, False, False], 
+                 enable_final_layer=False):
         super().__init__()
 
         # assert that every element in stage_depths is divisible by 3 except for the middle element
@@ -188,6 +189,7 @@ class FluidGPT_FM(nn.Module):
         self.skip_connect = skip_connect
         #self.causal_attn = causal_attn
         self.skip_enable = skip_enable
+        self.enable_final_layer = enable_final_layer
 
         self.resnorms_down = nn.ModuleList(nn.ModuleList() for _ in range(depth))
         self.resnorms_middle = nn.ModuleList()

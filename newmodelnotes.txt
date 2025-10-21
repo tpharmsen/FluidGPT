@@ -10,6 +10,6 @@ Try smooth noise
 
 
 run with
-python src/train.py --trainer FM --CB surf-high --CD surf-test --CM fm-test-customcausal --CT fm-b200-doublegauss --out newmodeltest
+python src/train.py --trainer FM --CB surf-high --CD surf-test --CM fm-test-A --CT fm-mig-doublegauss --out test
 
 decreased data with intersampling rate!!
