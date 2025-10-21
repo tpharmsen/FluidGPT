@@ -145,7 +145,7 @@ class FluidGPT_FM(nn.Module):
     def __init__(self, emb_dim=96, embedder_type="linear", data_dim=[64,3,2,128,128], patch_size=(8,8), hiddenout_dim=128, flowmatching_emb_dim=256,
                  depth=2, stage_depths=[6,6,10,6,6], num_heads=[6,6,12,6,6], window_size=4, mlp_ratio=4., 
                  qkv_bias=True, drop=0., attn_drop=0., use_flex_attn=True, causal_attn = True, norm_layer=nn.LayerNorm,
-                 act=nn.GELU, skip_enable=True, skip_connect=ConvNeXtBlock, gradient_flowthrough=[True, False, False]):
+                 act=nn.GELU, skip_enable=True, skip_connect=ConvNeXtBlock, gradient_flowthrough=[True, False, False], enable_final_layer=False):
         super().__init__()
 
         # assert that every element in stage_depths is divisible by 3 except for the middle element
@@ -325,7 +325,8 @@ class FluidGPT_FM(nn.Module):
             self.patchUnmerges.append(PatchUnMerge(emb_dim * 2**(i+1)))
             if self.skip_enable:
                 self.skip_connects.append(skip_connect(emb_dim * 2**i)) if skip_connect is not None else None
-            #self.final_layer = nn.Conv3d(2, 2, kernel_size=3, padding=1)
+            if self.enable_final_layer:
+                self.final_layer = nn.Conv3d(2, 2, kernel_size=3, padding=1)
 
     def forward(self, x, t, extra={None}):
         # shape checks
@@ -440,6 +441,8 @@ class FluidGPT_FM(nn.Module):
         
         x = self.embedding.decode(x, proj=True)
         x = x.permute(0,2,1,3,4).contiguous()
-        #x = self.final_layer(x)
+        print(x.shape)
+        if self.enable_final_layer:
+            x = self.final_layer(x)
         return x
 

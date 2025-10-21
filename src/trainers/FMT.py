@@ -213,6 +213,7 @@ class FMTmodel(L.LightningModule):
                             act=ACT_MAPPER[self.cm.act],
                             skip_connect=SKIPBLOCK_MAPPER[self.cm.skipblock],
                             gradient_flowthrough=self.cm.gradient_flowthrough,
+                            enable_final_layer=self.cm.final_layer
                             )
         else:
             raise ValueError('MODEL NOT RECOGNIZED')
