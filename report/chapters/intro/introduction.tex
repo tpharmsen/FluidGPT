@@ -1,31 +1,21 @@
 \chapter*{Introduction}
 
-Computational Fluid Dynamics (CFD) is the indispensable tool for designing and optimizing systems across virtually every engineering discipline, from aerospace and turbomachinery to climate modeling and biomedical devices. However, high-fidelity CFD simulations of complex, turbulent, or multi-physics systems remain computationally prohibitive, often requiring days or weeks of processing time. Recent years have shown that computational cost can be greatly reduced with the use of AI surrogate models. These models learn the underlying PDE behaviour directly from simulation data, promising to reduce prediction time from hours to milliseconds. Specifically, so called 'foundation' models can learn the dynamics of multiple PDE systems bundled in a single model. 
+Computational Fluid Dynamics (CFD) is the indispensable tool for designing and optimizing systems across virtually every engineering discipline, from aerospace and turbomachinery to climate modeling and biomedical devices. However, high-fidelity CFD simulations of complex, turbulent, or multi-physics systems remain computationally expensive, often requiring days or weeks of processing time. Recent years have shown that computational cost can be greatly reduced with the use of AI surrogate models. These models learn the underlying PDE behaviour directly from simulation data, promising to reduce prediction time from hours to milliseconds. Specifically, so called 'foundation' models can capture the dynamics of multiple PDE systems in a single unified model.
 
-\section{Foundational model goal}
- 
-The creation of an effective AI surrogate model presents a critical challenge: achieving generalization across the vast parameter space of PDEs. Traditional models are often trained and locked to a single set of simulation parameters for multiple PDE systems. Our work tackles this limitation by including a wide domain of simulation parameters for a single PDE system; Navier Stokes. The primary goal is to design a single, unified AI architecture capable of accurately predicting future states across a wide variety of Navier-Stokes systems, including compressible and incompressible flows, diverse geometric constraints, and varying simulation settings from multi-source large-scale pretraining data.
+%\section*{Background and Related Work}
 
-\section{Dual approach to temporal stability}
-
-While foundational models are often designed for accuracy of spatial structures, the accuracy of temporal progression of generated system states dictate its usability in the real world. To account for this gap in literature, this research focuses on stable time-progression of system states.
-The approach to stability is two-fold;
-
-\textbf{Short-Term Deterministic Prediction (Auto-regressive):} This scheme utilizes an Auto-regressive (AR) approach, predicting a few (bundled) time-steps into the future. This method is computationally straightforward and highly accurate for very short horizons. However, when deployed for long-sequence generation, this system is inherently susceptible to compounding errors: the small error in one predicted state is fed directly as input to predict the next, leading to an accumulation of error and divergence from the true physical trajectory.
-  
-
-\textbf{Long-Sequence Probabilistic Generation (Flow Matching):} This method shifts the focus from a short deterministic future to modeling the complex transition probability distribution over longer time steps. This shift is motivated by the physical nature of turbulent flows; the Navier-Stokes system is naturally diverging (sensitive to initial conditions), meaning small variations can lead to vastly different system states over time. Specifically, the breaking of the same high-energy vortex can result in vastly different small-energy vortex distributions. As Flow Matching is able to learn probability density distributions rather than single input-output pairs, this approach is naturally able to account for branches in the state space.
-
-A significant gap exists in current literature, where reported results often focus on single-step accuracy rather than long-term temporal stability and physical consistency over extended rollouts. Yet, for any real-world application—be it aerodynamic design, weather forecasting, or control—the ability of the surrogate to remain stable and accurate over hundreds or thousands of steps is fundamental. By comparing these two methods, we directly address this critical stability and fidelity challenge.
-
-\section*{Background and Related Work}
-
-In this section, we place our work within the broader literature on neural surrogates for PDEs (especially Navier–Stokes), and we highlight both deterministic (e.g. convolutional / operator-based) and probabilistic / generative approaches, as well as more recent foundational model or multi-physics perspectives.
+%In this section, we place our work within the broader literature on neural surrogates for PDEs (especially Navier–Stokes), and we highlight both deterministic (e.g. convolutional / operator-based) and probabilistic / generative approaches, as well as more recent foundational model or multi-physics perspectives.
 
 \paragraph{Neural Surrogate Models for Fluid Dynamics}
 Early neural-network approaches to fluid simulation often used convolutional architectures operating on grid-based velocity/pressure fields to predict next-step increments or to emulate low-dimensional flow maps. For instance, \textit{Deep Fluids} \cite{kim2018deepfluids} uses a convolutional generative model over velocity fields, enforcing divergence-free velocity via architectural constraints, and evolves in latent space to accelerate simulation by orders of magnitude.
 
-More generally, convolutional U-Net style architectures (or hybrid CNN + residual blocks) have been used to directly predict flow updates or corrections, sometimes augmented with physics-based regularization based on divergence.
+More generally, convolutional U-Net style architectures or hybrid CNN with attention or residual blocks have been used to directly predict flow updates or corrections, sometimes augmented with physics-based regularization.
+
+U-Net: Convolutional Networks for Biomedical Image Segmentation
+U-net architectures for fast prediction in fluid mechanics
+Surrogate Modeling of Fluid Dynamics with a Multigrid U-Net
+2D Fluid Flows Prediction Based on U-Net Architecture
+
 
 On the other side, physics-informed neural networks (PINNs) and physics-constrained deep surrogates attempt to encode the governing PDE residuals directly into the loss, thereby reducing reliance on large amounts of simulation data. Zhu et al. \cite{zhu2019physics} propose a physics-constrained deep learning framework for high-dimensional PDEs, incorporating the residual of the differential operator into the loss function. Similarly, Sun et al. \cite{sun2020surrogate} explore physics-constrained surrogates for fluid flows without fully relying on simulation data. Geometry-aware extensions, such as GAPINN \cite{haghighat2022gapinn}, allow handling non-trivial geometries by encoding latent representations of boundary shapes combined with spatial inputs.
 
@@ -60,4 +50,22 @@ From this survey, several gaps remain, which our work directly addresses:
 \end{itemize}
 
 In this work, by comparing an auto-regressive deterministic surrogate and a probabilistic generative model (via flow matching) within a shared foundational framework, we aim to illuminate the trade-offs between accuracy, rollout stability, and efficiency. Moreover, by training across a wide parameter regime of Navier–Stokes flows and emphasizing temporal stability beyond single-step metrics, we contribute a more rigorous evaluation of surrogate modeling for real-world CFD applications.
+
+
+\section{Foundational model goal}
+ 
+The creation of an effective AI surrogate model presents a critical challenge: achieving generalization across the vast parameter space of PDEs. Traditional models are often trained and locked to a single set of simulation parameters for multiple PDE systems. Our work tackles this limitation by including a wide domain of simulation parameters for a single PDE system; Navier Stokes. The primary goal is to design a single, unified AI architecture capable of accurately predicting future states across a wide variety of Navier-Stokes systems, including compressible and incompressible flows, diverse geometric constraints, and varying simulation settings from multi-source large-scale pretraining data.
+
+\section{Dual approach to temporal stability}
+
+While foundational models are often designed for accuracy of spatial structures, the accuracy of temporal progression of generated system states dictate its usability in the real world. To account for this gap in literature, this research focuses on stable time-progression of system states.
+The approach to stability is two-fold;
+
+\textbf{Short-Term Deterministic Prediction (Auto-regressive):} This scheme utilizes an Auto-regressive (AR) approach, predicting a few (bundled) time-steps into the future. This method is computationally straightforward and highly accurate for very short horizons. However, when deployed for long-sequence generation, this system is inherently susceptible to compounding errors: the small error in one predicted state is fed directly as input to predict the next, leading to an accumulation of error and divergence from the true physical trajectory.
+  
+
+\textbf{Long-Sequence Probabilistic Generation (Flow Matching):} This method shifts the focus from a short deterministic future to modeling the complex transition probability distribution over longer time steps. This shift is motivated by the physical nature of turbulent flows; the Navier-Stokes system is naturally diverging (sensitive to initial conditions), meaning small variations can lead to vastly different system states over time. Specifically, the breaking of the same high-energy vortex can result in vastly different small-energy vortex distributions. As Flow Matching is able to learn probability density distributions rather than single input-output pairs, this approach is naturally able to account for branches in the state space.
+
+A significant gap exists in current literature, where reported results often focus on single-step accuracy rather than long-term temporal stability and physical consistency over extended rollouts. Yet, for any real-world application—be it aerodynamic design, weather forecasting, or control—the ability of the surrogate to remain stable and accurate over hundreds or thousands of steps is fundamental. By comparing these two methods, we directly address this critical stability and fidelity challenge.
+
 

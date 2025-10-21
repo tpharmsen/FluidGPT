@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.6)  20 OCT 2025 19:51
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.6)  21 OCT 2025 16:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -887,67 +887,73 @@ Package hyperref Info: Link coloring OFF on input line 53.
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texlive/texmf-di
 st/fonts/enc/dvips/base/8r.enc}]) (./chapters/intro/introduction.tex
-Overfull \hbox (3.02016pt too wide) in paragraph at lines 7--8
-\T1/ptm/m/n/10.95 The cre-ation of an ef-fec-tive AI sur-ro-gate model presents
- a crit-i-cal chal-lenge: achiev-
- []
-
-[1
-
-]
-Overfull \hbox (5.63808pt too wide) in paragraph at lines 17--18
-[]\T1/ptm/b/n/10.95 Long-Sequence Prob-a-bilis-tic Gen-er-a-tion (Flow Match-in
-g): \T1/ptm/m/n/10.95 This method shifts
- []
-
-
-Overfull \hbox (3.09831pt too wide) in paragraph at lines 26--27
+Overfull \hbox (3.09831pt too wide) in paragraph at lines 10--11
  []\T1/ptm/b/n/10.95 Neural Sur-ro-gate Mod-els for Fluid Dy-nam-ics[] \T1/ptm/
 m/n/10.95 Early neural-network ap-proaches
  []
 
 
-Overfull \hbox (9.68904pt too wide) in paragraph at lines 26--27
+Overfull \hbox (9.68904pt too wide) in paragraph at lines 10--11
 \T1/ptm/m/n/10.95 ve-loc-i-ty/-pres-sure fields to pre-dict next-step in-cre-me
 nts or to em-u-late low-dimensional
  []
 
 
-Overfull \hbox (0.91887pt too wide) in paragraph at lines 26--27
+Overfull \hbox (0.91887pt too wide) in paragraph at lines 10--11
 \T1/ptm/m/n/10.95 over ve-loc-ity fields, en-forc-ing divergence-free ve-loc-it
 y via ar-chi-tec-tural con-straints,
  []
 
-[2]
-Overfull \hbox (23.25696pt too wide) in paragraph at lines 30--31
+
+Overfull \hbox (23.25696pt too wide) in paragraph at lines 14--15
 []\T1/ptm/m/n/10.95 On the other side, physics-informed neu-ral net-works (PINN
 s) and physics-constrained
  []
 
-[3]
+[1
+
+] [2]
 LaTeX Info: Symbol \textrightarrow not provided by
             font family ptm in TS1 encoding.
-            Default family used instead on input line 50.
+            Default family used instead on input line 34.
 LaTeX Info: Symbol \textrightarrow not provided by
             font family ptm in TS1 encoding.
-            Default family used instead on input line 50.
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 5
-6.
+            Default family used instead on input line 34.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 4
+0.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-) [4{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
-Overfull \hbox (25.93956pt too wide) in paragraph at lines 57--58
+)
+Overfull \hbox (25.93956pt too wide) in paragraph at lines 41--42
 \T1/ptm/m/n/10.95 tem (e.g. com-press-ible vs. in-com-press-ible Navier^^UStoke
 s, vary-ing Mach/Reynolds
  []
 
 
-Overfull \hbox (2.30945pt too wide) in paragraph at lines 58--59
+Overfull \hbox (2.30945pt too wide) in paragraph at lines 42--43
 []\T1/ptm/b/n/10.95 Efficient Prob-a-bilis-tic Gen-er-a-tion: \T1/ptm/m/n/10.95
  Diffusion-based gen-er-a-tive mod-els tend
  []
 
-) (./chapters/problem/problemformulation.tex [5]
+[3{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
+Overfull \hbox (15.64717pt too wide) in paragraph at lines 46--47
+\T1/ptm/m/n/10.95 and ef-fi-ciency. More-over, by train-ing across a wide pa-ra
+m-e-ter regime of Navier^^UStokes
+ []
+
+
+Overfull \hbox (3.02016pt too wide) in paragraph at lines 51--52
+\T1/ptm/m/n/10.95 The cre-ation of an ef-fec-tive AI sur-ro-gate model presents
+ a crit-i-cal chal-lenge: achiev-
+ []
+
+
+Overfull \hbox (5.63808pt too wide) in paragraph at lines 61--62
+[]\T1/ptm/b/n/10.95 Long-Sequence Prob-a-bilis-tic Gen-er-a-tion (Flow Match-in
+g): \T1/ptm/m/n/10.95 This method shifts
+ []
+
+[4]) (./chapters/problem/problemformulation.tex [5]
 LaTeX Font Info:    Trying to load font information for OT1+ztmcm on input line
  11.
 
@@ -1018,11 +1024,11 @@ L3 programming layer <2024-01-22>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 00FBDC7A8E644B6D12864037488ED32E;1529.
+(rerunfilecheck)             Checksum: AE2CCB221B25963D7933D1178884ABAA;1529.
  ) 
 Here is how much of TeX's memory you used:
- 30153 strings out of 474222
- 609416 string characters out of 5748733
+ 30152 strings out of 474222
+ 609405 string characters out of 5748733
  1932975 words of memory out of 5000000
  51804 multiletter control sequences out of 15000+600000
  609841 words of font info for 108 fonts, out of 8000000 for 9000
@@ -1040,10 +1046,10 @@ xlive/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist
 /fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/ur
 w/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a
 .pfb>
-Output written on main.pdf (15 pages, 173613 bytes).
+Output written on main.pdf (15 pages, 173070 bytes).
 PDF statistics:
- 281 PDF objects out of 1000 (max. 8388607)
- 211 compressed objects within 3 object streams
- 65 named destinations out of 1000 (max. 500000)
+ 280 PDF objects out of 1000 (max. 8388607)
+ 210 compressed objects within 3 object streams
+ 64 named destinations out of 1000 (max. 500000)
  213 words of extra memory for PDF output out of 10000 (max. 10000000)
 
