@@ -1,5 +1,6 @@
 resample_shape: 128
 resample_mode: "fourier"
+seed: 227
 
 datasets:
   - name: "amira"
