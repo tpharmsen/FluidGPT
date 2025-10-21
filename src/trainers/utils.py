@@ -49,7 +49,7 @@ def prior_gaussiangaussian(data, fromframe=4, sigma_time=1.0, sigma_space=1.0):
     noise = F.pad(noise, (pad_y, pad_y, pad_x, pad_x, pad_t, pad_t), mode='circular')
     noise = F.conv3d(noise, kernel3d, stride=1, padding=0, groups=C)
     #noise = noise.permute(1,0,2,3)
-    noise = noise / noise.std()
+    #noise = noise / noise.std()
     data[:, :, fromframe:] = noise
     return data
     
@@ -69,7 +69,7 @@ def prior_avggaussian(data, fromframe=4, smooth_passes=3):
             stride=1,
         )
     noise = noise.permute(1,0,2,3)
-    noise = noise / noise.std()  # Normalize to std=1
+    #noise = noise / noise.std()  # Normalize to std=1
     data[fromframe:] = noise
     return data
 

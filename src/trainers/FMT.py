@@ -159,7 +159,7 @@ class FMTmodel(L.LightningModule):
 
         self.train_losses = []
         self.val_SS_losses = []
-        #self.val_FS_losses = []
+        self.val_errors = []
         self.epoch_time = None
         self.log_time = None
         
@@ -266,9 +266,12 @@ class FMTmodel(L.LightningModule):
         #print(pred.shape, target_vector.shape, target.shape)
         #val_loss = F.mse_loss(pred, target_vector, reduction='mean')
         val_loss = ((pred - target_vector)**2).mean()
+        val_error = ((pred.detach() - target_vector) ** 2).mean().item()
         val_loss = val_loss.item()
+        
         self.val_SS_losses.append(val_loss)
-        return val_loss
+        self.val_errors.append(val_error)
+        return val_loss, val_error
 
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW(
@@ -302,6 +305,7 @@ class FMTmodel(L.LightningModule):
     
     def on_validation_epoch_end(self):
         val_SS_loss = np.mean(self.val_SS_losses)
+        val_error = np.mean(self.val_errors)
         self.log("val_SS_loss_checkpoint", val_SS_loss)
 
         if not self.trainer.sanity_checking and rank_zero_only.rank == 0:
@@ -309,19 +313,10 @@ class FMTmodel(L.LightningModule):
             self.epoch_time = time.time() - self.epoch_time
             self.log_time = time.time()
             train_loss = np.mean(self.train_losses)
-            #val_SS_loss = np.mean(self.val_SS_losses)
-            #val_FS_loss = np.mean(self.val_FS_losses)
-            #self.log("val_SS_loss_checkpoint", val_SS_loss)
-
+            
             self.global_mean = self.trainer.datamodule.global_mean
             self.global_std = self.trainer.datamodule.global_std
 
-            '''
-            self.log_dict({
-                "val_SS_loss": val_SS_loss,
-            }, prog_bar=False)
-            '''
-            
             visuals = self.cb.viz and epoch % self.cb.viz_freq == 0
             if visuals:
                 #print('time for visuals')
@@ -338,6 +333,7 @@ class FMTmodel(L.LightningModule):
                 "epoch": epoch,
                 "train_loss": train_loss,
                 "val_SS_loss": val_SS_loss,
+                "val_error": val_error,
                 #"val_FS_loss": val_FS_loss,
                 "Learning Rate": self.trainer.optimizers[0].param_groups[0]['lr'],
                 "Epoch Time": self.epoch_time,
@@ -351,6 +347,7 @@ class FMTmodel(L.LightningModule):
 
         self.train_losses = []
         self.val_SS_losses = []
+        self.val_errors = []
         #self.val_FS_losses = []
 
     def spectra_plot(self, stacked_pred, stacked_true, dataset_name, output_path):
