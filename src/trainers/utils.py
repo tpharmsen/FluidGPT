@@ -336,7 +336,7 @@ def rollout_prb(front, model, steps, int_steps, from_frame, noisetype='puregauss
                         kernel_size=(5, 5, 5),
                         stride=1,
                     )
-                noise = noise / noise.std()  # Normalize to std=1
+                #noise = noise / noise.std()  # Normalize to std=1
                 xt = torch.cat((old, noise), dim=2)
                 #print(noise.shape, noise.std(), noise.mean())
             elif noisetype == "gaussiangaussian":
@@ -367,7 +367,7 @@ def rollout_prb(front, model, steps, int_steps, from_frame, noisetype='puregauss
                 #print(noise.shape)
                 noise = F.pad(noise, (pad_y, pad_y, pad_x, pad_x, pad_t, pad_t), mode='circular')
                 noise = F.conv3d(noise, kernel3d, stride=1, padding=0, groups=C)
-                noise = noise / noise.std()
+                #noise = noise / noise.std()
                 xt = torch.cat((old, noise), dim=2)
             else:
                 raise ValueError(f"Unknown noisetype {noisetype}")
