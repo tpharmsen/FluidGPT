@@ -6,6 +6,27 @@ Byungsoo Kim, Vasco Azevedo, and Nils Thuerey.
   simulations.
 \newblock {\em Computer Graphics Forum}, 2018.
 
+\bibitem{ronneberger2015u}
+Olaf Ronneberger, Philipp Fischer, and Thomas Brox.
+\newblock {U-Net}: Convolutional networks for biomedical image segmentation.
+\newblock pages 234--241, 2015.
+
+\bibitem{chen2020u}
+Junfeng Chen, Jonathan Viquerat, and Elie Hachem.
+\newblock {U-net} architectures for fast prediction in fluid mechanics.
+\newblock {\em Computers \& Fluids}, 205:104591, 2020.
+
+\bibitem{suter2022surrogate}
+Timo Suter, Tim G{\"a}hler, Matthias M{\"u}ller, Marc Hutter, and Hinnerk
+  Hanebutte.
+\newblock Surrogate modeling of fluid dynamics with a multigrid u-net.
+\newblock {\em arXiv preprint arXiv:2205.15545}, 2022.
+
+\bibitem{prihatno20202d}
+Alvian Prihatno and Hyok-Chan Kang.
+\newblock 2d fluid flows prediction based on u-net architecture.
+\newblock pages 31--33, 2020.
+
 \bibitem{zhu2019physics}
 Yifei Zhu, Nicholas Zabaras, Phaedon~S. Koutsourelakis, and Paris Perdikaris.
 \newblock Physics-constrained deep learning for high-dimensional surrogate
@@ -41,6 +62,32 @@ Lu~Lu, Pengzhan Jin, Guofei Pang, Zhiping Zhang, and George~E. Karniadakis.
 Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, and Anima Anandkumar.
 \newblock Graph neural operator for parametric partial differential equations.
 \newblock {\em arXiv preprint arXiv:2003.03485}, 2020.
+
+\bibitem{vaswani2017attention}
+Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones,
+  Aidan~N Gomez, {\L}ukasz Kaiser, and Illia Polosukhin.
+\newblock Attention is all you need.
+\newblock pages 5998--6008, 2017.
+
+\bibitem{mccabe2023mpp}
+Michael McCabe, Bruno R{\'e}galdo-Saint~Blancard, Liam Holden~Parker, Ruben
+  Ohana, Miles Cranmer, Alberto Bietti, Michael Eickenberg, Siavash Golkar,
+  Geraud Krawezik, Francois Lanusse, et~al.
+\newblock Multiple physics pretraining for physical surrogate models.
+\newblock {\em arXiv preprint arXiv:2310.02994}, 2023.
+
+\bibitem{herde2024poseidon}
+Maximilian Herde, Bogdan Raoni{\'c}, Tobias Rohner, Roger K{\"a}ppeli, Roberto
+  Molinaro, Emmanuel de~B{\'e}zenac, and Siddhartha Mishra.
+\newblock Poseidon: Efficient foundation models for pdes.
+\newblock {\em arXiv preprint arXiv:2405.19101}, 2024.
+
+\bibitem{liu2024prose}
+Yuxuan Liu, Jingmin Sun, Xinjie He, Griffin Pinney, Zecheng Zhang, and Hayden
+  Schaeffer.
+\newblock Prose-fd: A multimodal pde foundation model for learning multiple
+  operators for forecasting fluid dynamics.
+\newblock {\em arXiv preprint arXiv:2409.09811}, 2024.
 
 \bibitem{polymathicAI2024}
 Polymathic~AI Team.
