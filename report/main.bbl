@@ -1,5 +1,11 @@
 \begin{thebibliography}{10}
 
+\bibitem{Zhang2022surrogateCFD}
+Tongtao Zhang, Biswadip Dey, Krishna Veeraraghavan, Harshad Kulkarni, and Amit
+  Chakraborty.
+\newblock Demystifying the data need of ml-surrogates for cfd simulations.
+\newblock {\em arXiv preprint arXiv:2205.08355}, 2022.
+
 \bibitem{kim2018deepfluids}
 Byungsoo Kim, Vasco Azevedo, and Nils Thuerey.
 \newblock Deep fluids: A generative network for parameterized fluid
