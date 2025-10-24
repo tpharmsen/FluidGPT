@@ -15,8 +15,9 @@ CPU_MEMORY_LIMIT=$((245 * MULTIPLIER))G
 GPU_DEVICES_REQUEST=$((1 * MULTIPLIER))
 
 echo "GPU devices request: $GPU_DEVICES_REQUEST"
+echo "Container name: $CONTAINER_NAME"
 
-runai workspace submit $CONTAINER_NAME \
+runai training submit $CONTAINER_NAME \
 --image "harbor.spike.tue.nl/fluidgpt/fluidgpt-fm-ssh:latest" \
 --project "fluidgpt" \
 --cpu-core-limit $CPU_CORE_LIMIT \
@@ -24,8 +25,8 @@ runai workspace submit $CONTAINER_NAME \
 --cpu-memory-limit $CPU_MEMORY_LIMIT \
 --cpu-memory-request $CPU_MEMORY_REQUEST \
 --gpu-devices-request $GPU_DEVICES_REQUEST \
---backoff-limit 1   \
---image-pull-policy IfNotPresent \
+--backoff-limit 0   \
+--image-pull-policy "IfNotPresent" \
 --new-pvc "claimname=shm-ephemeral,storageclass=exascaler-ephemeral,size=512G,path=/dev/shm,accessmode-rwm,ephemeral" \
 --existing-pvc "claimname=fluidgpt,path=/data" \
 --git-sync "name=fluidgpt,repository=https://github.com/tpharmsen/FluidGPT,path=/code/,rev=main" \
