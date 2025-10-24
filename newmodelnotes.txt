@@ -20,7 +20,7 @@ python src/train.py --trainer FM --CB surf-high --CD surf-test --CM fm-test-A --
 
 decreased data with intersampling rate!!
 
-submit/spike-G1.sh 2 fmtest-b "--trainer FM --CB surf-high --CD surf-test --CM fm-test-B --CT fm-b200-doublegauss6 --out FMtest-B" 
-submit/spike-G1.sh 2 fmtest-b-h2 "--trainer FM --CB surf-high --CD surf-test --CM fm-test-B-h2 --CT fm-b200-doublegauss6 --out FMtest-B-h2"
-submit/spike-G1.sh 2 fmtest-b-h3 "--trainer FM --CB surf-high --CD surf-test --CM fm-test-B-h3 --CT fm-b200-doublegauss6 --out FMtest-B-h3"
-submit/spike-G1.sh 2 fmtest-b-d3 "--trainer FM --CB surf-high --CD surf-test --CM fm-test-B-d3 --CT fm-b200-doublegauss6 --out FMtest-B-d3"
+submit/spike-G1.sh 2 fmtest-b "--trainer FM --CB spike-high --CD spike-gauss --CM fm-test-B --CT fm-b200-doublegauss6 --out FMtest-B" 
+submit/spike-G1.sh 2 fmtest-b-h2 "--trainer FM --CB spike-high --CD spike-gauss --CM fm-test-B-h2 --CT fm-b200-doublegauss6 --out FMtest-B-h2"
+submit/spike-G1.sh 2 fmtest-b-h3 "--trainer FM --CB spike-high --CD spike-gauss --CM fm-test-B-h3 --CT fm-b200-doublegauss6 --out FMtest-B-h3"
+submit/spike-G1.sh 2 fmtest-b-d3 "--trainer FM --CB spike-high --CD spike-gauss --CM fm-test-B-d3 --CT fm-b200-doublegauss6 --out FMtest-B-d3"
