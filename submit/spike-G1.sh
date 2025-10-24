@@ -25,6 +25,7 @@ runai workspace submit $CONTAINER_NAME \
 --cpu-memory-request $CPU_MEMORY_REQUEST \
 --gpu-devices-request $GPU_DEVICES_REQUEST \
 --backoff-limit 1   \
+--image-pull-policy IfNotPresent \
 --new-pvc "claimname=shm-ephemeral,storageclass=exascaler-ephemeral,size=512G,path=/dev/shm,accessmode-rwm,ephemeral" \
 --existing-pvc "claimname=fluidgpt,path=/data" \
 --git-sync "name=fluidgpt,repository=https://github.com/tpharmsen/FluidGPT,path=/code/,rev=main" \
