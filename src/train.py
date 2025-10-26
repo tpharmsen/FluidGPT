@@ -66,7 +66,7 @@ if __name__ == "__main__":
         # print all the pathing avabile from /
         print(os.listdir('/'))
         print()
-        print(os.listdir('/data/'))
+        print(os.listdir('C:/Program Files/Git/data'))
         print()
         print(os.listdir('/data/fluidgpt/'))
 
