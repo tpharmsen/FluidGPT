@@ -62,7 +62,8 @@ if __name__ == "__main__":
     if args.out != None:
         cb.folder_out = args.out.replace("/", "") + "/"
         #print('args flag')
-    os.makedirs(cb.save_path + cb.folder_out, exist_ok=True)
+    if os.path.exists(cb.save_path + cb.folder_out) == False:
+        os.makedirs(cb.save_path + cb.folder_out, exist_ok=True)
     if args.out != None:
         cb.wandb_name = args.out
         
