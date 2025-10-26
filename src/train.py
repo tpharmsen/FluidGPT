@@ -63,13 +63,6 @@ if __name__ == "__main__":
         cb.folder_out = args.out.replace("/", "") + "/"
         #print('args flag')
     if os.path.exists(cb.save_path + cb.folder_out) == False:
-        # print all the pathing avabile from /
-        print(os.listdir('/'))
-        print()
-        print(os.listdir('/C:/Program Files/Git/data'))
-        print()
-        print(os.listdir('/data/fluidgpt/'))
-
         os.makedirs(cb.save_path + cb.folder_out, exist_ok=True)
     if args.out != None:
         cb.wandb_name = args.out

@@ -16,6 +16,7 @@ GPU_DEVICES_REQUEST=$((1 * MULTIPLIER))
 
 echo "GPU devices request: $GPU_DEVICES_REQUEST"
 echo "Container name: $CONTAINER_NAME"
+echo "DO NOT USE GIT BASH FOR THIS SCRIPT (IT WILL CHANGE THE PATHING OF PVCs)"
 
 runai training submit $CONTAINER_NAME \
 --image "harbor.spike.tue.nl/fluidgpt/fluidgpt-fm-ssh:latest" \
@@ -27,7 +28,7 @@ runai training submit $CONTAINER_NAME \
 --gpu-devices-request $GPU_DEVICES_REQUEST \
 --backoff-limit 0   \
 --new-pvc "claimname=shm-ephemeral,storageclass=exascaler-ephemeral,size=512G,path=/dev/shm,accessmode-rwm,ephemeral" \
---existing-pvc "claimname=fluidgpt,path=/data" \
+--existing-pvc "claimname=fluidgpt,path=/data/" \
 --git-sync "name=fluidgpt,repository=https://github.com/tpharmsen/FluidGPT,path=/code/,rev=main" \
 --environment WANDB_API_KEY="$VAR3" \
 --command -- torchrun --nproc-per-node=$GPU_DEVICES_REQUEST src/train.py $COMMAND_ARGS
