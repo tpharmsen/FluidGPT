@@ -66,8 +66,9 @@ if __name__ == "__main__":
         # print all the pathing avabile from /
         print(os.listdir('/'))
         print()
-        print(os.listdir('/data'))
+        print(os.listdir('/home/'))
         print()
+        print(os.listdir('/home/data/'))
 
         os.makedirs(cb.save_path + cb.folder_out, exist_ok=True)
     if args.out != None:
