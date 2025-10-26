@@ -31,4 +31,5 @@ runai training submit $CONTAINER_NAME \
 --existing-pvc "claimname=fluidgpt,path=/data/" \
 --git-sync "name=fluidgpt,repository=https://github.com/tpharmsen/FluidGPT,path=/code/,rev=main" \
 --environment WANDB_API_KEY="$VAR3" \
---command -- torchrun --nproc-per-node=$GPU_DEVICES_REQUEST src/train.py $COMMAND_ARGS
+--command -- torchrun --nproc-per-node=$GPU_DEVICES_REQUEST src/train.py $COMMAND_ARGS \
+--quiet
