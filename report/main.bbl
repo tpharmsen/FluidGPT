@@ -141,4 +141,10 @@ Philippe Vadeboncoeur, Sergey Frolov, and Khachik Sargsyan.
   parametric pdes.
 \newblock {\em arXiv preprint arXiv:2208.04856}, 2022.
 
+\bibitem{Kolmogorov1941}
+N.~Kolmogorov, A.\.
+\newblock The local structure of turbulence in incompressible viscous fluid for
+  very large reynolds’ numbers.
+\newblock {\em Doklady Akademii Nauk SSSR}, 30(4):301--305, 1941.
+
 \end{thebibliography}
