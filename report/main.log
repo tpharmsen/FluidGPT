@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.6)  29 OCT 2025 19:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.6)  29 OCT 2025 21:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -887,56 +887,55 @@ Package hyperref Info: Link coloring OFF on input line 53.
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texlive/texmf-di
 st/fonts/enc/dvips/base/8r.enc}]) (./chapters/intro/introduction.tex
-Overfull \hbox (1.86098pt too wide) in paragraph at lines 10--11
+
+Package natbib Warning: Citation `Akgul2024LiquidCoolingPlate' on page 1 undefi
+ned on input line 3.
+
+
+Overfull \hbox (1.86098pt too wide) in paragraph at lines 12--13
  []\T1/ptm/b/n/10.95 Convolutional Fluid dy-nam-ics mod-els[] \T1/ptm/m/n/10.95
  Early neural-network ap-proaches to fluid
  []
 
 
-Overfull \hbox (0.91887pt too wide) in paragraph at lines 10--11
+Overfull \hbox (0.91887pt too wide) in paragraph at lines 12--13
 \T1/ptm/m/n/10.95 over ve-loc-ity fields, en-forc-ing divergence-free ve-loc-it
 y via ar-chi-tec-tural con-straints,
  []
 
 
-Overfull \hbox (23.25696pt too wide) in paragraph at lines 14--15
+Overfull \hbox (23.25696pt too wide) in paragraph at lines 16--17
 []\T1/ptm/m/n/10.95 On the other side, physics-informed neu-ral net-works (PINN
 s) and physics-constrained
  []
 
 [1
 
-] [2]
+] [2] [3]
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 4
-3.
+5.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-) [3]
-Overfull \hbox (25.93956pt too wide) in paragraph at lines 44--45
+)
+Overfull \hbox (25.93956pt too wide) in paragraph at lines 46--47
 \T1/ptm/m/n/10.95 tem (e.g. com-press-ible vs. in-com-press-ible Navier^^UStoke
 s, vary-ing Mach/Reynolds
  []
 
 
-Overfull \hbox (2.30945pt too wide) in paragraph at lines 45--46
-[]\T1/ptm/b/n/10.95 Efficient Prob-a-bilis-tic Gen-er-a-tion: \T1/ptm/m/n/10.95
- Diffusion-based gen-er-a-tive mod-els tend
- []
-
-
-Overfull \hbox (3.67796pt too wide) in paragraph at lines 46--47
+Overfull \hbox (3.67796pt too wide) in paragraph at lines 47--48
 \T1/ptm/m/n/10.95 based PDE mod-els are pow-er-ful but heavy; lighter ar-chi-te
 c-tures show promise
  []
 
 
-Overfull \hbox (3.02016pt too wide) in paragraph at lines 51--52
+Overfull \hbox (3.02016pt too wide) in paragraph at lines 52--53
 \T1/ptm/m/n/10.95 The cre-ation of an ef-fec-tive AI sur-ro-gate model presents
  a crit-i-cal chal-lenge: achiev-
  []
 
 [4]
-Overfull \hbox (2.5721pt too wide) in paragraph at lines 60--61
+Overfull \hbox (2.5721pt too wide) in paragraph at lines 61--62
  []\T1/ptm/b/n/10.95 Long-Sequence Prob-a-bilis-tic Gen-er-a-tion (Flow Match-i
 ng):[] \T1/ptm/m/n/10.95 This method shifts
  []
@@ -987,55 +986,231 @@ m/n/10.95 The Navier^^UStokes sys-tem shows
 [6
 
 ]
-<chapters/problem/energyspectrumscheme.png, id=148, 637.38126pt x 498.86375pt>
+<chapters/problem/energyspectrumscheme.png, id=154, 637.38126pt x 498.86375pt>
 File: chapters/problem/energyspectrumscheme.png Graphic file (type png)
 <use chapters/problem/energyspectrumscheme.png>
 Package pdftex.def Info: chapters/problem/energyspectrumscheme.png  used on inp
 ut line 43.
 (pdftex.def)             Requested size: 216.0022pt x 169.05576pt.
  [7 <./chapters/problem/energyspectrumscheme.png (PNG copy)>] [8] [9]
-[10] [11]
+Overfull \hbox (12.7226pt too wide) in paragraph at lines 138--139
+\T1/ptm/m/n/10.95 di-verse en-sem-ble of 2-dimensional pre-training datasets is
+ needed. The Navier^^UStokes
+ []
 
-LaTeX Warning: Reference `table:datasets' on page 12 undefined on input line 19
-6.
+[10]
+Overfull \hbox (2.014pt too wide) in paragraph at lines 158--159
+[]\T1/ptm/m/n/10.95 Collectively, the cov-er-age en-sures that the pre-training
+ pro-cess ex-poses the model
+ []
 
-) (./main.bbl [12]
-Underfull \hbox (badness 2680) in paragraph at lines 37--41
+) (./main.bbl [11]
+
+! LaTeX Error: Unicode character   (U+202F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 M. 
+          Bahattin Akg{\"u}l and Furkan Sinan Er{\c c}el.
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+! LaTeX Error: Unicode character   (U+202F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.13 M. Bahattin Akg{\"u}l and Furkan 
+                                          Sinan Er{\c c}el.
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+! LaTeX Error: Unicode character   (U+202F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.16 \newblock {\em Celal 
+                            Bayar University Journal of Science}, 20(4):72--81,
+
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+! LaTeX Error: Unicode character   (U+202F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.20  
+        R. Perinajová,  T. van de Ven,  E. Roelse,  F. Xu,  J.
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+! LaTeX Error: Unicode character   (U+202F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.20  R. Perinajová,  
+                           T. van de Ven,  E. Roelse,  F. Xu,  J.
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+! LaTeX Error: Unicode character   (U+202F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.20  R. Perinajová,  T. van 
+                                    de Ven,  E. Roelse,  F. Xu,  J.
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+! LaTeX Error: Unicode character   (U+202F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.20  R. Perinajová,  T. van de 
+                                         Ven,  E. Roelse,  F. Xu,  J.
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+! LaTeX Error: Unicode character   (U+202F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.20  R. Perinajová,  T. van de Ven,  
+                                                 E. Roelse,  F. Xu,  J.
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+! LaTeX Error: Unicode character   (U+202F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.20 ...�,  T. van de Ven,  E. Roelse,  
+                                                  F. Xu,  J.
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+! LaTeX Error: Unicode character   (U+202F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.20 ...an de Ven,  E. Roelse,  F. Xu,  
+                                                  J.
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+! LaTeX Error: Unicode character   (U+202F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.21   Juffermans,  
+                      J.J.M. Westenberg,  H. Lamb, and  S. Kenjereš.
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+! LaTeX Error: Unicode character   (U+202F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.21   Juffermans,  J.J.M. Westenberg,  
+                                            H. Lamb, and  S. Kenjereš.
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+
+! LaTeX Error: Unicode character   (U+202F)
+               not set up for use with LaTeX.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.21 ...  J.J.M. Westenberg,  H. Lamb, and  
+                                                  S. Kenjereš.
+You may provide a definition with
+\DeclareUnicodeCharacter 
+
+[12
+
+]
+Underfull \hbox (badness 2680) in paragraph at lines 66--70
 []\T1/ptm/m/n/10.95 Yifei Zhu, Nicholas Zabaras, Phae-don S. Kout-soure-lakis, 
 and Paris
  []
 
-[13
-
-]
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 1
-01.
- (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
+30.
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
-) [14{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}]) (./appendice
-s/appendices.tex
-[15]) [16
+) [13])
+(./appendices/appendices.tex [14{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-s
+uper-t1.enc}])
+
+Package natbib Warning: There were undefined citations.
+
+[15
 
 ] (./main.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
-
-
-LaTeX Warning: There were undefined references.
-
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 30200 strings out of 474222
- 610709 string characters out of 5748733
- 1934975 words of memory out of 5000000
- 51836 multiletter control sequences out of 15000+600000
+ 30215 strings out of 474222
+ 611142 string characters out of 5748733
+ 1933975 words of memory out of 5000000
+ 51848 multiletter control sequences out of 15000+600000
  608731 words of font info for 106 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 101i,7n,107p,1486b,869s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 101i,7n,107p,1486b,875s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texli
@@ -1047,10 +1222,10 @@ r.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf
 -dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/urw/times/utmri8a.pfb>
-Output written on main.pdf (17 pages, 249830 bytes).
+Output written on main.pdf (16 pages, 249324 bytes).
 PDF statistics:
- 295 PDF objects out of 1000 (max. 8388607)
- 224 compressed objects within 3 object streams
- 83 named destinations out of 1000 (max. 500000)
+ 299 PDF objects out of 1000 (max. 8388607)
+ 229 compressed objects within 3 object streams
+ 86 named destinations out of 1000 (max. 500000)
  162 words of extra memory for PDF output out of 10000 (max. 10000000)
 

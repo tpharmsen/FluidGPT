@@ -1,6 +1,8 @@
 \chapter*{Introduction}
 
-Computational Fluid Dynamics (CFD) is the indispensable tool for designing and optimizing systems across virtually every engineering discipline, from aerospace and turbomachinery to climate modeling and biomedical devices. However, high-fidelity CFD simulations of complex, turbulent, or multi-physics systems remain computationally expensive, often requiring days or weeks of processing time. Recent years have shown that computational cost can be greatly reduced with the use of AI surrogate models. These models learn the underlying PDE behaviour directly from simulation data, promising to reduce prediction time from hours to milliseconds. \cite{Zhang2022surrogateCFD} % Specifically, so called 'foundation' models can capture the dynamics of multiple PDE systems in a single unified model.
+Computational Fluid Dynamics (CFD) is the indispensable tool for designing and optimizing systems across virtually every engineering discipline; from generating large-scale aerospace simulations and modelling the cooling process of electronics to personalised aorta bloodflow modelling and wind speed prediction for wind farm operations. \cite{Nielsen2024FrontierCFD} \cite{Akgul2024LiquidCoolingPlate} \cite{Perinajova2024} \cite{SuarezVazquez2025}
+
+However, high-fidelity CFD simulations of complex, turbulent, or multi-physics systems remain computationally expensive, often requiring days or weeks of processing time. Recent years have shown that computational cost can be greatly reduced with the use of AI surrogate models. These models learn the underlying PDE behaviour directly from simulation data, promising to reduce prediction time from hours to milliseconds. \cite{Zhang2022surrogateCFD} % Specifically, so called 'foundation' models can capture the dynamics of multiple PDE systems in a single unified model.
 
 \section*{Background and Related Work}
 
@@ -42,7 +44,6 @@ From this survey, several gaps remain, which our work directly addresses:
 \begin{itemize}
 	\item \textbf{Long-Term Stability and Physical Consistency:} Many existing studies report per-step or short-horizon error metrics but do not extensively validate long rollouts in turbulent regimes. Accumulation of error and divergence from physical invariants (e.g. energy, enstrophy, divergence-free constraint) remain major obstacles.
 	\item \textbf{Unified Modeling Across Parameter Regimes:} While foundation model approaches exist, they rarely confront the full diversity within a single system (e.g. compressible vs. incompressible Navier–Stokes, varying Mach/Reynolds regimes, geometric constraints).
-	\item \textbf{Efficient Probabilistic Generation:} Diffusion-based generative models tend to be slow in inference; flow matching, stochastic interpolants, or other faster generative techniques need more exploration in PDE contexts.
 	\item \textbf{Architectural Trade-offs and Inference Efficiency:} Larger transformer-based PDE models are powerful but heavy; lighter architectures show promise but require careful design to maintain generalization.
 \end{itemize}
 

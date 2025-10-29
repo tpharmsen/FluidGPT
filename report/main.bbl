@@ -1,5 +1,34 @@
 \begin{thebibliography}{10}
 
+\bibitem{Nielsen2024FrontierCFD}
+Eric~J. Nielsen, Andrew Walden, George Nastac, Lixin Wang, William Jones,
+  Michael Lohry, W.~Kyle Anderson, Boris Diskin, Yang Liu, Christopher~L.
+  Rumsey, Pradeep Iyer, Patrick Moran, and Mohammad Zubair.
+\newblock Large-scale computational fluid dynamics simulations of aerospace
+  configurations on the frontier exascale system.
+\newblock In {\em AIAA Aviation Forum \& ASCEND 2024}, pages 1--32. American
+  Institute of Aeronautics and Astronautics, 2024.
+
+\bibitem{Akgül2024LiquidCoolingPlate}
+M. Bahattin Akg{\"u}l and Furkan Sinan Er{\c c}el.
+\newblock Thermal performance analysis of a liquid cooling plate for power
+  electronics.
+\newblock {\em Celal Bayar University Journal of Science}, 20(4):72--81,
+  2024.
+
+\bibitem{Perinajova2024}
+ R. Perinajová,  T. van de Ven,  E. Roelse,  F. Xu,  J.
+  Juffermans,  J.J.M. Westenberg,  H. Lamb, and  S. Kenjereš.
+\newblock A comprehensive mri‑based computational model of blood flow in
+  compliant aorta using radial basis function interpolation.
+\newblock {\em BioMedical Engineering OnLine}, 23:69, 2024.
+
+\bibitem{SuarezVazquez2025}
+J.~Suárez-Vázquez, P.~Martínez, and R.~Gómez.
+\newblock Numerical weather modelling and large eddy simulations of strong-wind
+  events in coastal mountainous terrain.
+\newblock {\em Applied Sciences}, 15(14):7683, 2025.
+
 \bibitem{Zhang2022surrogateCFD}
 Tongtao Zhang, Biswadip Dey, Krishna Veeraraghavan, Harshad Kulkarni, and Amit
   Chakraborty.

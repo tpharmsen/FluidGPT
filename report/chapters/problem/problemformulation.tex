@@ -133,76 +133,29 @@ $$
 This probabilistic formulation allows the model to capture the inherent stochasticity and multimodality of long-term system evolution, complementing the deterministic short-sequence model and enabling stable extrapolation over extended horizons.
 
 
-\section*{Pre-training Datasets and Domain Coverage}
+\section*{Pre-training Datasets and Preliminary Domain Coverage}
 
-To enable the model to generalise across the full range of Navier–Stokes regimes, a diverse ensemble of pre-training datasets is selected. The Navier–Stokes equation exhibits a broad spectrum of behaviour depending on flow type (laminar or turbulent), compressibility, boundary conditions, and external forcing. Capturing these variations requires data originating from multiple numerical solvers, simulation conditions, and initialisation schemes.
+To enable the model to generalise across the full range of Navier–Stokes regimes, a diverse ensemble of 2-dimensional pre-training datasets is needed. The Navier–Stokes equation exhibits a broad spectrum of behaviour depending on flow type (laminar or turbulent), compressibility, boundary conditions, and external forcing. Capturing these variations requires data originating from multiple numerical solvers, simulation conditions, and initialisation schemes.
 
-In total, nine datasets were selected from four sources: PDEGym (Poseidon), Amiraset (J. Jakob et al.), and two from PDEBench. Together, these cover a wide range of physical and numerical conditions, including:
+%In total, nine datasets were selected from four sources: PDEGym (Poseidon), Amiraset (J. Jakob et al.), and two from PDEBench. Together, these cover a wide domain space with coverage of the following type:
+We aim to select datasets with coverage of the following type:
 \begin{enumerate}
-	\item Compressible and incompressible formulations
+	\item Compressible and incompressible simulations
 	
 	\item Laminar and turbulent regimes
 	
 	\item Periodic and Dirichlet boundary conditions
 	
-	\item Homogeneous and inhomogeneous forcing terms
+	\item With and without forcing terms
 	
-	\item Distinct initialisation methods (Gaussian, sine, piecewise constant, etc.)
+	\item Distinct initialisation methods
 	
-	\item Variations in viscosity, pressure, and density
+	\item Parameter variations in viscosity, pressure, and density
 	
 	\item Different solvers
 \end{enumerate}
-This combination provides the model with a foundation for learning invariant representations that are robust across solver implementations and physical configurations.
 
-\paragraph{PDEBench}
-
-
-\paragraph{Amiraset}
-
-\paragraph{PDEGym}
-
-
-Data Harmonisation
-
-The datasets originate from different storage formats and spatial/temporal sampling resolutions. To unify them into a common dataset interface, custom loaders were implemented:
-
-Amiraset: binary .am parsing
-
-PDEBench (compressible): .hdf5 files
-
-PDEBench (incompressible): .h5 files
-
-PDEGym: .nc files
-
-All datasets are normalised using a global mean and standard deviation. The training/validation split is randomised at an 80/20 ratio, with zero-shot evaluation applied for validation.
-
-Spatial Re-sampling
-
-Given that the smallest physically meaningful scale in fluid dynamics is tied to the simulation resolution, spatial re-sampling requires careful consideration. Upsampling may introduce unphysical artefacts, whereas downsampling reduces the fidelity of small-scale features. To balance these trade-offs, the final training resolution was chosen based on the modal overlap across datasets—most data were provided at 
-5122
-512
-2
-or 
-1282
-128
-2
-grid resolutions.
-
-To reconcile these differences, a spectral Fourier interpolation approach was implemented for spatial re-sampling, following the operator-learning perspective that emphasises frequency-space consistency. Since PyTorch’s built-in FFT functions extend arrays beyond the unit domain, a custom bounded Fourier resampling function was developed. Optionally, a bicubic interpolation fallback is provided for computational efficiency.
-
-Temporal Re-sampling
-
-The temporal sampling rate ($\delta t$) varies significantly across datasets. For consistent autoregressive prediction, all trajectories were resampled such that consecutive frames represent a uniform timestep across datasets. This ensures the learned temporal operator generalises over consistent physical evolution intervals.
-
-Hardware and Implementation
-
-All experiments and preprocessing pipelines were executed on the NVIDIA DGX B-200 platform, leveraging multi-GPU parallelisation for spectral operations and data loading.
-
-Dataset Coverage Overview
-
-Table \ref{table:datasets} summarises the characteristics of each dataset, including PDE type, numerical solver, resolution, and boundary conditions. Collectively, they provide comprehensive coverage across the Navier–Stokes landscape, ensuring that the foundational model is not biased toward a specific solver, resolution, or boundary configuration.
-
+Collectively, the coverage ensures that the pre-training process exposes the model to a broad spectrum of physical behaviours. A detailed description of each dataset, including its generation method, resolution, and specific parameters, will be provided in the methodology section.
 
 \section*{Research Questions}
 
