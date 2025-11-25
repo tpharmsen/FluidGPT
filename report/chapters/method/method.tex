@@ -10,6 +10,16 @@ table 9 datasets
 
 interpolate to same spatial and time domain
 
+The pre-processing of the used datasets consist interpolation on the spatial domain and sub-sampling on the temporal domain.
+\textbf{Spatial interpolation}
+All simulations of the datasets are done on the unit grid, with a resolution varying from 128^2 to 512^2, like mentioned in the table above. Since our models functions with a static grid input, all datasets are interpolated to a grid of 128^2 as this is the minimum of the set of resolutions. As the grid points of the simulation are not placed homogeneously in the unit square, custom interpolation with new grid point locations has to be done to reduce the high resolution unit square to a 128^2 unit square.
+
+\textbf{Temporal sampling}
+
+As the model assumes a static constant difference between subsequent timesteps, the data must be subsampled towards the same delta t. By chance all the datasets share common multipliers for their temporal resolution, thus the temporal sub-  is governed by aligned resolution levels. This means that for each $\delta T$ 20 frames exist.
+
+table of each dataset and resolution
+
 \subsection{Models}
 
 \subsubsection{Architecture}
