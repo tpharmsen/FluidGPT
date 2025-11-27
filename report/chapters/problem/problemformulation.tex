@@ -135,7 +135,7 @@ This probabilistic formulation allows the model to capture the inherent stochast
 
 \section*{Pre-training Datasets and Preliminary Domain Coverage}
 
-To enable the model to generalise across the full range of Navier–Stokes regimes, a diverse ensemble of 2-dimensional pre-training datasets is needed. The Navier–Stokes equation exhibits a broad spectrum of behaviour depending on flow type (laminar or turbulent), compressibility, boundary conditions, and external forcing. Capturing these variations requires data originating from multiple numerical solvers, simulation conditions, and initialisation schemes.
+To enable the model to generalise across the full range of Navier–Stokes regimes, a diverse ensemble of 2-dimensional pre-training datasets is needed. The Navier–Stokes equation exhibits a broad spectrum of behaviour depending on flow type (laminar or turbulent), compressibility, boundary conditions, and external forcing. Capturing these variations requires data originating from multiple numerical solvers, simulation conditions, and initialisation schemes. For our datasets we seek uniform grid simulated data.
 
 %In total, nine datasets were selected from four sources: PDEGym (Poseidon), Amiraset (J. Jakob et al.), and two from PDEBench. Together, these cover a wide domain space with coverage of the following type:
 We aim to select datasets with coverage of the following type:

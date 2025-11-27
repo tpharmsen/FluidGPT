@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.6)  26 NOV 2025 18:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.6)  27 NOV 2025 18:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1131,17 +1131,17 @@ Overfull \hbox (106.3829pt too wide) in paragraph at lines 10--31
 
 [12
 
-] [13]) (./chapters/models/models.tex [14])
-(./chapters/training/training.tex [15
+] [13] [14]) (./chapters/models/models.tex [15])
+(./chapters/training/training.tex [16
 
 ]) (./chapters/results/results.tex
-[16
+[17
 
-]) (./chapters/conclusion/conclusion.tex [17
+]) (./chapters/conclusion/conclusion.tex [18
 
-]) (./main.bbl [18
+]) (./main.bbl [19
 
-] [19
+] [20
 
 ]
 Underfull \hbox (badness 2680) in paragraph at lines 65--69
@@ -1153,9 +1153,9 @@ LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 1
 29.
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
-) [20])
-(./appendices/appendices.tex [21{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-s
-uper-t1.enc}]) [22
+) [21])
+(./appendices/appendices.tex [22{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-s
+uper-t1.enc}]) [23
 
 ] (./main.aux)
  ***********
@@ -1166,10 +1166,10 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: BD751D6F3205B2DBE8EC2941A3897C3C;801.
  ) 
 Here is how much of TeX's memory you used:
- 30295 strings out of 474222
- 612958 string characters out of 5748733
- 1942975 words of memory out of 5000000
- 51886 multiletter control sequences out of 15000+600000
+ 30301 strings out of 474222
+ 613105 string characters out of 5748733
+ 1943975 words of memory out of 5000000
+ 51887 multiletter control sequences out of 15000+600000
  608731 words of font info for 106 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  101i,9n,107p,1486b,875s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1184,10 +1184,10 @@ r.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf
 -dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/urw/times/utmri8a.pfb>
-Output written on main.pdf (23 pages, 258859 bytes).
+Output written on main.pdf (24 pages, 261054 bytes).
 PDF statistics:
- 372 PDF objects out of 1000 (max. 8388607)
- 295 compressed objects within 3 object streams
- 109 named destinations out of 1000 (max. 500000)
+ 382 PDF objects out of 1000 (max. 8388607)
+ 303 compressed objects within 4 object streams
+ 114 named destinations out of 1000 (max. 500000)
  218 words of extra memory for PDF output out of 10000 (max. 10000000)
 

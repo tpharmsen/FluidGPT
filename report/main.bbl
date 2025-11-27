@@ -175,4 +175,11 @@ N.~Kolmogorov, A.\.
   very large reynolds’ numbers.
 \newblock {\em Doklady Akademii Nauk SSSR}, 30(4):301--305, 1941.
 
+\bibitem{Jakob2021FluidFlowDataset}
+Janis Jakob, Markus Gross, and Thomas G{\"u}nther.
+\newblock A fluid flow data set for machine learning and its application to
+  neural flow map interpolation.
+\newblock {\em IEEE Transactions on Visualization and Computer Graphics},
+  27(2):1279--1289, 2021.
+
 \end{thebibliography}
