@@ -21,6 +21,7 @@ echo "DO NOT USE GIT BASH FOR THIS SCRIPT (IT WILL CHANGE THE PATHING OF PVCs)"
 runai training submit $CONTAINER_NAME \
 --image "harbor.spike.tue.nl/fluidgpt/fluidgpt-fm-ssh:latest" \
 --project "fluidgpt" \
+--user-group-source "fromTheImage" \
 --cpu-core-limit $CPU_CORE_LIMIT \
 --cpu-core-request $CPU_CORE_REQUEST \
 --cpu-memory-limit $CPU_MEMORY_LIMIT \

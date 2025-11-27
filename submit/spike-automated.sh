@@ -11,6 +11,7 @@ runai login user -u="$VAR1" -p="$VAR2" --quiet
 runai workspace submit fluidgpt-testsubmit-cli \
 --image "harbor.spike.tue.nl/fluidgpt/fluidgpt-fm-ssh:latest" \
 --project "fluidgpt" \
+--user-group-source "fromTheImage" \
 --cpu-core-limit 25 \
 --cpu-core-request 4 \
 --cpu-memory-limit  245G \
