@@ -3,6 +3,10 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: main.aux
 The style file: unsrt.bst
 Database file #1: references.bib
+Repeated entry---line 160 of file references.bib
+ : @article{herde2024poseidon
+ :                           ,
+I'm skipping whatever remains of this entry
 Warning--empty journal in ronneberger2015u
 Warning--empty journal in prihatno20202d
 Warning--empty journal in vaswani2017attention
@@ -47,4 +51,4 @@ warning$ -- 3
 while$ -- 51
 width$ -- 32
 write$ -- 310
-(There were 3 warnings)
+(There was 1 error message)
