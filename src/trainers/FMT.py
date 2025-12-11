@@ -81,7 +81,7 @@ class FMTtrainer(L.LightningModule):
         callbacks = []
         if self.cb.save_on:
             
-            self.checkpoint_path = self.cb.save_path + self.cb.folder_out + self.cm.model_name + '/' + str(wandb_logger.experiment.id)
+            self.checkpoint_path = self.cb.save_path + self.cb.folder_out + self.cm.model_name + '/' + str(datetime.now().strftime("%d%m-%H%M%S")) + '/'
             if not os.path.exists(self.checkpoint_path):
                 os.makedirs(self.checkpoint_path)
             if not os.path.exists(self.cb.save_path + self.cb.folder_out):
