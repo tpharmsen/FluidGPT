@@ -28,8 +28,8 @@ def prior_gaussiangaussian(data, fromframe=4, sigma_time=1.0, sigma_space=1.0):
     def make_gaussian_kernel3d(sigma_t, sigma_s, device):
         size_t = int(2 * round(3 * sigma_t) + 1)
         size_s = int(2 * round(3 * sigma_s) + 1)
-        print()
-        print(f"Creating Gaussian kernel with size_t: {size_t}, size_s: {size_s}")
+        #print()
+        #print(f"Creating Gaussian kernel with size_t: {size_t}, size_s: {size_s}")
 
         t = torch.arange(size_t, device=device) - size_t // 2
         x = torch.arange(size_s, device=device) - size_s // 2
