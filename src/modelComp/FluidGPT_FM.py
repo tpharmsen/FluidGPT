@@ -182,7 +182,7 @@ class FluidGPT_FM(nn.Module):
         self.flow_d3 = nn.Linear(flowmatching_emb_dim, 128)
         self.flow_d4 = nn.Linear(flowmatching_emb_dim, 64)
         self.flow_d5 = nn.Linear(flowmatching_emb_dim, 32)
-
+        
         self.depth = depth
         self.middleblocklen = stage_depths[depth]
         self.gradient_flowthrough = gradient_flowthrough

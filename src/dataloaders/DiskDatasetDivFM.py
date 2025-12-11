@@ -10,7 +10,7 @@ from dataloaders.utils import spatial_resample
 from scipy.ndimage import gaussian_filter
 
 class DiskDatasetDivFM(Dataset):
-    def __init__(self, preproc_path, temporal_bundling = 1, noisetype='puregaussian', from_frame = 4, **kwargs):
+    def __init__(self, preproc_path, temporal_bundling = 1, noisetype='puregaussian', from_frame = 5, **kwargs):
         self.filepath = preproc_path
         self.from_frame = from_frame
         self.noisetype = noisetype
