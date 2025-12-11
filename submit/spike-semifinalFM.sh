@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
-set -a
-source .env
-set +a
+#set -a
+#source .env
+#set +a
 
 # Check required variable(s)
 #: "${WANDB_API_KEY:?WANDB_API_KEY not set in any ENV file}"
 
-runai login user -u="$VAR1" -p="$VAR2" --quiet
-runai workspace submit fluidgpt-testsubmit-cli \
+#runai login user -u="$VAR1" -p="$VAR2" --quiet
+runai workspace submit fgpt-fm-semifinal \
 --image "harbor.spike.tue.nl/fluidgpt/fluidgpt-fm-ssh:latest" \
 --project "fluidgpt" \
 --user-group-source "fromTheImage" \

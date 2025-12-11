@@ -28,6 +28,8 @@ def prior_gaussiangaussian(data, fromframe=4, sigma_time=1.0, sigma_space=1.0):
     def make_gaussian_kernel3d(sigma_t, sigma_s, device):
         size_t = int(2 * round(3 * sigma_t) + 1)
         size_s = int(2 * round(3 * sigma_s) + 1)
+        #print()
+        #print(f"Creating Gaussian kernel with size_t: {size_t}, size_s: {size_s}")
 
         t = torch.arange(size_t, device=device) - size_t // 2
         x = torch.arange(size_s, device=device) - size_s // 2
@@ -36,6 +38,8 @@ def prior_gaussiangaussian(data, fromframe=4, sigma_time=1.0, sigma_space=1.0):
         tt, xx, yy = torch.meshgrid(t, x, y, indexing='ij')
         kernel = torch.exp(-0.5 * ((tt / sigma_t) ** 2 + (xx / sigma_s) ** 2 + (yy / sigma_s) ** 2))
         kernel /= kernel.sum()
+        # print kernel shape
+        #print(f"Kernel shape: {kernel.shape}")
         return kernel
     B, C, T, X, Y = data.shape
     kernel3d = make_gaussian_kernel3d(sigma_time, sigma_space, data.device) 
