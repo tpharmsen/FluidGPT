@@ -8,7 +8,6 @@
 #: "${WANDB_API_KEY:?WANDB_API_KEY not set in any ENV file}"
 
 #runai login user -u="$VAR1" -p="$VAR2" --quiet
-runai login 
 runai workspace submit fgpt-fm-semifinal \
 --image "harbor.spike.tue.nl/fluidgpt/fluidgpt-fm-ssh:latest" \
 --project "fluidgpt" \
