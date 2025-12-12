@@ -367,7 +367,7 @@ def rollout_prb(front, model, steps, int_steps, from_frame, noisetype='puregauss
                 pad_x = kernel3d.shape[-2] // 2
                 pad_y = kernel3d.shape[-1] // 2
 
-                noise = torch.randn((B, C, T - 4, X, Y), device=xt.device)
+                noise = torch.randn((B, C, T - from_frame, X, Y), device=xt.device)
                 #print(noise.shape)
                 noise = F.pad(noise, (pad_y, pad_y, pad_x, pad_x, pad_t, pad_t), mode='circular')
                 noise = F.conv3d(noise, kernel3d, stride=1, padding=0, groups=C)
