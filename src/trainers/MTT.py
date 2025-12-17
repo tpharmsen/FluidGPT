@@ -607,7 +607,7 @@ class MTTdata(L.LightningDataModule):
                 
         self.train_dataset = ConcatDataset(self.train_datasets)
         self.val_dataset = ConcatDataset(self.val_datasets)
-        self.val_forward_dataset = ConcatDataset(self.val_forward_datasets)
+        #self.val_forward_dataset = ConcatDataset(self.val_forward_datasets)
         print("datasets ready")
 
     def create_sampler(self, dataset, shuffle):
