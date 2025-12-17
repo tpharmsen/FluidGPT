@@ -600,7 +600,7 @@ class MTTdata(L.LightningDataModule):
         self.global_mean = np.sum(sizes * means) / np.sum(sizes)
         self.global_std = np.sqrt(np.sum(sizes * (stds**2 + (means - self.global_mean)**2)) / np.sum(sizes))
         if self.ct.normalize:
-            for dataset_list in [self.train_datasets, self.val_datasets, self.val_forward_datasets]:
+            for dataset_list in [self.train_datasets, self.val_datasets]: #, self.val_forward_datasets]:
                 for subset in dataset_list:
                     subset.dataset.avgnorm = self.global_mean
                     subset.dataset.stdnorm = self.global_std
