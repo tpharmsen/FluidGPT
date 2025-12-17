@@ -28,7 +28,7 @@ import json
 
 from dataloaders import *
 from dataloaders import PREPROC_MAPPER
-from dataloaders.utils import get_dataset, ZeroShotSampler, spatial_resample
+from dataloaders.utils import get_dataset, ZeroShotSamplerReduced, spatial_resample
 #from trainers.utils import make_plot, animate_rollout, magnitude_vel, rollout
 from trainers.utils import animate_rollout, magnitude_vel, rollout_det, compute_energy_enstrophy_spectra
 from modelComp.utils import ACT_MAPPER, SKIPBLOCK_MAPPER
@@ -548,9 +548,9 @@ class MTTdata(L.LightningDataModule):
             # generate random seed
             seed = self.cd.seed
             #random_seed = random.randint(0, 10000)
-            train_sampler = ZeroShotSampler(dataset_SS, train_ratio=self.ct.train_ratio, split="train", seed=seed, forward_steps=1)
-            val_sampler = ZeroShotSampler(dataset_SS, train_ratio=self.ct.train_ratio, split="val", seed=seed, forward_steps=1)
-            val_forward_sampler = ZeroShotSampler(dataset_FS, train_ratio=self.ct.train_ratio, split="val", seed=seed, forward_steps=self.ct.forward_steps_loss)
+            train_sampler = ZeroShotSamplerReduced(dataset_SS, train_ratio=self.ct.train_ratio, split="train", seed=seed, forward_steps=1)
+            val_sampler = ZeroShotSamplerReduced(dataset_SS, train_ratio=self.ct.train_ratio, split="val", seed=seed, forward_steps=1)
+            val_forward_sampler = ZeroShotSamplerReduced(dataset_FS, train_ratio=self.ct.train_ratio, split="val", seed=seed, forward_steps=self.ct.forward_steps_loss)
 
             self.train_datasets.append(Subset(dataset_SS, train_sampler.indices))
             self.val_datasets.append(Subset(dataset_SS, val_sampler.indices))
