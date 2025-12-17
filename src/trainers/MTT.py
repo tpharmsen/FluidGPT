@@ -75,7 +75,8 @@ class MTTtrainer(L.LightningModule):
         callbacks = []
         if self.cb.save_on:
             
-            self.checkpoint_path = self.cb.save_path + self.cb.folder_out + self.cm.model_name + '/' + str(wandb_logger.experiment.id)
+            self.checkpoint_path = self.cb.save_path + self.cb.folder_out + self.cm.model_name + '/' + str(datetime.now().strftime("%d%m-%H%M%S")) + '/'
+            
             if not os.path.exists(self.checkpoint_path):
                 os.makedirs(self.checkpoint_path)
             if not os.path.exists(self.cb.save_path + self.cb.folder_out):
@@ -153,7 +154,7 @@ class MTTmodel(L.LightningModule):
 
         self.train_losses = []
         self.val_SS_losses = []
-        self.val_FS_losses = []
+        #self.val_FS_losses = []
         self.epoch_time = None
         self.log_time = None
         
@@ -193,12 +194,12 @@ class MTTmodel(L.LightningModule):
     def validation_step(self, batch, batch_idx, dataloader_idx):
 
         front, label = batch
-        
-        if dataloader_idx == 0:
-            pred = self(front)
-            val_loss = F.mse_loss(pred, label)
-            self.val_SS_losses.append(val_loss.item())
-            self.log("val_SS_loss", val_loss, on_epoch=True, prog_bar=False, sync_dist=True)
+        #if dataloader_idx == 0:
+        pred = self(front)
+        val_loss = F.mse_loss(pred, label)
+        self.val_SS_losses.append(val_loss.item())
+        #self.log("val_SS_loss", val_loss, on_epoch=True, prog_bar=False, sync_dist=True)
+        """
         elif dataloader_idx == 1:
             # a few forward steps for the forward step loss
             pred = front
@@ -207,7 +208,7 @@ class MTTmodel(L.LightningModule):
             val_loss = F.mse_loss(pred, label)
             self.val_FS_losses.append(val_loss.item())
             #self.log("val_FS_loss", val_loss, on_epoch=True, prog_bar=False, sync_dist=True)
-            
+        """
         return val_loss
 
     def configure_optimizers(self):
@@ -225,7 +226,7 @@ class MTTmodel(L.LightningModule):
                 patience=self.ct.patience,
                 min_lr=1e-7
             ),
-            "monitor": "val_SS_loss/dataloader_idx_0",
+            "monitor": "val_SS_loss_checkpoint",
             "interval": "epoch",
             "frequency": 1
         }
@@ -251,7 +252,7 @@ class MTTmodel(L.LightningModule):
 
             train_loss = np.mean(self.train_losses)
             #val_SS_loss = np.mean(self.val_SS_losses)
-            val_FS_loss = np.mean(self.val_FS_losses)
+            #val_FS_loss = np.mean(self.val_FS_losses)
             #self.log("val_SS_loss_checkpoint", val_SS_loss)
 
             self.global_mean = self.trainer.datamodule.global_mean
@@ -268,7 +269,7 @@ class MTTmodel(L.LightningModule):
                 device = 'cuda' if torch.cuda.is_available() else 'cpu'
                 self.make_plot(self.out_1, mode='val', device=device)
                 self.make_plot(self.out_0, mode='train', device=device)
-                self.make_plot(self.out_2, mode='val_forward', device=device)
+                #self.make_plot(self.out_2, mode='val_forward', device=device)
                 stacked_pred, stacked_true, dataset_name = self.random_rollout(device=device)
                 self.make_anim(stacked_pred, stacked_true, dataset_name, self.out_3)
                 self.spectra_plot(stacked_pred, stacked_true, dataset_name, self.out_4)
@@ -278,12 +279,12 @@ class MTTmodel(L.LightningModule):
                 "epoch": epoch,
                 "train_loss": train_loss,
                 "val_SS_loss": val_SS_loss,
-                "val_FS_loss": val_FS_loss,
+                #"val_FS_loss": val_FS_loss,
                 "Learning Rate": self.trainer.optimizers[0].param_groups[0]['lr'],
                 "Epoch Time": self.epoch_time,
                 "train_plot": wandb.Image(self.out_0) if visuals else None,
                 "val_plot": wandb.Image(self.out_1) if visuals else None,
-                "val_forward_plot": wandb.Image(self.out_2) if visuals and os.path.exists(self.out_2) else None,
+                #"val_forward_plot": wandb.Image(self.out_2) if visuals and os.path.exists(self.out_2) else None,
                 "val_anim": wandb.Video(self.out_3, format="gif") if visuals else None,
                 "val_spectra": wandb.Image(self.out_4) if visuals else None,
                 "Log Time": self.log_time
@@ -291,7 +292,7 @@ class MTTmodel(L.LightningModule):
 
         self.train_losses = []
         self.val_SS_losses = []
-        self.val_FS_losses = []
+        #self.val_FS_losses = []
 
     def spectra_plot(self, stacked_pred, stacked_true, dataset_name, output_path):
         #clock = time.time()
@@ -533,31 +534,33 @@ class MTTdata(L.LightningDataModule):
 
         self.train_datasets = []
         self.val_datasets = []
-        self.val_forward_datasets = []
+        #self.val_forward_datasets = []
         self.train_samplers = []
         self.val_samplers = []
-        self.val_forward_samplers = []
+        #self.val_forward_samplers = []
         
         means, stds, sizes = [], [], []
                 
         for item in self.cd.datasets:
             preproc_savepath = str(self.cb.data_base + 'preproc_' + item["name"])
             dataset_SS = DiskDatasetDiv(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=1)
-            dataset_FS = DiskDatasetDiv(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=self.ct.forward_steps_loss)
+            #dataset_FS = DiskDatasetDiv(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=self.ct.forward_steps_loss)
 
             # generate random seed
             seed = self.cd.seed
             #random_seed = random.randint(0, 10000)
-            train_sampler = ZeroShotSamplerReduced(dataset_SS, train_ratio=self.ct.train_ratio, split="train", seed=seed, forward_steps=1)
-            val_sampler = ZeroShotSamplerReduced(dataset_SS, train_ratio=self.ct.train_ratio, split="val", seed=seed, forward_steps=1)
-            val_forward_sampler = ZeroShotSamplerReduced(dataset_FS, train_ratio=self.ct.train_ratio, split="val", seed=seed, forward_steps=self.ct.forward_steps_loss)
+            train_sampler = ZeroShotSamplerReduced(dataset_SS, train_ratio=self.ct.train_ratio, 
+                                                   split="train", seed=seed, skip_timesteps=item["timesample"])
+            val_sampler = ZeroShotSamplerReduced(dataset_SS, train_ratio=self.ct.train_ratio, 
+                                                 split="val", seed=seed, skip_timesteps=item["timesample"])
+            #val_forward_sampler = ZeroShotSamplerReduced(dataset_FS, train_ratio=self.ct.train_ratio, split="val", seed=seed, forward_steps=self.ct.forward_steps_loss)
 
             self.train_datasets.append(Subset(dataset_SS, train_sampler.indices))
             self.val_datasets.append(Subset(dataset_SS, val_sampler.indices))
-            self.val_forward_datasets.append(Subset(dataset_FS, val_forward_sampler.indices))
+            #self.val_forward_datasets.append(Subset(dataset_FS, val_forward_sampler.indices))
             self.train_samplers.append(train_sampler)
             self.val_samplers.append(val_sampler)
-            self.val_forward_samplers.append(val_forward_sampler)
+            #self.val_forward_samplers.append(val_forward_sampler)
             
             #torch.synchronize() 
             split = {
@@ -565,17 +568,15 @@ class MTTdata(L.LightningDataModule):
                 "seed": seed,
                 "train_trajs": train_sampler.train_trajs,
                 "val_trajs": val_sampler.val_trajs,
-                "val_forward_trajs": val_forward_sampler.val_trajs,
+                #"val_forward_trajs": val_forward_sampler.val_trajs,
                 "train_idxs": train_sampler.indices,
                 "val_idxs": val_sampler.indices,
-                "val_forward_idxs": val_forward_sampler.indices,
+                #"val_forward_idxs": val_forward_sampler.indices,
             }
             if self.cb.save_on:
                 for callback in self.trainer.callbacks:
                     if isinstance(callback, ModelCheckpoint): # include the rank
-                        #save_split_path = os.path.join(callback.dirpath, "traj_split_" + item["name"] + "rank" + str(dist.get_rank())+ ".json")
-                        save_split_path = self.cb.save_path + self.cb.folder_out + "traj_split_" + item["name"] + "_rank" + str(dist.get_rank()) + ".json" # out path
-                        #print("path save:", save_split_path)
+                        save_split_path = os.path.join(callback.dirpath, "traj_split_" + item["name"] + "rank" + str(dist.get_rank())+ ".json")
                 if save_split_path is None:
                     raise ValueError("ModelCheckpoint callback not found, unable to save trajectory split.")
                 with open(save_split_path, "w") as f:
@@ -636,7 +637,7 @@ class MTTdata(L.LightningDataModule):
 
     def val_dataloader(self):
         val_SS_sampler = self.create_sampler(self.val_dataset, shuffle=True)
-        val_FS_sampler = self.create_sampler(self.val_forward_dataset, shuffle=True)
+        #val_FS_sampler = self.create_sampler(self.val_forward_dataset, shuffle=True)
 
         val_SS_loader = DataLoader(
             self.val_dataset,
@@ -648,6 +649,7 @@ class MTTdata(L.LightningDataModule):
             persistent_workers=self.ct.persistent_workers if self.ct.num_workers > 0 else False,
             prefetch_factor=self.ct.prefetch_factor if self.ct.num_workers > 0 else None
         )
+        """
         val_FS_loader = DataLoader(
             self.val_forward_dataset,
             batch_size=self.ct.batch_size,
@@ -658,6 +660,8 @@ class MTTdata(L.LightningDataModule):
             persistent_workers=self.ct.persistent_workers if self.ct.num_workers > 0 else False,
             prefetch_factor=self.ct.prefetch_factor if self.ct.num_workers > 0 else None
         )
-        return [val_SS_loader, val_FS_loader]
+        """
+        #return [val_SS_loader, val_FS_loader]
+        return val_SS_loader
 
 

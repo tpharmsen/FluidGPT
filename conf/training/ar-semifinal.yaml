@@ -13,12 +13,6 @@ persistent_workers: True
 prefetch_factor: 4
 strategy: "ddp"
 
-from_frame: 5
-int_steps: 25
-noise_type: 'gaussiangaussian'  # options: 'puregaussian', 'checkerboard'
-sigma_time: 1.0 # original 3.0
-sigma_space: 4.0 # original 5.0
-
 plottrain_out: "plot_train.png"
 plotval_out: "plot_val.png"
 plotvalf_out: "plotf_val.png"
