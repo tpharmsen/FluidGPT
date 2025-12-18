@@ -191,7 +191,7 @@ class MTTmodel(L.LightningModule):
         self.train_losses.append(train_loss.item())
         return train_loss
 
-    def validation_step(self, batch, batch_idx, dataloader_idx):
+    def validation_step(self, batch, batch_idx): #, dataloader_idx):
 
         front, label = batch
         #if dataloader_idx == 0:
