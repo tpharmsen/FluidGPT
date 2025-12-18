@@ -22,4 +22,4 @@ runai workspace submit fgpt-fm-semifinal \
 --existing-pvc "claimname=fluidgpt,path=/data" \
 --git-sync "name=fluidgpt,repository=https://github.com/tpharmsen/FluidGPT,path=/code/,rev=main" \
 --environment WANDB_API_KEY="$VAR3" \
---command -- torchrun --nproc-per-node=8 src/train.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run
+--command -- torchrun --nproc-per-node=8 src/train.py --trainer MTT --CB spike-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-semifinal-run
