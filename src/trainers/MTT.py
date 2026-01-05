@@ -55,10 +55,12 @@ class MTTtrainer(L.LightningModule):
         self.cd = cd
         self.cm = cm
         self.ct = ct
+        self.checkpoint_path = self.cb.save_path + self.cb.folder_out + self.cm.model_name + '/' + str(datetime.now().strftime("%m%d%y-%H%M%S")) + '/'
+        
 
     def init_modules(self):
         self.modelmodule = MTTmodel(self.cb, self.cd, self.cm, self.ct)
-        self.datamodule = MTTdata(self.cb, self.cd, self.cm, self.ct)
+        self.datamodule = MTTdata(self.cb, self.cd, self.cm, self.ct)    
 
     def train(self):
         self.init_modules()
@@ -74,16 +76,13 @@ class MTTtrainer(L.LightningModule):
         
         callbacks = []
         if self.cb.save_on:
-            
-            self.checkpoint_path = self.cb.save_path + self.cb.folder_out + self.cm.model_name + '/' + str(datetime.now().strftime("%d%m-%H%M%S")) + '/'
-            
             if not os.path.exists(self.checkpoint_path):
                 os.makedirs(self.checkpoint_path)
             if not os.path.exists(self.cb.save_path + self.cb.folder_out):
                 os.makedirs(self.cb.save_path + self.cb.folder_out)
             manualCheckpoint = ModelCheckpoint(
                 dirpath= self.checkpoint_path,
-                filename = "{epoch:04d}-{val_SS_loss_checkpoint:.6f}",
+                filename = "{epoch:04d}-{val_SS_loss_checkpoint:.8f}",
                 #filename=r"{epoch:04d}-val_SS_loss_dataloader_idx_0={val_SS_loss/dataloader_idx_0:.4f}",
                 monitor="val_SS_loss_checkpoint",#/dataloader_idx_0",
                 mode="min",  
@@ -154,6 +153,7 @@ class MTTmodel(L.LightningModule):
 
         self.train_losses = []
         self.val_SS_losses = []
+        self.val_errors = []
         #self.val_FS_losses = []
         self.epoch_time = None
         self.log_time = None
@@ -196,8 +196,10 @@ class MTTmodel(L.LightningModule):
         front, label = batch
         #if dataloader_idx == 0:
         pred = self(front)
-        val_loss = F.mse_loss(pred, label)
+        val_loss = ((pred - label) ** 2).mean()
+        val_error = ((pred.detach() - label) ** 2).mean().item()
         self.val_SS_losses.append(val_loss.item())
+        self.val_errors.append(val_error)
         #self.log("val_SS_loss", val_loss, on_epoch=True, prog_bar=False, sync_dist=True)
         """
         elif dataloader_idx == 1:
@@ -243,6 +245,7 @@ class MTTmodel(L.LightningModule):
     
     def on_validation_epoch_end(self):
         val_SS_loss = np.mean(self.val_SS_losses)
+        val_error = np.mean(self.val_errors)
         self.log("val_SS_loss_checkpoint", val_SS_loss)
 
         if not self.trainer.sanity_checking and rank_zero_only.rank == 0:
@@ -279,6 +282,7 @@ class MTTmodel(L.LightningModule):
                 "epoch": epoch,
                 "train_loss": train_loss,
                 "val_SS_loss": val_SS_loss,
+                "val_error": val_error, 
                 #"val_FS_loss": val_FS_loss,
                 "Learning Rate": self.trainer.optimizers[0].param_groups[0]['lr'],
                 "Epoch Time": self.epoch_time,
@@ -292,6 +296,7 @@ class MTTmodel(L.LightningModule):
 
         self.train_losses = []
         self.val_SS_losses = []
+        self.val_errors = []
         #self.val_FS_losses = []
 
     def spectra_plot(self, stacked_pred, stacked_true, dataset_name, output_path):

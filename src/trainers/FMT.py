@@ -58,6 +58,8 @@ class FMTtrainer(L.LightningModule):
         self.cd = cd
         self.cm = cm
         self.ct = ct
+        self.checkpoint_path = self.cb.save_path + self.cb.folder_out + self.cm.model_name + '/' + str(datetime.now().strftime("%m%d%y-%H%M%S")) + '/'
+        
         #self.automatic_optimization = False
 
     def init_modules(self):
@@ -80,15 +82,13 @@ class FMTtrainer(L.LightningModule):
         
         callbacks = []
         if self.cb.save_on:
-            
-            self.checkpoint_path = self.cb.save_path + self.cb.folder_out + self.cm.model_name + '/' + str(datetime.now().strftime("%d%m-%H%M%S")) + '/'
             if not os.path.exists(self.checkpoint_path):
                 os.makedirs(self.checkpoint_path)
             if not os.path.exists(self.cb.save_path + self.cb.folder_out):
                 os.makedirs(self.cb.save_path + self.cb.folder_out)
             manualCheckpoint = ModelCheckpoint(
                 dirpath= self.checkpoint_path,
-                filename = "{epoch:04d}-{val_SS_loss_checkpoint:.6f}",
+                filename = "{epoch:04d}-{val_SS_loss_checkpoint:.8f}",
                 #filename=r"{epoch:04d}-val_SS_loss_dataloader_idx_0={val_SS_loss/dataloader_idx_0:.4f}",
                 monitor="val_SS_loss_checkpoint",#/dataloader_idx_0",
                 mode="min",  
