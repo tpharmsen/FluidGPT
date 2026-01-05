@@ -55,7 +55,7 @@ class MTTtrainer(L.LightningModule):
         self.cd = cd
         self.cm = cm
         self.ct = ct
-        self.checkpoint_path = self.cb.save_path + self.cb.folder_out + self.cm.model_name + '/' + str(datetime.now().strftime("%m%d%y-%H%M%S")) + '/'
+        self.checkpoint_path = self.cb.save_path + self.cb.folder_out + self.cm.model_name + '/' + str(datetime.now().strftime("%m%d%y-%H%M")) + '/'
         
 
     def init_modules(self):
@@ -211,7 +211,7 @@ class MTTmodel(L.LightningModule):
             self.val_FS_losses.append(val_loss.item())
             #self.log("val_FS_loss", val_loss, on_epoch=True, prog_bar=False, sync_dist=True)
         """
-        return val_loss
+        return val_loss, val_error
 
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW(

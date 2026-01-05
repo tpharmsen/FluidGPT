@@ -58,7 +58,7 @@ class FMTtrainer(L.LightningModule):
         self.cd = cd
         self.cm = cm
         self.ct = ct
-        self.checkpoint_path = self.cb.save_path + self.cb.folder_out + self.cm.model_name + '/' + str(datetime.now().strftime("%m%d%y-%H%M%S")) + '/'
+        self.checkpoint_path = self.cb.save_path + self.cb.folder_out + self.cm.model_name + '/' + str(datetime.now().strftime("%m%d%y-%H%M")) + '/'
         
         #self.automatic_optimization = False
 
