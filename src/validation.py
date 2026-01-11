@@ -24,6 +24,14 @@ import platform
 import json
 import argparse
 
+"""
+MTT --trainer MTT --CB spike-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal
+FM  --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal
+
+
+"""
+
+
 from dataloaders import *
 from dataloaders import PREPROC_MAPPER
 from dataloaders.utils import get_dataset, ZeroShotSamplerReduced, spatial_resample
@@ -146,26 +154,19 @@ class ModelValidation:
             #print(checkpoint['state_dict'].keys()[i], self.model.state_dict().keys()[i])
         new_model_state_dict = {}
         for key, value in checkpoint['state_dict'].items():
-            # Remove the 'model.' prefix if it exists
+            
             new_key = key.replace('model.', '', 1)
             new_model_state_dict[new_key] = value
         self.model.load_state_dict(new_model_state_dict)
-        raise NotImplementedError("Model loading not yet implemented.")
-        #self.model.load_state_dict(checkpoint['state_dict'])
-        #else:
-        #    state_dict = checkpoint
-        # create new OrderedDict that does not contain 'model.' prefix
-        #from collections import OrderedDict
-        #new_state_dict = OrderedDict()
-        #for k, v in state_dict.items():
-        #    if k.startswith('model.'):
-        #        name = k[6:]  # remove 'model.' prefix
-        #    else:
-        #        name = k
-        #    new_state_dict[name] = v
-        #self.model.load_state_dict(new_state_dict)
+        self.model.cuda()
         self.model.eval()
         print("Model loaded from", self.model_path)
+
+        self.model2 = torch.load(self.model_path)
+        
+        self.model2.cuda()
+
+        raise NotImplementedError("Not yet implemented.")
 
     def load_dataloaders(self):
         
@@ -210,7 +211,8 @@ class ModelValidation:
                 #"val_forward_idxs": val_forward_sampler.indices,
             }
             if self.cb.save_on:
-                save_split_path = None
+                save_split_path = self.cb.save_path + self.cb.folder_out + "validation/"
+                os.makedirs(save_split_path, exist_ok=True)
                 if save_split_path is None:
                     raise ValueError("ModelCheckpoint callback not found, unable to save trajectory split.")
                 with open(save_split_path, "w") as f:
