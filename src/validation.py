@@ -30,6 +30,8 @@ conda activate grad312
 python src/validation.py --trainer MTT --CB surf-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-semifinal-run
 python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run
 
+NOTES:
+calculate only next frame error instead of next timeblock?
 """
 
 from dataloaders import *
