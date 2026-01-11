@@ -267,27 +267,39 @@ class ModelValidation:
                
     def calculate_ss_error_per_dataset(self):
         # absolute and relative error per dataset?
-        for i, dataloader in enumerate(self.val_loaders):
+        self.model.eval()
+        for d, dataloader in enumerate(self.val_loaders):
             print()
-            print(self.cd.datasets[i]["name"])
-            error_sum = 0.0
-            #error_sum2 = 0.0
-            count = 0
-            for i, (x, y) in enumerate(dataloader):
-                if i==0:
-                    print(y.shape)
-                x, y = x.cuda(), y.cuda()
-                yhat = self.model(x)
-                error_sum += ((yhat.detach() - y) ** 2).sum().item()
-                #error_sum2 += ( (yhat.detach() - y) ** 2).mean().item()
-                count += y.shape[0] * y.shape[1] * y.shape[2] * y.shape[3] * y.shape[4]
+            print(self.cd.datasets[d]["name"])
+            se_sum = 0.0   
+            ae_sum = 0.0   
+            y2_sum = 0.0    
+            yabs_sum = 0.0   
 
-                #print(f"Batch {i}, SS MSE: {ss_2error / y.shape[0]}")
-                if i == 50:
-                    break
-            print("Total samples:", count)
-            print("SS MSE:", error_sum / count)
-            #print("SS MSE (mean of batches):", error_sum2 / (i+1))
+            with torch.no_grad():
+                for i, (x, y) in enumerate(dataloader):
+                    if i == 0:
+                        print("Sample batch shape:", y.shape)
+                    x, y = x.cuda(), y.cuda()
+                    yhat = self.model(x)
+
+                    unnorm_yhat = yhat * self.global_std + self.global_mean
+                    unnorm_y = y * self.global_std + self.global_mean
+                    diff = unnorm_yhat - unnorm_y
+                    se_sum += diff.pow(2).sum().item()
+                    ae_sum += diff.abs().sum().item()
+                    y2_sum += (unnorm_y.pow(2)).sum().item() 
+                    yabs_sum += unnorm_y.abs().sum().item()  
+
+                    if i == 25: #############################################3 temporary
+                        break
+
+            rrmse = (se_sum / y2_sum) ** 0.5 # relative RMSE
+            rae = ae_sum / yabs_sum  # relative absolute error
+
+            print("Relative RMSE:", rrmse)
+            print("Relative Absolute Error (RAE):", rae)
+
         print("SS error calculation done.")
         return 1
         
