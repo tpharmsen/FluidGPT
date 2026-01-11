@@ -25,12 +25,12 @@ import json
 import argparse
 
 """
-MTT --trainer MTT --CB spike-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal
-FM  --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal
-
+for surf:
+conda activate grad312
+python src/validation.py --trainer MTT --CB surf-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-semifinal-run
+python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run
 
 """
-
 
 from dataloaders import *
 from dataloaders import PREPROC_MAPPER
@@ -101,6 +101,15 @@ def read_command():
         ct = load_yaml_as_dotdict("conf/training/" + args.CT + ".yaml")
     else:
         raise FileNotFoundError(f"Config file {args.CT}.yaml not found.")
+    
+    if args.out != None:
+        cb.folder_out = args.out.replace("/", "") + "/"
+        #print('args flag')
+    if os.path.exists(cb.save_path + cb.folder_out) == False:
+        os.makedirs(cb.save_path + cb.folder_out, exist_ok=True)
+    if args.out != None:
+        cb.wandb_name = args.out
+
     return cb, cd, cm, ct, args.trainer, args.model_path
 
 print("Configs loaded.")
@@ -158,15 +167,10 @@ class ModelValidation:
             new_key = key.replace('model.', '', 1)
             new_model_state_dict[new_key] = value
         self.model.load_state_dict(new_model_state_dict)
-        self.model.cuda()
         self.model.eval()
         print("Model loaded from", self.model_path)
 
-        self.model2 = torch.load(self.model_path)
-        
-        self.model2.cuda()
-
-        raise NotImplementedError("Not yet implemented.")
+        #raise NotImplementedError("Not yet implemented.")
 
     def load_dataloaders(self):
         
@@ -211,8 +215,9 @@ class ModelValidation:
                 #"val_forward_idxs": val_forward_sampler.indices,
             }
             if self.cb.save_on:
-                save_split_path = self.cb.save_path + self.cb.folder_out + "validation/"
+                save_split_path = self.cb.save_path + "validation/" + self.cb.folder_out 
                 os.makedirs(save_split_path, exist_ok=True)
+                save_split_path += "traj_split_" + item["name"] + ".json"
                 if save_split_path is None:
                     raise ValueError("ModelCheckpoint callback not found, unable to save trajectory split.")
                 with open(save_split_path, "w") as f:
@@ -248,8 +253,9 @@ class ModelValidation:
         for item in self.val_datasets:
             
             dataloader = DataLoader(item,
-                batch_size=self.ct.batch_size,
-                shuffle=False,
+                batch_size=int(self.ct.batch_size / 8), ################################################################### temporary
+                shuffle=True, ###################################################################################3 also temporary
+                drop_last=False,
                 pin_memory=self.ct.pin_memory, 
                 num_workers=self.ct.num_workers, 
                 persistent_workers=self.ct.persistent_workers if self.ct.num_workers > 0 else False,
@@ -259,20 +265,45 @@ class ModelValidation:
         print("dataloaders created.")
         print(len(self.val_loaders))
                
-    def calculate_ss_error_per_dataset():
+    def calculate_ss_error_per_dataset(self):
         # absolute and relative error per dataset?
-        for i, dataset in enumerate(self.val_loaders):
-            print("blablabla")
+        for i, dataloader in enumerate(self.val_loaders):
+            print()
+            print(self.cd.datasets[i]["name"])
+            error_sum = 0.0
+            #error_sum2 = 0.0
+            count = 0
+            for i, (x, y) in enumerate(dataloader):
+                if i==0:
+                    print(y.shape)
+                x, y = x.cuda(), y.cuda()
+                yhat = self.model(x)
+                error_sum += ((yhat.detach() - y) ** 2).sum().item()
+                #error_sum2 += ( (yhat.detach() - y) ** 2).mean().item()
+                count += y.shape[0] * y.shape[1] * y.shape[2] * y.shape[3] * y.shape[4]
+
+                #print(f"Batch {i}, SS MSE: {ss_2error / y.shape[0]}")
+                if i == 50:
+                    break
+            print("Total samples:", count)
+            print("SS MSE:", error_sum / count)
+            #print("SS MSE (mean of batches):", error_sum2 / (i+1))
+        print("SS error calculation done.")
+        return 1
         
-    def calculate_rollout_error_per_dataset():
+    def calculate_rollout_error_per_dataset(self):
         # not sure yet
         pass
 
-    def calculate_spectra_plots_per_dataset():
+    def calculate_spectra_plots_per_dataset(self):
         # not sure yet
         pass
 
 if __name__ == "__main__":
     cb, cd, cm, ct, trainer, model_path = read_command()
     model_validation = ModelValidation(cb, cd, cm, ct, trainer, model_path)
-    model_validation.calculate_ss_error_per_dataset()
+    return_code = model_validation.calculate_ss_error_per_dataset()
+    if return_code == 1:
+        print("Validation completed successfully.")
+    else:
+        print("Validation encountered issues.")
