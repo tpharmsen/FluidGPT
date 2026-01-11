@@ -37,7 +37,13 @@ plt.rcParams['axes.facecolor'] = '#1F1F1F'
 plt.rcParams['savefig.facecolor'] = '#1F1F1F'
 torch.set_float32_matmul_precision('medium')
 
-# read in all config files
+# following is a gpu mig bug fix
+if "MIG" in subprocess.check_output(["nvidia-smi", "-L"], text=True):
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    print('MIG GPU detected, using GPU 0')
+else:
+    print('No MIG GPU detected, using all available GPUs')
+
 
 class DotDict(dict):
     def __init__(self, mapping=None):
@@ -67,6 +73,7 @@ def read_command():
     parser.add_argument("--CM", type=str, default="std")
     parser.add_argument("--CT", type=str, default="std")
     parser.add_argument("--trainer", type=str, default="MTT")
+    parser.add_argument("--model_path", type=str, default = "models/epoch=0050-val_SS_loss_checkpoint=0.004699.ckpt")
     parser.add_argument("--out", type=str, default=None)
     args = parser.parse_args()
 
@@ -86,7 +93,7 @@ def read_command():
         ct = load_yaml_as_dotdict("conf/training/" + args.CT + ".yaml")
     else:
         raise FileNotFoundError(f"Config file {args.CT}.yaml not found.")
-    return cb, cd, cm, ct, args.trainer
+    return cb, cd, cm, ct, args.trainer, args.model_path
 
 print("Configs loaded.")
 #raise NotImplementedError("Testing script not yet implemented.")
@@ -238,6 +245,6 @@ class ModelValidation:
         pass
 
 if __name__ == "__main__":
-    cb, cd, cm, ct, trainer = read_command()
+    cb, cd, cm, ct, trainer, model_path = read_command()
     model_validation = ModelValidation(cb, cd, cm, ct, trainer, model_path)
     model_validation.calculate_ss_error_per_dataset()
