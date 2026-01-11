@@ -227,7 +227,7 @@ class ModelValidation:
     def calculate_ss_error_per_dataset():
         # absolute and relative error per dataset?
         for i, dataset in enumerate(self.val_datasets):
-        pass
+            pass
 
     def calculate_rollout_error_per_dataset():
         # not sure yet
