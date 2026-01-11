@@ -138,7 +138,32 @@ class ModelValidation:
                             ).cuda()
         else:
             raise ValueError('MODEL NOT RECOGNIZED')   
-        self.model.load_state_dict(torch.load(self.model_path))
+        #self.model.load_state_dict(torch.load_state_dict(self.model_path))
+        #print keys in the checkpoint
+        checkpoint = torch.load(self.model_path, map_location='cpu')
+        #print("Checkpoint keys:", checkpoint.keys())
+        #for i in range(len(checkpoint['state_dict'].keys())):
+            #print(checkpoint['state_dict'].keys()[i], self.model.state_dict().keys()[i])
+        new_model_state_dict = {}
+        for key, value in checkpoint['state_dict'].items():
+            # Remove the 'model.' prefix if it exists
+            new_key = key.replace('model.', '', 1)
+            new_model_state_dict[new_key] = value
+        self.model.load_state_dict(new_model_state_dict)
+        raise NotImplementedError("Model loading not yet implemented.")
+        #self.model.load_state_dict(checkpoint['state_dict'])
+        #else:
+        #    state_dict = checkpoint
+        # create new OrderedDict that does not contain 'model.' prefix
+        #from collections import OrderedDict
+        #new_state_dict = OrderedDict()
+        #for k, v in state_dict.items():
+        #    if k.startswith('model.'):
+        #        name = k[6:]  # remove 'model.' prefix
+        #    else:
+        #        name = k
+        #    new_state_dict[name] = v
+        #self.model.load_state_dict(new_state_dict)
         self.model.eval()
         print("Model loaded from", self.model_path)
 
@@ -218,24 +243,25 @@ class ModelValidation:
         #self.val_dataset = ConcatDataset(self.val_datasets)
         #self.val_forward_dataset = ConcatDataset(self.val_forward_datasets)
         print("datasets ready, now creating dataloaders...")
-        dataloader = DataLoader(self.val_dataset,
-            batch_size=self.ct.batch_size,
-            shuffle=False,
-            pin_memory=self.ct.pin_memory, 
-            num_workers=self.ct.num_workers,
-            persistent_workers=self.ct.persistent_workers if self.ct.num_workers > 0 else False,
-            prefetch_factor=self.ct.prefetch_factor if self.ct.num_workers > 0 else None
-        )
-        self.val_loaders.append(dataloader)
+        for item in self.val_datasets:
+            
+            dataloader = DataLoader(item,
+                batch_size=self.ct.batch_size,
+                shuffle=False,
+                pin_memory=self.ct.pin_memory, 
+                num_workers=self.ct.num_workers, 
+                persistent_workers=self.ct.persistent_workers if self.ct.num_workers > 0 else False,
+                prefetch_factor=self.ct.prefetch_factor if self.ct.num_workers > 0 else None
+            )
+            self.val_loaders.append(dataloader)
         print("dataloaders created.")
         print(len(self.val_loaders))
                
-
     def calculate_ss_error_per_dataset():
         # absolute and relative error per dataset?
-        for i, dataset in enumerate(self.val_datasets):
-            pass
-
+        for i, dataset in enumerate(self.val_loaders):
+            print("blablabla")
+        
     def calculate_rollout_error_per_dataset():
         # not sure yet
         pass
