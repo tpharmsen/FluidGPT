@@ -217,7 +217,7 @@ class ModelValidation:
                 #"val_forward_idxs": val_forward_sampler.indices,
             }
             if self.cb.save_on:
-                save_split_path = self.cb.save_path + "validation/" + self.cb.folder_out 
+                save_split_path = self.cb.save_path + "validation/" + self.cb.folder_out + "traj_splits/"
                 os.makedirs(save_split_path, exist_ok=True)
                 save_split_path += "traj_split_" + item["name"] + ".json"
                 if save_split_path is None:
@@ -273,8 +273,6 @@ class ModelValidation:
         self.model.eval()
 
         for d, dataloader in enumerate(self.val_loaders):
-            if d == 4:
-                break
             print()
             print(self.cd.datasets[d]["name"]) 
             cumulative_se_sum = 0.0
@@ -321,7 +319,7 @@ class ModelValidation:
             print("Relative RMSE:", rrmse)
             print("Relative AE:", rae)
 
-            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out 
+            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ss_error/"
             os.makedirs(save_error_path, exist_ok=True)
             individual_rrmse_file_path = save_error_path + "individual_rrmse_" + self.cd.datasets[d]["name"] + ".txt"
             with open(individual_rrmse_file_path, "w") as f:
@@ -389,9 +387,11 @@ class ModelValidation:
                         individual_rrmse_errors[t].append(batch_rrmse)
                         individual_rae_errors[t].append(batch_rae)
                         #print(individual_rrmse_errors)
+                if i == 5:
+                    break
                     
 
-            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out 
+            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ms_error/"
             os.makedirs(save_error_path, exist_ok=True)
 
             # Save individual RMSE errors for this dataset
@@ -411,8 +411,6 @@ class ModelValidation:
             with open(mean_rrmse_file_path, "w") as f:
                 for t, error in enumerate(mean_rrmse_per_timestep):
                     f.write(f"Timestep {t}: Avg Relative RMSE: {error}\n")
-            mean_rae_file_path = save_error_path + "mae_error_" + self.cd.datasets[d]["name"] + ".txt"
-            with open(mean_rae_file_path, "w") as f:
                 for t, error in enumerate(mean_rae_per_timestep):
                     f.write(f"Timestep {t}: Avg Relative AE: {error}\n")
             print(f"Errors saved for dataset: {self.cd.datasets[d]['name']}")
