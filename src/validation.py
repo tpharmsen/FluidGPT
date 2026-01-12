@@ -334,10 +334,12 @@ class ModelValidation:
 
             save_error_path += "ss_error_" + self.cd.datasets[d]["name"] + ".txt"
             with open(save_error_path, "w") as f:
-                f.write(f"Relative RMSE: {rrmse}\n")
-                f.write(f"Relative AE: {rae}\n")
+                f.write(f"Avg Relative RMSE: {rrmse}\n")
+                f.write(f"Avg Relative AE: {rae}\n")
 
         print("SS error calculation done.")
+        del individual_rrmse_errors
+        del individual_rae_errors
         return 1
 
         
@@ -360,10 +362,6 @@ class ModelValidation:
                 y = y.cuda()
                 x = y.unsqueeze(0)[:,:self.cm.temporal_bundling]
                 
-                se_sum = 0.0   
-                ae_sum = 0.0   
-                y2_sum = 0.0    
-                yabs_sum = 0.0
                 with torch.no_grad():
                     # Perform rollout for the trajectory
                     yhat_rollout = rollout_det(x, self.model, len(y) // self.cm.temporal_bundling + 1)
@@ -372,12 +370,12 @@ class ModelValidation:
                     unnorm_yhat = yhat_rollout * self.global_std + self.global_mean
                     unnorm_y = y * self.global_std + self.global_mean
                     
-                    print("Rollout shape:", unnorm_yhat.shape)
-                    print("Ground truth shape:", unnorm_y.shape)
+                    #print("Rollout shape:", unnorm_yhat.shape)
+                    #print("Ground truth shape:", unnorm_y.shape)
                     diff = unnorm_yhat - unnorm_y
                     #raise NotImplementedError("Temporary stop for debugging.")
                     # Calculate the error for each timestep in the rollout
-                    for t in range(yhat_rollout.shape[1]):  
+                    for t in range(yhat_rollout.shape[0]):  
                         diffslice = diff[t]
                         yslice = unnorm_y[t]
                         
@@ -385,30 +383,39 @@ class ModelValidation:
                         ae = diffslice.abs().sum().item()
                         y2 = (yslice.pow(2)).sum().item()
                         yabs = yslice.abs().sum().item()
-                        batch_rrmse = (se / y.shape[0]) ** 0.5  
-                        batch_rae = (ae / y.shape[0]) 
+                        batch_rrmse = (se / y2) ** 0.5  
+                        batch_rae = (ae / yabs) 
 
                         individual_rrmse_errors[t].append(batch_rrmse)
                         individual_rae_errors[t].append(batch_rae)
-                        print(individual_rrmse_errors)
+                        #print(individual_rrmse_errors)
                     
 
-                save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out 
-                os.makedirs(save_error_path, exist_ok=True)
+            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out 
+            os.makedirs(save_error_path, exist_ok=True)
 
-                # Save individual RMSE errors for this dataset
-                individual_rrmse_file_path = save_error_path + "individual_rollout_rrmse_" + self.cd.datasets[d]["name"] + ".txt"
-                with open(individual_rrmse_file_path, "w") as f:
-                    for rrmse in individual_rrmse_errors:
-                        f.write(f"{rrmse}\n")
-                
-                # Save individual AE errors for this dataset
-                individual_rae_file_path = save_error_path + "individual_rollout_rae_" + self.cd.datasets[d]["name"] + ".txt"
-                with open(individual_rae_file_path, "w") as f:
-                    for rae_value in individual_rae_errors:
-                        f.write(f"{rae_value}\n")
+            # Save individual RMSE errors for this dataset
+            individual_rrmse_file_path = save_error_path + "individual_rollout_rrmse_" + self.cd.datasets[d]["name"] + ".json"
+            with open(individual_rrmse_file_path, "w") as f:
+                json.dump(individual_rrmse_errors, f)
+            # Save individual AE errors for this dataset
+            individual_rae_file_path = save_error_path + "individual_rollout_rae_" + self.cd.datasets[d]["name"] + ".json"
+            with open(individual_rae_file_path, "w") as f:
+                json.dump(individual_rae_errors, f)
 
-                print(f"Errors saved for dataset: {self.cd.datasets[d]['name']}")
+            # calculate the mean error per timestep
+            mean_rrmse_per_timestep = [np.mean(errors) for errors in individual_rrmse_errors]
+            mean_rae_per_timestep = [np.mean(errors) for errors in individual_rae_errors]
+            # Save mean errors per timestep for this dataset
+            mean_rrmse_file_path = save_error_path + "ms_error_" + self.cd.datasets[d]["name"] + ".txt"
+            with open(mean_rrmse_file_path, "w") as f:
+                for t, error in enumerate(mean_rrmse_per_timestep):
+                    f.write(f"Timestep {t}: Avg Relative RMSE: {error}\n")
+            mean_rae_file_path = save_error_path + "mae_error_" + self.cd.datasets[d]["name"] + ".txt"
+            with open(mean_rae_file_path, "w") as f:
+                for t, error in enumerate(mean_rae_per_timestep):
+                    f.write(f"Timestep {t}: Avg Relative AE: {error}\n")
+            print(f"Errors saved for dataset: {self.cd.datasets[d]['name']}")
 
         print("Rollout error calculation done.")
         return 1
@@ -420,8 +427,9 @@ class ModelValidation:
 if __name__ == "__main__":
     cb, cd, cm, ct, trainer, model_path = read_command()
     model_validation = ModelValidation(cb, cd, cm, ct, trainer, model_path)
-    return_code = model_validation.calculate_ss_error_per_dataset()
-    #return_code = model_validation.calculate_rollout_error_per_dataset()
+    return_code0 = model_validation.calculate_ss_error_per_dataset()
+    return_code1 = model_validation.calculate_rollout_error_per_dataset()
+    return_code = return_code0 * return_code1
     if return_code == 1:
         print("Validation completed successfully.")
     else:
