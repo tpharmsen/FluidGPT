@@ -301,6 +301,14 @@ class ModelValidation:
 
             print("Relative RMSE:", rrmse)
             print("Relative Absolute Error (RAE):", rae)
+            # dump to a file
+            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out 
+            os.makedirs(save_error_path, exist_ok=True)
+            save_error_path += "ss_error_" + self.cd.datasets[d]["name"] + ".txt"
+            with open(save_error_path, "w") as f:
+                f.write(f"Relative RMSE: {rrmse}\n")
+                f.write(f"Relative Absolute Error (RAE): {rae}\n")
+            
 
         print("SS error calculation done.")
         return 1
