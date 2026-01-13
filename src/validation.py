@@ -32,9 +32,11 @@ python src/validation.py --trainer MTT --CB surf-high --CD spike-preprocAll --CM
 python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run-test
 
 for spike:
-python3 src/validation.py --trainer MTT --CB spike-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-semifinal-run-test
+python3 src/validation.py --trainer MTT --CB spike-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-val-b200 --model_path /data/fluidgpt/val_models/ar_epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt --calc ssms
 
+--model_path /data/fluidgpt/val_models/ar_epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt
 NOTES:
+screens when workspace!
 calculate only next frame error instead of next timeblock?
 """
 
@@ -44,6 +46,9 @@ from dataloaders import PREPROC_MAPPER
 from dataloaders.utils import get_dataset, ZeroShotSamplerReduced, spatial_resample
 #from trainers.utils import make_plot, animate_rollout, magnitude_vel, rollout
 from trainers.utils import animate_rollout, magnitude_vel, rollout_det, compute_energy_enstrophy_spectra
+from trainers.utils import prior_purenoise, prior_avggaussian, prior_gaussiangaussian, prior_checkerboardnoise
+from trainers.utils import rollout_prb
+
 from modelComp.utils import ACT_MAPPER, SKIPBLOCK_MAPPER
 
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -90,7 +95,7 @@ def read_command():
     parser.add_argument("--CM", type=str, default="std")
     parser.add_argument("--CT", type=str, default="std")
     parser.add_argument("--trainer", type=str, default="MTT")
-    parser.add_argument("--model_path", type=str, default = "models/epoch=0050-val_SS_loss_checkpoint=0.004699.ckpt")
+    parser.add_argument("--model_path", type=str, required=True)
     parser.add_argument("--out", type=str, default=None)
     parser.add_argument("--calc", type=str, required=True)
     args = parser.parse_args()
@@ -196,9 +201,16 @@ class ModelValidation:
                 
         for item in self.cd.datasets:
             preproc_savepath = str(self.cb.data_base + 'preproc_' + item["name"])
-            dataset_SS = DiskDatasetDiv(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=1)
+            if self.trainer == "MTT":
+                dataset_SS = DiskDatasetDiv(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=1)
             #dataset_FS = DiskDatasetDiv(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=self.ct.forward_steps_loss)
-
+            elif self.trainer == "FM":
+                dataset_SS = DiskDatasetDivFM(preproc_savepath, temporal_bundling=self.cm.temporal_bundling,
+                noisetype=self.ct.noise_type, from_frame=self.ct.from_frame, sigma_time=self.ct.sigma_time if self.ct.noise_type == 'gaussiangaussian' else None,
+                sigma_space=self.ct.sigma_space if self.ct.noise_type == 'gaussiangaussian' else None
+                )
+            else:
+                raise ValueError("Trainer not recognized in validation dataloader.")
             # generate random seed
             seed = self.cd.seed
             #random_seed = random.randint(0, 10000)
@@ -273,6 +285,20 @@ class ModelValidation:
                 persistent_workers= self.ct.persistent_workers if self.ct.num_workers > 0 else False,
                 prefetch_factor=self.ct.prefetch_factor if self.ct.num_workers > 0 else None
             )
+    
+    def _generate_prior(self, target):
+        if self.ct.noise_type == 'puregaussian':
+            prior = prior_purenoise(target.clone(), fromframe=self.ct.from_frame)
+        elif self.ct.noise_type == 'checkerboard':
+            prior = prior_checkerboardnoise(target.clone(), fromframe=self.ct.from_frame)
+        elif self.ct.noise_type == 'avggaussian':
+            prior = prior_avggaussian(target.clone(), fromframe=self.ct.from_frame, smooth_passes=3)
+        elif self.ct.noise_type == 'gaussiangaussian':
+            prior = prior_gaussiangaussian(target.clone(), fromframe=self.ct.from_frame, 
+                                           sigma_time=self.ct.sigma_time, sigma_space=self.ct.sigma_space)
+        else:
+            raise ValueError(f"Unknown noisetype {self.ct.noise_type}")
+        return prior
 
     def calculate_ss_error_per_dataset(self):
         self.model.eval()
@@ -288,10 +314,25 @@ class ModelValidation:
             individual_rrmse_errors = []
             individual_rae_errors = []
 
+            steps = self.ct.int_steps
+
             with torch.no_grad():
                 for i, (x, y) in enumerate(dataloader):
-                    x, y = x.cuda(), y.cuda()
-                    yhat = self.model(x)
+                    if self.trainer == "MTT":
+                        x, y = x.cuda(), y.cuda()
+                        yhat = self.model(x)
+                    elif self.trainer == "FM":
+                        y = y.cuda()
+                        print(y.shape)
+                        yhat = self._generate_prior(y)
+                        print(yhat.shape)
+                        for i, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
+                            pred = self.model(yhat.clone(), t.to(y.device).expand(yhat.size(0)))
+                            print(pred.shape)
+                            yhat = yhat.clone() + (1 / steps) * pred.clone()
+                        raise NotImplementedError("Temporary stop for debugging.")
+                    else:
+                        raise ValueError("Trainer not recognized in ss error calculation.")
                     unnorm_yhat = yhat * self.global_std + self.global_mean
                     unnorm_y = y * self.global_std + self.global_mean
                     diff = unnorm_yhat - unnorm_y
@@ -357,15 +398,26 @@ class ModelValidation:
             individual_rae_errors = [list() for _ in range(ytest.shape[0])]
 
             for i in range(len(trajs)):
-                y = dataset.dataset.get_single_traj(trajs[i])
-                y = y.cuda()
-                x = y.unsqueeze(0)[:,:self.cm.temporal_bundling]
-                
+
                 with torch.no_grad():
-                    # Perform rollout for the trajectory
-                    yhat_rollout = rollout_det(x, self.model, len(y) // self.cm.temporal_bundling + 1)
-                    yhat_rollout = yhat_rollout.squeeze(0)
-                    yhat_rollout = yhat_rollout[:y.shape[0]] 
+                    y = dataset.dataset.get_single_traj(trajs[i])
+                    if self.trainer == "MTT":
+                        y = y.cuda()
+                        x = y.unsqueeze(0)[:,:self.cm.temporal_bundling]
+                        yhat_rollout = rollout_det(x, self.model, len(y) // self.cm.temporal_bundling + 1)
+                        yhat_rollout = yhat_rollout.squeeze(0)
+                        yhat_rollout = yhat_rollout[:y.shape[0]] 
+                    
+                    elif self.trainer == "FM":
+                        y = y.cuda()
+                        print(y.shape)
+                        x = self._generate_prior(y.unsqueeze(0)[:,:self.cm.temporal_bundling])
+                        print(x.shape)
+                        yhat_rollout = rollout_prb(x, self.model, len(y), self.ct.int_steps)
+                        raise NotImplementedError("Temporary stop for debugging.")
+                    else:
+                        raise ValueError("Trainer not recognized in rollout error calculation.")
+                
                     unnorm_yhat = yhat_rollout * self.global_std + self.global_mean
                     unnorm_y = y * self.global_std + self.global_mean
                     
