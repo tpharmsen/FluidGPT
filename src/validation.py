@@ -312,8 +312,8 @@ class ModelValidation:
                     individual_rae_errors.append(relative_rae)
                     if i % 50 == 0:
                         print(f"Progress: {i}/{len(dataloader)} batches", end="\r")
-                    if i == 220:
-                        break
+                    #if i == 220:
+                    #     break
             
 
             rrmse = (cumulative_se_sum / cumulative_y2_sum) ** 0.5  
@@ -388,8 +388,8 @@ class ModelValidation:
                         #print(individual_rrmse_errors)
                 if i % 5 == 0:
                     print(f"Progress: {i}/{len(trajs)} trajectories", end="\r")
-                if i == 20:
-                    break
+                #if i == 20:
+                #    break
                     
 
             save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ms_error/"
