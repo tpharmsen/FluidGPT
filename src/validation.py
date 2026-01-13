@@ -23,16 +23,18 @@ import subprocess
 import platform
 import json
 import argparse
+import warnings
 
 """
 for surf:
 conda activate grad312
-python src/validation.py --trainer MTT --CB surf-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-semifinal-run
-python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run
+python src/validation.py --trainer MTT --CB surf-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-semifinal-run-test
+python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run-test
 
 NOTES:
 calculate only next frame error instead of next timeblock?
 """
+
 
 from dataloaders import *
 from dataloaders import PREPROC_MAPPER
@@ -40,6 +42,8 @@ from dataloaders.utils import get_dataset, ZeroShotSamplerReduced, spatial_resam
 #from trainers.utils import make_plot, animate_rollout, magnitude_vel, rollout
 from trainers.utils import animate_rollout, magnitude_vel, rollout_det, compute_energy_enstrophy_spectra
 from modelComp.utils import ACT_MAPPER, SKIPBLOCK_MAPPER
+
+warnings.filterwarnings("ignore", category=UserWarning)
 
 plt.style.use('dark_background')
 plt.rcParams['figure.facecolor'] = '#1F1F1F'
@@ -85,6 +89,7 @@ def read_command():
     parser.add_argument("--trainer", type=str, default="MTT")
     parser.add_argument("--model_path", type=str, default = "models/epoch=0050-val_SS_loss_checkpoint=0.004699.ckpt")
     parser.add_argument("--out", type=str, default=None)
+    parser.add_argument("--calc", type=str, required=True)
     args = parser.parse_args()
 
     if os.path.exists("conf/base/" + args.CB + ".yaml"):
@@ -111,8 +116,11 @@ def read_command():
         os.makedirs(cb.save_path + cb.folder_out, exist_ok=True)
     if args.out != None:
         cb.wandb_name = args.out
+    if args.calc not in ["ss", "ssms", "ms", "spectra", "all"]:
+        raise ValueError("Invalid calculation type specified. Choose from 'ss', 'ssms', 'ms', 'spectra', or 'all'.")
+    
 
-    return cb, cd, cm, ct, args.trainer, args.model_path
+    return cb, cd, cm, ct, args.trainer, args.model_path, args.calc
 
 print("Configs loaded.")
 #raise NotImplementedError("Testing script not yet implemented.")
@@ -251,30 +259,25 @@ class ModelValidation:
         #self.train_dataset = ConcatDataset(self.train_datasets)
         #self.val_dataset = ConcatDataset(self.val_datasets)
         #self.val_forward_dataset = ConcatDataset(self.val_forward_datasets)
-        print("datasets ready, now creating dataloaders...")
-        for item in self.val_datasets:
-            
-            dataloader = DataLoader(item,
+        print("datasets ready.")
+               
+    def get_dataloader(self, dataset_idx):
+        return DataLoader(self.val_datasets[dataset_idx],
                 batch_size=1, #int(self.ct.batch_size / 8), ################################################################### temporary
-                shuffle=True, ###################################################################################3 also temporary
+                shuffle=False, ###################################################################################3 also temporary
                 drop_last=False,
                 pin_memory=self.ct.pin_memory, 
                 num_workers=self.ct.num_workers, 
-                persistent_workers=self.ct.persistent_workers if self.ct.num_workers > 0 else False,
+                persistent_workers= self.ct.persistent_workers if self.ct.num_workers > 0 else False,
                 prefetch_factor=self.ct.prefetch_factor if self.ct.num_workers > 0 else None
             )
-            self.val_loaders.append(dataloader)
-        print("dataloaders created.")
-        print(len(self.val_loaders))
-               
-   
 
     def calculate_ss_error_per_dataset(self):
         self.model.eval()
 
-        for d, dataloader in enumerate(self.val_loaders):
-            print()
-            print(self.cd.datasets[d]["name"]) 
+        for d, dataset in enumerate(self.val_datasets):
+            dataloader = self.get_dataloader(d)
+            print(f"\nDataset: {self.cd.datasets[d]['name']}") 
             cumulative_se_sum = 0.0
             cumulative_ae_sum = 0.0
             cumulative_y2_sum = 0.0
@@ -285,8 +288,6 @@ class ModelValidation:
 
             with torch.no_grad():
                 for i, (x, y) in enumerate(dataloader):
-                    if i == 0:
-                        print("Sample batch shape:", y.shape)
                     x, y = x.cuda(), y.cuda()
                     yhat = self.model(x)
                     unnorm_yhat = yhat * self.global_std + self.global_mean
@@ -309,7 +310,9 @@ class ModelValidation:
                     individual_rrmse_errors.append(relative_rrmse)
                     relative_rae = ae_sum / yabs_sum
                     individual_rae_errors.append(relative_rae)
-                    if i == 25:
+                    if i % 50 == 0:
+                        print(f"Progress: {i}/{len(dataloader)} batches", end="\r")
+                    if i == 220:
                         break
             
 
@@ -321,21 +324,18 @@ class ModelValidation:
 
             save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ss_error/"
             os.makedirs(save_error_path, exist_ok=True)
-            individual_rrmse_file_path = save_error_path + "individual_rrmse_" + self.cd.datasets[d]["name"] + ".txt"
+            individual_rrmse_file_path = save_error_path + "individual_rrmse_" + self.cd.datasets[d]["name"] + ".json"
             with open(individual_rrmse_file_path, "w") as f:
-                for value in individual_rrmse_errors:
-                    f.write(f"{value}\n")
-            individual_rae_file_path = save_error_path + "individual_rae_" + self.cd.datasets[d]["name"] + ".txt"
+                json.dump(individual_rrmse_errors, f, indent=2)
+            individual_rae_file_path = save_error_path + "individual_rae_" + self.cd.datasets[d]["name"] + ".json"
             with open(individual_rae_file_path, "w") as f:
-                for value in individual_rae_errors:
-                    f.write(f"{value}\n")
-
+                json.dump(individual_rae_errors, f, indent=2)
             save_error_path += "ss_error_" + self.cd.datasets[d]["name"] + ".txt"
             with open(save_error_path, "w") as f:
                 f.write(f"Avg Relative RMSE: {rrmse}\n")
                 f.write(f"Avg Relative AE: {rae}\n")
 
-        print("SS error calculation done.")
+            print(f"SS error {self.cd.datasets[d]['name']} calculation done.")
         del individual_rrmse_errors
         del individual_rae_errors
         return 1
@@ -346,10 +346,9 @@ class ModelValidation:
         self.model.eval()
 
         for d, dataset in enumerate(self.val_datasets):
-            print()
-            print("Dataset:", self.cd.datasets[d]["name"])
+            print(f"\nDataset: {self.cd.datasets[d]['name']}") 
             trajs = self.val_samplers[d].val_trajs
-            print(trajs[:10])
+            #print(trajs[:10])
             ytest = dataset.dataset.get_single_traj(trajs[0])
             # Lists to store errors for each timestep
             individual_rrmse_errors = [list() for _ in range(ytest.shape[0])]
@@ -387,7 +386,9 @@ class ModelValidation:
                         individual_rrmse_errors[t].append(batch_rrmse)
                         individual_rae_errors[t].append(batch_rae)
                         #print(individual_rrmse_errors)
-                if i == 5:
+                if i % 5 == 0:
+                    print(f"Progress: {i}/{len(trajs)} trajectories", end="\r")
+                if i == 20:
                     break
                     
 
@@ -397,11 +398,11 @@ class ModelValidation:
             # Save individual RMSE errors for this dataset
             individual_rrmse_file_path = save_error_path + "individual_rollout_rrmse_" + self.cd.datasets[d]["name"] + ".json"
             with open(individual_rrmse_file_path, "w") as f:
-                json.dump(individual_rrmse_errors, f)
+                json.dump(individual_rrmse_errors, f, indent=2)
             # Save individual AE errors for this dataset
             individual_rae_file_path = save_error_path + "individual_rollout_rae_" + self.cd.datasets[d]["name"] + ".json"
             with open(individual_rae_file_path, "w") as f:
-                json.dump(individual_rae_errors, f)
+                json.dump(individual_rae_errors, f, indent=2)
 
             # calculate the mean error per timestep
             mean_rrmse_per_timestep = [np.mean(errors) for errors in individual_rrmse_errors]
@@ -413,9 +414,8 @@ class ModelValidation:
                     f.write(f"Timestep {t}: Avg Relative RMSE: {error}\n")
                 for t, error in enumerate(mean_rae_per_timestep):
                     f.write(f"Timestep {t}: Avg Relative AE: {error}\n")
-            print(f"Errors saved for dataset: {self.cd.datasets[d]['name']}")
-
-        print("Rollout error calculation done.")
+            print()
+            print(f"MS error {self.cd.datasets[d]['name']} calculation done.")
         return 1
 
     def calculate_spectra_plots_per_dataset(self):
@@ -423,13 +423,21 @@ class ModelValidation:
         pass
 
 if __name__ == "__main__":
-    cb, cd, cm, ct, trainer, model_path = read_command()
+    cb, cd, cm, ct, trainer, model_path, calc = read_command()
     model_validation = ModelValidation(cb, cd, cm, ct, trainer, model_path)
-    return_code0 = model_validation.calculate_ss_error_per_dataset()
-    return_code1 = model_validation.calculate_rollout_error_per_dataset()
-    return_code = return_code0 * return_code1
-    if return_code == 1:
-        print("Validation completed successfully.")
+    if calc == "ss":
+        model_validation.calculate_ss_error_per_dataset()
+    elif calc == "ms":
+        model_validation.calculate_rollout_error_per_dataset()
+    elif calc == "ssms":
+        model_validation.calculate_ss_error_per_dataset()
+        model_validation.calculate_rollout_error_per_dataset()
+    elif calc == "spectra":
+        model_validation.calculate_spectra_plots_per_dataset()
+    elif calc == "all":
+        model_validation.calculate_ss_error_per_dataset()
+        model_validation.calculate_rollout_error_per_dataset()
+        model_validation.calculate_spectra_plots_per_dataset()
     else:
-        print("Validation encountered issues.")
+        raise ValueError("Invalid calculation type specified. Choose from 'ss', 'ms', 'spectra', or 'all'.")
     pass
