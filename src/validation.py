@@ -122,7 +122,6 @@ def read_command():
 
     return cb, cd, cm, ct, args.trainer, args.model_path, args.calc
 
-print("Configs loaded.")
 #raise NotImplementedError("Testing script not yet implemented.")
 
 # import data
@@ -310,7 +309,7 @@ class ModelValidation:
                     individual_rrmse_errors.append(relative_rrmse)
                     relative_rae = ae_sum / yabs_sum
                     individual_rae_errors.append(relative_rae)
-                    if i % 50 == 0:
+                    if i % 10 == 0:
                         print(f"Progress: {i}/{len(dataloader)} batches", end="\r")
                     #if i == 220:
                     #     break
@@ -439,5 +438,5 @@ if __name__ == "__main__":
         model_validation.calculate_rollout_error_per_dataset()
         model_validation.calculate_spectra_plots_per_dataset()
     else:
-        raise ValueError("Invalid calculation type specified. Choose from 'ss', 'ms', 'spectra', or 'all'.")
+        raise ValueError("Invalid calculation type specified. Choose from 'ss', 'ssms', 'ms', 'spectra', or 'all'.")
     pass
