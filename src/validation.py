@@ -401,11 +401,12 @@ class ModelValidation:
             else:
                 raise ValueError("Trainer not recognized in ss error calculation.")
 
-            with torch.no_grad():
-                for i, batch in enumerate(dataloader):
-                    torch.cuda.synchronize()
-                    time_start = time.time()
-                    for sample_idx in range(self.samples):
+            
+            for i, batch in enumerate(dataloader):
+                torch.cuda.synchronize()
+                time_start = time.time()
+                for sample_idx in range(self.samples):
+                    with torch.no_grad():
                         if self.trainer == "MTT":
                             x, y = batch
                             x, y = x.cuda(), y.cuda()
@@ -473,13 +474,13 @@ class ModelValidation:
                         #torch.cuda.synchronize()
                         #end_time = time.time()
                         #print(f"SS error calculation time for batch {i}, sample {sample_idx}: {end_time - start_time:.4f} seconds")
-                    #print()
-                    torch.cuda.synchronize()
-                    end_time = time.time()
-                    print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, timer: {end_time - time_start:.4f} s")
-                    #print()
-                    if i == 5:
-                        break
+                #print()
+                torch.cuda.synchronize()
+                end_time = time.time()
+                print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, timer: {end_time - time_start:.4f} s")
+                #print()
+                if i == 5:
+                    break
     
             rrmse = (cumulative_se_sum / cumulative_y2_sum) ** 0.5  
             rae = cumulative_ae_sum / cumulative_yabs_sum 
