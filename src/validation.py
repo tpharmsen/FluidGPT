@@ -55,13 +55,11 @@ python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --C
 python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ss --dsplit 1
 python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ms --dsplit 1
 python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 2
-python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 3
-python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 4
-python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 5
-python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 6
-python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 7
-python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 8
-python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 9
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ss --dsplit 3
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ms --dsplit 3
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 4 5
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 6 7 
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 8 9
 
 NOTES:
 screens when workspace!
@@ -377,6 +375,7 @@ class ModelValidation:
 
     def calculate_ss_error_per_dataset(self):
         self.model.eval()
+        print("\nStarting SS error calculation...")
 
         for d, dataset in enumerate(self.val_datasets):
             if d + 1 not in self.dsplit:
@@ -510,6 +509,7 @@ class ModelValidation:
     def calculate_rollout_error_per_dataset(self):
         # Get indices for each dataset
         self.model.eval()
+        print("\nStarting Multi-step rollout error calculation...")
 
         for d, dataset in enumerate(self.valtraj_datasets):
             if d + 1 not in self.dsplit:
@@ -541,7 +541,7 @@ class ModelValidation:
                         y = yfull.clone()
                         if self.trainer == "MTT":
                             y = y.cuda()
-                            print("y shape:", y.shape)
+                            #print("y shape:", y.shape)
                             x = y[:,:self.cm.temporal_bundling]
                             yhat_rollout = rollout_det(x, self.model, len(y) // self.cm.temporal_bundling + 1)
                             #print(yhat_rollout.shape, y.shape)

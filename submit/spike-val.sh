@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -a
+source .env
+set +a
+
+MULTIPLIER=${1:-1}
+CONTAINER_NAME=${2:-fluidgpt-clitest}
+COMMAND_ARGS=${3:-"--trainer FM --CB spike-high --CD spike-gauss --CM fm-test-B --CT fm-b200-doublegauss5 --out ${CONTAINER_NAME}"}
+
+CPU_CORE_REQUEST=$((4 * MULTIPLIER))
+CPU_CORE_LIMIT=$((25 * MULTIPLIER))
+CPU_MEMORY_REQUEST=$((32 * MULTIPLIER))G
+CPU_MEMORY_LIMIT=$((245 * MULTIPLIER))G
+GPU_DEVICES_REQUEST=$((1 * MULTIPLIER))
+
+echo "GPU devices request: $GPU_DEVICES_REQUEST"
+echo "Container name: $CONTAINER_NAME"
+echo "DO NOT USE GIT BASH FOR THIS SCRIPT (IT WILL CHANGE THE PATHING OF PVCs)"
+
+runai training submit $CONTAINER_NAME \
+--image "harbor.spike.tue.nl/fluidgpt/fluidgpt-fm-ssh:latest" \
+--project "fluidgpt" \
+--user-group-source "fromTheImage" \
+--cpu-core-limit $CPU_CORE_LIMIT \
+--cpu-core-request $CPU_CORE_REQUEST \
+--cpu-memory-limit $CPU_MEMORY_LIMIT \
+--cpu-memory-request $CPU_MEMORY_REQUEST \
+--gpu-devices-request $GPU_DEVICES_REQUEST \
+--backoff-limit 0   \
+--new-pvc "claimname=shm-ephemeral,storageclass=exascaler-ephemeral,size=512G,path=/dev/shm,accessmode-rwm,ephemeral" \
+--existing-pvc "claimname=fluidgpt,path=/data/" \
+--git-sync "name=fluidgpt,repository=https://github.com/tpharmsen/FluidGPT,path=/code/,rev=main" \
+--environment WANDB_API_KEY="$VAR3" \
+--quiet \
+--command -- python3 src/validation.py $COMMAND_ARGS 
