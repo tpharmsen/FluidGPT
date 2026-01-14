@@ -389,7 +389,7 @@ class ModelValidation:
                             for _, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
                                 pred = self.model(yhat, t.to(y.device).expand(yhat.size(0)))
                                 #print(pred.shape)
-                                yhat = yhat + (1 / steps) * pred.clone()
+                                yhat = yhat + (1 / steps) * pred.detach()
                             #raise NotImplementedError("Temporary stop for debugging.")
                             
                             y, yhat = y.permute(0,2,1,3,4), yhat.permute(0,2,1,3,4)
