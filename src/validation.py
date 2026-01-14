@@ -478,7 +478,7 @@ class ModelValidation:
                     end_time = time.time()
                     print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, timer: {end_time - time_start:.4f} s")
                     #print()
-                    if i == 1:
+                    if i == 5:
                         break
     
             rrmse = (cumulative_se_sum / cumulative_y2_sum) ** 0.5  
