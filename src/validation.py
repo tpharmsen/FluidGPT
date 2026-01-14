@@ -388,7 +388,6 @@ class ModelValidation:
             cumulative_ae_sum = 0.0
             cumulative_y2_sum = 0.0
             cumulative_yabs_sum = 0.0
-            continue
             #total_elements = 0
             
             if self.trainer == "MTT":
@@ -404,9 +403,9 @@ class ModelValidation:
                 raise ValueError("Trainer not recognized in ss error calculation.")
 
             with torch.no_grad():
-                torch.cuda.synchronize()
-                time_start = time.time()
                 for i, batch in enumerate(dataloader):
+                    torch.cuda.synchronize()
+                    time_start = time.time()
                     for sample_idx in range(self.samples):
                         if self.trainer == "MTT":
                             x, y = batch
@@ -476,18 +475,13 @@ class ModelValidation:
                         #end_time = time.time()
                         #print(f"SS error calculation time for batch {i}, sample {sample_idx}: {end_time - start_time:.4f} seconds")
                     #print()
-                    print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}", end="\r")
+                    torch.cuda.synchronize()
+                    end_time = time.time()
+                    print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, timer: {end_time - time_start:.4f} seconds", end="\r")
                     #print()
                     if i == 0:
                         break
-                torch.cuda.synchronize()
-                end_time = time.time()
-                print()
-                print(f"\nTimer {self.cd.datasets[d]['name']} of batch {i} out of {len(dataloader)} batches: {end_time - time_start:.4f} seconds")
-                print()
-
-            
-
+    
             rrmse = (cumulative_se_sum / cumulative_y2_sum) ** 0.5  
             rae = cumulative_ae_sum / cumulative_yabs_sum 
 
@@ -538,9 +532,10 @@ class ModelValidation:
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
 
             for i, batch in enumerate(dataloader):
+
+                torch.cuda.synchronize()
+                time_start = time.time()
                 with torch.no_grad():
-                    torch.cuda.synchronize()
-                    time_start = time.time()
                     yfull = batch.cuda()
                     for sample_idx in range(self.samples):
                         y = yfull.clone()
@@ -600,12 +595,9 @@ class ModelValidation:
                                 for t in range(batch_rrmse.shape[1]): 
                                     individual_rrmse_errors[t][i * self.batch_size + b].append(batch_rrmse[b, t].item())
                                     individual_rae_errors[t][i * self.batch_size + b].append(batch_rae[b, t].item())
-                    torch.cuda.synchronize()
-                    end_time = time.time()
-                    print()
-                    print(f"Timer for batch {i} out of {len(dataloader)} batches, sample {sample_idx}: {end_time - time_start:.4f} seconds")   
-                    print()
-                print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}", end="\r")
+                torch.cuda.synchronize()
+                end_time = time.time()
+                print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, Timer: {end_time - time_start:.4f} seconds", end="\r")
                 if i == 0:
                     break
             
