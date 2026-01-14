@@ -175,7 +175,7 @@ class ModelValidation:
         self.dsplit = dsplit
         
         if "B200" in torch.cuda.get_device_name():
-            self.batch_size = 512
+            self.batch_size = 1024
         else:
             self.batch_size = 64
         print("Using device:", torch.cuda.get_device_name(), "with batch size", self.batch_size)
@@ -468,14 +468,16 @@ class ModelValidation:
                         #torch.cuda.synchronize()
                         #end_time = time.time()
                         #print(f"SS error calculation time for batch {i}, sample {sample_idx}: {end_time - start_time:.4f} seconds")
-                    print()
+                    #print()
                     print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}", end="\r")
-                    print()
+                    #print()
                     if i == 0:
                         break
                 torch.cuda.synchronize()
                 end_time = time.time()
-                print(f"\nTimer {self.cd.datasets[d]['name']}: {end_time - time_start:.4f} seconds")
+                print()
+                print(f"\nTimer {self.cd.datasets[d]['name']} of batch {i} out of {len(dataloader)} batches: {end_time - time_start:.4f} seconds")
+                print()
 
             
 
@@ -594,7 +596,7 @@ class ModelValidation:
                     torch.cuda.synchronize()
                     end_time = time.time()
                     print()
-                    print(f"Timer for batch {i}, sample {sample_idx}: {end_time - time_start:.4f} seconds")   
+                    print(f"Timer for batch {i} out of {len(dataloader)} batches, sample {sample_idx}: {end_time - time_start:.4f} seconds")   
                     print()
                 print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}", end="\r")
                 if i == 0:
@@ -641,18 +643,34 @@ if __name__ == "__main__":
     cb, cd, cm, ct, trainer, model_path, calc, fm_samples, dsplit = read_command()
     model_validation = ModelValidation(cb, cd, cm, ct, trainer, model_path, fm_samples, dsplit)
     if calc == "ss":
-        model_validation.calculate_ss_error_per_dataset()
+        code = model_validation.calculate_ss_error_per_dataset()
+        if code: print("SS Success") 
+        else: print("SS Failure")
     elif calc == "ms":
-        model_validation.calculate_rollout_error_per_dataset()
+        code = model_validation.calculate_rollout_error_per_dataset()
+        if code: print("MS Success") 
+        else: print("MS Failure")
     elif calc == "ssms":
-        model_validation.calculate_ss_error_per_dataset()
-        model_validation.calculate_rollout_error_per_dataset()
+        code = model_validation.calculate_ss_error_per_dataset()
+        if code: print("SS Success") 
+        else: print("SS Failure")
+        code = model_validation.calculate_rollout_error_per_dataset()
+        if code: print("MS Success") 
+        else: print("MS Failure")
     elif calc == "spectra":
-        model_validation.calculate_spectra_plots_per_dataset()
+        code = model_validation.calculate_spectra_plots_per_dataset()
+        if code: print("SP Success") 
+        else: print("SP Failure")
     elif calc == "all":
-        model_validation.calculate_ss_error_per_dataset()
-        model_validation.calculate_rollout_error_per_dataset()
-        model_validation.calculate_spectra_plots_per_dataset()
+        code = model_validation.calculate_ss_error_per_dataset()
+        if code: print("SS Success") 
+        else: print("SS Failure")
+        code = model_validation.calculate_rollout_error_per_dataset()
+        if code: print("MS Success") 
+        else: print("MS Failure")
+        code = model_validation.calculate_spectra_plots_per_dataset()
+        if code: print("SP Success") 
+        else: print("SP Failure")
     else:
         raise ValueError("Invalid calculation type specified. Choose from 'ss', 'ssms', 'ms', 'spectra', or 'all'.")
     pass
