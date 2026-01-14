@@ -537,12 +537,6 @@ class ModelValidation:
                             #print(yhat_rollout.shape)
                             #print("Rollout shape before permute:", yhat_rollout.shape)
                             yhat_rollout, y = yhat_rollout.permute(0,2,1,3,4), y.permute(0,2,1,3,4)
-                            #print("yhat_rollout shape after permute:", yhat_rollout.shape)
-                            #print("y shape after permute:", y.shape)
-                            #print("Rollout shape after permute:", yhat_rollout.shape)
-                            #print(yhat_rollout.shape)
-                            #print(yhat_rollout.shape, y.shape)
-                            #raise NotImplementedError("Temporary stop for debugging.")
                         else:
                             raise ValueError("Trainer not recognized in rollout error calculation.")
                         yhat_rollout = yhat_rollout[:, :y.shape[1]] 
