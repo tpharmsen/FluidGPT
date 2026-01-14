@@ -48,6 +48,10 @@ fm: --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=
 python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out test --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --calc 
 fm-val-b200-0 
 
+spike testing
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out test --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --dsplit 4 --fm_samples 16 --calc ss
+
+
 python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ss --dsplit 1
 python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ms --dsplit 1
 python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 2
@@ -169,7 +173,12 @@ class ModelValidation:
         self.model_path = model_path
         self.samples = fm_samples
         self.dsplit = dsplit
-        self.batch_size = 64
+        
+        if "b200" in torch.cuda.get_device_name():
+            self.batch_size = 512
+        else:
+            self.batch_size = 64
+        print("Using device:", torch.cuda.get_device_name(), "with batch size", self.batch_size)
         
         #self.ct.int_steps = 20  # for FM inference
 
