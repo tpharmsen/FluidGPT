@@ -37,12 +37,12 @@ python src/validation.py --trainer MTT --CB surf-high --CD spike-preprocAll --CM
 python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run-test --model_path models/epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --calc 
 
 
-
 for spike:
-python3 src/validation.py --trainer MTT --CB spike-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-val-b200 --model_path /data/fluidgpt/val_models/ar_epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt --calc ssms 
+python3 src/validation.py --trainer MTT --CB spike-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out test --model_path /data/fluidgpt/val_models/ar_epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt --calc 
 ar: --model_path /data/fluidgpt/val_models/ar_epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt
 fm: --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt
-
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out test --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --calc 
+fm-val-b200-0 
 
 NOTES:
 screens when workspace!
@@ -395,8 +395,8 @@ class ModelValidation:
                     individual_rae_errors.append(relative_rae)
                     if i % 10 == 0:
                         print(f"Progress: {i}/{len(dataloader)} batches", end="\r")
-                    #if i == 10:
-                    #    break
+                    if i == 100:
+                        break
             
 
             rrmse = (cumulative_se_sum / cumulative_y2_sum) ** 0.5  
@@ -490,8 +490,8 @@ class ModelValidation:
                         #print(individual_rrmse_errors)
                 if i % 5 == 0:
                     print(f"Progress: {i}/{len(trajs)} trajectories", end="\r")
-                #if i == 20:
-                #    break
+                if i == 25:
+                    break
                     
 
             save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ms_error/"
