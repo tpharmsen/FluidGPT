@@ -381,7 +381,7 @@ class ModelValidation:
                             yhat = self.model(x)
                             #print(yhat.shape)
                         elif self.trainer == "FM":
-                            torch.synchronize()
+                            torch.cuda.synchronize()
                             time_start = time.time()
                             y = batch.clone()
                             y = y.cuda()
@@ -395,7 +395,7 @@ class ModelValidation:
                             #raise NotImplementedError("Temporary stop for debugging.")
                             
                             y, yhat = y.permute(0,2,1,3,4), yhat.permute(0,2,1,3,4)
-                            torch.synchronize()
+                            torch.cuda.synchronize()
                             end_time = time.time()
                             print(f"FM inference time per batch: {end_time - time_start:.4f} seconds")
                             #print(yhat.shape)
