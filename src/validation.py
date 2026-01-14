@@ -36,6 +36,10 @@ fm: --model_path models/epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt
 python src/validation.py --trainer MTT --CB surf-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-semifinal-run-test --model_path models/epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt --calc 
 python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run-test --model_path models/epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --calc 
 
+python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll-s3 --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run-test3 --model_path models/epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 3 --calc ssms
+python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll-s3 --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run-test4 --model_path models/epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 3 --calc ssms
+
+
 
 for spike:
 python3 src/validation.py --trainer MTT --CB spike-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out test --model_path /data/fluidgpt/val_models/ar_epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt --calc 
@@ -43,6 +47,17 @@ ar: --model_path /data/fluidgpt/val_models/ar_epoch=0048-val_SS_loss_checkpoint=
 fm: --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt
 python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out test --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --calc 
 fm-val-b200-0 
+
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ss --dsplit 1
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ms --dsplit 1
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 2
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 3
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 4
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 5
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 6
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 7
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 8
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ssms --dsplit 9
 
 NOTES:
 screens when workspace!
@@ -107,6 +122,8 @@ def read_command():
     parser.add_argument("--model_path", type=str, required=True)
     parser.add_argument("--out", type=str, default=None)
     parser.add_argument("--calc", type=str, required=True)
+    parser.add_argument("--fm_samples", type=int)
+    parser.add_argument("--dsplit", type=int, required=True) 
     args = parser.parse_args()
 
     if os.path.exists("conf/base/" + args.CB + ".yaml"):
@@ -135,18 +152,23 @@ def read_command():
         cb.wandb_name = args.out
     if args.calc not in ["ss", "ssms", "ms", "spectra", "all"]:
         raise ValueError("Invalid calculation type specified. Choose from 'ss', 'ssms', 'ms', 'spectra', or 'all'.")
-    
-    return cb, cd, cm, ct, args.trainer, args.model_path, args.calc
+    if args.fm_samples is None and args.trainer == "FM":
+        raise ValueError("For FM trainer, --fm_samples argument must be provided.")
+    if args.dsplit == 0:
+        raise ValueError("dsplit must be greater than 0.")
+    return cb, cd, cm, ct, args.trainer, args.model_path, args.calc, args.fm_samples, args.dsplit
 
 
 class ModelValidation:
-    def __init__(self, cb, cd, cm, ct, trainer, model_path):
+    def __init__(self, cb, cd, cm, ct, trainer, model_path, fm_samples=1, dsplit=0):
         self.cb = cb
         self.cd = cd
         self.cm = cm
         self.ct = ct
         self.trainer = trainer
         self.model_path = model_path
+        self.samples = fm_samples
+        self.dsplit = dsplit
 
         self.init_modules()
 
@@ -328,6 +350,8 @@ class ModelValidation:
         self.model.eval()
 
         for d, dataset in enumerate(self.val_datasets):
+            if d + 1 != self.dsplit:
+                continue
             dataloader = self.get_dataloader(d)
             print(f"\nDataset: {self.cd.datasets[d]['name']}") 
             cumulative_se_sum = 0.0
@@ -335,67 +359,77 @@ class ModelValidation:
             cumulative_y2_sum = 0.0
             cumulative_yabs_sum = 0.0
             total_elements = 0
-            individual_rrmse_errors = []
-            individual_rae_errors = []
-
-            if self.trainer == "FM":
+            
+            if self.trainer == "MTT":
+                individual_rrmse_errors = []
+                individual_rae_errors = []
+                steps = None
+                self.samples = 1
+            elif self.trainer == "FM":
+                individual_rrmse_errors = [[] for _ in range(len(dataloader))]
+                individual_rae_errors = [[] for _ in range(len(dataloader))]
                 steps = self.ct.int_steps
             else:
-                steps = None
+                raise ValueError("Trainer not recognized in ss error calculation.")
 
             with torch.no_grad():
                 for i, batch in enumerate(dataloader):
-                    if self.trainer == "MTT":
-                        x, y = batch
-                        x, y = x.cuda(), y.cuda()
-                        yhat = self.model(x)
-                        #print(yhat.shape)
-                    elif self.trainer == "FM":
-                        y = batch
-                        y = y.cuda()
-                        #print(y.shape)
-                        yhat = self._generate_prior(y)
-                        #print(yhat.shape)
-                        for _, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
-                            pred = self.model(yhat.clone(), t.to(y.device).expand(yhat.size(0)))
-                            #print(pred.shape)
-                            yhat = yhat.clone() + (1 / steps) * pred.clone()
-                        #raise NotImplementedError("Temporary stop for debugging.")
-                        
-                        y, yhat = y.permute(0,2,1,3,4), yhat.permute(0,2,1,3,4)
-                        #print(yhat.shape)
-                    else:
-                        raise ValueError("Trainer not recognized in ss error calculation.")
-                    yhat = yhat.squeeze(0)
-                    y = y.squeeze(0)
-                    unnorm_yhat = yhat * self.global_std + self.global_mean
-                    unnorm_y = y * self.global_std + self.global_mean
-                    if self.trainer == "MTT":
-                        diff = unnorm_yhat - unnorm_y
-                    elif self.trainer == "FM":
-                        diff = unnorm_yhat[self.ct.from_frame:] - unnorm_y[self.ct.from_frame:]
-                        unnorm_y = unnorm_y[self.ct.from_frame:]
-                    #print(diff.shape)
+                    for sample_idx in range(self.samples):
+                        if self.trainer == "MTT":
+                            x, y = batch
+                            x, y = x.cuda(), y.cuda()
+                            yhat = self.model(x)
+                            #print(yhat.shape)
+                        elif self.trainer == "FM":
+                            y = batch.clone()
+                            y = y.cuda()
+                            #print(y.shape)
+                            yhat = self._generate_prior(y)
+                            #print(yhat.shape)
+                            for _, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
+                                pred = self.model(yhat.clone(), t.to(y.device).expand(yhat.size(0)))
+                                #print(pred.shape)
+                                yhat = yhat.clone() + (1 / steps) * pred.clone()
+                            #raise NotImplementedError("Temporary stop for debugging.")
+                            
+                            y, yhat = y.permute(0,2,1,3,4), yhat.permute(0,2,1,3,4)
+                            #print(yhat.shape)
+                        else:
+                            raise ValueError("Trainer not recognized in ss error calculation.")
+                        yhat = yhat.squeeze(0)
+                        y = y.squeeze(0)
+                        unnorm_yhat = yhat * self.global_std + self.global_mean
+                        unnorm_y = y * self.global_std + self.global_mean
+                        if self.trainer == "MTT":
+                            diff = unnorm_yhat - unnorm_y
+                        elif self.trainer == "FM":
+                            diff = unnorm_yhat[self.ct.from_frame:] - unnorm_y[self.ct.from_frame:]
+                            unnorm_y = unnorm_y[self.ct.from_frame:]
+                        #print(diff.shape)
 
-                    se_sum = diff.pow(2).sum().item()  
-                    ae_sum = diff.abs().sum().item()  
-                    y2_sum = (unnorm_y.pow(2)).sum().item()
-                    yabs_sum = unnorm_y.abs().sum().item()
-                    num_elements = y.numel()
+                        se_sum = diff.pow(2).sum().item()  
+                        ae_sum = diff.abs().sum().item()  
+                        y2_sum = (unnorm_y.pow(2)).sum().item()
+                        yabs_sum = unnorm_y.abs().sum().item()
+                        num_elements = y.numel()
 
-                    cumulative_se_sum += se_sum
-                    cumulative_ae_sum += ae_sum
-                    cumulative_y2_sum += y2_sum
-                    cumulative_yabs_sum += yabs_sum
-                    total_elements += num_elements
+                        cumulative_se_sum += se_sum
+                        cumulative_ae_sum += ae_sum
+                        cumulative_y2_sum += y2_sum
+                        cumulative_yabs_sum += yabs_sum
+                        total_elements += num_elements
 
-                    relative_rrmse = (se_sum / y2_sum) ** 0.5
-                    individual_rrmse_errors.append(relative_rrmse)
-                    relative_rae = ae_sum / yabs_sum
-                    individual_rae_errors.append(relative_rae)
-                    if i % 10 == 0:
-                        print(f"Progress: {i}/{len(dataloader)} batches", end="\r")
-                    if i == 40:
+                        relative_rrmse = (se_sum / y2_sum) ** 0.5
+                        relative_rae = ae_sum / yabs_sum
+                        if self.trainer == "MTT":
+                            individual_rrmse_errors.append(relative_rrmse)
+                            individual_rae_errors.append(relative_rae)
+                        elif self.trainer == "FM":
+                            individual_rrmse_errors[i].append(relative_rrmse)
+                            individual_rae_errors[i].append(relative_rae)
+                    #if i % 10 == 0:
+                    print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}", end="\r")
+                    if i == 10:
                         break
             
 
@@ -429,71 +463,93 @@ class ModelValidation:
         self.model.eval()
 
         for d, dataset in enumerate(self.val_datasets):
+            if d + 1 != self.dsplit:
+                continue
             print(f"\nDataset: {self.cd.datasets[d]['name']}") 
             trajs = self.val_samplers[d].val_trajs
             #print(trajs[:10])
             ytest = dataset.dataset.get_single_traj(trajs[0])
+            #print(ytest.shape)
             # Lists to store errors for each timestep
-            individual_rrmse_errors = [list() for _ in range(ytest.shape[0])]
-            individual_rae_errors = [list() for _ in range(ytest.shape[0])]
+            if self.trainer == "MTT":
+                self.samples = 1
+                timesteps = ytest.shape[0]
+                #print("Timesteps:", timesteps)
+                individual_rrmse_errors = [list() for _ in range(timesteps)]
+                individual_rae_errors = [list() for _ in range(timesteps)]
+            elif self.trainer == "FM":
+                timesteps = ytest.shape[2]
+                individual_rae_errors = [list( list() for k in range(len(trajs))) for _ in range(timesteps)]
+                individual_rrmse_errors = [list( list() for k in range(len(trajs))) for _ in range(timesteps)]
+            #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
 
             for i in range(len(trajs)):
-
+                #print(i)
                 with torch.no_grad():
-                    y = dataset.dataset.get_single_traj(trajs[i])
-                    if self.trainer == "MTT":
-                        y = y.cuda()
-                        x = y.unsqueeze(0)[:,:self.cm.temporal_bundling]
-                        yhat_rollout = rollout_det(x, self.model, len(y) // self.cm.temporal_bundling + 1)
-                        #print(yhat_rollout.shape, y.shape)
-                    elif self.trainer == "FM":
-                        y = y.cuda()
-                        #print(y.shape)
-                        x = self._generate_prior(y[:,:,:self.cm.temporal_bundling])
-                        #print(x.shape)
-                        yhat_rollout = rollout_prb(x, self.model, int(np.ceil((y.shape[2] - self.ct.from_frame) / (self.cm.temporal_bundling - self.ct.from_frame))), 
-                                       self.ct.int_steps, self.ct.from_frame, noisetype=self.ct.noise_type,
-                                       sigma_time = self.ct.sigma_time if self.ct.noise_type == 'gaussiangaussian' else None, sigma_space = self.ct.sigma_space if self.ct.noise_type == 'gaussiangaussian' else None)
-                        #print(yhat_rollout.shape)
-                        yhat_rollout, y = yhat_rollout.permute(0,2,1,3,4), y.permute(0,2,1,3,4)
-                        #print(yhat_rollout.shape)
-                        #print(yhat_rollout.shape, y.shape)
-                        #raise NotImplementedError("Temporary stop for debugging.")
-                    else:
-                        raise ValueError("Trainer not recognized in rollout error calculation.")
-                    yhat_rollout = yhat_rollout.squeeze(0)
-                    yhat_rollout = yhat_rollout[:y.shape[0]] 
-                    y = y.squeeze(0)
-                    #y, yhat_rollout = y.squeeze(0), yhat_rollout.squeeze(0)
-                    unnorm_yhat = yhat_rollout * self.global_std + self.global_mean
-                    unnorm_y = y * self.global_std + self.global_mean
-                    
-                    #print("Rollout shape:", unnorm_yhat.shape)
-                    #print("Ground truth shape:", unnorm_y.shape)
-                    diff = unnorm_yhat - unnorm_y
-                    #print(diff.shape)
-                    #raise NotImplementedError("Temporary stop for debugging.")
-                    # Calculate the error for each timestep in the rollout
-                    for t in range(yhat_rollout.shape[0]):  
-                        diffslice = diff[t]
-                        yslice = unnorm_y[t]
+                    yfull = dataset.dataset.get_single_traj(trajs[i])
+                    yfull = yfull.cuda()
+                    for sample_idx in range(self.samples):
+                        y = yfull.clone()
+                        if self.trainer == "MTT":
+                            y = y.cuda()
+                            x = y.unsqueeze(0)[:,:self.cm.temporal_bundling]
+                            yhat_rollout = rollout_det(x, self.model, len(y) // self.cm.temporal_bundling + 1)
+                            #print(yhat_rollout.shape, y.shape)
+                        elif self.trainer == "FM":
+                            y = y.cuda()
+                            #print(y.shape)
+                            x = self._generate_prior(y[:,:,:self.cm.temporal_bundling])
+                            #print(x.shape)
+                            yhat_rollout = rollout_prb(x, self.model, int(np.ceil((y.shape[2] - self.ct.from_frame) / (self.cm.temporal_bundling - self.ct.from_frame))), 
+                                        self.ct.int_steps, self.ct.from_frame, noisetype=self.ct.noise_type,
+                                        sigma_time = self.ct.sigma_time if self.ct.noise_type == 'gaussiangaussian' else None, sigma_space = self.ct.sigma_space if self.ct.noise_type == 'gaussiangaussian' else None)
+                            #print(yhat_rollout.shape)
+                            #print("Rollout shape before permute:", yhat_rollout.shape)
+                            yhat_rollout, y = yhat_rollout.permute(0,2,1,3,4), y.permute(0,2,1,3,4)
+                            #print("Rollout shape after permute:", yhat_rollout.shape)
+                            #print(yhat_rollout.shape)
+                            #print(yhat_rollout.shape, y.shape)
+                            #raise NotImplementedError("Temporary stop for debugging.")
+                        else:
+                            raise ValueError("Trainer not recognized in rollout error calculation.")
+                        yhat_rollout, y = yhat_rollout.squeeze(0), y.squeeze(0)
+                        yhat_rollout = yhat_rollout[:y.shape[0]] 
                         
-                        se = (diffslice.pow(2)).sum().item()
-                        ae = diffslice.abs().sum().item()
-                        y2 = (yslice.pow(2)).sum().item()
-                        yabs = yslice.abs().sum().item()
-                        batch_rrmse = (se / y2) ** 0.5  
-                        batch_rae = (ae / yabs) 
-
-                        individual_rrmse_errors[t].append(batch_rrmse)
-                        individual_rae_errors[t].append(batch_rae)
-                        #print(individual_rrmse_errors)
-                if i % 5 == 0:
+                        #y, yhat_rollout = y.squeeze(0), yhat_rollout.squeeze(0)
+                        unnorm_yhat = yhat_rollout * self.global_std + self.global_mean
+                        unnorm_y = y * self.global_std + self.global_mean
+                        
+                        #print("Rollout shape:", unnorm_yhat.shape)
+                        #print("Ground truth shape:", unnorm_y.shape)
+                        diff = unnorm_yhat - unnorm_y
+                        #print(diff.shape)
+                        #raise NotImplementedError("Temporary stop for debugging.")
+                        # Calculate the error for each timestep in the rollout
+                        #print(yhat_rollout.shape)
+                        for t in range(yhat_rollout.shape[0]):  
+                            diffslice = diff[t]
+                            yslice = unnorm_y[t]
+                            
+                            se = (diffslice.pow(2)).sum().item()
+                            ae = diffslice.abs().sum().item()
+                            y2 = (yslice.pow(2)).sum().item()
+                            yabs = yslice.abs().sum().item()
+                            batch_rrmse = (se / y2) ** 0.5  
+                            batch_rae = (ae / yabs) 
+                            if self.trainer == "MTT":
+                                individual_rrmse_errors[t].append(batch_rrmse)
+                                individual_rae_errors[t].append(batch_rae)
+                            elif self.trainer == "FM":
+                                #print(t, i)
+                                individual_rrmse_errors[t][i].append(batch_rrmse)
+                                individual_rae_errors[t][i].append(batch_rae)
+                            #print(individual_rrmse_errors)
+                if i % 10 == 0:
                     print(f"Progress: {i}/{len(trajs)} trajectories", end="\r")
-                if i == 15:
-                    break
+                #if i == 1:
+                #    break
                     
-
+            #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
             save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ms_error/"
             os.makedirs(save_error_path, exist_ok=True)
 
@@ -507,8 +563,12 @@ class ModelValidation:
                 json.dump(individual_rae_errors, f, indent=2)
 
             # calculate the mean error per timestep
-            mean_rrmse_per_timestep = [np.mean(errors) for errors in individual_rrmse_errors]
-            mean_rae_per_timestep = [np.mean(errors) for errors in individual_rae_errors]
+            if self.trainer == "MTT":
+                mean_rrmse_per_timestep = [np.mean(errors) for errors in individual_rrmse_errors]
+                mean_rae_per_timestep = [np.mean(errors) for errors in individual_rae_errors]
+            elif self.trainer == "FM":
+                mean_rrmse_per_timestep = [np.mean([np.mean(individual_rrmse_errors[t][k]) for k in range(len(trajs))]) for t in range(timesteps)]
+                mean_rae_per_timestep = [np.mean([np.mean(individual_rae_errors[t][k]) for k in range(len(trajs))]) for t in range(timesteps)]
             # Save mean errors per timestep for this dataset
             mean_rrmse_file_path = save_error_path + "ms_error_" + self.cd.datasets[d]["name"] + ".txt"
             with open(mean_rrmse_file_path, "w") as f:
@@ -525,8 +585,8 @@ class ModelValidation:
         pass
 
 if __name__ == "__main__":
-    cb, cd, cm, ct, trainer, model_path, calc = read_command()
-    model_validation = ModelValidation(cb, cd, cm, ct, trainer, model_path)
+    cb, cd, cm, ct, trainer, model_path, calc, fm_samples, dsplit = read_command()
+    model_validation = ModelValidation(cb, cd, cm, ct, trainer, model_path, fm_samples, dsplit)
     if calc == "ss":
         model_validation.calculate_ss_error_per_dataset()
     elif calc == "ms":
