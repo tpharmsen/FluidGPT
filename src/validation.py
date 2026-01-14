@@ -28,13 +28,22 @@ import warnings
 """
 for surf:
 conda activate grad312
-python src/validation.py --trainer MTT --CB surf-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-semifinal-run-test
+python src/validation.py --trainer MTT --CB surf-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-semifinal-run-test 
 python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run-test
+ar: --model_path models/epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt
+fm: --model_path models/epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt
+
+python src/validation.py --trainer MTT --CB surf-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-semifinal-run-test --model_path models/epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt --calc 
+python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run-test --model_path models/epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --calc 
+
+
 
 for spike:
-python3 src/validation.py --trainer MTT --CB spike-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-val-b200 --model_path /data/fluidgpt/val_models/ar_epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt --calc ssms
+python3 src/validation.py --trainer MTT --CB spike-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-val-b200 --model_path /data/fluidgpt/val_models/ar_epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt --calc ssms 
+ar: --model_path /data/fluidgpt/val_models/ar_epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt
+fm: --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt
 
---model_path /data/fluidgpt/val_models/ar_epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt
+
 NOTES:
 screens when workspace!
 calculate only next frame error instead of next timeblock?
@@ -127,15 +136,8 @@ def read_command():
     if args.calc not in ["ss", "ssms", "ms", "spectra", "all"]:
         raise ValueError("Invalid calculation type specified. Choose from 'ss', 'ssms', 'ms', 'spectra', or 'all'.")
     
-
     return cb, cd, cm, ct, args.trainer, args.model_path, args.calc
 
-#raise NotImplementedError("Testing script not yet implemented.")
-
-# import data
-
-
-# load model
 
 class ModelValidation:
     def __init__(self, cb, cd, cm, ct, trainer, model_path):
@@ -156,8 +158,9 @@ class ModelValidation:
 
     def load_model(self):
         if self.cm.model_name == "FluidGPT":
-            from modelComp.FluidGPT_B import FluidGPT_B
-            self.model = FluidGPT_B(emb_dim=self.cm.emb_dim,
+            if self.trainer == "MTT":
+                from modelComp.FluidGPT_B import FluidGPT_B
+                self.model = FluidGPT_B(emb_dim=self.cm.emb_dim,
                             data_dim=[self.ct.batch_size, self.cm.temporal_bundling, self.cm.in_channels, self.cd.resample_shape, self.cd.resample_shape],
                             patch_size=(self.cm.patch_size, self.cm.patch_size),
                             hiddenout_dim=self.cm.hiddenout_dim,
@@ -169,7 +172,28 @@ class ModelValidation:
                             act=ACT_MAPPER[self.cm.act],
                             skip_connect=SKIPBLOCK_MAPPER[self.cm.skipblock],
                             gradient_flowthrough=self.cm.gradient_flowthrough,
+                            ).cuda()  
+            elif self.trainer == "FM":
+                from modelComp.FluidGPT_FM import FluidGPT_FM
+                self.model = FluidGPT_FM(emb_dim=self.cm.emb_dim,
+                            data_dim=[self.ct.batch_size, self.cm.temporal_bundling, self.cm.in_channels, self.cd.resample_shape, self.cd.resample_shape],
+                            embedder_type=self.cm.embedder_type,
+                            patch_size=(self.cm.patch_size, self.cm.patch_size),
+                            hiddenout_dim=self.cm.hiddenout_dim, 
+                            flowmatching_emb_dim=self.cm.flowmatching_emb_dim,
+                            depth=self.cm.depth,
+                            stage_depths=self.cm.stage_depths,
+                            num_heads=self.cm.num_heads,
+                            window_size=self.cm.window_size,
+                            use_flex_attn=self.cm.use_flex_attn,
+                            causal_attn=self.cm.causal_attn,
+                            act=ACT_MAPPER[self.cm.act],
+                            skip_connect=SKIPBLOCK_MAPPER[self.cm.skipblock],
+                            gradient_flowthrough=self.cm.gradient_flowthrough,
+                            enable_final_layer=self.cm.final_layer
                             ).cuda()
+            else:
+                raise ValueError("Trainer not recognized in model loading.")
         else:
             raise ValueError('MODEL NOT RECOGNIZED')   
         #self.model.load_state_dict(torch.load_state_dict(self.model_path))
@@ -314,28 +338,44 @@ class ModelValidation:
             individual_rrmse_errors = []
             individual_rae_errors = []
 
-            steps = self.ct.int_steps
+            if self.trainer == "FM":
+                steps = self.ct.int_steps
+            else:
+                steps = None
 
             with torch.no_grad():
-                for i, (x, y) in enumerate(dataloader):
+                for i, batch in enumerate(dataloader):
                     if self.trainer == "MTT":
+                        x, y = batch
                         x, y = x.cuda(), y.cuda()
                         yhat = self.model(x)
+                        #print(yhat.shape)
                     elif self.trainer == "FM":
+                        y = batch
                         y = y.cuda()
-                        print(y.shape)
+                        #print(y.shape)
                         yhat = self._generate_prior(y)
-                        print(yhat.shape)
-                        for i, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
+                        #print(yhat.shape)
+                        for _, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
                             pred = self.model(yhat.clone(), t.to(y.device).expand(yhat.size(0)))
-                            print(pred.shape)
+                            #print(pred.shape)
                             yhat = yhat.clone() + (1 / steps) * pred.clone()
-                        raise NotImplementedError("Temporary stop for debugging.")
+                        #raise NotImplementedError("Temporary stop for debugging.")
+                        
+                        y, yhat = y.permute(0,2,1,3,4), yhat.permute(0,2,1,3,4)
+                        #print(yhat.shape)
                     else:
                         raise ValueError("Trainer not recognized in ss error calculation.")
+                    yhat = yhat.squeeze(0)
+                    y = y.squeeze(0)
                     unnorm_yhat = yhat * self.global_std + self.global_mean
                     unnorm_y = y * self.global_std + self.global_mean
-                    diff = unnorm_yhat - unnorm_y
+                    if self.trainer == "MTT":
+                        diff = unnorm_yhat - unnorm_y
+                    elif self.trainer == "FM":
+                        diff = unnorm_yhat[self.ct.from_frame:] - unnorm_y[self.ct.from_frame:]
+                        unnorm_y = unnorm_y[self.ct.from_frame:]
+                    #print(diff.shape)
 
                     se_sum = diff.pow(2).sum().item()  
                     ae_sum = diff.abs().sum().item()  
@@ -355,8 +395,8 @@ class ModelValidation:
                     individual_rae_errors.append(relative_rae)
                     if i % 10 == 0:
                         print(f"Progress: {i}/{len(dataloader)} batches", end="\r")
-                    #if i == 220:
-                    #     break
+                    #if i == 10:
+                    #    break
             
 
             rrmse = (cumulative_se_sum / cumulative_y2_sum) ** 0.5  
@@ -405,25 +445,33 @@ class ModelValidation:
                         y = y.cuda()
                         x = y.unsqueeze(0)[:,:self.cm.temporal_bundling]
                         yhat_rollout = rollout_det(x, self.model, len(y) // self.cm.temporal_bundling + 1)
-                        yhat_rollout = yhat_rollout.squeeze(0)
-                        yhat_rollout = yhat_rollout[:y.shape[0]] 
-                    
+                        #print(yhat_rollout.shape, y.shape)
                     elif self.trainer == "FM":
                         y = y.cuda()
-                        print(y.shape)
-                        x = self._generate_prior(y.unsqueeze(0)[:,:self.cm.temporal_bundling])
-                        print(x.shape)
-                        yhat_rollout = rollout_prb(x, self.model, len(y), self.ct.int_steps)
-                        raise NotImplementedError("Temporary stop for debugging.")
+                        #print(y.shape)
+                        x = self._generate_prior(y[:,:,:self.cm.temporal_bundling])
+                        #print(x.shape)
+                        yhat_rollout = rollout_prb(x, self.model, int(np.ceil((y.shape[2] - self.ct.from_frame) / (self.cm.temporal_bundling - self.ct.from_frame))), 
+                                       self.ct.int_steps, self.ct.from_frame, noisetype=self.ct.noise_type,
+                                       sigma_time = self.ct.sigma_time if self.ct.noise_type == 'gaussiangaussian' else None, sigma_space = self.ct.sigma_space if self.ct.noise_type == 'gaussiangaussian' else None)
+                        #print(yhat_rollout.shape)
+                        yhat_rollout, y = yhat_rollout.permute(0,2,1,3,4), y.permute(0,2,1,3,4)
+                        #print(yhat_rollout.shape)
+                        #print(yhat_rollout.shape, y.shape)
+                        #raise NotImplementedError("Temporary stop for debugging.")
                     else:
                         raise ValueError("Trainer not recognized in rollout error calculation.")
-                
+                    yhat_rollout = yhat_rollout.squeeze(0)
+                    yhat_rollout = yhat_rollout[:y.shape[0]] 
+                    y = y.squeeze(0)
+                    #y, yhat_rollout = y.squeeze(0), yhat_rollout.squeeze(0)
                     unnorm_yhat = yhat_rollout * self.global_std + self.global_mean
                     unnorm_y = y * self.global_std + self.global_mean
                     
                     #print("Rollout shape:", unnorm_yhat.shape)
                     #print("Ground truth shape:", unnorm_y.shape)
                     diff = unnorm_yhat - unnorm_y
+                    #print(diff.shape)
                     #raise NotImplementedError("Temporary stop for debugging.")
                     # Calculate the error for each timestep in the rollout
                     for t in range(yhat_rollout.shape[0]):  
