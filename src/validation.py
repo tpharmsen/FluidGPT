@@ -127,7 +127,7 @@ def read_command():
     parser.add_argument("--out", type=str, default=None)
     parser.add_argument("--calc", type=str, required=True)
     parser.add_argument("--fm_samples", type=int)
-    parser.add_argument("--dsplit", type=int, required=True) 
+    parser.add_argument("--dsplit", type=int or list, required=True) 
     args = parser.parse_args()
 
     if os.path.exists("conf/base/" + args.CB + ".yaml"):
