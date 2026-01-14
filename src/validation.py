@@ -127,7 +127,7 @@ def read_command():
     parser.add_argument("--out", type=str, default=None)
     parser.add_argument("--calc", type=str, required=True)
     parser.add_argument("--fm_samples", type=int)
-    parser.add_argument("--dsplit", required=True) 
+    parser.add_argument("--dsplit", type=int, nargs='+', required=True) 
     args = parser.parse_args()
 
     if os.path.exists("conf/base/" + args.CB + ".yaml"):
@@ -160,8 +160,8 @@ def read_command():
         raise ValueError("For FM trainer, --fm_samples argument must be provided.")
     if args.dsplit == 0:
         raise ValueError("dsplit must be greater than 0.")
-    if not isinstance(args.dsplit, int) and not isinstance(args.dsplit, list):
-        raise ValueError("dsplit must be an integer or a list of integers.")
+    #if not isinstance(args.dsplit, int) and not isinstance(args.dsplit, list):
+    #    raise ValueError("dsplit must be an integer or a list of integers.")
     return cb, cd, cm, ct, args.trainer, args.model_path, args.calc, args.fm_samples, args.dsplit
 
 
@@ -175,6 +175,7 @@ class ModelValidation:
         self.model_path = model_path
         self.calc = calc
         self.samples = fm_samples
+        print(dsplit)
         self.dsplit = dsplit if isinstance(dsplit, list) else [dsplit]
         
         #self.ct.int_steps = 20  # for FM inference
