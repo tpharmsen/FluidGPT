@@ -36,8 +36,8 @@ fm: --model_path models/epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt
 python src/validation.py --trainer MTT --CB surf-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-semifinal-run-test --model_path models/epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt --calc 
 python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run-test --model_path models/epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --calc 
 
-python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll-s3 --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run-test3 --model_path models/epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 3 --calc ssms
-python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll-s3 --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run-test4 --model_path models/epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 3 --calc ssms
+python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run-test3 --model_path models/epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 3 --calc ssms
+python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run-test4 --model_path models/epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 3 --calc ssms
 
 
 
@@ -169,6 +169,9 @@ class ModelValidation:
         self.model_path = model_path
         self.samples = fm_samples
         self.dsplit = dsplit
+        self.batch_size = 64
+        
+        self.ct.int_steps = 20  # for FM inference
 
         self.init_modules()
 
@@ -323,7 +326,7 @@ class ModelValidation:
                
     def get_dataloader(self, dataset_idx):
         return DataLoader(self.val_datasets[dataset_idx],
-                batch_size=1, #int(self.ct.batch_size / 8), ################################################################### temporary
+                batch_size=self.batch_size, #1, #int(self.ct.batch_size / 8), ################################################################### temporary
                 shuffle=False, ###################################################################################3 also temporary
                 drop_last=False,
                 pin_memory=self.ct.pin_memory, 
@@ -353,12 +356,13 @@ class ModelValidation:
             if d + 1 != self.dsplit:
                 continue
             dataloader = self.get_dataloader(d)
+            traj_count = len(self.val_samplers[d].val_trajs)
             print(f"\nDataset: {self.cd.datasets[d]['name']}") 
             cumulative_se_sum = 0.0
             cumulative_ae_sum = 0.0
             cumulative_y2_sum = 0.0
             cumulative_yabs_sum = 0.0
-            total_elements = 0
+            #total_elements = 0
             
             if self.trainer == "MTT":
                 individual_rrmse_errors = []
@@ -366,8 +370,8 @@ class ModelValidation:
                 steps = None
                 self.samples = 1
             elif self.trainer == "FM":
-                individual_rrmse_errors = [[] for _ in range(len(dataloader))]
-                individual_rae_errors = [[] for _ in range(len(dataloader))]
+                individual_rrmse_errors = [[] for _ in range(traj_count)]
+                individual_rae_errors = [[] for _ in range(traj_count)]
                 steps = self.ct.int_steps
             else:
                 raise ValueError("Trainer not recognized in ss error calculation.")
@@ -381,8 +385,9 @@ class ModelValidation:
                             yhat = self.model(x)
                             #print(yhat.shape)
                         elif self.trainer == "FM":
-                            #torch.cuda.synchronize()
-                            #time_start = time.time()
+                            #print("y:", batch.shape)
+                            torch.cuda.synchronize()
+                            time_start = time.time()
                             y = batch.clone()
                             y = y.cuda()
                             #print(y.shape)
@@ -395,47 +400,71 @@ class ModelValidation:
                             #raise NotImplementedError("Temporary stop for debugging.")
                             
                             y, yhat = y.permute(0,2,1,3,4), yhat.permute(0,2,1,3,4)
-                            #torch.cuda.synchronize()
-                            #end_time = time.time()
-                            #print(f"FM inference time per batch: {end_time - time_start:.4f} seconds")
+                            torch.cuda.synchronize()
+                            end_time = time.time()
+                            print(f"FM inference time per batch: {end_time - time_start:.4f} seconds")
                             #print(yhat.shape)
                         else:
                             raise ValueError("Trainer not recognized in ss error calculation.")
-                        yhat = yhat.squeeze(0)
-                        y = y.squeeze(0)
+                        
+                        torch.cuda.synchronize()
+                        start_time = time.time()
+                        #yhat = yhat.squeeze(0)
+                        #y = y.squeeze(0)
                         unnorm_yhat = yhat * self.global_std + self.global_mean
                         unnorm_y = y * self.global_std + self.global_mean
                         if self.trainer == "MTT":
                             diff = unnorm_yhat - unnorm_y
                         elif self.trainer == "FM":
-                            diff = unnorm_yhat[self.ct.from_frame:] - unnorm_y[self.ct.from_frame:]
-                            unnorm_y = unnorm_y[self.ct.from_frame:]
+                            diff = unnorm_yhat[:,self.ct.from_frame:] - unnorm_y[:,self.ct.from_frame:]
+                            unnorm_y = unnorm_y[:,self.ct.from_frame:]
                         #print(diff.shape)
-
+                        """
                         se_sum = diff.pow(2).sum().item()  
                         ae_sum = diff.abs().sum().item()  
                         y2_sum = (unnorm_y.pow(2)).sum().item()
                         yabs_sum = unnorm_y.abs().sum().item()
-                        num_elements = y.numel()
+                        #num_elements = y.numel()
 
                         cumulative_se_sum += se_sum
                         cumulative_ae_sum += ae_sum
                         cumulative_y2_sum += y2_sum
                         cumulative_yabs_sum += yabs_sum
-                        total_elements += num_elements
-
-                        relative_rrmse = (se_sum / y2_sum) ** 0.5
+                        #total_elements += num_elements
+                        """
+                        #print("diff:", diff.shape)
+                        reduce_dims = tuple(range(1, diff.ndim))
+                        se_sum = diff.pow(2).sum(dim=reduce_dims)         
+                        ae_sum = diff.abs().sum(dim=reduce_dims)           
+                        y2_sum = unnorm_y.pow(2).sum(dim=reduce_dims)      
+                        yabs_sum = unnorm_y.abs().sum(dim=reduce_dims)
+                        #print(se_sum.shape, ae_sum.shape, y2_sum.shape, yabs_sum.shape)
+                        relative_rrmse = torch.sqrt(se_sum / y2_sum)
                         relative_rae = ae_sum / yabs_sum
+
+                        cumulative_se_sum += se_sum.sum().item()
+                        cumulative_ae_sum += ae_sum.sum().item()
+                        cumulative_y2_sum += y2_sum.sum().item()
+                        cumulative_yabs_sum += yabs_sum.sum().item()
+
                         if self.trainer == "MTT":
-                            individual_rrmse_errors.append(relative_rrmse)
-                            individual_rae_errors.append(relative_rae)
+                            for error in relative_rrmse.cpu().numpy().tolist():
+                                individual_rrmse_errors.append(error)
+                            for error in relative_rae.cpu().numpy().tolist():
+                                individual_rae_errors.append(error)
                         elif self.trainer == "FM":
-                            individual_rrmse_errors[i].append(relative_rrmse)
-                            individual_rae_errors[i].append(relative_rae)
+                            for h, error in enumerate(relative_rrmse.cpu().numpy().tolist()):
+
+                                individual_rrmse_errors[i * self.batch_size + h].append(error)
+                            for h, error in enumerate(relative_rae.cpu().numpy().tolist()):
+                                individual_rae_errors[i * self.batch_size + h].append(error)
+                        torch.cuda.synchronize()
+                        end_time = time.time()
+                        print(f"SS error calculation time for batch {i}, sample {sample_idx}: {end_time - start_time:.4f} seconds")
                     if i % 10 == 0:
                         print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}", end="\r")
-                    #if i == 10:
-                    #    break
+                    if i == 0:
+                        break
             
 
             rrmse = (cumulative_se_sum / cumulative_y2_sum) ** 0.5  
@@ -551,8 +580,8 @@ class ModelValidation:
                             #print(individual_rrmse_errors)
                 if i % 10 == 0:
                     print(f"Progress: {i}/{len(trajs)} trajectories, samplecount: {self.samples}", end="\r")
-                #if i == 1:
-                #    break
+                if i == 1:
+                    break
                     
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
             save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ms_error/"
