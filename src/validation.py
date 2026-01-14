@@ -381,6 +381,8 @@ class ModelValidation:
                             yhat = self.model(x)
                             #print(yhat.shape)
                         elif self.trainer == "FM":
+                            torch.synchronize()
+                            time_start = time.time()
                             y = batch.clone()
                             y = y.cuda()
                             #print(y.shape)
@@ -393,6 +395,9 @@ class ModelValidation:
                             #raise NotImplementedError("Temporary stop for debugging.")
                             
                             y, yhat = y.permute(0,2,1,3,4), yhat.permute(0,2,1,3,4)
+                            torch.synchronize()
+                            end_time = time.time()
+                            print(f"FM inference time per batch: {end_time - time_start:.4f} seconds")
                             #print(yhat.shape)
                         else:
                             raise ValueError("Trainer not recognized in ss error calculation.")
@@ -429,8 +434,8 @@ class ModelValidation:
                             individual_rae_errors[i].append(relative_rae)
                     if i % 10 == 0:
                         print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}", end="\r")
-                    if i == 10:
-                        break
+                    #if i == 10:
+                    #    break
             
 
             rrmse = (cumulative_se_sum / cumulative_y2_sum) ** 0.5  
