@@ -338,9 +338,9 @@ class ModelValidation:
             dataset = self.val_datasets[dataset_idx]
             dataset.dataset.fulltrajmode = False
         elif mode == 'ms':
-            if "B200" in torch.cuda.get_device_name() and self.dsplit not in [1,3]:
+            if "B200" in torch.cuda.get_device_name() and not (set(self.dsplit) & set([1,3])):
                 self.batch_size = 512
-            elif "B200" in torch.cuda.get_device_name() and self.dsplit in [1,3]:
+            elif "B200" in torch.cuda.get_device_name() and set(self.dsplit) & set([1,3]):
                 self.batch_size = 128
             else:
                 self.batch_size = 64
