@@ -14,7 +14,7 @@ prefetch_factor: 4
 strategy: "ddp"
 
 from_frame: 5
-int_steps: 25
+int_steps: 20
 noise_type: 'gaussiangaussian'  # options: 'puregaussian', 'checkerboard'
 sigma_time: 1.0 # original 3.0
 sigma_space: 4.0 # original 5.0
