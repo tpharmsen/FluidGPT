@@ -535,9 +535,9 @@ class ModelValidation:
 
                 torch.cuda.synchronize()
                 time_start = time.time()
-                with torch.no_grad():
+                for sample_idx in range(self.samples):
                     yfull = batch.cuda()
-                    for sample_idx in range(self.samples):
+                    with torch.no_grad():
                         y = yfull.clone()
                         if self.trainer == "MTT":
                             y = y.cuda()
@@ -595,11 +595,11 @@ class ModelValidation:
                                 for t in range(batch_rrmse.shape[1]): 
                                     individual_rrmse_errors[t][i * self.batch_size + b].append(batch_rrmse[b, t].item())
                                     individual_rae_errors[t][i * self.batch_size + b].append(batch_rae[b, t].item())
-                torch.cuda.synchronize()
-                end_time = time.time()
-                print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, Timer: {end_time - time_start:.4f} s")
-                #if i == 0:
-                #    break
+            torch.cuda.synchronize()
+            end_time = time.time()
+            print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, Timer: {end_time - time_start:.4f} s")
+            #if i == 0:
+            #    break
             
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
             save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ms_error/"
