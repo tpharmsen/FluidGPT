@@ -174,7 +174,7 @@ class ModelValidation:
         self.samples = fm_samples
         self.dsplit = dsplit
         
-        if "b200" in torch.cuda.get_device_name():
+        if "B200" in torch.cuda.get_device_name():
             self.batch_size = 512
         else:
             self.batch_size = 64
