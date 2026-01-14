@@ -395,8 +395,8 @@ class ModelValidation:
                 steps = None
                 self.samples = 1
             elif self.trainer == "FM":
-                individual_rrmse_errors = [list() for _ in range(len(traj_indices))]
-                individual_rae_errors = [list() for _ in range(len(traj_indices))]
+                individual_rrmse_errors = [list() for _ in range(traj_indices)]
+                individual_rae_errors = [list() for _ in range(traj_indices)]
                 steps = self.ct.int_steps
             else:
                 raise ValueError("Trainer not recognized in ss error calculation.")
