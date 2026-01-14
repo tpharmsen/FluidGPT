@@ -323,7 +323,7 @@ class ModelValidation:
                
     def get_dataloader(self, dataset_idx):
         return DataLoader(self.val_datasets[dataset_idx],
-                batch_size=128, #1, #int(self.ct.batch_size / 8), ################################################################### temporary
+                batch_size=1, #int(self.ct.batch_size / 8), ################################################################### temporary
                 shuffle=False, ###################################################################################3 also temporary
                 drop_last=False,
                 pin_memory=self.ct.pin_memory, 
@@ -381,8 +381,8 @@ class ModelValidation:
                             yhat = self.model(x)
                             #print(yhat.shape)
                         elif self.trainer == "FM":
-                            torch.cuda.synchronize()
-                            time_start = time.time()
+                            #torch.cuda.synchronize()
+                            #time_start = time.time()
                             y = batch.clone()
                             y = y.cuda()
                             #print(y.shape)
@@ -395,9 +395,9 @@ class ModelValidation:
                             #raise NotImplementedError("Temporary stop for debugging.")
                             
                             y, yhat = y.permute(0,2,1,3,4), yhat.permute(0,2,1,3,4)
-                            torch.cuda.synchronize()
-                            end_time = time.time()
-                            print(f"FM inference time per batch: {end_time - time_start:.4f} seconds")
+                            #torch.cuda.synchronize()
+                            #end_time = time.time()
+                            #print(f"FM inference time per batch: {end_time - time_start:.4f} seconds")
                             #print(yhat.shape)
                         else:
                             raise ValueError("Trainer not recognized in ss error calculation.")
