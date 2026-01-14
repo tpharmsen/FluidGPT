@@ -460,7 +460,6 @@ class ModelValidation:
                                 individual_rae_errors.append(error)
                         elif self.trainer == "FM":
                             for h, error in enumerate(relative_rrmse.cpu().numpy().tolist()):
-
                                 individual_rrmse_errors[i * self.batch_size + h].append(error)
                             for h, error in enumerate(relative_rae.cpu().numpy().tolist()):
                                 individual_rae_errors[i * self.batch_size + h].append(error)
@@ -468,7 +467,7 @@ class ModelValidation:
                         #end_time = time.time()
                         #print(f"SS error calculation time for batch {i}, sample {sample_idx}: {end_time - start_time:.4f} seconds")
                     print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}", end="\r")
-                    if i == 5:
+                    if i == 0:
                         break
             
 
@@ -523,6 +522,8 @@ class ModelValidation:
 
             for i, batch in enumerate(dataloader):
                 with torch.no_grad():
+                    torch.cuda.synchronize()
+                    time_start = time.time()
                     yfull = batch.cuda()
                     for sample_idx in range(self.samples):
                         y = yfull.clone()
@@ -582,7 +583,9 @@ class ModelValidation:
                                 for t in range(batch_rrmse.shape[1]): 
                                     individual_rrmse_errors[t][i * self.batch_size + b].append(batch_rrmse[b, t].item())
                                     individual_rae_errors[t][i * self.batch_size + b].append(batch_rae[b, t].item())
-                        
+                    torch.cuda.synchronize()
+                    end_time = time.time()
+                    print(f"Timer for batch {i}, sample {sample_idx}: {end_time - time_start:.4f} seconds")   
                 print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}", end="\r")
                 if i == 1:
                     break
