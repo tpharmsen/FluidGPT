@@ -49,7 +49,7 @@ python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --C
 fm-val-b200-0 
 
 spike testing
-python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out test --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --dsplit 4 --fm_samples 16 --calc ss
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out test --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --dsplit 1 --fm_samples 1 --calc ss
 
 
 python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ss --dsplit 1
@@ -164,21 +164,16 @@ def read_command():
 
 
 class ModelValidation:
-    def __init__(self, cb, cd, cm, ct, trainer, model_path, fm_samples=1, dsplit=0):
+    def __init__(self, cb, cd, cm, ct, trainer, model_path, calc, fm_samples=1, dsplit=0):
         self.cb = cb
         self.cd = cd
         self.cm = cm
         self.ct = ct
         self.trainer = trainer
         self.model_path = model_path
+        self.calc = calc
         self.samples = fm_samples
         self.dsplit = dsplit
-        
-        if "B200" in torch.cuda.get_device_name():
-            self.batch_size = 512
-        else:
-            self.batch_size = 64
-        print("Using device:", torch.cuda.get_device_name(), "with batch size", self.batch_size)
         
         #self.ct.int_steps = 20  # for FM inference
 
@@ -338,13 +333,21 @@ class ModelValidation:
                
     def get_dataloader(self, dataset_idx, mode='ss'):
         if mode == 'ss':
+            self.batch_size = 512 if "B200" in torch.cuda.get_device_name() else 64
             dataset = self.val_datasets[dataset_idx]
             dataset.dataset.fulltrajmode = False
         elif mode == 'ms':
+            if "B200" in torch.cuda.get_device_name() and self.dsplit not in [1,3]:
+                self.batch_size = 512
+            elif "B200" in torch.cuda.get_device_name() and self.dsplit in [1,3]:
+                self.batch_size = 128
+            else:
+                self.batch_size = 64
             dataset = self.valtraj_datasets[dataset_idx]
             dataset.dataset.fulltrajmode = True
         else:
             raise ValueError("Mode not recognized in dataloader.")
+        print("Using device:", torch.cuda.get_device_name(), "with batch size", self.batch_size)
         return DataLoader(dataset,
                 batch_size=self.batch_size, #1, #int(self.ct.batch_size / 8), ################################################################### temporary
                 shuffle=False, ###################################################################################3 also temporary
@@ -641,7 +644,7 @@ class ModelValidation:
 
 if __name__ == "__main__":
     cb, cd, cm, ct, trainer, model_path, calc, fm_samples, dsplit = read_command()
-    model_validation = ModelValidation(cb, cd, cm, ct, trainer, model_path, fm_samples, dsplit)
+    model_validation = ModelValidation(cb, cd, cm, ct, trainer, model_path, calc, fm_samples, dsplit)
     if calc == "ss":
         code = model_validation.calculate_ss_error_per_dataset()
         if code: print("SS Success") 
