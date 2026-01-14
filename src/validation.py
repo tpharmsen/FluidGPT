@@ -477,10 +477,10 @@ class ModelValidation:
                 #print()
                 torch.cuda.synchronize()
                 end_time = time.time()
-                print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, timer: {end_time - time_start:.4f} s")
+                print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, timer: {end_time - time_start:.4f} s", flush=True)
                 #print()
-                if i == 5:
-                    break
+                #if i == 5:
+                #    break
     
             rrmse = (cumulative_se_sum / cumulative_y2_sum) ** 0.5  
             rae = cumulative_ae_sum / cumulative_yabs_sum 
@@ -598,7 +598,7 @@ class ModelValidation:
                                     individual_rae_errors[t][i * self.batch_size + b].append(batch_rae[b, t].item())
             torch.cuda.synchronize()
             end_time = time.time()
-            print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, Timer: {end_time - time_start:.4f} s")
+            print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, Timer: {end_time - time_start:.4f} s", flush=True)
             #if i == 0:
             #    break
             
