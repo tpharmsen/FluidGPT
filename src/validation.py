@@ -478,8 +478,8 @@ class ModelValidation:
                     end_time = time.time()
                     print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, timer: {end_time - time_start:.4f} seconds", end="\r")
                     #print()
-                    if i == 0:
-                        break
+                    #if i == 0:
+                    #    break
     
             rrmse = (cumulative_se_sum / cumulative_y2_sum) ** 0.5  
             rae = cumulative_ae_sum / cumulative_yabs_sum 
@@ -598,8 +598,8 @@ class ModelValidation:
                 torch.cuda.synchronize()
                 end_time = time.time()
                 print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, Timer: {end_time - time_start:.4f} seconds", end="\r")
-                if i == 0:
-                    break
+                #if i == 0:
+                #    break
             
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
             save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ms_error/"
