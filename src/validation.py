@@ -323,7 +323,7 @@ class ModelValidation:
                
     def get_dataloader(self, dataset_idx):
         return DataLoader(self.val_datasets[dataset_idx],
-                batch_size=1, #int(self.ct.batch_size / 8), ################################################################### temporary
+                batch_size=128, #1, #int(self.ct.batch_size / 8), ################################################################### temporary
                 shuffle=False, ###################################################################################3 also temporary
                 drop_last=False,
                 pin_memory=self.ct.pin_memory, 
