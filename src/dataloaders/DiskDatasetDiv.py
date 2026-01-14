@@ -6,9 +6,10 @@ from pathlib import Path
 from dataloaders.utils import spatial_resample
 
 class DiskDatasetDiv(Dataset):
-    def __init__(self, preproc_path, temporal_bundling = 1, forward_steps = 1):
+    def __init__(self, preproc_path, temporal_bundling = 1, forward_steps = 1, fulltrajmode=False):
         self.filepath = preproc_path
         self._file = None
+        self.fulltrajmode = fulltrajmode
         # If the file ends with .h5, remove it
         if self.filepath.endswith('.h5'):
             self.filepath = self.filepath[:-3]
@@ -46,22 +47,24 @@ class DiskDatasetDiv(Dataset):
         return self.traj * self.lenpertraj
 
     def __getitem__(self, idx):
-        
-        #f = self._get_file()
-        traj_idx = idx // self.lenpertraj
-        ts_idx = idx % self.lenpertraj
-        filename = self.filepath
-        # if ends with .h5, remove it
-        filename = Path(filename)
-        filename = filename / f'traj{traj_idx:05d}.h5'
-        with h5py.File(filename, 'r') as f:
-            front = f['data'][ts_idx : ts_idx + self.idx_window : self.dt]
-            label = f['data'][ts_idx + self.fs * self.idx_window : ts_idx + (self.fs + 1) * self.idx_window : self.dt]
-        if self.avgnorm is not None:
-            #print('normalising\n')
-            front = (front - self.avgnorm) / self.stdnorm
-            label = (label - self.avgnorm) / self.stdnorm
-        return torch.tensor(front, dtype=torch.float32), torch.tensor(label, dtype=torch.float32)
+        if not self.fulltrajmode:
+            #f = self._get_file()
+            traj_idx = idx // self.lenpertraj
+            ts_idx = idx % self.lenpertraj
+            filename = self.filepath
+            # if ends with .h5, remove it
+            filename = Path(filename)
+            filename = filename / f'traj{traj_idx:05d}.h5'
+            with h5py.File(filename, 'r') as f:
+                front = f['data'][ts_idx : ts_idx + self.idx_window : self.dt]
+                label = f['data'][ts_idx + self.fs * self.idx_window : ts_idx + (self.fs + 1) * self.idx_window : self.dt]
+            if self.avgnorm is not None:
+                #print('normalising\n')
+                front = (front - self.avgnorm) / self.stdnorm
+                label = (label - self.avgnorm) / self.stdnorm
+            return torch.tensor(front, dtype=torch.float32), torch.tensor(label, dtype=torch.float32)
+        else:
+            return self.get_single_traj(idx)
     """
     def __del__(self):
         if self._file is not None:

@@ -171,7 +171,7 @@ class ModelValidation:
         self.dsplit = dsplit
         self.batch_size = 64
         
-        self.ct.int_steps = 20  # for FM inference
+        #self.ct.int_steps = 20  # for FM inference
 
         self.init_modules()
 
@@ -243,19 +243,21 @@ class ModelValidation:
         # assume preprocessing has already been done !
         
         self.val_datasets = []
+        self.valtraj_datasets = []
         self.val_samplers = []
         self.val_loaders = []
+        self.valtraj_loaders = []
 
         means, stds, sizes = [], [], []
                 
         for item in self.cd.datasets:
             preproc_savepath = str(self.cb.data_base + 'preproc_' + item["name"])
             if self.trainer == "MTT":
-                dataset_SS = DiskDatasetDiv(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=1)
+                dataset_SS = DiskDatasetDiv(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=1, fulltrajmode=False)
             #dataset_FS = DiskDatasetDiv(preproc_savepath, temporal_bundling=self.cm.temporal_bundling, forward_steps=self.ct.forward_steps_loss)
             elif self.trainer == "FM":
                 dataset_SS = DiskDatasetDivFM(preproc_savepath, temporal_bundling=self.cm.temporal_bundling,
-                noisetype=self.ct.noise_type, from_frame=self.ct.from_frame, sigma_time=self.ct.sigma_time if self.ct.noise_type == 'gaussiangaussian' else None,
+                noisetype=self.ct.noise_type, from_frame=self.ct.from_frame, fulltrajmode=False, sigma_time=self.ct.sigma_time if self.ct.noise_type == 'gaussiangaussian' else None,
                 sigma_space=self.ct.sigma_space if self.ct.noise_type == 'gaussiangaussian' else None
                 )
             else:
@@ -271,6 +273,7 @@ class ModelValidation:
 
             #self.train_datasets.append(Subset(dataset_SS, train_sampler.indices))
             self.val_datasets.append(Subset(dataset_SS, val_sampler.indices))
+            self.valtraj_datasets.append(Subset(dataset_SS, val_sampler.val_trajs))
             #self.val_forward_datasets.append(Subset(dataset_FS, val_forward_sampler.indices))
             #self.train_samplers.append(train_sampler)
             self.val_samplers.append(val_sampler)
@@ -314,7 +317,7 @@ class ModelValidation:
         self.global_mean = np.sum(sizes * means) / np.sum(sizes)
         self.global_std = np.sqrt(np.sum(sizes * (stds**2 + (means - self.global_mean)**2)) / np.sum(sizes))
         if self.ct.normalize:
-            for dataset_list in [self.val_datasets]: #, self.val_forward_datasets]:
+            for dataset_list in [self.val_datasets, self.valtraj_datasets]: #, self.val_forward_datasets]:
                 for subset in dataset_list:
                     subset.dataset.avgnorm = self.global_mean
                     subset.dataset.stdnorm = self.global_std
@@ -324,8 +327,16 @@ class ModelValidation:
         #self.val_forward_dataset = ConcatDataset(self.val_forward_datasets)
         print("datasets ready.")
                
-    def get_dataloader(self, dataset_idx):
-        return DataLoader(self.val_datasets[dataset_idx],
+    def get_dataloader(self, dataset_idx, mode='ss'):
+        if mode == 'ss':
+            dataset = self.val_datasets[dataset_idx]
+            dataset.dataset.fulltrajmode = False
+        elif mode == 'ms':
+            dataset = self.valtraj_datasets[dataset_idx]
+            dataset.dataset.fulltrajmode = True
+        else:
+            raise ValueError("Mode not recognized in dataloader.")
+        return DataLoader(dataset,
                 batch_size=self.batch_size, #1, #int(self.ct.batch_size / 8), ################################################################### temporary
                 shuffle=False, ###################################################################################3 also temporary
                 drop_last=False,
@@ -353,9 +364,9 @@ class ModelValidation:
         self.model.eval()
 
         for d, dataset in enumerate(self.val_datasets):
-            if d + 1 != self.dsplit:
+            if self.dsplit and d + 1 != self.dsplit:
                 continue
-            dataloader = self.get_dataloader(d)
+            dataloader = self.get_dataloader(d, mode='ss')
             traj_count = len(self.val_samplers[d].val_trajs)
             print(f"\nDataset: {self.cd.datasets[d]['name']}") 
             cumulative_se_sum = 0.0
@@ -386,8 +397,8 @@ class ModelValidation:
                             #print(yhat.shape)
                         elif self.trainer == "FM":
                             #print("y:", batch.shape)
-                            torch.cuda.synchronize()
-                            time_start = time.time()
+                            #torch.cuda.synchronize()
+                            #time_start = time.time()
                             y = batch.clone()
                             y = y.cuda()
                             #print(y.shape)
@@ -400,15 +411,15 @@ class ModelValidation:
                             #raise NotImplementedError("Temporary stop for debugging.")
                             
                             y, yhat = y.permute(0,2,1,3,4), yhat.permute(0,2,1,3,4)
-                            torch.cuda.synchronize()
-                            end_time = time.time()
-                            print(f"FM inference time per batch: {end_time - time_start:.4f} seconds")
+                            #torch.cuda.synchronize()
+                            #end_time = time.time()
+                            #print(f"FM inference time per batch: {end_time - time_start:.4f} seconds")
                             #print(yhat.shape)
                         else:
                             raise ValueError("Trainer not recognized in ss error calculation.")
                         
-                        torch.cuda.synchronize()
-                        start_time = time.time()
+                        #torch.cuda.synchronize()
+                        #start_time = time.time()
                         #yhat = yhat.squeeze(0)
                         #y = y.squeeze(0)
                         unnorm_yhat = yhat * self.global_std + self.global_mean
@@ -418,21 +429,7 @@ class ModelValidation:
                         elif self.trainer == "FM":
                             diff = unnorm_yhat[:,self.ct.from_frame:] - unnorm_y[:,self.ct.from_frame:]
                             unnorm_y = unnorm_y[:,self.ct.from_frame:]
-                        #print(diff.shape)
-                        """
-                        se_sum = diff.pow(2).sum().item()  
-                        ae_sum = diff.abs().sum().item()  
-                        y2_sum = (unnorm_y.pow(2)).sum().item()
-                        yabs_sum = unnorm_y.abs().sum().item()
-                        #num_elements = y.numel()
 
-                        cumulative_se_sum += se_sum
-                        cumulative_ae_sum += ae_sum
-                        cumulative_y2_sum += y2_sum
-                        cumulative_yabs_sum += yabs_sum
-                        #total_elements += num_elements
-                        """
-                        #print("diff:", diff.shape)
                         reduce_dims = tuple(range(1, diff.ndim))
                         se_sum = diff.pow(2).sum(dim=reduce_dims)         
                         ae_sum = diff.abs().sum(dim=reduce_dims)           
@@ -458,12 +455,11 @@ class ModelValidation:
                                 individual_rrmse_errors[i * self.batch_size + h].append(error)
                             for h, error in enumerate(relative_rae.cpu().numpy().tolist()):
                                 individual_rae_errors[i * self.batch_size + h].append(error)
-                        torch.cuda.synchronize()
-                        end_time = time.time()
-                        print(f"SS error calculation time for batch {i}, sample {sample_idx}: {end_time - start_time:.4f} seconds")
-                    if i % 10 == 0:
-                        print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}", end="\r")
-                    if i == 0:
+                        #torch.cuda.synchronize()
+                        #end_time = time.time()
+                        #print(f"SS error calculation time for batch {i}, sample {sample_idx}: {end_time - start_time:.4f} seconds")
+                    print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}", end="\r")
+                    if i == 5:
                         break
             
 
@@ -496,42 +492,43 @@ class ModelValidation:
         # Get indices for each dataset
         self.model.eval()
 
-        for d, dataset in enumerate(self.val_datasets):
-            if d + 1 != self.dsplit:
+        for d, dataset in enumerate(self.valtraj_datasets):
+            if self.dsplit and d + 1 != self.dsplit:
                 continue
             print(f"\nDataset: {self.cd.datasets[d]['name']}") 
             trajs = self.val_samplers[d].val_trajs
             #print(trajs[:10])
-            ytest = dataset.dataset.get_single_traj(trajs[0])
+            timesteps = dataset.dataset.ts
+            dataloader = self.get_dataloader(d, mode='ms')
             #print(ytest.shape)
             # Lists to store errors for each timestep
             if self.trainer == "MTT":
                 self.samples = 1
-                timesteps = ytest.shape[0]
                 #print("Timesteps:", timesteps)
                 individual_rrmse_errors = [list() for _ in range(timesteps)]
                 individual_rae_errors = [list() for _ in range(timesteps)]
             elif self.trainer == "FM":
-                timesteps = ytest.shape[2]
                 individual_rae_errors = [list( list() for k in range(len(trajs))) for _ in range(timesteps)]
                 individual_rrmse_errors = [list( list() for k in range(len(trajs))) for _ in range(timesteps)]
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
 
-            for i in range(len(trajs)):
-                #print(i)
+            for i, batch in enumerate(dataloader):
                 with torch.no_grad():
-                    yfull = dataset.dataset.get_single_traj(trajs[i])
-                    yfull = yfull.cuda()
+                    yfull = batch.cuda()
                     for sample_idx in range(self.samples):
                         y = yfull.clone()
                         if self.trainer == "MTT":
                             y = y.cuda()
-                            x = y.unsqueeze(0)[:,:self.cm.temporal_bundling]
+                            print("y shape:", y.shape)
+                            x = y[:,:self.cm.temporal_bundling]
                             yhat_rollout = rollout_det(x, self.model, len(y) // self.cm.temporal_bundling + 1)
                             #print(yhat_rollout.shape, y.shape)
                         elif self.trainer == "FM":
                             y = y.cuda()
+                            y = y.squeeze(1)
                             #print(y.shape)
+
+                            #print("y shape:", y.shape)
                             x = self._generate_prior(y[:,:,:self.cm.temporal_bundling])
                             #print(x.shape)
                             yhat_rollout = rollout_prb(x, self.model, int(np.ceil((y.shape[2] - self.ct.from_frame) / (self.cm.temporal_bundling - self.ct.from_frame))), 
@@ -540,14 +537,15 @@ class ModelValidation:
                             #print(yhat_rollout.shape)
                             #print("Rollout shape before permute:", yhat_rollout.shape)
                             yhat_rollout, y = yhat_rollout.permute(0,2,1,3,4), y.permute(0,2,1,3,4)
+                            #print("yhat_rollout shape after permute:", yhat_rollout.shape)
+                            #print("y shape after permute:", y.shape)
                             #print("Rollout shape after permute:", yhat_rollout.shape)
                             #print(yhat_rollout.shape)
                             #print(yhat_rollout.shape, y.shape)
                             #raise NotImplementedError("Temporary stop for debugging.")
                         else:
                             raise ValueError("Trainer not recognized in rollout error calculation.")
-                        yhat_rollout, y = yhat_rollout.squeeze(0), y.squeeze(0)
-                        yhat_rollout = yhat_rollout[:y.shape[0]] 
+                        yhat_rollout = yhat_rollout[:, :y.shape[1]] 
                         
                         #y, yhat_rollout = y.squeeze(0), yhat_rollout.squeeze(0)
                         unnorm_yhat = yhat_rollout * self.global_std + self.global_mean
@@ -560,29 +558,32 @@ class ModelValidation:
                         #raise NotImplementedError("Temporary stop for debugging.")
                         # Calculate the error for each timestep in the rollout
                         #print(yhat_rollout.shape)
-                        for t in range(yhat_rollout.shape[0]):  
-                            diffslice = diff[t]
-                            yslice = unnorm_y[t]
-                            
-                            se = (diffslice.pow(2)).sum().item()
-                            ae = diffslice.abs().sum().item()
-                            y2 = (yslice.pow(2)).sum().item()
-                            yabs = yslice.abs().sum().item()
-                            batch_rrmse = (se / y2) ** 0.5  
-                            batch_rae = (ae / yabs) 
-                            if self.trainer == "MTT":
-                                individual_rrmse_errors[t].append(batch_rrmse)
-                                individual_rae_errors[t].append(batch_rae)
-                            elif self.trainer == "FM":
-                                #print(t, i)
-                                individual_rrmse_errors[t][i].append(batch_rrmse)
-                                individual_rae_errors[t][i].append(batch_rae)
-                            #print(individual_rrmse_errors)
-                if i % 10 == 0:
-                    print(f"Progress: {i}/{len(trajs)} trajectories, samplecount: {self.samples}", end="\r")
+                        reduce_dims = tuple(range(2, diff.ndim)) # reduce over all but batch and time
+                        se_sum = diff.pow(2).sum(dim=reduce_dims)         
+                        ae_sum = diff.abs().sum(dim=reduce_dims)           
+                        y2_sum = unnorm_y.pow(2).sum(dim=reduce_dims)      
+                        yabs_sum = unnorm_y.abs().sum(dim=reduce_dims)
+
+                        batch_rrmse = torch.sqrt(se_sum / y2_sum)
+                        batch_rae = ae_sum / yabs_sum
+                        #print("Batch RRMSE shape:", batch_rrmse.shape)
+                        #raise NotImplementedError("Temporary stop for debugging.")
+                        
+                        if self.trainer == "MTT": 
+                            for b in range(batch_rrmse.shape[0]): 
+                                for t in range(batch_rrmse.shape[1]): 
+                                    individual_rrmse_errors[t].append(batch_rrmse[b, t].item())
+                                    individual_rae_errors[t].append(batch_rae[b, t].item())
+                        elif self.trainer == "FM": 
+                            for b in range(batch_rrmse.shape[0]): 
+                                for t in range(batch_rrmse.shape[1]): 
+                                    individual_rrmse_errors[t][i * self.batch_size + b].append(batch_rrmse[b, t].item())
+                                    individual_rae_errors[t][i * self.batch_size + b].append(batch_rae[b, t].item())
+                        
+                print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}", end="\r")
                 if i == 1:
                     break
-                    
+            
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
             save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ms_error/"
             os.makedirs(save_error_path, exist_ok=True)
@@ -612,6 +613,8 @@ class ModelValidation:
                     f.write(f"Timestep {t}: Avg Relative AE: {error}\n")
             print()
             print(f"MS error {self.cd.datasets[d]['name']} calculation done.")
+        del individual_rrmse_errors
+        del individual_rae_errors
         return 1
 
     def calculate_spectra_plots_per_dataset(self):
