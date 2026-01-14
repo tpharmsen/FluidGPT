@@ -6,7 +6,7 @@ set +a
 
 MULTIPLIER=${1:-1}
 CONTAINER_NAME=${2:-fluidgpt-clitest}
-COMMAND_ARGS=${3:-"--trainer FM --CB spike-high --CD spike-gauss --CM fm-test-B --CT fm-b200-doublegauss5 --out ${CONTAINER_NAME}"}
+COMMAND_ARGS=${3:-"--trainer FM --CB spike-high --CD spike-gauss --CM fm-test-B --CT fm-b200-doublegauss5 --out test"}
 
 CPU_CORE_REQUEST=$((4 * MULTIPLIER))
 CPU_CORE_LIMIT=$((25 * MULTIPLIER))
