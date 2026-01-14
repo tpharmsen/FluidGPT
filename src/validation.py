@@ -381,7 +381,7 @@ class ModelValidation:
             if d + 1 not in self.dsplit:
                 continue
             dataloader = self.get_dataloader(d, mode='ss')
-            traj_count = len(self.val_samplers[d].val_trajs)
+            traj_indices = len(self.val_samplers[d].indices)
             print(f"\nDataset: {self.cd.datasets[d]['name']}") 
             cumulative_se_sum = 0.0
             cumulative_ae_sum = 0.0
@@ -395,8 +395,8 @@ class ModelValidation:
                 steps = None
                 self.samples = 1
             elif self.trainer == "FM":
-                individual_rrmse_errors = [[] for _ in range(traj_count)]
-                individual_rae_errors = [[] for _ in range(traj_count)]
+                individual_rrmse_errors = [[] for _ in range(len(traj_indices))]
+                individual_rae_errors = [[] for _ in range(len(traj_indices))]
                 steps = self.ct.int_steps
             else:
                 raise ValueError("Trainer not recognized in ss error calculation.")
