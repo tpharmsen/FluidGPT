@@ -388,6 +388,7 @@ class ModelValidation:
             cumulative_ae_sum = 0.0
             cumulative_y2_sum = 0.0
             cumulative_yabs_sum = 0.0
+            continue
             #total_elements = 0
             
             if self.trainer == "MTT":
