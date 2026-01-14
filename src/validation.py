@@ -397,6 +397,8 @@ class ModelValidation:
                 raise ValueError("Trainer not recognized in ss error calculation.")
 
             with torch.no_grad():
+                torch.cuda.synchronize()
+                time_start = time.time()
                 for i, batch in enumerate(dataloader):
                     for sample_idx in range(self.samples):
                         if self.trainer == "MTT":
@@ -466,9 +468,15 @@ class ModelValidation:
                         #torch.cuda.synchronize()
                         #end_time = time.time()
                         #print(f"SS error calculation time for batch {i}, sample {sample_idx}: {end_time - start_time:.4f} seconds")
+                    print()
                     print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}", end="\r")
+                    print()
                     if i == 0:
                         break
+                torch.cuda.synchronize()
+                end_time = time.time()
+                print(f"\nTimer {self.cd.datasets[d]['name']}: {end_time - time_start:.4f} seconds")
+
             
 
             rrmse = (cumulative_se_sum / cumulative_y2_sum) ** 0.5  
@@ -585,9 +593,11 @@ class ModelValidation:
                                     individual_rae_errors[t][i * self.batch_size + b].append(batch_rae[b, t].item())
                     torch.cuda.synchronize()
                     end_time = time.time()
+                    print()
                     print(f"Timer for batch {i}, sample {sample_idx}: {end_time - time_start:.4f} seconds")   
+                    print()
                 print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}", end="\r")
-                if i == 1:
+                if i == 0:
                     break
             
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
