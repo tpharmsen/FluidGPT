@@ -175,7 +175,7 @@ class ModelValidation:
         self.dsplit = dsplit
         
         if "B200" in torch.cuda.get_device_name():
-            self.batch_size = 1024
+            self.batch_size = 512
         else:
             self.batch_size = 64
         print("Using device:", torch.cuda.get_device_name(), "with batch size", self.batch_size)
