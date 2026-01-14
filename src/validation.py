@@ -476,7 +476,7 @@ class ModelValidation:
                     #print()
                     torch.cuda.synchronize()
                     end_time = time.time()
-                    print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, timer: {end_time - time_start:.4f} seconds", end="\r")
+                    print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, timer: {end_time - time_start:.4f} s")
                     #print()
                     #if i == 0:
                     #    break
@@ -597,7 +597,7 @@ class ModelValidation:
                                     individual_rae_errors[t][i * self.batch_size + b].append(batch_rae[b, t].item())
                 torch.cuda.synchronize()
                 end_time = time.time()
-                print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, Timer: {end_time - time_start:.4f} seconds", end="\r")
+                print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, Timer: {end_time - time_start:.4f} s")
                 #if i == 0:
                 #    break
             
