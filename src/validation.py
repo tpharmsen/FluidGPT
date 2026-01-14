@@ -173,7 +173,7 @@ class ModelValidation:
         self.model_path = model_path
         self.calc = calc
         self.samples = fm_samples
-        self.dsplit = dsplit
+        self.dsplit = dsplit if isinstance(dsplit, list) else [dsplit]
         
         #self.ct.int_steps = 20  # for FM inference
 
@@ -376,7 +376,7 @@ class ModelValidation:
         self.model.eval()
 
         for d, dataset in enumerate(self.val_datasets):
-            if self.dsplit and d + 1 != self.dsplit:
+            if d + 1 not in self.dsplit:
                 continue
             dataloader = self.get_dataloader(d, mode='ss')
             traj_count = len(self.val_samplers[d].val_trajs)
@@ -514,7 +514,7 @@ class ModelValidation:
         self.model.eval()
 
         for d, dataset in enumerate(self.valtraj_datasets):
-            if self.dsplit and d + 1 != self.dsplit:
+            if d + 1 not in self.dsplit:
                 continue
             print(f"\nDataset: {self.cd.datasets[d]['name']}") 
             trajs = self.val_samplers[d].val_trajs
