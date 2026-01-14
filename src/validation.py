@@ -395,7 +395,7 @@ class ModelValidation:
                     individual_rae_errors.append(relative_rae)
                     if i % 10 == 0:
                         print(f"Progress: {i}/{len(dataloader)} batches", end="\r")
-                    if i == 100:
+                    if i == 40:
                         break
             
 
@@ -490,7 +490,7 @@ class ModelValidation:
                         #print(individual_rrmse_errors)
                 if i % 5 == 0:
                     print(f"Progress: {i}/{len(trajs)} trajectories", end="\r")
-                if i == 25:
+                if i == 15:
                     break
                     
 
