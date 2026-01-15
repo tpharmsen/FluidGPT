@@ -634,10 +634,222 @@ class ModelValidation:
         del individual_rrmse_errors
         del individual_rae_errors
         return 1
+    
+    def calc_spectra(self, stacked_pred, dataset_name):
+        """
+        stacked_pred: [B, T, 2, Nx, Ny]
+        """
+        B, T, _, Nx, Ny = stacked_pred.shape
+
+        t1 = 5
+        t2 = 20
+        
+        u0 = stacked_pred[:, t1, 0]
+        v0 = stacked_pred[:, t1, 1]
+        
+        u1 = stacked_pred[:, t2, 0]
+        v1 = stacked_pred[:, t2, 1]
+
+        k0, E0, Z0 = self.calc_spectra2(u0, v0, dataset_name)
+        k1, E1, Z1 = self.calc_spectra2(u1, v1, dataset_name)
+        
+        if dataset_name == "pdebench-incomp" or dataset_name == "amira":
+            t3 = T - 1
+            u2 = stacked_pred[:, t3, 0]
+            v2 = stacked_pred[:, t3, 1]
+            k2, E2, Z2 = self.calc_spectra2(u2, v2, dataset_name)
+
+        return (k0, E0, Z0), (k1, E1, Z1), (k2, E2, Z2) if dataset_name == "pdebench-incomp" or dataset_name == "amira" else (k0, E0, Z0), (k1, E1, Z1)
+    
+    def calc_spectra2(u, v, dataset_name="", Lx=1.0, Ly=1.0):
+        assert u.shape == v.shape
+        device = u.device
+
+        B, nx, ny = u.shape
+        dx = Lx / nx
+        dy = Ly / ny
+
+        if dataset_name == "pdebench-incomp":
+            wx = torch.hann_window(nx, periodic=False, device=device)
+            wy = torch.hann_window(ny, periodic=False, device=device)
+            window = wx[:, None] * wy[None, :]
+            u = u * window
+            v = v * window
+
+        kx = torch.fft.fftfreq(nx, d=dx, device=device) * 2 * torch.pi
+        ky = torch.fft.fftfreq(ny, d=dy, device=device) * 2 * torch.pi
+        KX, KY = torch.meshgrid(kx, ky, indexing="ij")
+
+        K = torch.sqrt(KX**2 + KY**2)               
+        K_flat = K.flatten()                        
+
+        u_hat = torch.fft.fft2(u, dim=(-2, -1))
+        v_hat = torch.fft.fft2(v, dim=(-2, -1))
+
+        E_k = 0.5 * (u_hat.abs()**2 + v_hat.abs()**2)
+
+        w_hat = 1j * (KX * v_hat - KY * u_hat)
+        Z_k = 0.5 * w_hat.abs()**2
+
+        E_flat = E_k.reshape(B, -1)
+        Z_flat = Z_k.reshape(B, -1)
+
+        n_bins = nx // 2
+        k_max = K_flat.max()
+        k_bins = torch.linspace(0, k_max, n_bins + 1, device=device)
+        k_centers = 0.5 * (k_bins[:-1] + k_bins[1:])
+
+        bin_idx = torch.bucketize(K_flat, k_bins) - 1
+        valid = (bin_idx >= 0) & (bin_idx < n_bins)
+        bin_idx = bin_idx[valid]
+
+        E_flat = E_flat[:, valid]
+        Z_flat = Z_flat[:, valid]
+
+        bin_idx = bin_idx.unsqueeze(0).expand(B, -1)
+
+        E_spec = torch.zeros(B, n_bins, device=device)
+        Z_spec = torch.zeros(B, n_bins, device=device)
+        counts = torch.zeros(n_bins, device=device)
+
+        E_spec.scatter_add_(1, bin_idx, E_flat)
+        Z_spec.scatter_add_(1, bin_idx, Z_flat)
+
+        counts.scatter_add_(0, bin_idx[0], torch.ones_like(bin_idx[0], dtype=torch.float))
+        counts[counts == 0] = 1.0 
+
+        E_spec /= counts
+        Z_spec /= counts
+
+        return k_centers, E_spec, Z_spec
 
     def calculate_spectra_plots_per_dataset(self):
-        # not sure yet
-        pass
+        self.model.eval()
+        print("\nStarting Physics error calculation...")
+
+        for d, dataset in enumerate(self.valtraj_datasets):
+            if d + 1 not in self.dsplit:
+                continue
+            print(f"\nDataset: {self.cd.datasets[d]['name']}") 
+            trajs = self.val_samplers[d].val_trajs
+            testtraj = dataset.dataset.get_full_trajectory(trajs[0])
+            testspectra = self.calc_spectra(testtraj, dataset_name=self.cd.datasets[d]['name'])
+            #print(trajs[:10])
+            timesteps = dataset.dataset.ts
+            dataloader = self.get_dataloader(d, mode='ms')
+            #print(ytest.shape)
+            if self.trainer == "MTT":
+                self.samples = 1
+                #print("Timesteps:", timesteps)
+                individual_rrmse_errors = [list() for _ in range(timesteps)]
+                individual_rae_errors = [list() for _ in range(timesteps)]
+            elif self.trainer == "FM":
+                individual_rae_errors = [list( list() for k in range(len(trajs))) for _ in range(timesteps)]
+                individual_rrmse_errors = [list( list() for k in range(len(trajs))) for _ in range(timesteps)]
+            #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
+
+            for i, batch in enumerate(dataloader):
+
+                torch.cuda.synchronize()
+                time_start = time.time()
+                for sample_idx in range(self.samples):
+                    yfull = batch.cuda()
+                    with torch.no_grad():
+                        y = yfull.clone()
+                        if self.trainer == "MTT":
+                            y = y.cuda()
+                            #print("y shape:", y.shape)
+                            x = y[:,:self.cm.temporal_bundling]
+                            yhat_rollout = rollout_det(x, self.model, len(y) // self.cm.temporal_bundling + 1)
+                            #print(yhat_rollout.shape, y.shape)
+                        elif self.trainer == "FM":
+                            y = y.cuda()
+                            y = y.squeeze(1)
+                            #print(y.shape)
+
+                            #print("y shape:", y.shape)
+                            x = self._generate_prior(y[:,:,:self.cm.temporal_bundling])
+                            #print(x.shape)
+                            yhat_rollout = rollout_prb(x, self.model, int(np.ceil((y.shape[2] - self.ct.from_frame) / (self.cm.temporal_bundling - self.ct.from_frame))), 
+                                        self.ct.int_steps, self.ct.from_frame, noisetype=self.ct.noise_type,
+                                        sigma_time = self.ct.sigma_time if self.ct.noise_type == 'gaussiangaussian' else None, sigma_space = self.ct.sigma_space if self.ct.noise_type == 'gaussiangaussian' else None)
+                            #print(yhat_rollout.shape)
+                            #print("Rollout shape before permute:", yhat_rollout.shape)
+                            yhat_rollout, y = yhat_rollout.permute(0,2,1,3,4), y.permute(0,2,1,3,4)
+                        else:
+                            raise ValueError("Trainer not recognized in rollout error calculation.")
+                        yhat_rollout = yhat_rollout[:, :y.shape[1]] 
+                        
+                        #y, yhat_rollout = y.squeeze(0), yhat_rollout.squeeze(0)
+                        unnorm_yhat = yhat_rollout * self.global_std + self.global_mean
+                        unnorm_y = y * self.global_std + self.global_mean
+                        
+                        #print("Rollout shape:", unnorm_yhat.shape)
+                        #print("Ground truth shape:", unnorm_y.shape)
+                        diff = unnorm_yhat - unnorm_y
+                        #print(diff.shape)
+                        #raise NotImplementedError("Temporary stop for debugging.")
+                        # Calculate the error for each timestep in the rollout
+                        #print(yhat_rollout.shape)
+                        reduce_dims = tuple(range(2, diff.ndim)) # reduce over all but batch and time
+                        se_sum = diff.pow(2).sum(dim=reduce_dims)         
+                        ae_sum = diff.abs().sum(dim=reduce_dims)           
+                        y2_sum = unnorm_y.pow(2).sum(dim=reduce_dims)      
+                        yabs_sum = unnorm_y.abs().sum(dim=reduce_dims)
+
+                        batch_rrmse = torch.sqrt(se_sum / y2_sum)
+                        batch_rae = ae_sum / yabs_sum
+                        #print("Batch RRMSE shape:", batch_rrmse.shape)
+                        #raise NotImplementedError("Temporary stop for debugging.")
+                        
+                        if self.trainer == "MTT": 
+                            for b in range(batch_rrmse.shape[0]): 
+                                for t in range(batch_rrmse.shape[1]): 
+                                    individual_rrmse_errors[t].append(batch_rrmse[b, t].item())
+                                    individual_rae_errors[t].append(batch_rae[b, t].item())
+                        elif self.trainer == "FM": 
+                            for b in range(batch_rrmse.shape[0]): 
+                                for t in range(batch_rrmse.shape[1]): 
+                                    individual_rrmse_errors[t][i * self.batch_size + b].append(batch_rrmse[b, t].item())
+                                    individual_rae_errors[t][i * self.batch_size + b].append(batch_rae[b, t].item())
+                torch.cuda.synchronize()
+                end_time = time.time()
+                print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, Timer: {end_time - time_start:.4f} s", flush=True)
+                #if i == 0:
+                #    break
+            
+            #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
+            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ms_error/"
+            os.makedirs(save_error_path, exist_ok=True)
+
+            # Save individual RMSE errors for this dataset
+            individual_rrmse_file_path = save_error_path + "individual_rollout_rrmse_" + self.cd.datasets[d]["name"] + ".json"
+            with open(individual_rrmse_file_path, "w") as f:
+                json.dump(individual_rrmse_errors, f, indent=2)
+            # Save individual AE errors for this dataset
+            individual_rae_file_path = save_error_path + "individual_rollout_rae_" + self.cd.datasets[d]["name"] + ".json"
+            with open(individual_rae_file_path, "w") as f:
+                json.dump(individual_rae_errors, f, indent=2)
+
+            # calculate the mean error per timestep
+            if self.trainer == "MTT":
+                mean_rrmse_per_timestep = [np.mean(errors) for errors in individual_rrmse_errors]
+                mean_rae_per_timestep = [np.mean(errors) for errors in individual_rae_errors]
+            elif self.trainer == "FM":
+                mean_rrmse_per_timestep = [np.mean([np.mean(individual_rrmse_errors[t][k]) for k in range(len(trajs))]) for t in range(timesteps)]
+                mean_rae_per_timestep = [np.mean([np.mean(individual_rae_errors[t][k]) for k in range(len(trajs))]) for t in range(timesteps)]
+            # Save mean errors per timestep for this dataset
+            mean_rrmse_file_path = save_error_path + "ms_error_" + self.cd.datasets[d]["name"] + ".txt"
+            with open(mean_rrmse_file_path, "w") as f:
+                for t, error in enumerate(mean_rrmse_per_timestep):
+                    f.write(f"Timestep {t}: Avg Relative RMSE: {error}\n")
+                for t, error in enumerate(mean_rae_per_timestep):
+                    f.write(f"Timestep {t}: Avg Relative AE: {error}\n")
+            print()
+            print(f"MS error {self.cd.datasets[d]['name']} calculation done.")
+        del individual_rrmse_errors
+        del individual_rae_errors
+        return 1
 
 if __name__ == "__main__":
     cb, cd, cm, ct, trainer, model_path, calc, fm_samples, dsplit = read_command()
