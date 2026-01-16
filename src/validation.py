@@ -612,23 +612,21 @@ class ModelValidation:
             save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ms_error/"
             os.makedirs(save_error_path, exist_ok=True)
 
-            # Save individual RMSE errors for this dataset
             individual_rrmse_file_path = save_error_path + "individual_rollout_rrmse_" + self.cd.datasets[d]["name"] + ".json"
             with open(individual_rrmse_file_path, "w") as f:
                 json.dump(individual_rrmse_errors, f, indent=2)
-            # Save individual AE errors for this dataset
+            
             individual_rae_file_path = save_error_path + "individual_rollout_rae_" + self.cd.datasets[d]["name"] + ".json"
             with open(individual_rae_file_path, "w") as f:
                 json.dump(individual_rae_errors, f, indent=2)
 
-            # calculate the mean error per timestep
             if self.trainer == "MTT":
                 mean_rrmse_per_timestep = [np.mean(errors) for errors in individual_rrmse_errors]
                 mean_rae_per_timestep = [np.mean(errors) for errors in individual_rae_errors]
             elif self.trainer == "FM":
                 mean_rrmse_per_timestep = [np.mean([np.mean(individual_rrmse_errors[t][k]) for k in range(len(trajs))]) for t in range(timesteps)]
                 mean_rae_per_timestep = [np.mean([np.mean(individual_rae_errors[t][k]) for k in range(len(trajs))]) for t in range(timesteps)]
-            # Save mean errors per timestep for this dataset
+            
             mean_rrmse_file_path = save_error_path + "ms_error_" + self.cd.datasets[d]["name"] + ".txt"
             with open(mean_rrmse_file_path, "w") as f:
                 for t, error in enumerate(mean_rrmse_per_timestep):
@@ -867,7 +865,7 @@ class ModelValidation:
                                         Z_errors_t2[r][i * self.batch_size + g].append(diff_Z2[g, r].item())
                         
                 if i == 4:
-                    raise NotImplementedError("Temporary stop for debugging.")
+                    #raise NotImplementedError("Temporary stop for debugging.")
                     break
                 torch.cuda.synchronize()
                 end_time = time.time()
@@ -876,26 +874,46 @@ class ModelValidation:
                 #    break
             
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
-            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ms_error/"
+            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "spectra_error/"
             os.makedirs(save_error_path, exist_ok=True)
 
-            # Save individual RMSE errors for this dataset
-            individual_rrmse_file_path = save_error_path + "individual_rollout_rrmse_" + self.cd.datasets[d]["name"] + ".json"
-            with open(individual_rrmse_file_path, "w") as f:
-                json.dump(individual_rrmse_errors, f, indent=2)
-            # Save individual AE errors for this dataset
-            individual_rae_file_path = save_error_path + "individual_rollout_rae_" + self.cd.datasets[d]["name"] + ".json"
-            with open(individual_rae_file_path, "w") as f:
-                json.dump(individual_rae_errors, f, indent=2)
-
-            # calculate the mean error per timestep
+            file_path_Et5 = save_error_path + "Espec_t=5" + self.cd.datasets[d]["name"] + ".json"
+            file_path_Et20 = save_error_path + "Espec_t=20" + self.cd.datasets[d]["name"] + ".json"
+            file_path_Zt5 = save_error_path + "Zspec_t=5" + self.cd.datasets[d]["name"] + ".json"
+            file_path_Zt20 = save_error_path + "Zspec_t=20" + self.cd.datasets[d]["name"] + ".json"
+            with open(file_path_Et5, "w") as f:
+                json.dump(E_errors_t0, f, indent=2)
+            with open(file_path_Et20, "w") as f:
+                json.dump(E_errors_t1, f, indent=2)
+            with open(file_path_Zt5, "w") as f:
+                json.dump(Z_errors_t0, f, indent=2)
+            with open(file_path_Zt20, "w") as f:
+                json.dump(Z_errors_t1, f, indent=2)
+            if self.cd.datasets[d]['name'] == "pdebench-incomp" or self.cd.datasets[d]['name'] == "amira":
+                file_path_Etend = save_error_path + "Espec_t=Final" + self.cd.datasets[d]["name"] + ".json"
+                file_path_Ztend = save_error_path + "Zspec_t=Final" + self.cd.datasets[d]["name"] + ".json"
+                with open(file_path_Etend, "w") as f:
+                    json.dump(E_errors_t2, f, indent=2)
+                with open(file_path_Ztend, "w") as f:
+                    json.dump(Z_errors_t2, f, indent=2)
+            
             if self.trainer == "MTT":
-                mean_rrmse_per_timestep = [np.mean(errors) for errors in individual_rrmse_errors]
-                mean_rae_per_timestep = [np.mean(errors) for errors in individual_rae_errors]
+                meanE_per_k_t0 = [np.mean(errors) for errors in E_errors_t0]
+                meanZ_per_k_t0 = [np.mean(errors) for errors in Z_errors_t0]
+                meanE_per_k_t1 = [np.mean(errors) for errors in E_errors_t1]
+                meanZ_per_k_t1 = [np.mean(errors) for errors in Z_errors_t1]
+                if self.cd.datasets[d]['name'] == "pdebench-incomp" or self.cd.datasets[d]['name'] == "amira":
+                    meanE_per_k_t2 = [np.mean(errors) for errors in E_errors_t2]
+                    meanZ_per_k_t2 = [np.mean(errors) for errors in Z_errors_t2]
             elif self.trainer == "FM":
-                mean_rrmse_per_timestep = [np.mean([np.mean(individual_rrmse_errors[t][k]) for k in range(len(trajs))]) for t in range(timesteps)]
-                mean_rae_per_timestep = [np.mean([np.mean(individual_rae_errors[t][k]) for k in range(len(trajs))]) for t in range(timesteps)]
-            # Save mean errors per timestep for this dataset
+                meanE_per_k_t0 = [np.mean([np.mean(E_errors_t0[n][m]) for m in range(len(trajs))]) for n in range(len(k_steps))]
+                meanZ_per_k_t0 = [np.mean([np.mean(Z_errors_t0[n][m]) for m in range(len(trajs))]) for n in range(len(k_steps))]
+                meanE_per_k_t1 = [np.mean([np.mean(E_errors_t1[n][m]) for m in range(len(trajs))]) for n in range(len(k_steps))]
+                meanZ_per_k_t1 = [np.mean([np.mean(Z_errors_t1[n][m]) for m in range(len(trajs))]) for n in range(len(k_steps))]
+                if self.cd.datasets[d]['name'] == "pdebench-incomp" or self.cd.datasets[d]['name'] == "amira":
+                    meanE_per_k_t2 = [np.mean(errors) for errors in E_errors_t2]
+                    meanZ_per_k_t2 = [np.mean(errors) for errors in Z_errors_t2]
+            
             mean_rrmse_file_path = save_error_path + "ms_error_" + self.cd.datasets[d]["name"] + ".txt"
             with open(mean_rrmse_file_path, "w") as f:
                 for t, error in enumerate(mean_rrmse_per_timestep):
