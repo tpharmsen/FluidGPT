@@ -39,7 +39,8 @@ python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM 
 python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run-test3 --model_path models/epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 3 --calc ssms
 python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run-test4 --model_path models/epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 3 --calc ssms
 
-
+spectr:
+python src/validation.py --trainer MTT --CB surf-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-semifinal-run-test --model_path models/epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt --calc spectra --dsplit 4 
 
 for spike:
 python3 src/validation.py --trainer MTT --CB spike-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out test --model_path /data/fluidgpt/val_models/ar_epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt --calc 
@@ -649,7 +650,7 @@ class ModelValidation:
         
         u1 = stacked_pred[:, t2, 0]
         v1 = stacked_pred[:, t2, 1]
-
+        #print(u0.shape, v0.shape)
         k0, E0, Z0 = self.calc_spectra2(u0, v0, dataset_name)
         k1, E1, Z1 = self.calc_spectra2(u1, v1, dataset_name)
         
@@ -659,10 +660,12 @@ class ModelValidation:
             v2 = stacked_pred[:, t3, 1]
             k2, E2, Z2 = self.calc_spectra2(u2, v2, dataset_name)
 
-        return (k0, E0, Z0), (k1, E1, Z1), (k2, E2, Z2) if dataset_name == "pdebench-incomp" or dataset_name == "amira" else (k0, E0, Z0), (k1, E1, Z1)
+        return ((k0, E0, Z0), (k1, E1, Z1), (k2, E2, Z2)) if dataset_name == "pdebench-incomp" or dataset_name == "amira" else ((k0, E0, Z0), (k1, E1, Z1))
     
-    def calc_spectra2(u, v, dataset_name="", Lx=1.0, Ly=1.0):
+    def calc_spectra2(self, u, v, dataset_name="", Lx=1.0, Ly=1.0):
+        #print(u.shape, v.shape)
         assert u.shape == v.shape
+        print(u.shape, v.shape)
         device = u.device
 
         B, nx, ny = u.shape
@@ -685,12 +688,12 @@ class ModelValidation:
 
         u_hat = torch.fft.fft2(u, dim=(-2, -1))
         v_hat = torch.fft.fft2(v, dim=(-2, -1))
-
+        print(u_hat.shape, v_hat.shape)
         E_k = 0.5 * (u_hat.abs()**2 + v_hat.abs()**2)
 
         w_hat = 1j * (KX * v_hat - KY * u_hat)
         Z_k = 0.5 * w_hat.abs()**2
-
+        print(E_k.shape, Z_k.shape)
         E_flat = E_k.reshape(B, -1)
         Z_flat = Z_k.reshape(B, -1)
 
@@ -730,10 +733,18 @@ class ModelValidation:
         for d, dataset in enumerate(self.valtraj_datasets):
             if d + 1 not in self.dsplit:
                 continue
+            self.batch_size = 4 ###################################################################### tempo
+
             print(f"\nDataset: {self.cd.datasets[d]['name']}") 
             trajs = self.val_samplers[d].val_trajs
-            testtraj = dataset.dataset.get_full_trajectory(trajs[0])
-            testspectra = self.calc_spectra(testtraj, dataset_name=self.cd.datasets[d]['name'])
+            testtraj = dataset.dataset.get_single_traj(trajs[0]).unsqueeze(0) 
+            testtraj = testtraj.cuda()
+            #print("shape of testtraj:", testtraj.shape)
+            #print()
+            (k0, E0, Z0), (k1, E1, Z1) = self.calc_spectra(testtraj, dataset_name=self.cd.datasets[d]['name'])
+            #print()
+            #print(k0.shape, E0.shape, Z0.shape)
+            #raise NotImplementedError("Temporary stop for debugging.")
             #print(trajs[:10])
             timesteps = dataset.dataset.ts
             dataloader = self.get_dataloader(d, mode='ms')
@@ -741,19 +752,37 @@ class ModelValidation:
             if self.trainer == "MTT":
                 self.samples = 1
                 #print("Timesteps:", timesteps)
-                individual_rrmse_errors = [list() for _ in range(timesteps)]
-                individual_rae_errors = [list() for _ in range(timesteps)]
+                individual_rrmse_errors_t0 = [list() for r in range(len(k0))]
+                individual_rae_errors_t0 = [list() for r in range(len(k0))]
+                individual_rrmse_errors_t1 = [list() for r in range(len(k0))]
+                individual_rae_errors_t1 = [list() for r in range(len(k0))]
+                if self.cd.datasets[d]['name'] == "pdebench-incomp" or self.cd.datasets[d]['name'] == "amira":
+                    individual_rrmse_errors_t2 = [list() for r in range(len(k0))]
+                    individual_rae_errors_t2 = [list() for r in range(len(k0))]
+                k_steps = list(k0.cpu().numpy())
             elif self.trainer == "FM":
-                individual_rae_errors = [list( list() for k in range(len(trajs))) for _ in range(timesteps)]
-                individual_rrmse_errors = [list( list() for k in range(len(trajs))) for _ in range(timesteps)]
+                individual_rrmse_errors_t0 = [list( list() for _ in range(len(trajs))) for r in range(len(k0))]
+                individual_rae_errors_t0 = [list( list() for _ in range(len(trajs))) for r in range(len(k0))]
+                individual_rrmse_errors_t1 = [list( list() for _ in range(len(trajs))) for r in range(len(k0))]
+                individual_rae_errors_t1 = [list( list() for _ in range(len(trajs))) for r in range(len(k0))]
+                if self.cd.datasets[d]['name'] == "pdebench-incomp" or self.cd.datasets[d]['name'] == "amira":
+                    individual_rrmse_errors_t2 = [list( list() for _ in range(len(trajs))) for r in range(len(k0))]
+                    individual_rae_errors_t2 = [list( list() for _ in range(len(trajs))) for r in range(len(k0))]
+                k_steps = list(k0.cpu().numpy())
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
 
             for i, batch in enumerate(dataloader):
 
                 torch.cuda.synchronize()
                 time_start = time.time()
+                yfull = batch.cuda()
+                unnorm_y = yfull * self.global_std + self.global_mean
+                if self.cd.datasets[d]['name'] == "pdebench-incomp" or self.cd.datasets[d]['name'] == "amira":
+                    (k0ref, E0ref, Z0ref), (k1ref, E1ref, Z1ref), (k2ref, E2ref, Z2ref) = self.calc_spectra(unnorm_y, dataset_name=self.cd.datasets[d]['name'])
+                else:
+                    (k0ref, E0ref, Z0ref), (k1ref, E1ref, Z1ref) = self.calc_spectra(unnorm_y, dataset_name=self.cd.datasets[d]['name'])
+    
                 for sample_idx in range(self.samples):
-                    yfull = batch.cuda()
                     with torch.no_grad():
                         y = yfull.clone()
                         if self.trainer == "MTT":
@@ -782,26 +811,23 @@ class ModelValidation:
                         
                         #y, yhat_rollout = y.squeeze(0), yhat_rollout.squeeze(0)
                         unnorm_yhat = yhat_rollout * self.global_std + self.global_mean
-                        unnorm_y = y * self.global_std + self.global_mean
-                        
-                        #print("Rollout shape:", unnorm_yhat.shape)
-                        #print("Ground truth shape:", unnorm_y.shape)
-                        diff = unnorm_yhat - unnorm_y
-                        #print(diff.shape)
-                        #raise NotImplementedError("Temporary stop for debugging.")
-                        # Calculate the error for each timestep in the rollout
-                        #print(yhat_rollout.shape)
-                        reduce_dims = tuple(range(2, diff.ndim)) # reduce over all but batch and time
-                        se_sum = diff.pow(2).sum(dim=reduce_dims)         
-                        ae_sum = diff.abs().sum(dim=reduce_dims)           
-                        y2_sum = unnorm_y.pow(2).sum(dim=reduce_dims)      
-                        yabs_sum = unnorm_y.abs().sum(dim=reduce_dims)
-
-                        batch_rrmse = torch.sqrt(se_sum / y2_sum)
-                        batch_rae = ae_sum / yabs_sum
-                        #print("Batch RRMSE shape:", batch_rrmse.shape)
-                        #raise NotImplementedError("Temporary stop for debugging.")
-                        
+                        if self.cd.datasets[d]['name'] == "pdebench-incomp" or self.cd.datasets[d]['name'] == "amira":
+                            (k0_pred, E0_pred, Z0_pred), (k1_pred, E1_pred, Z1_pred), (k2_pred, E2_pred, Z2_pred) = self.calc_spectra(unnorm_yhat, dataset_name=self.cd.datasets[d]['name'])
+                        else:
+                            (k0_pred, E0_pred, Z0_pred), (k1_pred, E1_pred, Z1_pred) = self.calc_spectra(unnorm_yhat, dataset_name=self.cd.datasets[d]['name'])
+                        diff_E0 = E0_pred / E0ref
+                        diff_Z0 = Z0_pred / Z0ref
+                        diff_E1 = E1_pred / E1ref
+                        diff_Z1 = Z1_pred / Z1ref
+                        if self.cd.datasets[d]['name'] == "pdebench-incomp" or self.cd.datasets[d]['name'] == "amira":
+                            diff_E2 = E2_pred / E2ref
+                            diff_Z2 = Z2_pred / Z2ref
+                        print()
+                        print(k0_pred.shape, E0_pred.shape, Z0_pred.shape)
+                        print(k0ref.shape, E0ref.shape, Z0ref.shape)
+                        print()
+                        print(k0[:5])
+                        raise NotImplementedError("Temporary stop for debugging.")
                         if self.trainer == "MTT": 
                             for b in range(batch_rrmse.shape[0]): 
                                 for t in range(batch_rrmse.shape[1]): 
