@@ -495,7 +495,7 @@ class ModelValidation:
             print("Relative RMSE:", rrmse)
             print("Relative AE:", rae)
 
-            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ss_error/" + self.trainer + "/"
+            save_error_path = save_error_path = self.cb.save_path + "validation/" + self.trainer + "/" + self.cb.folder_out + "ss_error/"
             os.makedirs(save_error_path, exist_ok=True)
             individual_rrmse_file_path = save_error_path + "individual_rrmse_" + self.cd.datasets[d]["name"] + ".json"
             with open(individual_rrmse_file_path, "w") as f:
@@ -610,7 +610,7 @@ class ModelValidation:
                 #    break
             
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
-            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ms_error/" + self.trainer + "/"
+            save_error_path = self.cb.save_path + "validation/" + self.trainer + "/" + self.cb.folder_out + "ms_error/"
             os.makedirs(save_error_path, exist_ok=True)
 
             individual_rrmse_file_path = save_error_path + "individual_rollout_rrmse_" + self.cd.datasets[d]["name"] + ".json"
@@ -746,7 +746,7 @@ class ModelValidation:
                 testtraj = testtraj.unsqueeze(0) 
             elif self.trainer == "FM":
                 testtraj = testtraj.permute(0,2,1,3,4)
-            print("shape of testtraj:", testtraj.shape)
+            #print("shape of testtraj:", testtraj.shape)
             #print()
             (k0, E0, Z0), (k1, E1, Z1) = self.calc_spectra(testtraj, dataset_name=self.cd.datasets[d]['name'])
             #print()
@@ -784,6 +784,10 @@ class ModelValidation:
                 time_start = time.time()
                 yfull = batch.cuda()
                 unnorm_y = yfull * self.global_std + self.global_mean
+                #print("shape of unnorm_y:", unnorm_y.shape)
+                if self.trainer == "FM":
+                    unnorm_y = unnorm_y.squeeze(1).permute(0,2,1,3,4)
+                #print("shape of unnorm_y:", unnorm_y.shape)
                 if self.cd.datasets[d]['name'] == "pdebench-incomp" or self.cd.datasets[d]['name'] == "amira":
                     (k0ref, E0ref, Z0ref), (k1ref, E1ref, Z1ref), (k2ref, E2ref, Z2ref) = self.calc_spectra(unnorm_y, dataset_name=self.cd.datasets[d]['name'])
                 else:
@@ -811,10 +815,12 @@ class ModelValidation:
                                         sigma_time = self.ct.sigma_time if self.ct.noise_type == 'gaussiangaussian' else None, sigma_space = self.ct.sigma_space if self.ct.noise_type == 'gaussiangaussian' else None)
                             #print(yhat_rollout.shape)
                             #print("Rollout shape before permute:", yhat_rollout.shape)
-                            yhat_rollout, y = yhat_rollout.permute(0,2,1,3,4), y.permute(0,2,1,3,4)
+                            yhat_rollout = yhat_rollout.permute(0,2,1,3,4)
                         else:
                             raise ValueError("Trainer not recognized in rollout error calculation.")
-                        yhat_rollout = yhat_rollout[:, :y.shape[1]] 
+                        #print("yhat_rollout shape before cropping:", yhat_rollout.shape)
+                        yhat_rollout = yhat_rollout[:, :unnorm_y.shape[1]] 
+                        #print("yhat_rollout shape after cropping:", yhat_rollout.shape)
                         
                         #y, yhat_rollout = y.squeeze(0), yhat_rollout.squeeze(0)
                         unnorm_yhat = yhat_rollout * self.global_std + self.global_mean
@@ -870,7 +876,7 @@ class ModelValidation:
                     #raise NotImplementedError("Temporary stop for debugging.")
                     break
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
-            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "spectra_error/" + self.trainer + "/"
+            save_error_path = self.cb.save_path + "validation/" + self.trainer + "/" + self.cb.folder_out + "spectra_error/"
             os.makedirs(save_error_path, exist_ok=True)
             file_path_ksteps = save_error_path + "k_steps_" + self.cd.datasets[d]["name"] + ".json"
             with open(file_path_ksteps, "w") as f:
