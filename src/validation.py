@@ -53,6 +53,7 @@ fm-val-b200-0
 spike testing
 python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out test --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --dsplit 1 --fm_samples 1 --calc ss
 python3 src/validation.py --trainer MTT --CB spike-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out test --model_path /data/fluidgpt/val_models/ar_epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt --calc spectra --dsplit 1 2 3 4 5 6 7 8 9
+python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out test --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --calc spectra --dsplit 1 2 3 4 5 6 7 8 9 --fm_samples 1
 
 python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ss --dsplit 1
 python3 src/validation.py --trainer FM --CB spike-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-val-b200 --model_path /data/fluidgpt/val_models/fm_epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 16 --calc ms --dsplit 1
@@ -348,9 +349,9 @@ class ModelValidation:
             dataset = self.val_datasets[dataset_idx]
             dataset.dataset.fulltrajmode = False
         elif mode == 'ms' or mode == 'spectra':
-            if "B200" in torch.cuda.get_device_name() and not (set([dataset_idx]) & set([1,3])):
+            if "B200" in torch.cuda.get_device_name() and not (set([dataset_idx]) & set([0,2])): 
                 self.batch_size = 512
-            elif "B200" in torch.cuda.get_device_name() and set([dataset_idx]) & set([1,3]):
+            elif "B200" in torch.cuda.get_device_name() and set([dataset_idx]) & set([0,2]): # amira and pdebench incomp
                 self.batch_size = 128
             else:
                 self.batch_size = 64
@@ -390,7 +391,7 @@ class ModelValidation:
         for d, dataset in enumerate(self.val_datasets):
             if d + 1 not in self.dsplit:
                 continue
-            dataloader = self.get_dataloader(d + 1, mode='ss')
+            dataloader = self.get_dataloader(d, mode='ss')
             traj_indices = len(self.val_samplers[d].indices)
             print(f"\nDataset: {self.cd.datasets[d]['name']}") 
             cumulative_se_sum = 0.0
@@ -529,7 +530,7 @@ class ModelValidation:
             trajs = self.val_samplers[d].val_trajs
             #print(trajs[:10])
             timesteps = dataset.dataset.ts
-            dataloader = self.get_dataloader(d + 1, mode='ms')
+            dataloader = self.get_dataloader(d, mode='ms')
             #print(ytest.shape)
             # Lists to store errors for each timestep
             if self.trainer == "MTT":
@@ -760,7 +761,7 @@ class ModelValidation:
             #raise NotImplementedError("Temporary stop for debugging.")
             #print(trajs[:10])
             timesteps = dataset.dataset.ts
-            dataloader = self.get_dataloader(d + 1, mode='spectra')
+            dataloader = self.get_dataloader(d, mode='spectra')
             #print(ytest.shape)
             if self.trainer == "MTT":
                 self.samples = 1
