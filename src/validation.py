@@ -858,21 +858,18 @@ class ModelValidation:
                                     for r in range(len(k_steps)):
                                         E_errors_t2[r][i * self.batch_size + g].append(diff_E2[g, r].item())
                                         Z_errors_t2[r][i * self.batch_size + g].append(diff_Z2[g, r].item())
-                        
-                if i == 4:
-                    #raise NotImplementedError("Temporary stop for debugging.")
-                    break
                 torch.cuda.synchronize()
                 end_time = time.time()
                 print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, Timer: {end_time - time_start:.4f} s", flush=True)
-                #if i == 0:
-                #    break
+                if i == 9:
+                    #raise NotImplementedError("Temporary stop for debugging.")
+                    break
             
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
             save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "spectra_error/"
             os.makedirs(save_error_path, exist_ok=True)
 
-            file_path_Et5 = save_error_path + "Espec_t=5" + self.cd.datasets[d]["name"] + ".json"
+            file_path_Et5 = save_error_path + "Espec_t=5_" + self.cd.datasets[d]["name"] + ".json"
             file_path_Et20 = save_error_path + "Espec_t=20" + self.cd.datasets[d]["name"] + ".json"
             file_path_Zt5 = save_error_path + "Zspec_t=5" + self.cd.datasets[d]["name"] + ".json"
             file_path_Zt20 = save_error_path + "Zspec_t=20" + self.cd.datasets[d]["name"] + ".json"
@@ -909,22 +906,28 @@ class ModelValidation:
                     meanE_per_k_t2 = [np.mean(errors) for errors in E_errors_t2]
                     meanZ_per_k_t2 = [np.mean(errors) for errors in Z_errors_t2]
             
-            mean_rrmse_file_path = save_error_path + "mean_spectra_error_" + self.cd.datasets[d]["name"] + ".txt"
-            with open(mean_rrmse_file_path, "w") as f:
+            meanE_file_path = save_error_path + "mean_Espec_error_" + self.cd.datasets[d]["name"] + ".txt"
+            meanZ_file_path = save_error_path + "mean_Zspec_error_" + self.cd.datasets[d]["name"] + ".txt"
+            with open(meanE_file_path, "w") as f:
                 f.write("Timestep 5:\n")
                 for r, error in enumerate(meanE_per_k_t0):
                     f.write(f"K {k_steps[r]}: Avg E_spectra Ratio: {error}\n")
-                for r, error in enumerate(meanZ_per_k_t0):
-                    f.write(f"K {k_steps[r]}: Avg Z_spectra Ratio: {error}\n")
                 f.write("\nTimestep 20:\n")
                 for r, error in enumerate(meanE_per_k_t1):
                     f.write(f"K {k_steps[r]}: Avg E_spectra Ratio: {error}\n")
-                for r, error in enumerate(meanZ_per_k_t1):
-                    f.write(f"K {k_steps[r]}: Avg Z_spectra Ratio: {error}\n")
                 if self.cd.datasets[d]['name'] == "pdebench-incomp" or self.cd.datasets[d]['name'] == "amira":
                     f.write("\nFinal Timestep:\n")
                     for r, error in enumerate(meanE_per_k_t2):
                         f.write(f"K {k_steps[r]}: Avg E_spectra Ratio: {error}\n")
+            with open(meanZ_file_path, "w") as f:
+                f.write("Timestep 5:\n")
+                for r, error in enumerate(meanZ_per_k_t0):
+                    f.write(f"K {k_steps[r]}: Avg Z_spectra Ratio: {error}\n")
+                f.write("\nTimestep 20:\n")
+                for r, error in enumerate(meanZ_per_k_t1):
+                    f.write(f"K {k_steps[r]}: Avg Z_spectra Ratio: {error}\n")
+                if self.cd.datasets[d]['name'] == "pdebench-incomp" or self.cd.datasets[d]['name'] == "amira":
+                    f.write("\nFinal Timestep:\n")
                     for r, error in enumerate(meanZ_per_k_t2):
                         f.write(f"K {k_steps[r]}: Avg Z_spectra Ratio: {error}\n")
             print()
