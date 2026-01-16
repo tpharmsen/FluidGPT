@@ -40,7 +40,7 @@ python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM 
 python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-semifinal-run-test4 --model_path models/epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --fm_samples 3 --calc ssms
 
 spectr:
-python src/validation.py --trainer MTT --CB surf-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-semifinal-run-test --model_path models/epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt --calc spectra --dsplit 4 
+python src/validation.py --trainer MTT --CB surf-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-spectr-test --model_path models/epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt --calc spectra --dsplit 4 
 
 for spike:
 python3 src/validation.py --trainer MTT --CB spike-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out test --model_path /data/fluidgpt/val_models/ar_epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt --calc 
@@ -761,7 +761,7 @@ class ModelValidation:
                 if self.cd.datasets[d]['name'] == "pdebench-incomp" or self.cd.datasets[d]['name'] == "amira":
                     E_errors_t2 = [list() for r in range(len(k0))]
                     Z_errors_t2 = [list() for r in range(len(k0))]
-                k_steps = list(k0.cpu().numpy())
+                k_steps = k0.cpu().numpy().tolist()
             elif self.trainer == "FM":
                 E_errors_t0 = [list( list() for _ in range(len(trajs))) for r in range(len(k0))]
                 Z_errors_t0 = [list( list() for _ in range(len(trajs))) for r in range(len(k0))]
@@ -770,7 +770,7 @@ class ModelValidation:
                 if self.cd.datasets[d]['name'] == "pdebench-incomp" or self.cd.datasets[d]['name'] == "amira":
                     E_errors_t2 = [list( list() for _ in range(len(trajs))) for r in range(len(k0))]
                     Z_errors_t2 = [list( list() for _ in range(len(trajs))) for r in range(len(k0))]
-                k_steps = list(k0.cpu().numpy())
+                k_steps = k0.cpu().numpy().tolist()
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
 
             for i, batch in enumerate(dataloader):
@@ -864,15 +864,16 @@ class ModelValidation:
                 if i == 9:
                     #raise NotImplementedError("Temporary stop for debugging.")
                     break
-            
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
             save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "spectra_error/"
             os.makedirs(save_error_path, exist_ok=True)
-
+            file_path_ksteps = save_error_path + "k_steps_" + self.cd.datasets[d]["name"] + ".json"
+            with open(file_path_ksteps, "w") as f:
+                json.dump(k_steps, f, indent=2)
             file_path_Et5 = save_error_path + "Espec_t=5_" + self.cd.datasets[d]["name"] + ".json"
-            file_path_Et20 = save_error_path + "Espec_t=20" + self.cd.datasets[d]["name"] + ".json"
-            file_path_Zt5 = save_error_path + "Zspec_t=5" + self.cd.datasets[d]["name"] + ".json"
-            file_path_Zt20 = save_error_path + "Zspec_t=20" + self.cd.datasets[d]["name"] + ".json"
+            file_path_Et20 = save_error_path + "Espec_t=20_" + self.cd.datasets[d]["name"] + ".json"
+            file_path_Zt5 = save_error_path + "Zspec_t=5_" + self.cd.datasets[d]["name"] + ".json"
+            file_path_Zt20 = save_error_path + "Zspec_t=20_" + self.cd.datasets[d]["name"] + ".json"
             with open(file_path_Et5, "w") as f:
                 json.dump(E_errors_t0, f, indent=2)
             with open(file_path_Et20, "w") as f:
@@ -882,8 +883,8 @@ class ModelValidation:
             with open(file_path_Zt20, "w") as f:
                 json.dump(Z_errors_t1, f, indent=2)
             if self.cd.datasets[d]['name'] == "pdebench-incomp" or self.cd.datasets[d]['name'] == "amira":
-                file_path_Etend = save_error_path + "Espec_t=Final" + self.cd.datasets[d]["name"] + ".json"
-                file_path_Ztend = save_error_path + "Zspec_t=Final" + self.cd.datasets[d]["name"] + ".json"
+                file_path_Etend = save_error_path + "Espec_tfinal_" + self.cd.datasets[d]["name"] + ".json"
+                file_path_Ztend = save_error_path + "Zspec_tfinal_" + self.cd.datasets[d]["name"] + ".json"
                 with open(file_path_Etend, "w") as f:
                     json.dump(E_errors_t2, f, indent=2)
                 with open(file_path_Ztend, "w") as f:
