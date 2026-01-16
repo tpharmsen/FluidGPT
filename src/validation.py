@@ -41,6 +41,7 @@ python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM 
 
 spectr:
 python src/validation.py --trainer MTT --CB surf-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out ar-spectr-test --model_path models/epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt --calc spectra --dsplit 4 
+python src/validation.py --trainer FM --CB surf-high --CD spike-preprocAll --CM fm-semifinal --CT fm-semifinal --out fm-spectr-test --model_path models/epoch=0112-val_SS_loss_checkpoint=0.000363.ckpt --calc spectra --dsplit 4 --fm_samples 3
 
 for spike:
 python3 src/validation.py --trainer MTT --CB spike-high --CD spike-preprocAll --CM ar-semifinal --CT ar-semifinal --out test --model_path /data/fluidgpt/val_models/ar_epoch=0048-val_SS_loss_checkpoint=0.004346.ckpt --calc 
@@ -494,7 +495,7 @@ class ModelValidation:
             print("Relative RMSE:", rrmse)
             print("Relative AE:", rae)
 
-            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ss_error/"
+            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ss_error/" + self.trainer + "/"
             os.makedirs(save_error_path, exist_ok=True)
             individual_rrmse_file_path = save_error_path + "individual_rrmse_" + self.cd.datasets[d]["name"] + ".json"
             with open(individual_rrmse_file_path, "w") as f:
@@ -609,7 +610,7 @@ class ModelValidation:
                 #    break
             
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
-            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ms_error/"
+            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "ms_error/" + self.trainer + "/"
             os.makedirs(save_error_path, exist_ok=True)
 
             individual_rrmse_file_path = save_error_path + "individual_rollout_rrmse_" + self.cd.datasets[d]["name"] + ".json"
@@ -739,9 +740,13 @@ class ModelValidation:
             
             print(f"\nDataset: {self.cd.datasets[d]['name']}") 
             trajs = self.val_samplers[d].val_trajs
-            testtraj = dataset.dataset.get_single_traj(trajs[0]).unsqueeze(0) 
+            testtraj = dataset.dataset.get_single_traj(trajs[0])
             testtraj = testtraj.cuda()
-            #print("shape of testtraj:", testtraj.shape)
+            if self.trainer == "MTT":
+                testtraj = testtraj.unsqueeze(0) 
+            elif self.trainer == "FM":
+                testtraj = testtraj.permute(0,2,1,3,4)
+            print("shape of testtraj:", testtraj.shape)
             #print()
             (k0, E0, Z0), (k1, E1, Z1) = self.calc_spectra(testtraj, dataset_name=self.cd.datasets[d]['name'])
             #print()
@@ -865,7 +870,7 @@ class ModelValidation:
                     #raise NotImplementedError("Temporary stop for debugging.")
                     break
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
-            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "spectra_error/"
+            save_error_path = self.cb.save_path + "validation/" + self.cb.folder_out + "spectra_error/" + self.trainer + "/"
             os.makedirs(save_error_path, exist_ok=True)
             file_path_ksteps = save_error_path + "k_steps_" + self.cd.datasets[d]["name"] + ".json"
             with open(file_path_ksteps, "w") as f:
