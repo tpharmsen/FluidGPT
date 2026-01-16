@@ -528,8 +528,14 @@ class ModelValidation:
                 continue
             print(f"\nDataset: {self.cd.datasets[d]['name']}") 
             trajs = self.val_samplers[d].val_trajs
-            #print(trajs[:10])
-            timesteps = dataset.dataset.ts
+            testtraj = dataset.dataset.get_single_traj(trajs[0])
+            testtraj = testtraj.cuda()
+            if self.trainer == "MTT":
+                testtraj = testtraj.unsqueeze(0) 
+            elif self.trainer == "FM":
+                testtraj = testtraj.permute(0,2,1,3,4)
+            timesteps = testtraj.shape[1]
+            print("Timesteps in trajectory:", timesteps)
             dataloader = self.get_dataloader(d, mode='ms')
             #print(ytest.shape)
             # Lists to store errors for each timestep
