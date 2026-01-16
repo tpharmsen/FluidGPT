@@ -751,7 +751,10 @@ class ModelValidation:
                 testtraj = testtraj.permute(0,2,1,3,4)
             #print("shape of testtraj:", testtraj.shape)
             #print()
-            (k0, E0, Z0), (k1, E1, Z1) = self.calc_spectra(testtraj, dataset_name=self.cd.datasets[d]['name'])
+            if self.cd.datasets[d]['name'] == "pdebench-incomp" or self.cd.datasets[d]['name'] == "amira":
+                (k0, E0, Z0), (k1, E1, Z1), (k2, E2, Z2) = self.calc_spectra(testtraj, dataset_name=self.cd.datasets[d]['name'])
+            else:
+                (k0, E0, Z0), (k1, E1, Z1) = self.calc_spectra(testtraj, dataset_name=self.cd.datasets[d]['name'])
             #print()
             #print(k0.shape, E0.shape, Z0.shape)
             #raise NotImplementedError("Temporary stop for debugging.")
