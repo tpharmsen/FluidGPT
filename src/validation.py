@@ -828,11 +828,6 @@ class ModelValidation:
                         #print()
                         #print(k0_pred.shape, E0_pred.shape, Z0_pred.shape)
                         #print(k0ref.shape, E0ref.shape, Z0ref.shape)
-                        print()
-                        print(E0ref.shape, E0_pred.shape)
-                        print(E0ref[0,::10])
-                        print(E0_pred[0,::10])
-                        print()
                         #raise NotImplementedError("Temporary stop for debugging.")
                         
                         if self.trainer == "MTT": 
@@ -914,16 +909,26 @@ class ModelValidation:
                     meanE_per_k_t2 = [np.mean(errors) for errors in E_errors_t2]
                     meanZ_per_k_t2 = [np.mean(errors) for errors in Z_errors_t2]
             
-            mean_rrmse_file_path = save_error_path + "ms_error_" + self.cd.datasets[d]["name"] + ".txt"
+            mean_rrmse_file_path = save_error_path + "mean_spectra_error_" + self.cd.datasets[d]["name"] + ".txt"
             with open(mean_rrmse_file_path, "w") as f:
-                for t, error in enumerate(mean_rrmse_per_timestep):
-                    f.write(f"Timestep {t}: Avg Relative RMSE: {error}\n")
-                for t, error in enumerate(mean_rae_per_timestep):
-                    f.write(f"Timestep {t}: Avg Relative AE: {error}\n")
+                f.write("Timestep 5:\n")
+                for r, error in enumerate(meanE_per_k_t0):
+                    f.write(f"K {k_steps[r]}: Avg E_spectra Ratio: {error}\n")
+                for r, error in enumerate(meanZ_per_k_t0):
+                    f.write(f"K {k_steps[r]}: Avg Z_spectra Ratio: {error}\n")
+                f.write("\nTimestep 20:\n")
+                for r, error in enumerate(meanE_per_k_t1):
+                    f.write(f"K {k_steps[r]}: Avg E_spectra Ratio: {error}\n")
+                for r, error in enumerate(meanZ_per_k_t1):
+                    f.write(f"K {k_steps[r]}: Avg Z_spectra Ratio: {error}\n")
+                if self.cd.datasets[d]['name'] == "pdebench-incomp" or self.cd.datasets[d]['name'] == "amira":
+                    f.write("\nFinal Timestep:\n")
+                    for r, error in enumerate(meanE_per_k_t2):
+                        f.write(f"K {k_steps[r]}: Avg E_spectra Ratio: {error}\n")
+                    for r, error in enumerate(meanZ_per_k_t2):
+                        f.write(f"K {k_steps[r]}: Avg Z_spectra Ratio: {error}\n")
             print()
-            print(f"MS error {self.cd.datasets[d]['name']} calculation done.")
-        del individual_rrmse_errors
-        del individual_rae_errors
+            print(f"Spectra calculation {self.cd.datasets[d]['name']} done.")
         return 1
 
 if __name__ == "__main__":
