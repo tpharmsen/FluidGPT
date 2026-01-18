@@ -199,6 +199,7 @@ class FMTmodel(L.LightningModule):
         elif self.cm.model_name == "FluidGPT":
             if self.cm.depth == 3:
                 from modelComp.FluidGPT_FM_d3 import FluidGPT_FM
+                print("---\nUSING DEPTH3 MODEL\n----")
             elif self.cm.depth == 2:
                 from modelComp.FluidGPT_FM import FluidGPT_FM
             else:
