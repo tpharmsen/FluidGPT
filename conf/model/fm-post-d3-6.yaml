@@ -7,7 +7,7 @@ patch_size: 4
 hiddenout_dim: 512
 flowmatching_emb_dim: 512
 depth: 3
-stage_depths: [12,12,12,8,12,12,12]
+stage_depths: [9,9,9,8,9,9,9]
 num_heads: [4,8,16,16,16,8,4]
 window_size: 4
 use_flex_attn: True
