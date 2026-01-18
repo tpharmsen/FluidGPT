@@ -355,7 +355,7 @@ class FluidGPT_FM(nn.Module):
         #x = x + t1
         #t1 = self.flowt_proj_easy(t.unsqueeze(-1))
         #print(t.shape)
-        t = gen_t_embedding(t, self.flowmatching_emb_dim)
+        t = gen_t_embedding(t, self.flowmatching_emb_dim, max_positions=1000)
         #print(t.shape)
         t0 = self.flowt_proj(t)
         t0 = self.flowt_act(t0)
@@ -391,9 +391,9 @@ class FluidGPT_FM(nn.Module):
 
         # ===== DOWN =====
         for i, module_list in enumerate(self.blockDown):
-            print(f"blockdown {i}")
+            #print(f"blockdown {i}")
             for j, module in enumerate(module_list):
-                print(f"module {j}")
+                #print(f"module {j}")
                 #print(j)
                 if j % 2 == 0:
                     residual = x if self.gradient_flowthrough[0] else None
