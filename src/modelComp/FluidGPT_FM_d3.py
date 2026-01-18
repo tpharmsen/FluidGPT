@@ -177,13 +177,13 @@ class FluidGPT_FM(nn.Module):
         #self.flowt_proj_easy = nn.Linear(1, emb_dim) 
         self.flowt_proj2 = nn.Linear(flowmatching_emb_dim, flowmatching_emb_dim) #2**depth * emb_dim
 
-        self.flow_d1 = nn.Linear(flowmatching_emb_dim, 32)
-        self.flow_d2 = nn.Linear(flowmatching_emb_dim, 64)
-        self.flow_d3 = nn.Linear(flowmatching_emb_dim, 128)
-        self.flow_d4 = nn.Linear(flowmatching_emb_dim, 256)
-        self.flow_d5 = nn.Linear(flowmatching_emb_dim, 128)
-        self.flow_d6 = nn.Linear(flowmatching_emb_dim, 64)
-        self.flow_d7 = nn.Linear(flowmatching_emb_dim, 32)
+        self.flow_d1 = nn.Linear(flowmatching_emb_dim, 16)
+        self.flow_d2 = nn.Linear(flowmatching_emb_dim, 32)
+        self.flow_d3 = nn.Linear(flowmatching_emb_dim, 64)
+        self.flow_d4 = nn.Linear(flowmatching_emb_dim, 128)
+        self.flow_d5 = nn.Linear(flowmatching_emb_dim, 64)
+        self.flow_d6 = nn.Linear(flowmatching_emb_dim, 32)
+        self.flow_d7 = nn.Linear(flowmatching_emb_dim, 16)
         
         self.depth = depth
         self.middleblocklen = stage_depths[depth]
@@ -202,10 +202,10 @@ class FluidGPT_FM(nn.Module):
             for j in range(stage_depths[i]):
 
                 if j % 3 == 0:
-                    self.resnorms_down[i].append(nn.LayerNorm((emb_dim + 32) * 2**i))
+                    self.resnorms_down[i].append(nn.LayerNorm((emb_dim + 16) * 2**i))
                     self.blockDown[i].append(
                         SwinStage(
-                            (emb_dim + 32) * 2**i, 
+                            (emb_dim + 16) * 2**i, 
                             patch_grid_res=patch_grid_res, 
                             num_heads=num_heads[i], 
                             window_size=window_size, 
@@ -223,7 +223,7 @@ class FluidGPT_FM(nn.Module):
                 if j % 3 == 2:
                     self.blockDown[i].append(
                         TemporalBlock(
-                            emb_dim=(emb_dim + 32) * 2**i,
+                            emb_dim=(emb_dim + 16) * 2**i,
                             num_heads=num_heads[i],
                             max_timesteps=data_dim[1],
                             mlp_ratio=mlp_ratio,
@@ -246,10 +246,10 @@ class FluidGPT_FM(nn.Module):
         for i in range(stage_depths[depth]):
             
             if i % 2 == 0:
-                self.resnorms_middle.append(nn.LayerNorm((emb_dim + 32) * 2**depth))
+                self.resnorms_middle.append(nn.LayerNorm((emb_dim + 16) * 2**depth))
                 self.blockMiddle.append(
                     SpatialSwinBlock(
-                        (emb_dim + 32) * 2**depth,
+                        (emb_dim + 16) * 2**depth,
                         patch_grid_res=patch_grid_res,
                         num_heads=num_heads[depth],
                         window_size = full_window_size,
@@ -267,7 +267,7 @@ class FluidGPT_FM(nn.Module):
             if i % 2 == 1:
                 self.blockMiddle.append(
                     TemporalBlock(
-                        emb_dim=(emb_dim + 32) * 2**depth,
+                        emb_dim=(emb_dim + 16) * 2**depth,
                         num_heads=num_heads[depth],
                         max_timesteps=data_dim[1],
                         mlp_ratio=mlp_ratio,
@@ -290,10 +290,10 @@ class FluidGPT_FM(nn.Module):
                 #print(i, emb_dim * 2**i)
                 
                 if j % 3 == 0:
-                    self.resnorms_up[depth - i - 1].append(nn.LayerNorm((emb_dim + 32) * 2**i))
+                    self.resnorms_up[depth - i - 1].append(nn.LayerNorm((emb_dim + 16) * 2**i))
                     self.blockUp[depth - i - 1].append(
                         SwinStage(
-                            (emb_dim + 32) * 2**i,
+                            (emb_dim + 16) * 2**i,
                             patch_grid_res=patch_grid_res, 
                             num_heads=num_heads[2*depth - i], 
                             window_size=window_size, 
@@ -311,7 +311,7 @@ class FluidGPT_FM(nn.Module):
                 if j % 3 == 2:
                     self.blockUp[depth - i - 1].append(
                         TemporalBlock(
-                            emb_dim=(emb_dim + 32) * 2**i,
+                            emb_dim=(emb_dim + 16) * 2**i,
                             num_heads=num_heads[2*depth - i],
                             max_timesteps=data_dim[1],
                             mlp_ratio=mlp_ratio,
@@ -345,8 +345,11 @@ class FluidGPT_FM(nn.Module):
             skips = []
         #print('module_list', self.blockDown)
         #print('block up', self.blockUp)
+        #print(x.shape)
         x = self.embedding.encode(x, proj=True)
+        #print('after embed', x.shape)
         x = self.pos_encoding(x)
+        #print('after pos enc', x.shape)
 
         # flowmatching stuff
         #t = gen_t_embedding(t, self.flowmatching_emb_dim)
@@ -400,16 +403,20 @@ class FluidGPT_FM(nn.Module):
                     #print(x.shape, t1.shape, t2.shape)
                     if i == 0:
                         x = torch.concat((x, t1), dim=3)
+                        #print('after concat', x.shape)
                     elif i == 1:
                         x = torch.concat((x, t2), dim=3)
+                        #print('after concat', x.shape)
                     else:
                         x = torch.concat((x, t3), dim=3)
+                        #print('after concat', x.shape)
                     #print('after concat', x.shape)
                     x = self.resnorms_down[i][j // 2](x)
                     #print('after resnorm', x.shape)
                 x = module(x)
+                #print('after module', x.shape)
                 if j % 2 == 1:
-                    x = x[:,:,:,:(-32 * 2**i)]
+                    x = x[:,:,:,:(-16 * 2**i)]
                     #print('after remove', x.shape)
                     if residual is not None:
                         x = x + residual
@@ -428,7 +435,7 @@ class FluidGPT_FM(nn.Module):
                 #print(x.shape)
             x = module(x)
             if j % 2 == 1:
-                x = x[:,:,:,:-256]
+                x = x[:,:,:,:-128]
                 if residual is not None:
                     x = x + residual
 
@@ -453,7 +460,7 @@ class FluidGPT_FM(nn.Module):
                     x = self.resnorms_up[i][j // 2](x)
                 x = module(x)
                 if j % 2 == 1:
-                    x = x[:,:,:,:(-32 * 2**(self.depth - i - 1))]
+                    x = x[:,:,:,:(-16 * 2**(self.depth - i - 1))]
                     if residual is not None:
                         x = x + residual
         
