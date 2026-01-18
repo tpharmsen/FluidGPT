@@ -197,7 +197,12 @@ class FMTmodel(L.LightningModule):
             #self.model.load_state_dict(new_state_dict, strict = True)
             #print('\n...model loaded from some previous session...\n')
         elif self.cm.model_name == "FluidGPT":
-            from modelComp.FluidGPT_FM import FluidGPT_FM
+            if self.cm.depth == 3:
+                from modelComp.FluidGPT_FM_d3 import FluidGPT_FM
+            elif self.cm.depth == 2:
+                from modelComp.FluidGPT_FM import FluidGPT_FM
+            else:
+                raise ValueError('MODEL DEPTH NOT RECOGNIZED')
             self.model = FluidGPT_FM(emb_dim=self.cm.emb_dim,
                             data_dim=[self.ct.batch_size, self.cm.temporal_bundling, self.cm.in_channels, self.cd.resample_shape, self.cd.resample_shape],
                             embedder_type=self.cm.embedder_type,
