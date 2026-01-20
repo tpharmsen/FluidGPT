@@ -217,6 +217,7 @@ class FMTmodel(L.LightningModule):
                             use_flex_attn=self.cm.use_flex_attn,
                             causal_attn=self.cm.causal_attn,
                             act=ACT_MAPPER[self.cm.act],
+                            skip_enable=self.cm.skip_enable,
                             skip_connect=SKIPBLOCK_MAPPER[self.cm.skipblock],
                             gradient_flowthrough=self.cm.gradient_flowthrough,
                             enable_final_layer=self.cm.final_layer

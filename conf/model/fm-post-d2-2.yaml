@@ -1,0 +1,19 @@
+model_name: "FluidGPT"
+in_channels: 2
+temporal_bundling: 10
+emb_dim: 96
+embedder_type: "linear"  # options: "linear", "conv_v1", "conv_v2"
+patch_size: 8
+hiddenout_dim: 512
+flowmatching_emb_dim: 512
+depth: 2
+stage_depths: [9,9,8,9,9]
+num_heads: [4,8,16,8,4]
+window_size: 4
+use_flex_attn: False
+causal_attn: "custom"
+act: "gelu"
+skip_enable: True
+skipblock: "none"
+gradient_flowthrough: [True, True, True]
+final_layer: False
