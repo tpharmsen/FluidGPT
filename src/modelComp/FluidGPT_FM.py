@@ -1,6 +1,6 @@
 from .FluidGPT_B import *
 
-def gen_t_embedding(t, emb_dim, max_positions=10000):
+def gen_t_embedding(t, emb_dim, max_positions=1000):
     t = t * max_positions
     half_dim = emb_dim // 2
     emb = math.log(max_positions) / (half_dim - 1)

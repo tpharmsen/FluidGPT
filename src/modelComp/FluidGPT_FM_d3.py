@@ -1,6 +1,6 @@
 from .FluidGPT_B import *
 
-def gen_t_embedding(t, emb_dim, max_positions=10000):
+def gen_t_embedding(t, emb_dim, max_positions=1000):
     t = t * max_positions
     half_dim = emb_dim // 2
     emb = math.log(max_positions) / (half_dim - 1)
@@ -358,7 +358,7 @@ class FluidGPT_FM(nn.Module):
         #x = x + t1
         #t1 = self.flowt_proj_easy(t.unsqueeze(-1))
         #print(t.shape)
-        t = gen_t_embedding(t, self.flowmatching_emb_dim, max_positions=10000)
+        t = gen_t_embedding(t, self.flowmatching_emb_dim)
         #print(t.shape)
         t0 = self.flowt_proj(t)
         t0 = self.flowt_act(t0)
