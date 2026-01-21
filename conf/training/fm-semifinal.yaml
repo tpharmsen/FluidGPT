@@ -1,8 +1,8 @@
-epochs: 120
+epochs: 110
 batch_size: 128
 init_lr: 1.0e-4
 patience: 3
-weight_decay: 0.01
+weight_decay: 1.0e-4
 inj_noise: False
 train_ratio: 0.8
 normalize: True
@@ -12,7 +12,7 @@ forward_steps_loss: 3
 persistent_workers: True
 prefetch_factor: 4
 strategy: "ddp"
-lr_milestones: [60, 80, 100]
+lr_milestones: [50, 70, 90]
 warmup_epochs: 3
 
 from_frame: 5
