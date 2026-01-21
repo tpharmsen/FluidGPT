@@ -217,22 +217,47 @@ class MTTmodel(L.LightningModule):
         optimizer = torch.optim.AdamW(
             self.model.parameters(),
             lr=self.ct.init_lr,
-            weight_decay=self.ct.weight_decay
+            betas=(0.9, 0.95),
+            weight_decay=self.ct.weight_decay,
+            eps=1e-8
         )
         
-        scheduler = {
-            "scheduler": ReduceLROnPlateau(
-                optimizer,
-                mode='min', 
-                factor=0.1,
-                patience=self.ct.patience,
-                min_lr=1e-7
-            ),
-            "monitor": "val_SS_loss_checkpoint",
-            "interval": "epoch",
-            "frequency": 1
+        warmup_epochs = self.ct.warmup_epochs
+        max_epochs = self.trainer.max_epochs
+        milestones = self.ct.lr_milestones 
+        gamma = 0.1
+
+        def warmup_linear_decay(epoch):
+            if epoch < warmup_epochs:
+                return float(epoch + 1) / float(warmup_epochs)
+            else:
+                return max(
+                    0.0,
+                    float(max_epochs - epoch) / float(max_epochs - warmup_epochs)
+                )
+
+        warmup_scheduler = torch.optim.lr_scheduler.LambdaLR(
+            optimizer,
+            lr_lambda=warmup_linear_decay
+        )
+        milestone_scheduler = torch.optim.lr_scheduler.MultiStepLR(
+            optimizer,
+            milestones=milestones,
+            gamma=gamma
+        )
+        scheduler = torch.optim.lr_scheduler.SequentialLR(
+            optimizer,
+            schedulers=[warmup_scheduler, milestone_scheduler],
+            milestones=[warmup_epochs]
+        )
+        return {
+            "optimizer": optimizer,
+            "lr_scheduler": {
+                "scheduler": scheduler,
+                "interval": "epoch",
+                "frequency": 1
+            }
         }
-        return {"optimizer": optimizer, "lr_scheduler": scheduler}
 
     def on_train_epoch_start(self):
         if not self.trainer.sanity_checking:#print(self.device)

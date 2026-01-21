@@ -12,6 +12,8 @@ forward_steps_loss: 3
 persistent_workers: True
 prefetch_factor: 4
 strategy: "ddp"
+lr_milestones: [60, 80, 100]
+warmup_epochs: 3
 
 from_frame: 5
 int_steps: 20
