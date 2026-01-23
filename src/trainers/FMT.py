@@ -290,22 +290,17 @@ class FMTmodel(L.LightningModule):
         )
         
         warmup_epochs = self.ct.warmup_epochs
-        max_epochs = self.trainer.max_epochs
         milestones = self.ct.lr_milestones 
         gamma = 0.1
 
-        def warmup_linear_decay(epoch):
+        def warmup_fn(epoch):
             if epoch < warmup_epochs:
                 return float(epoch + 1) / float(warmup_epochs)
-            else:
-                return max(
-                    0.0,
-                    float(max_epochs - epoch) / float(max_epochs - warmup_epochs)
-                )
+            return 1.0 
 
         warmup_scheduler = torch.optim.lr_scheduler.LambdaLR(
             optimizer,
-            lr_lambda=warmup_linear_decay
+            lr_lambda=warmup_fn
         )
         milestone_scheduler = torch.optim.lr_scheduler.MultiStepLR(
             optimizer,
@@ -329,6 +324,7 @@ class FMTmodel(L.LightningModule):
     def on_train_epoch_start(self):
         if not self.trainer.sanity_checking:#print(self.device)
             dataloader = self.trainer.datamodule.train_dataloader()
+            self.lr_cache = self.trainer.optimizers[0].param_groups[0]['lr']
             if isinstance(dataloader.sampler, DistributedSampler):
                 dataloader.sampler.set_epoch(self.current_epoch)
             
@@ -367,7 +363,7 @@ class FMTmodel(L.LightningModule):
                 "val_SS_loss": val_SS_loss,
                 "val_error": val_error,
                 #"val_FS_loss": val_FS_loss,
-                "Learning Rate": self.trainer.optimizers[0].param_groups[0]['lr'],
+                "Learning Rate": self.lr_cache,
                 "Epoch Time": self.epoch_time,
                 "train_plot": wandb.Image(self.out_0) if visuals else None,
                 "val_plot": wandb.Image(self.out_1) if visuals else None,
