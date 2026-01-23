@@ -82,11 +82,11 @@ class MTTtrainer(L.LightningModule):
                 os.makedirs(self.cb.save_path + self.cb.folder_out)
             manualCheckpoint = ModelCheckpoint(
                 dirpath= self.checkpoint_path,
-                filename = "{epoch:04d}-{val_SS_loss_checkpoint:.8f}",
+                filename = "{epoch:04d}-{val_SS_loss_checkpoint:.10f}",
                 #filename=r"{epoch:04d}-val_SS_loss_dataloader_idx_0={val_SS_loss/dataloader_idx_0:.4f}",
                 monitor="val_SS_loss_checkpoint",#/dataloader_idx_0",
                 mode="min",  
-                save_top_k=5,           
+                save_top_k=10,           
                 every_n_epochs=1,       
                 save_weights_only=False,
             )       
@@ -228,7 +228,7 @@ class MTTmodel(L.LightningModule):
 
         def warmup_fn(epoch):
             if epoch < warmup_epochs:
-                return float(epoch + 1) / float(warmup_epochs)
+                return float(epoch + 1) / float(warmup_epochs + 1)
             return 1.0 
 
         warmup_scheduler = torch.optim.lr_scheduler.LambdaLR(
