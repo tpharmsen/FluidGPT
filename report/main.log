@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.6)  4 DEC 2025 19:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.6)  25 JAN 2026 17:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -887,261 +887,260 @@ Package hyperref Info: Link coloring OFF on input line 53.
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texlive/texmf-di
 st/fonts/enc/dvips/base/8r.enc}]) (./chapters/intro/introduction.tex
-Overfull \hbox (1.86098pt too wide) in paragraph at lines 12--13
+Overfull \hbox (1.86098pt too wide) in paragraph at lines 24--25
  []\T1/ptm/b/n/10.95 Convolutional Fluid dy-nam-ics mod-els[] \T1/ptm/m/n/10.95
  Early neural-network ap-proaches to fluid
  []
 
 
-Overfull \hbox (0.91887pt too wide) in paragraph at lines 12--13
+Overfull \hbox (0.91887pt too wide) in paragraph at lines 24--25
 \T1/ptm/m/n/10.95 over ve-loc-ity fields, en-forc-ing divergence-free ve-loc-it
 y via ar-chi-tec-tural con-straints,
  []
 
+[1
 
-Overfull \hbox (23.25696pt too wide) in paragraph at lines 16--17
+]
+Overfull \hbox (23.25696pt too wide) in paragraph at lines 28--29
 []\T1/ptm/m/n/10.95 On the other side, physics-informed neu-ral net-works (PINN
 s) and physics-constrained
  []
 
-[1
-
-] [2] [3]
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 4
-5.
+[2] [3]
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 5
+7.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
-Overfull \hbox (25.93956pt too wide) in paragraph at lines 46--47
+Overfull \hbox (25.93956pt too wide) in paragraph at lines 58--59
 \T1/ptm/m/n/10.95 tem (e.g. com-press-ible vs. in-com-press-ible Navier^^UStoke
 s, vary-ing Mach/Reynolds
  []
 
 
-Overfull \hbox (3.67796pt too wide) in paragraph at lines 47--48
+Overfull \hbox (3.67796pt too wide) in paragraph at lines 59--60
 \T1/ptm/m/n/10.95 based PDE mod-els are pow-er-ful but heavy; lighter ar-chi-te
 c-tures show promise
  []
 
 
-Overfull \hbox (3.02016pt too wide) in paragraph at lines 52--53
+Overfull \hbox (3.02016pt too wide) in paragraph at lines 64--65
 \T1/ptm/m/n/10.95 The cre-ation of an ef-fec-tive AI sur-ro-gate model presents
  a crit-i-cal chal-lenge: achiev-
  []
 
 [4]
-Overfull \hbox (2.5721pt too wide) in paragraph at lines 61--62
+Overfull \hbox (2.5721pt too wide) in paragraph at lines 73--74
  []\T1/ptm/b/n/10.95 Long-Sequence Prob-a-bilis-tic Gen-er-a-tion (Flow Match-i
 ng):[] \T1/ptm/m/n/10.95 This method shifts
  []
 
 ) (./chapters/problem/problemformulation.tex [5]
 LaTeX Font Info:    Trying to load font information for OT1+ztmcm on input line
- 11.
+ 21.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ztmcm.fd
 File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
 )
 LaTeX Font Info:    Trying to load font information for OML+ztmcm on input line
- 11.
+ 21.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlztmcm.fd
 File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
 )
 LaTeX Font Info:    Trying to load font information for OMS+ztmcm on input line
- 11.
+ 21.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsztmcm.fd
 File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
 )
 LaTeX Font Info:    Trying to load font information for OMX+ztmcm on input line
- 11.
+ 21.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omxztmcm.fd
 File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
 )
-LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 1
+LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 2
 1.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 11.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 21.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 11.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 21.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 11.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 21.
+ [6
 
-Overfull \hbox (2.3971pt too wide) in paragraph at lines 30--31
+]
+Overfull \hbox (2.3971pt too wide) in paragraph at lines 40--41
  []\T1/ptm/b/n/10.95 Characteristics of the Navier^^UStokes Sys-tem.[] \T1/ptm/
 m/n/10.95 The Navier^^UStokes sys-tem shows
  []
 
-[6
-
-]
 <chapters/problem/energyspectrumscheme.png, id=184, 637.38126pt x 498.86375pt>
 File: chapters/problem/energyspectrumscheme.png Graphic file (type png)
 <use chapters/problem/energyspectrumscheme.png>
 Package pdftex.def Info: chapters/problem/energyspectrumscheme.png  used on inp
-ut line 43.
+ut line 53.
 (pdftex.def)             Requested size: 216.0022pt x 169.05576pt.
- [7 <./chapters/problem/energyspectrumscheme.png (PNG copy)>] [8] [9]
-Overfull \hbox (12.7226pt too wide) in paragraph at lines 138--139
+[7] [8 <./chapters/problem/energyspectrumscheme.png (PNG copy)>] [9] [10]
+Overfull \hbox (12.7226pt too wide) in paragraph at lines 148--149
 \T1/ptm/m/n/10.95 di-verse en-sem-ble of 2-dimensional pre-training datasets is
  needed. The Navier^^UStokes
  []
 
-[10]
-Overfull \hbox (2.014pt too wide) in paragraph at lines 156--157
+
+Overfull \hbox (2.014pt too wide) in paragraph at lines 166--167
 []\T1/ptm/m/n/10.95 Collectively, the cov-er-age en-sures that the pre-training
  pro-cess ex-poses the model
  []
 
-) (./chapters/datasets/datasets.tex [11]
-Underfull \hbox (badness 10000) in paragraph at lines 13--13
+) (./chapters/datasets/datasets.tex [11] [12]
+Underfull \hbox (badness 10000) in paragraph at lines 19--19
 []|\T1/ptm/b/n/10.95 Year
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 13--13
+Underfull \hbox (badness 10000) in paragraph at lines 19--19
 \T1/ptm/b/n/10.95 of
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 13--13
+Underfull \hbox (badness 10000) in paragraph at lines 19--19
 \T1/ptm/b/n/10.95 Ori-
  []
 
 
-Overfull \hbox (5.54173pt too wide) in paragraph at lines 13--13
+Overfull \hbox (5.54173pt too wide) in paragraph at lines 19--19
 []|\T1/ptm/b/n/10.95 Source/Name| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 13--13
+Underfull \hbox (badness 10000) in paragraph at lines 19--19
 []|\T1/ptm/b/n/10.95 TrajxTxXxY
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 15--15
+Underfull \hbox (badness 10000) in paragraph at lines 21--21
 []|\T1/ptm/m/n/10.95 A Fluid
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 15--15
+Underfull \hbox (badness 10000) in paragraph at lines 21--21
 \T1/ptm/m/n/10.95 Flow Data
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 15--15
+Underfull \hbox (badness 10000) in paragraph at lines 21--21
 \T1/ptm/m/n/10.95 Set for
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 15--15
+Underfull \hbox (badness 10000) in paragraph at lines 21--21
 \T1/ptm/m/n/10.95 Ma-chine
  []
 
 
-Underfull \hbox (badness 1248) in paragraph at lines 15--16
+Underfull \hbox (badness 1248) in paragraph at lines 21--22
 \T1/ptm/m/n/10.95 tion - Tur-bu-lent and Lam-i-nar
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 18--18
+Underfull \hbox (badness 10000) in paragraph at lines 24--24
 []|\T1/ptm/m/n/10.95 PDEBench
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 19--19
+Underfull \hbox (badness 10000) in paragraph at lines 25--25
 []|\T1/ptm/m/n/10.95 PDEBench
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 19--19
+Underfull \hbox (badness 10000) in paragraph at lines 25--25
 []|\T1/ptm/m/n/10.95 1000x21x 128$[]$
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 22--22
+Underfull \hbox (badness 10000) in paragraph at lines 28--28
 []|\T1/ptm/m/n/10.95 PDEGym
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 22--22
+Underfull \hbox (badness 10000) in paragraph at lines 28--28
 []|\T1/ptm/m/n/10.95 80 GB - Used for Po-sei-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 22--22
+Underfull \hbox (badness 10000) in paragraph at lines 28--28
 \T1/ptm/m/n/10.95 don model Pre-Training -
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 23--23
+Underfull \hbox (badness 10000) in paragraph at lines 29--29
 []|\T1/ptm/m/n/10.95 PDEGym
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 24--24
+Underfull \hbox (badness 10000) in paragraph at lines 30--30
 []|\T1/ptm/m/n/10.95 PDEGym
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 24--24
+Underfull \hbox (badness 10000) in paragraph at lines 30--30
 []|\T1/ptm/m/n/10.95 80 GB - Used for Po-sei-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 24--24
+Underfull \hbox (badness 10000) in paragraph at lines 30--30
 \T1/ptm/m/n/10.95 don model Pre-Training -
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 25--25
+Underfull \hbox (badness 10000) in paragraph at lines 31--31
 []|\T1/ptm/m/n/10.95 PDEGym
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 25--25
+Underfull \hbox (badness 10000) in paragraph at lines 31--31
 \T1/ptm/m/n/10.95 Brow-n-ian Bridge
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--26
+Underfull \hbox (badness 10000) in paragraph at lines 32--32
 []|\T1/ptm/m/n/10.95 PDEGym
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 27--27
+Underfull \hbox (badness 10000) in paragraph at lines 33--33
 []|\T1/ptm/m/n/10.95 PDEGym
  []
 
 
-Underfull \hbox (badness 1072) in paragraph at lines 27--27
+Underfull \hbox (badness 1072) in paragraph at lines 33--33
 \T1/ptm/m/n/10.95 Sine Vor-tex Sheet
  []
 
 
-Overfull \hbox (106.3829pt too wide) in paragraph at lines 10--31
+Overfull \hbox (106.3829pt too wide) in paragraph at lines 16--37
 []  [][][] 
  []
 
-[12
+[13
 
-] [13] [14]) (./chapters/models/models.tex [15])
-(./chapters/training/training.tex [16
+] [14] [15]) (./chapters/models/models.tex [16])
+(./chapters/training/training.tex [17
 
 ]) (./chapters/results/results.tex
-[17
+[18
 
-]) (./chapters/conclusion/conclusion.tex [18
+]) (./chapters/conclusion/conclusion.tex [19
 
-]) (./main.bbl [19
+]) (./main.bbl [20
 
-] [20
+] [21
 
 ]
 Underfull \hbox (badness 2680) in paragraph at lines 65--69
@@ -1153,9 +1152,9 @@ LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 1
 29.
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
-) [21])
-(./appendices/appendices.tex [22{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-s
-uper-t1.enc}]) [23
+) [22])
+(./appendices/appendices.tex [23{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-s
+uper-t1.enc}]) [24
 
 ] (./main.aux)
  ***********
@@ -1166,8 +1165,8 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: BD751D6F3205B2DBE8EC2941A3897C3C;801.
  ) 
 Here is how much of TeX's memory you used:
- 30303 strings out of 474222
- 613163 string characters out of 5748733
+ 30304 strings out of 474222
+ 613170 string characters out of 5748733
  1943975 words of memory out of 5000000
  51889 multiletter control sequences out of 15000+600000
  608731 words of font info for 106 fonts, out of 8000000 for 9000
@@ -1184,10 +1183,10 @@ r.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/symbol/usyr.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf
 -dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/urw/times/utmri8a.pfb>
-Output written on main.pdf (24 pages, 261170 bytes).
+Output written on main.pdf (25 pages, 263021 bytes).
 PDF statistics:
- 382 PDF objects out of 1000 (max. 8388607)
- 303 compressed objects within 4 object streams
- 114 named destinations out of 1000 (max. 500000)
+ 388 PDF objects out of 1000 (max. 8388607)
+ 308 compressed objects within 4 object streams
+ 115 named destinations out of 1000 (max. 500000)
  218 words of extra memory for PDF output out of 10000 (max. 10000000)
 
