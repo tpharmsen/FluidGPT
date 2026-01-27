@@ -215,24 +215,31 @@ class ModelValidation:
                             gradient_flowthrough=self.cm.gradient_flowthrough,
                             ).cuda()  
             elif self.trainer == "FM":
-                from modelComp.FluidGPT_FM import FluidGPT_FM
+                if self.cm.depth == 3:
+                    from modelComp.FluidGPT_FM_d3 import FluidGPT_FM
+                    print("---\nUSING DEPTH3 MODEL\n----")
+                elif self.cm.depth == 2:
+                    from modelComp.FluidGPT_FM import FluidGPT_FM
+                else:
+                    raise ValueError('MODEL DEPTH NOT RECOGNIZED')
                 self.model = FluidGPT_FM(emb_dim=self.cm.emb_dim,
-                            data_dim=[self.ct.batch_size, self.cm.temporal_bundling, self.cm.in_channels, self.cd.resample_shape, self.cd.resample_shape],
-                            embedder_type=self.cm.embedder_type,
-                            patch_size=(self.cm.patch_size, self.cm.patch_size),
-                            hiddenout_dim=self.cm.hiddenout_dim, 
-                            flowmatching_emb_dim=self.cm.flowmatching_emb_dim,
-                            depth=self.cm.depth,
-                            stage_depths=self.cm.stage_depths,
-                            num_heads=self.cm.num_heads,
-                            window_size=self.cm.window_size,
-                            use_flex_attn=self.cm.use_flex_attn,
-                            causal_attn=self.cm.causal_attn,
-                            act=ACT_MAPPER[self.cm.act],
-                            skip_connect=SKIPBLOCK_MAPPER[self.cm.skipblock],
-                            gradient_flowthrough=self.cm.gradient_flowthrough,
-                            enable_final_layer=self.cm.final_layer
-                            ).cuda()
+                                data_dim=[self.ct.batch_size, self.cm.temporal_bundling, self.cm.in_channels, self.cd.resample_shape, self.cd.resample_shape],
+                                embedder_type=self.cm.embedder_type,
+                                patch_size=(self.cm.patch_size, self.cm.patch_size),
+                                hiddenout_dim=self.cm.hiddenout_dim, 
+                                flowmatching_emb_dim=self.cm.flowmatching_emb_dim,
+                                depth=self.cm.depth,
+                                stage_depths=self.cm.stage_depths,
+                                num_heads=self.cm.num_heads,
+                                window_size=self.cm.window_size,
+                                use_flex_attn=self.cm.use_flex_attn,
+                                causal_attn=self.cm.causal_attn,
+                                act=ACT_MAPPER[self.cm.act],
+                                skip_enable=self.cm.skip_enable,
+                                skip_connect=SKIPBLOCK_MAPPER[self.cm.skipblock],
+                                gradient_flowthrough=self.cm.gradient_flowthrough,
+                                enable_final_layer=self.cm.final_layer
+                                ).cuda()
             else:
                 raise ValueError("Trainer not recognized in model loading.")
         else:
