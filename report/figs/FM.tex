@@ -1,0 +1,640 @@
+
+\documentclass[border=8pt, multi, tikz]{standalone} 
+\usepackage{import}
+\subimport{../layers/}{init}
+\usetikzlibrary{positioning}
+\usetikzlibrary{3d} %for including external image 
+\usetikzlibrary{calc}
+%\usepackage{tikz-3dplot}
+
+% Set the viewing angles: {elevation}{azimuth}
+%\tdplotsetmaincoords{-30}{-10}  % elevation=60°, azimuth=120°
+
+
+
+\def\InputColor{rgb:black,10;white,2} % input
+\def\BlockAColor{rgb:red,5;white,2} % window
+\def\BlockBColor{rgb:orange,5;white,2} % shifted window
+\def\BlockCColor{rgb:yellow,5;white,2} % time 
+\def\BlockDColor{rgb:purple,5;blue,1;white,2} % Full pos
+\def\BlockEColor{rgb:brown,5;white,2} % ConvXNext
+\def\MergeColor{rgb:cyan,5;blue,3;white,2}  % merge and unmerge
+\def\TimeInjectColor{rgb:green,5;white,2} % time injection stuff
+\def\BlackColor{rgb:black,5;white,2}
+\def\Opacity{0.5}
+\def\SkipBlockColor{rgb:blue,3;green,2;white,2}
+
+% for the global and local skip connections
+\def\skipshift{6}
+\def\skipshiftsmall{2}
+
+% patch visualization stuff
+\def\PatchHeight{8.5}
+\def\PatchWidth{0.3}
+\def\PatchDepth{8.5}
+\def\xShift{-2} 
+
+\newcommand{\midarrow}{\tikz \draw[-{Stealth[width=2mm]},line width =1mm,draw=\BlackColor] (-0.3,0) -- ++(0.3,0);}
+
+\begin{document}
+\begin{tikzpicture}%[tdplot_main_coords]
+\tikzstyle{connection}=[thick,every node/.style={sloped,allow upside down},draw=\BlackColor,opacity=0.8]
+
+
+\foreach \row in {-3,-1,1,3} { 
+    \foreach \col in {-3,-1,1,3} { 
+        \pgfmathtruncatemacro{\irow}{int((\row+3)/2)}
+        \pgfmathtruncatemacro{\icol}{int((\col+3)/2)}
+        \pic[shift={(0,\row,\col)}] at (0,0,0) 
+            {Box={
+                name=in_\irow_\icol,
+                caption= ,
+                fill=\InputColor,
+                opacity=\Opacity,
+                height=\PatchHeight,
+                width=\PatchWidth,
+                depth=\PatchDepth
+            }
+        };
+    }
+}
+
+\pic[shift={(-2,0,0)}] at (0,0,0) 
+    {Box={
+        name=input,
+        caption=Input ,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\InputColor,
+        opacity=\Opacity,
+        height=40,
+        width=0.5,
+        depth=40
+        }
+    };
+
+\pic[shift={ (2,0,0) }] at (0,0,0)
+    {Box={
+        name=1a,
+        caption= ,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockAColor,
+        opacity=\Opacity,
+        height=40,
+        width=1,
+        depth=40
+        }
+    };
+
+\pic[shift={(0,0,0)}] at (1a-east) 
+    {Box={
+        name=1b,
+        caption=x N,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockBColor,
+        opacity=\Opacity,
+        height=40,
+        width=1,
+        depth=40
+        }
+    };
+
+\pic[shift={(0,0,0)}] at (1b-east) 
+    {Box={
+        name=1c,
+        caption= ,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockCColor,
+        opacity=\Opacity,
+        height=40,
+        width=1,
+        depth=40
+        }
+    };
+
+\pic[shift={ (1,0,0) }] at (1c-east) 
+    {Box={
+        name=merge1,
+        caption= ,
+        fill=\MergeColor,
+        opacity=\Opacity,
+        opacity=0.5,
+        height=20,
+        width=0.5,
+        depth=20
+        }
+    };
+
+\pic[shift={(1,0,0)}] at (merge1-east) 
+    {Box={
+        name=2a,
+        caption= ,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockAColor,
+        opacity=\Opacity,
+        height=20,
+        width=2,
+        depth=20
+        }
+    };
+
+\pic[shift={(0,0,0)}] at (2a-east) 
+    {Box={
+        name=2b,
+        caption=x N,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockBColor,
+        opacity=\Opacity,
+        height=20,
+        width=2,
+        depth=20
+        }
+    };
+
+\pic[shift={(0,0,0)}] at (2b-east) 
+    {Box={
+        name=2c,
+        caption= ,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockCColor,
+        opacity=\Opacity,
+        height=20,
+        width=2,
+        depth=20
+        }
+    };
+
+\pic[shift={ (1,0,0) }] at (2c-east) 
+    {Box={
+        name=merge2,
+        caption= ,
+        fill=\MergeColor,
+        opacity=\Opacity,
+        opacity=0.5,
+        height=10,
+        width=0.5,
+        depth=10
+        }
+    };
+
+
+\pic[shift={(1,0,0)}] at (merge2-east) 
+    {Box={
+        name=3a,
+        caption= ,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockAColor,
+        opacity=\Opacity,
+        height=10,
+        width=4,
+        depth=10
+        }
+    };
+
+
+\pic[shift={(0,0,0)}] at (3a-east) 
+    {Box={
+        name=3b,
+        caption=x N,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockBColor,
+        opacity=\Opacity,
+        height=10,
+        width=4,
+        depth=10
+        }
+    };
+
+\pic[shift={(0,0,0)}] at (3b-east) 
+    {Box={
+        name=3c,
+        caption=,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockCColor,
+        opacity=\Opacity,
+        height=10,
+        width=4,
+        depth=10
+        }
+    };
+
+\pic[shift={ (1,0,0) }] at (3c-east) 
+    {Box={
+        name=merge3,
+        caption= ,
+        fill=\MergeColor,
+        opacity=\Opacity,
+        height=5,
+        width=0.5,
+        depth=5
+        }
+    };
+    
+
+
+\pic[shift={(1,0,0)}] at (merge3-east) 
+    {Box={
+        name=4a,
+        caption= ,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockDColor,
+        opacity=\Opacity,
+        height=5,
+        width=8,
+        depth=5
+        }
+    };
+
+\pic[shift={(0,0,0)}] at (4a-east) 
+    {Box={
+        name=4b,
+        caption=x N,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockCColor,
+        opacity=\Opacity,
+        height=5,
+        width=8,
+        depth=5
+        }
+    };
+
+\pic[shift={ (1,0,0) }] at (4b-east) 
+    {Box={
+        name=merge4,
+        caption= ,
+        fill=\MergeColor,
+        opacity=\Opacity,
+        height=10,
+        width=0.5,
+        depth=10
+        }
+    };
+
+
+\pic[shift={(1,0,0)}] at (merge4-east) 
+    {Box={
+        name=5a,
+        caption= ,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockAColor,
+        opacity=\Opacity,
+        height=10,
+        width=4,
+        depth=10
+        }
+    };
+
+\pic[shift={(0,0,0)}] at (5a-east) 
+    {Box={
+        name=5b,
+        caption=x N,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockBColor,
+        opacity=\Opacity,
+        height=10,
+        width=4,
+        depth=10
+        }
+    };
+
+\pic[shift={(0,0,0)}] at (5b-east) 
+    {Box={
+        name=5c,
+        caption= ,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockCColor,
+        opacity=\Opacity,
+        height=10,
+        width=4,
+        depth=10
+        }
+    };
+
+\pic[shift={(1,0,0)}] at (5c-east) 
+    {Box={
+        name=merge5,
+        caption= ,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\MergeColor,
+        opacity=\Opacity,
+        height=20,
+        width=0.5,
+        depth=20
+        }
+    };
+
+\pic[shift={(1,0,0)}] at (merge5-east) 
+    {Box={
+        name=6a,
+        caption= ,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockAColor,
+        opacity=\Opacity,
+        height=20,
+        width=2,
+        depth=20
+        }
+    };
+
+\pic[shift={(0,0,0)}] at (6a-east) 
+    {Box={
+        name=6b,
+        caption=x N,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockBColor,
+        opacity=\Opacity,
+        height=20,
+        width=2,
+        depth=20
+        }
+    };
+
+\pic[shift={(0,0,0)}] at (6b-east) 
+    {Box={
+        name=6c,
+        caption= ,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockCColor,
+        opacity=\Opacity,
+        height=20,
+        width=2,
+        depth=20
+        }
+    };
+
+\pic[shift={(1,0,0)}] at (6c-east) 
+    {Box={
+        name=merge6,
+        caption= ,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\MergeColor,
+        opacity=\Opacity,
+        height=40,
+        width=0.5,
+        depth=40
+        }
+    };
+    
+\pic[shift={(1,0,0)}] at (merge6-east) 
+    {Box={
+        name=7a,
+        caption= ,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockAColor,
+        opacity=\Opacity,
+        height=40,
+        width=1,
+        depth=40
+        }
+    };
+
+\pic[shift={(0,0,0)}] at (7a-east) 
+    {Box={
+        name=7b,
+        caption=x N,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockBColor,
+        opacity=\Opacity,
+        height=40,
+        width=1,
+        depth=40
+        }
+    };
+
+\pic[shift={(0,0,0)}] at (7b-east) 
+    {Box={
+        name=7c,
+        caption= ,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\BlockCColor,
+        opacity=\Opacity,
+        height=40,
+        width=1,
+        depth=40
+        }
+    };
+
+\pic[shift={ (2,0,0) }] at (7c-east) 
+    {Box={
+        name=output,
+        caption=Output ,
+        xlabel={{64, }},
+        zlabel=256,
+        fill=\InputColor,
+        opacity=\Opacity,
+        height=40,
+        width=0.5,
+        depth=40
+        }
+    };
+
+\pic[shift={ (0,0,0) }] at (-2,7,0) 
+    {Box={
+        name=t_start,
+        caption=\textbf{$t_\lambda$},
+        fill=\TimeInjectColor,
+        opacity=\Opacity,
+        height=1,
+        width=0.5,
+        depth=1
+        }
+    };
+
+\pic[shift={ (14,0,0) }] at (t_start-east) 
+    {Box={
+        name=t_inj,
+        caption=\textbf{$f(t_{\lambda})$},
+        fill=\TimeInjectColor,
+        opacity=\Opacity,
+        height=4,
+        width=2,
+        depth=4
+        }
+    };
+    
+\draw [connection]  (input-east)    -- node {\midarrow} (0,0,0);
+\draw [connection]  (0,0,0)    -- node {\midarrow} (1a-west);
+\draw [connection]  (1c-west)    -- node {\midarrow} (merge1-west);
+\draw [connection]  (merge1-east)    -- node {\midarrow} (2a-west);
+\draw [connection]  (2c-east)    -- node {\midarrow} (merge2-west);
+\draw [connection]  (merge2-east)    -- node {\midarrow} (3a-west);
+\draw [connection]  (3c-east)    -- node {\midarrow} (merge3-west);
+\draw [connection]  (merge3-east)    -- node {\midarrow} (4a-west);
+\draw [connection]  (4b-east)    -- node {\midarrow} (merge4-west);
+\draw [connection]  (merge4-east)    -- node {\midarrow} (5a-west);
+\draw [connection]  (5c-east)    -- node {\midarrow} (merge5-west);
+\draw [connection]  (merge5-east)    -- node {\midarrow} (6a-west);
+\draw [connection]  (6c-east)    -- node {\midarrow} (merge6-west);
+\draw [connection]  (merge6-east)    -- node {\midarrow} (7a-west);
+\draw [connection]  (7c-east)    -- node {\midarrow} (output-west);
+
+
+\path (0,0,0) -- (1a-west) coordinate[pos=0.5] (skip1a);
+\path (1c-west) -- (merge1-west) coordinate[pos=0.5] (skip1b);
+\path (merge1-east) -- (2a-west) coordinate[pos=0.5] (skip2a);
+\path (2c-east) -- (merge2-west) coordinate[pos=0.5] (skip2b);
+\path (merge2-east) -- (3a-west) coordinate[pos=0.5] (skip3a);
+\path (3c-east) -- (merge3-west) coordinate[pos=0.5] (skip3b);
+\path (merge3-east) -- (4a-west) coordinate[pos=0.5] (skip4a);
+\path (4b-east) -- (merge4-west) coordinate[pos=0.5] (skip4b);
+\path (merge4-east) -- (5a-west) coordinate[pos=0.5] (skip5a);
+\path (5c-east) -- (merge5-west) coordinate[pos=0.5] (skip5b);
+\path (merge5-east) -- (6a-west) coordinate[pos=0.5] (skip6a);
+\path (6c-east) -- (merge6-west) coordinate[pos=0.5] (skip6b);
+\path (merge6-east) -- (7a-west) coordinate[pos=0.5] (skip7a);
+\path (7c-east) -- (output-west) coordinate[pos=0.5] (skip7b);
+
+\coordinate (globalskip1-out) at ($(skip1b) + (0,0,3*\skipshift)$);
+\coordinate (globalskip2-out) at ($(skip2b) + (0,0,2*\skipshift)$);
+\coordinate (globalskip3-out) at ($(skip3b) + (0,0,1*\skipshift)$);
+%\coordinate (globalskip4-out) at ($(skip4a) + (0,0,\skipshift)$);
+\coordinate (globalskip5-out) at ($(skip5a) + (0,0,1*\skipshift)$);
+\coordinate (globalskip6-out) at ($(skip6a) + (0,0,2*\skipshift)$);
+\coordinate (globalskip7-out) at ($(skip7a) + (0,0,3*\skipshift)$);
+\coordinate (skip16-mid) at ($(globalskip1-out)!0.3!(globalskip7-out)$);
+\coordinate (skip25-mid) at ($(globalskip2-out)!0.35!(globalskip6-out)$);
+\coordinate (skip34-mid) at ($(globalskip3-out)!0.4!(globalskip5-out)$);
+
+\pic at (skip25-mid)
+    {Box={
+        name=skip2block,
+        fill=\BlockEColor,
+        opacity=\Opacity,
+        height=10,
+        width=1,
+        depth=10
+    }};
+\pic at (skip16-mid)
+    {Box={
+        name=skip1block,
+        fill=\BlockEColor,
+        opacity=\Opacity,
+        height=20,
+        width=1,
+        depth=20
+    }};
+\pic at (skip34-mid)
+    {Box={
+        name=skip3block,
+        fill=\BlockEColor,
+        opacity=\Opacity,
+        height=5,
+        width=1,
+        depth=5
+    }};
+
+\draw [connection]
+    (skip1b) -- node{\midarrow} (globalskip1-out) -- node{\midarrow} (skip1block-west);
+\draw [connection]
+    (skip1block-east) -- node{\midarrow} (globalskip7-out) -- node{\midarrow} (skip7a);
+\draw [connection]
+    (skip2b) -- node{\midarrow} (globalskip2-out) -- node{\midarrow} (skip2block-west);
+\draw [connection]
+    (skip2block-east) -- node{\midarrow} (globalskip6-out) -- node{\midarrow} (skip6a);
+\draw [connection]
+    (skip3b) -- node{\midarrow} (globalskip3-out) -- node{\midarrow} (skip3block-west);
+\draw [connection]
+    (skip3block-east) -- node{\midarrow} (globalskip5-out) -- node{\midarrow} (skip5a);
+
+\coordinate (localskip1a-out) at ($(skip1a) + (0,3*\skipshiftsmall,0)$);
+\coordinate (localskip2a-out) at ($(skip2a) + (0,2*\skipshiftsmall,0)$);
+\coordinate (localskip3a-out) at ($(skip3a) + (0,1*\skipshiftsmall,0)$);
+\coordinate (localskip4a-out) at ($(skip4a) + (0,0.5*\skipshiftsmall,0)$);
+\coordinate (localskip5a-out) at ($(skip5a) + (0,1*\skipshiftsmall,0)$);
+\coordinate (localskip6a-out) at ($(skip6a) + (0,2*\skipshiftsmall,0)$);
+\coordinate (localskip7a-out) at ($(skip7a) + (0,3*\skipshiftsmall,0)$);
+\coordinate (localskip1b-out) at ($(skip1b) + (0,3*\skipshiftsmall,0)$);
+\coordinate (localskip2b-out) at ($(skip2b) + (0,2*\skipshiftsmall,0)$);
+\coordinate (localskip3b-out) at ($(skip3b) + (0,1*\skipshiftsmall,0)$);
+\coordinate (localskip4b-out) at ($(skip4b) + (0,0.5*\skipshiftsmall,0)$);
+\coordinate (localskip5b-out) at ($(skip5b) + (0,1*\skipshiftsmall,0)$);
+\coordinate (localskip6b-out) at ($(skip6b) + (0,2*\skipshiftsmall,0)$);
+\coordinate (localskip7b-out) at ($(skip7b) + (0,3*\skipshiftsmall,0)$);
+
+\draw [connection]
+    (skip1a) -- node{\midarrow} (localskip1a-out) -- node{\midarrow} (localskip1b-out) -- node{\midarrow} (skip1b);
+\draw [connection]
+    (skip2a) -- node{\midarrow} (localskip2a-out) -- node{\midarrow} (localskip2b-out) -- node{\midarrow} (skip2b);
+\draw [connection]
+    (skip3a) -- node{\midarrow} (localskip3a-out) -- node{\midarrow} (localskip3b-out) -- node{\midarrow} (skip3b);
+\draw [connection]
+    (skip4a) -- node{\midarrow} (localskip4a-out) -- node{\midarrow} (localskip4b-out) -- node{\midarrow} (skip4b);
+\draw [connection]
+    (skip5a) -- node{\midarrow} (localskip5a-out) -- node{\midarrow} (localskip5b-out) -- node{\midarrow} (skip5b);
+\draw [connection]
+    (skip6a) -- node{\midarrow} (localskip6a-out) -- node{\midarrow} (localskip6b-out) -- node{\midarrow} (skip6b);
+\draw [connection]
+    (skip7a) -- node{\midarrow} (localskip7a-out) -- node{\midarrow} (localskip7b-out) -- node{\midarrow} (skip7b);
+
+
+
+\draw [connection]  (t_start-east)    -- node {\midarrow} (t_inj-west);
+
+\foreach \i in {1,2,3,4,5,6,7} {
+    % midpoint: half vertical distance
+    \coordinate (t-\i a-mid) at ($(t_inj-south)!0.5!(\i a-north)$);
+
+    % horizontal turn toward block
+    \coordinate (t-\i a-turn) at ($(t-\i a-mid -| \i a-north)$);
+
+    \draw [connection]
+        (t_inj-south)
+        -- node{\midarrow} (t-\i a-mid)
+        -- node{\midarrow} (t-\i a-turn)
+        -- node{\midarrow} (\i a-north);
+}
+
+\begin{scope}[shift={(1,9,0)}, scale=0.15]
+
+\def\colwidth{50}   % horizontal spacing
+\def\rowheight{4}   % vertical spacing
+\def\ncols{4}       % entries per row (2 rows total)
+
+\foreach \i/\color/\text in {
+    0/\InputColor/Input–Output,
+    1/\BlockAColor/Normal window spatial attention block,
+    2/\BlockBColor/Shifted window spatial attention block,
+    3/\BlockCColor/Temporal attention block,
+    4/\BlockDColor/Full spatial attention block,
+    5/\BlockEColor/ConvXNext block,
+    6/\MergeColor/Merge–Unmerge,
+    7/\TimeInjectColor/Flowtime injection
+}{
+    \pgfmathsetmacro{\x}{mod(\i,\ncols)*\colwidth}
+    \pgfmathsetmacro{\y}{-floor(\i/\ncols)*\rowheight}
+
+    \draw[fill=\color,opacity=\Opacity,draw=black]
+        (\x,\y) rectangle +(2.3,2.3);
+
+    \node[anchor=west, text width=240, align=left]
+        at (\x+2.0,\y+0.75) {\text};
+}
+
+\end{scope}
+
+
+
+\end{tikzpicture}
+\end{document}
