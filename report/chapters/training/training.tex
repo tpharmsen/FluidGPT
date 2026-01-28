@@ -1,18 +1,18 @@
 \chapter*{Training and Validation}
-- explain that i made a custom framework to faciliate training and validation on slurm-based, container-based HPC systems and local devices.
-- explain that the framework is modular and configurable via config files
-- explain the 8 times data paralellism and effective batch size
-- explain the need for high compute and memory due to model size and data size and attention mechanisms
-- explain that two models have been trained, one deterministic AR model and one probabilistic flowmatching model that both can be used auto-regressively for rollout predictions
-- explain reduced precision training bfloat16 and for validation float32
-- explain learning rate tuning with warmup and milestones with decay steps
-- explain nvidia dgx b200 platform -> containerization
+%- explain that i made a custom framework to faciliate training and validation on slurm-based, container-based HPC systems and local devices.
+%- explain that the framework is modular and configurable via config files
+%- explain the 8 times data paralellism and effective batch size
+%- explain the need for high compute and memory due to model size and data size and attention mechanisms
+%- explain that two models have been trained, one deterministic AR model and one probabilistic flowmatching model that both can be used auto-regressively for rollout predictions
+%- explain reduced precision training bfloat16 and for validation float32
+%- explain learning rate tuning with warmup and milestones with decay steps
+%- explain nvidia dgx b200 platform -> containerization
 
-- explain single step validation sampling
-- explain rollout validation
-- explain energy spectrum error calculation
-- define error metrics relative rmse and absolute
-- validation in float32/float64?
+%- explain single step validation sampling
+%- explain rollout validation
+%- explain energy spectrum error calculation
+%- define error metrics relative rmse and absolute
+%- validation in float32/float64?
 
 \section{Training procedure}
 
@@ -22,13 +22,13 @@ To support large-scale experimentation across heterogeneous compute environments
 
 The framework is fully modular and configurable through declarative configuration files, allowing model architectures, optimization parameters, data handling, and distributed training settings to be adjusted without modifying core training code. This design was critical for systematically comparing multiple model classes under controlled experimental conditions.
 
-Models and Autoregressive Rollout
+Models
 
-Two foundation models were trained within this unified framework. The first is a deterministic autoregressive (AR) model, which predicts the next temporal state conditioned on a fixed history window. The second is a probabilistic flow-matching model, which learns a conditional distribution over future states and enables stochastic sampling during inference. Despite their conceptual differences, both models are trained to support autoregressive rollout, where predictions are recursively fed back as inputs to generate long-horizon temporal sequences of fluid states. For the flow-matching model, the prior-distribution is generated on the go with correlated gaussian noise. The noise is generated as pure gaussian noise, with a gaussian filter with a standard deviation of 4 in spatial directions and 1 in temporal direction applied to introduce correlation.
+Two foundation models were trained within this unified framework. The first is a deterministic autoregressive (AR) model, which predicts the next temporal state conditioned on a fixed history window. The second is a probabilistic flow-matching model, which learns a conditional distribution over future states and enables stochastic sampling during inference. For the flow-matching model, the prior-distribution is generated on the go with correlated gaussian noise. The noise is generated as pure gaussian noise, with a gaussian filter with a standard deviation of 4 in spatial directions and 1 in temporal direction applied to introduce correlation. Applying spatial-correlation of the prior distribution is not only reducing the sharpness of interfaces in the fluids, but also reduces the state-space from which the model has to learn to transform to the target distribution, making the learning task easier.
 
 Distributed Training and Effective Batch Size
 
-Training was performed using data parallelism across 8 devices, resulting in an effective batch size equal to eight times the per-device batch size. This parallelism was essential to stabilize optimization and maintain throughput given the high-dimensional spatial-temporal data and large model capacity. Gradient synchronization was performed at each training step to ensure consistent updates across devices.
+Training was performed using data parallelism across 8 devices, resulting in an effective batch size equal to eight times the per-device batch size of 176. This parallelism was essential to stabilize optimization and maintain throughput given the high-dimensional spatial-temporal data and large model capacity. Gradient synchronization was performed at each training step to ensure consistent updates across devices.
 
 Precision Strategy
 
@@ -55,7 +55,7 @@ All large-scale experiments were conducted on the state of the art NVIDIA DGX B2
         Data split seed & 227 & 227 \\
         GPU allocation & 8x NVIDIA B200 & 8x NVIDIA B200 \\
         epochs & 100 & 120 \\
-        batch size & 176 & 176 \\
+        Effective batch size & 1408 & 1408 \\
         init lr & $2 \times 10^{-4}$ & $4 \times 10^{-4}$ \\
         warmup epochs & 4 & 4 \\
         lr decay & 0.1 & 0.1 \\
@@ -68,8 +68,59 @@ All large-scale experiments were conducted on the state of the art NVIDIA DGX B2
 	\label{tab:fluidgpt_hparams}
 \end{table}
 
-\section{Evaluation}
+\section{Validation}
 
-stability and accuracy of MSE error over time
-energy spectrum and enstrophy spectrum over time
-comparison
+%for each dataset (20% validation split)
+%- explain single next-timeblock validation
+%- explain rollout validation with error per timestep
+%- explain log-scaled energy spectrum calculation and enstrophy spectrum calculation
+%- explain error calculation for each scale in this energy and enstrophy spectrum 
+%- explain static prediction for AR model
+%- explain sampling prediction for Flowmatching model (16 samples for each input, look at distribution of outputs)
+%- explain integration of flowmatching output as velocity increments to get next state (20 steps of integration with euler method)
+%- show formula for integration here
+
+For each dataset, 20\% of the available trajectories were reserved for validation and were not used during training. All validation metrics were computed exclusively on this held-out split. Validation was designed to assess both short-term predictive accuracy and long-horizon temporal stability of the learned dynamics.
+
+\subsection{Model-Specific Validation}
+
+\paragraph{Deterministic Autoregressive Model.}
+The deterministic autoregressive (AR) model produces a static prediction for a given input sequence. Both single-step and rollout validations therefore yield a deterministic predicted trajectory, which is directly compared against ground truth using pointwise and spectral physics metrics.
+
+\paragraph{Probabilistic Flow-Matching Model.}
+The probabilistic flow-matching model defines a conditional distribution over future states. During validation, 16 independent samples were drawn for each input sequence. Metrics were computed over the resulting ensemble, enabling analysis of both the mean prediction and the variability across samples. 
+
+\subsection{Velocity Integration for Flow Matching}
+The flow-matching model predicts \emph{velocity increments} rather than absolute states. To generate the next physical state, a sample is first drawn from a prior distribution. The initial physical state is then integrated forward in \emph{flowtime} using the learned velocity field (the model), conditioned on the current physical state. Here, \emph{flowtime} $t$ is an auxiliary, continuous variable that parameterizes the transformation from the prior distribution to the predicted physical state. It is important to note that this is not the real physical time of the fluid system. Actually, it represents the trajectory along which the model deforms a sample into a physically plausible next state.
+
+Formally, given an initial state $x_0$ and a learned velocity field $v_\theta(x,t)$, the integration in flowtime is expressed as
+\begin{equation}
+x(T) = x(0) + \int_{0}^{T} v_\theta\bigl(x(t), t\bigr) \, dt,
+\end{equation}
+where $T$ is the end of the flowtime interval. This continuous integration transforms the latent sample into a prediction in physical space. For the validation, we employed a simple Euler integration scheme with 20 discrete flowtime steps to approximate this integral.
+
+\subsection{Single-Step Validation}
+As an initial evaluation, both models were assessed using a single next-timeblock prediction setting. Given a ground-truth input sequence, the models predict the immediate next temporal block without feeding back their own predictions. This evaluation isolates the one-step transition accuracy and avoids error accumulation effects inherent to autoregressive rollouts. Thus this next-timeblock error metric consists of the average error of the next 5 timesteps.
+
+\begin{equation}
+\text{RRMSE} = \frac{\sqrt{\frac{1}{N} \sum_{i=1}^{N} \left( y_i - \hat{y}_i \right)^2}}{\sqrt{\frac{1}{N} \sum_{i=1}^{N} y_i^2}}
+\end{equation}
+
+\begin{equation}
+\text{RAE} = \frac{\sum_{i=1}^{N} \left| y_i - \hat{y}_i \right|}{\sum_{i=1}^{N} \left| y_i \right|}
+\end{equation}
+
+\subsection{Autoregressive Rollout Validation}
+To evaluate long-term behavior, both models were deployed in an autoregressive rollout configuration. Starting from an initial ground-truth context, model predictions were recursively fed back as inputs to generate future states. Prediction errors were computed at each timestep throughout the rollout horizon, enabling analysis of stability over time. 
+
+\subsection{Spectral Diagnostics}
+In addition to pointwise errors, validation focused on physically motivated spectral diagnostics. For each predicted and ground-truth state, the log-scaled kinetic energy spectrum $E(k)$ and enstrophy spectrum $Z(k)$ were computed by Fourier transforming the velocity field and aggregating contributions over isotropic shells in wavenumber space.
+
+Scale-resolved spectral errors were defined as
+\begin{equation}
+\varepsilon_E(k) = \left| \log E_{\mathrm{pred}}(k) - \log E_{\mathrm{true}}(k) \right|,
+\qquad
+\varepsilon_Z(k) = \left| \log Z_{\mathrm{pred}}(k) - \log Z_{\mathrm{true}}(k) \right|,
+\end{equation}
+allowing direct comparison of model fidelity across spatial scales.
+
