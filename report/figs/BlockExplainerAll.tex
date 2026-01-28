@@ -1,7 +1,7 @@
 
 \documentclass[border=8pt, multi, tikz]{standalone} 
 \usepackage{import}
-\subimport{../layers/}{init}
+\subimport{layers/}{init.tex}
 \usetikzlibrary{positioning}
 \usetikzlibrary{3d} %for including external image 
 \usetikzlibrary{calc}
@@ -12,17 +12,21 @@
 
 
 
-\def\InputColor{rgb:gray,5;white,2} % input
-\def\BlockAColor{rgb:red,5;white,2} % window
-\def\BlockBColor{rgb:orange,5;white,2} % shifted window
-\def\BlockCColor{rgb:yellow,5;white,2} % time 
-\def\BlockDColor{rgb:purple,5;blue,1;white,2} % Full pos
-\def\BlockEColor{rgb:brown,5;white,2} % ConvXNext
-\def\MergeColor{rgb:cyan,5;blue,3;white,2}  % merge and unmerge
-\def\TimeInjectColor{rgb:green,5;white,2} % time injection stuff
-\def\BlackColor{rgb:black,5;white,2}
+\def\InputColor{rgb:black,3;white,4}
+
+\def\BlockAColor{rgb:blue,7;white,2}
+\def\BlockBColor{rgb:teal,7;white,2}
+\def\BlockCColor{rgb:orange,7;white,2}
+\def\BlockDColor{rgb:purple,7;white,2}
+
+\def\BlockEColor{rgb:brown,6;black,1;white,2}
+\def\MergeColor{rgb:gray,5;white,4}
+\def\TimeInjectColor{rgb:black,12;white,2}
+
+\def\BlackColor{rgb:black,8;white,1}
+\def\SkipBlockColor{rgb:cyan,5;black,1;white,2}
+
 \def\Opacity{1}
-\def\SkipBlockColor{rgb:blue,3;green,2;white,2}
 
 % for the global and local skip connections
 \def\skipshift{6}

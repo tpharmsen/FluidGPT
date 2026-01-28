@@ -637,13 +637,13 @@
 \def\ncols{4}       % entries per row (2 rows total)
 
 \foreach \i/\color/\text in {
-    0/\InputColor/Input–Output,
+    0/\InputColor/(Un)Patchify (+Positional Encoding),
     1/\BlockAColor/Normal window spatial attention block,
     2/\BlockBColor/Shifted window spatial attention block,
     3/\BlockCColor/Temporal attention block,
     4/\BlockDColor/Full spatial attention block,
     5/\BlockEColor/ConvXNext block,
-    6/\MergeColor/Merge–Unmerge,
+    6/\MergeColor/(Un)Merge,
     7/\TimeInjectColor/Flowtime injection
 }{
     \pgfmathsetmacro{\x}{mod(\i,\ncols)*\colwidth}
