@@ -1,10 +1,12 @@
 \chapter*{Training and Validation}
-
-- explain data paralellism
-- explain reduced precision training bfloat16
-- explain learning rate tuning
-- explain b200 platform -> containerization
-- explain framework github
+- explain that i made a custom framework to faciliate training and validation on slurm-based, container-based HPC systems and local devices.
+- explain that the framework is modular and configurable via config files
+- explain the 8 times data paralellism and effective batch size
+- explain the need for high compute and memory due to model size and data size and attention mechanisms
+- explain that two models have been trained, one deterministic AR model and one probabilistic flowmatching model that both can be used auto-regressively for rollout predictions
+- explain reduced precision training bfloat16 and for validation float32
+- explain learning rate tuning with warmup and milestones with decay steps
+- explain nvidia dgx b200 platform -> containerization
 
 - explain single step validation sampling
 - explain rollout validation
@@ -14,8 +16,57 @@
 
 \section{Training procedure}
 
-framework, github link, config file structure
-Compute; B200 AI platform containers
+Training Framework and System Abstraction
+
+To support large-scale experimentation across heterogeneous compute environments, we developed a custom training framework designed to seamlessly operate on both local devices and high-performance computing (HPC) systems. In particular, the framework targets SLURM-managed, container-based clusters while retaining full compatibility with single-node and multi-GPU setups. This abstraction enables identical training and validation logic to be reused across environments, ensuring reproducibility and minimizing environment-specific code paths.
+
+The framework is fully modular and configurable through declarative configuration files, allowing model architectures, optimization parameters, data handling, and distributed training settings to be adjusted without modifying core training code. This design was critical for systematically comparing multiple model classes under controlled experimental conditions.
+
+Models and Autoregressive Rollout
+
+Two foundation models were trained within this unified framework. The first is a deterministic autoregressive (AR) model, which predicts the next temporal state conditioned on a fixed history window. The second is a probabilistic flow-matching model, which learns a conditional distribution over future states and enables stochastic sampling during inference. Despite their conceptual differences, both models are trained to support autoregressive rollout, where predictions are recursively fed back as inputs to generate long-horizon temporal sequences of fluid states. For the flow-matching model, the prior-distribution is generated on the go with correlated gaussian noise. The noise is generated as pure gaussian noise, with a gaussian filter with a standard deviation of 4 in spatial directions and 1 in temporal direction applied to introduce correlation.
+
+Distributed Training and Effective Batch Size
+
+Training was performed using data parallelism across 8 devices, resulting in an effective batch size equal to eight times the per-device batch size. This parallelism was essential to stabilize optimization and maintain throughput given the high-dimensional spatial-temporal data and large model capacity. Gradient synchronization was performed at each training step to ensure consistent updates across devices.
+
+Precision Strategy
+
+To balance numerical stability with computational efficiency, reduced-precision training using bfloat16 was employed for all forward and backward passes during training. Validation and evaluation were conducted in float32 precision to ensure accurate error metrics and fair model comparison. This mixed-precision strategy significantly reduced memory usage and improved throughput without observable degradation in training stability.
+
+Optimization and Learning Rate Scheduling
+
+Both models were trained using the same optimization strategy to ensure a fair comparison. Learning rates were tuned using a schedule consisting of an initial warmup phase, followed by stepwise decay at predefined milestones. The warmup phase mitigates optimization instability during early training, particularly for large models and distributed settings, while milestone-based decay improves convergence during later stages of training. Due to the sampling nature of the flow-matching model, a slightly higher initial learning rate was used compared to the deterministic AR model. Also, the flow-matching model is trained for longer at pre-decay learning rates to account for the increased complexity of learning a conditional distribution.
+
+Hardware Platform
+
+All large-scale experiments were conducted on the state of the art NVIDIA DGX B200 unified AI platform, leveraging its high-bandwidth interconnect, large GPU memory capacity and high compute power. Training and evaluation were executed within containerized environments, ensuring consistent software dependencies across runs.
+
+\begin{table}[htbp]
+	\centering
+	\renewcommand{\arraystretch}{1.2} % increase row height for readability
+	\begin{tabular}{lcc}
+		\hline
+		\textbf{Hyperparameter} & \textbf{Deterministic Model} & \textbf{Probabilistic Model} \\
+		\hline
+		Model Name & FluidGPT-AR & FluidGPT-FM \\
+        Model Parameters & 31.6 M & 46.0 M \\
+        Training time & ... & 3d 18h 6m 18s \\ 
+        Data split seed & 227 & 227 \\
+        GPU allocation & 8x NVIDIA B200 & 8x NVIDIA B200 \\
+        epochs & 100 & 120 \\
+        batch size & 176 & 176 \\
+        init lr & $2 \times 10^{-4}$ & $4 \times 10^{-4}$ \\
+        warmup epochs & 4 & 4 \\
+        lr decay & 0.1 & 0.1 \\
+        lr milestones & 43, 63, 83 & 63, 83, 103 \\
+        optimizer & AdamW & AdamW \\
+        weight decay & $1 \times 10^{-2}$ & $1 \times 10^{-4}$ \\
+		\hline
+	\end{tabular}
+	\caption{Comparison of training parameters between the deterministic and probabilistic FluidGPT models.}
+	\label{tab:fluidgpt_hparams}
+\end{table}
 
 \section{Evaluation}
 

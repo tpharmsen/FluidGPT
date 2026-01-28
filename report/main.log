@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2025.10.6)  27 JAN 2026 20:21
+This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2025.10.6)  28 JAN 2026 16:43
  restricted system commands enabled.
 **main.tex
 (./main.tex
@@ -959,7 +959,14 @@ Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 Package: filemod-expmin 2011/09/19 v1.2 Get and compare file modification times
  (expandable; minimal)
 ))
-(./main.aux)
+(./main.aux
+
+LaTeX Warning: Label `tab:fluidgpt_hparams' multiply defined.
+
+
+LaTeX Warning: Label `tab:fluidgpt_hparams@cref' multiply defined.
+
+)
 \openout1 = main.aux
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 56.
@@ -1280,27 +1287,23 @@ Overfull \hbox (106.3829pt too wide) in paragraph at lines 16--37
 ] [14] [15]) (./chapters/models/models.tex [16]
 Package standalone Info: generated file figs/FM.pdf newer then source file figs
 /FM.tex on input line 23.
-<figs/FM.pdf, id=267, 1079.70377pt x 587.37343pt>
+<figs/FM.pdf, id=267, 1079.70377pt x 587.9285pt>
 File: figs/FM.pdf Graphic file (type pdf)
 <use figs/FM.pdf>
 Package luatex.def Info: figs/FM.pdf  used on input line 23.
-(luatex.def)             Requested size: 540.0pt x 293.76665pt.
-
-Overfull \hbox (5.68996pt too wide) in paragraph at lines 36--64
- [][] 
- []
-
-) (./chapters/training/training.tex [17
+(luatex.def)             Requested size: 540.0pt x 294.04427pt.
+)
+(./chapters/training/training.tex [17
 
 ] [18<./figs/FM.pdf>] [19])
 (./chapters/results/results.tex [20
 
-]) (./chapters/conclusion/conclusion.tex
-[21
+] [21])
+(./chapters/conclusion/conclusion.tex [22
 
-]) (./main.bbl [22
+]) (./main.bbl [23
 
-] [23
+] [24
 
 ]
 Underfull \hbox (badness 2680) in paragraph at lines 65--69
@@ -1312,22 +1315,26 @@ LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
 29.
 (/usr/share/texmf/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) [24]) (./appendices/appendices.tex
-[25
+) [25]) (./appendices/appendices.tex
+[26
 Missing character: There is no ’ (U+2019) in font ptmr8t!
-]) [26
+]) [27
 
 ] (./main.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
+
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: BD751D6F3205B2DBE8EC2941A3897C3C;801.
 )
 
 Here is how much of LuaTeX's memory you used:
- 32470 strings out of 476553
+ 32472 strings out of 476553
  125039,1977958 words of node,token memory allocated
  1413 words of node memory still in use:
    30 hlist, 2 vlist, 14 rule, 2 glue, 4 kern, 1 glyph, 102 attribute, 62 glue_s
@@ -1336,7 +1343,7 @@ pec, 102 attribute_list, 2 write, 24 pdf_literal, 24 pdf_colorstack nodes
 
  53323 multiletter control sequences out of 65536+600000
  98 fonts using 6479431 bytes
- 101i,9n,101p,1486b,887s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 101i,10n,101p,1486b,887s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texlive/texmf-dist/fo
 nts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsf
 onts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
@@ -1348,10 +1355,10 @@ ts/type1/public/rsfs/rsfs10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/s
 ymbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (27 pages, 319956 bytes).
+Output written on main.pdf (28 pages, 301441 bytes).
 
-PDF statistics: 398 PDF objects out of 1000 (max. 8388607)
- 318 compressed objects within 4 object streams
- 119 named destinations out of 1000 (max. 131072)
+PDF statistics: 411 PDF objects out of 1000 (max. 8388607)
+ 328 compressed objects within 4 object streams
+ 121 named destinations out of 1000 (max. 131072)
  312 words of extra memory for PDF output out of 10000 (max. 100000000)
 
