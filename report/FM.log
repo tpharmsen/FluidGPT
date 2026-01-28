@@ -1,7 +1,7 @@
-This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2025.10.6)  28 JAN 2026 16:00
+This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2025.10.6)  28 JAN 2026 11:49
  restricted system commands enabled.
-**FM.tex
-(./FM.tex
+**figs/FM.tex
+(./figs/FM.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
 Lua module: luaotfload 2023-08-31 3.26 Lua based OpenType font support
@@ -416,154 +416,41 @@ File: tikzlibrarytopaths.code.tex 2023-01-15 v3.1.10 (3.1.10)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/import/import.sty
 Package: import 2020/04/01  v 6.2
-) (./layers/init.tex
-(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
-zlibraryquotes.code.tex
-File: tikzlibraryquotes.code.tex 2023-01-15 v3.1.10 (3.1.10)
 )
-(/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.meta.
-code.tex
-File: pgflibraryarrows.meta.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgfarrowinset=\dimen192
-\pgfarrowlength=\dimen193
-\pgfarrowwidth=\dimen194
-\pgfarrowlinewidth=\dimen195
-)
-(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
-zlibrarypositioning.code.tex
-File: tikzlibrarypositioning.code.tex 2023-01-15 v3.1.10 (3.1.10)
-) (./layers/Box.sty
 
-LaTeX Warning: You have requested package `layers/Box',
-               but the package provides `Box'.
+! LaTeX Error: File `layers/init.tex' not found.
 
-Package: Box 
-) (./layers/RightBandedBox.sty
+Type X to quit or <RETURN> to proceed,
+or enter new name. (Default extension: tex)
 
-LaTeX Warning: You have requested package `layers/RightBandedBox',
-               but the package provides `RightBandedBox'.
-
-Package: RightBandedBox 
-))
-(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
-zlibrary3d.code.tex
-File: tikzlibrary3d.code.tex 2023-01-15 v3.1.10 (3.1.10)
-)
-(/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
-zlibrarycalc.code.tex
-File: tikzlibrarycalc.code.tex 2023-01-15 v3.1.10 (3.1.10)
-)
-(/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-luatex.def
-File: l3backend-luatex.def 2024-01-04 L3 backend support: PDF output (LuaTeX)
-\l__color_backend_stack_int=\count283
-Inserting `l3color' in `luaotfload.parse_color'.
-\l__pdf_internal_box=\box63
-)
-(./FM.aux)
-\openout1 = FM.aux
-
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 42.
-LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 4
-2.
- (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
-File: ts1cmr.fd 2023/04/13 v2.5m Standard LaTeX font definitions
-)
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-
-(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count284
-\scratchdimen=\dimen196
-\scratchbox=\box64
-\nofMPsegments=\count285
-\nofMParguments=\count286
-\everyMPshowfont=\toks32
-\MPscratchCnt=\count287
-\MPscratchDim=\dimen197
-\MPnumerator=\count288
-\makeMPintoPDFobject=\count289
-\everyMPtoPDFconversion=\toks33
-) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
-Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
-Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
-85.
-
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
-e
-))
-Overfull \hbox (7.08069pt too wide) in paragraph at lines 76--76
- [][][]\TU/lmr/bx/n/10 In- 
- []
+Enter file name: ^^X
+! Text line contains an invalid character.
+<read *> ^^X
+    
+l.4 \subimport{layers/}{init.tex}
+                               
+? C
+Type <return> to proceed, S to scroll future error messages,
+R to run without stopping, Q to run quietly,
+I to insert something, E to edit your file,
+H for help, X to quit.
+? 
+! Emergency stop.
+<read *> 
+   
+l.4 \subimport{layers/}{init.tex}
+                               
+End of file on the terminal!
 
 
-Overfull \hbox (9.75069pt too wide) in paragraph at lines 76--76
- \TU/lmr/bx/n/10 put[] 
- []
-
-
-Overfull \hbox (15.83069pt too wide) in paragraph at lines 472--472
- [][][]\TU/lmr/bx/n/10 Out- 
- []
-
-
-Overfull \hbox (9.75069pt too wide) in paragraph at lines 472--472
- \TU/lmr/bx/n/10 put[] 
- []
-
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 485.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 485.
-
-Overfull \hbox (1.35487pt too wide) in paragraph at lines 485--485
- [][][]$\OML/cmm/m/it/10 t[]$[] 
- []
-
-[1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./FM.aux)
- ***********
-LaTeX2e <2023-11-01> patch level 1
-L3 programming layer <2024-01-22>
- ***********
-)
 
 Here is how much of LuaTeX's memory you used:
- 22164 strings out of 476553
- 931583,1977958 words of node,token memory allocated
- 413 words of node memory still in use:
-   3 hlist, 1 vlist, 1 rule, 2 glue, 3 kern, 1 glyph, 5 attribute, 48 glue_spec,
- 5 attribute_list, 2 write nodes
-   avail lists: 1:2,2:58720,3:44871,4:412,5:84,6:416,7:36953,8:5,9:25476,10:1,11
-:75
- 43697 multiletter control sequences out of 65536+600000
- 27 fonts using 1608431 bytes
- 117i,11n,114p,405b,1353s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texmf/fonts/opentype/public/lm/lmroman10-bold.otf></usr/share/texmf/
-fonts/opentype/public/lm/lmroman9-regular.otf></usr/share/texmf/fonts/opentype/p
-ublic/lm/lmroman10-regular.otf></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-r10.pfb>
-Output written on FM.pdf (1 page, 48164 bytes).
-
-PDF statistics: 44 PDF objects out of 1000 (max. 8388607)
- 28 compressed objects within 1 object stream
- 0 named destinations out of 1000 (max. 131072)
- 16 words of extra memory for PDF output out of 10000 (max. 100000000)
-
+ 12158 strings out of 476553
+ 100000,1977958 words of node,token memory allocated 383 words of node memory still in use:
+   2 hlist, 1 rule, 1 dir, 3 kern, 1 glyph, 4 attribute, 48 glue_spec, 4 attribu
+te_list, 1 write, 1 pdf_colorstack nodes
+   avail lists: 2:23,3:2,5:5,7:2,9:3
+ 33809 multiletter control sequences out of 65536+600000
+ 15 fonts using 723367 bytes
+ 117i,0n,114p,410b,88s stack positions out of 10000i,1000n,20000p,200000b,200000s
+!  ==> Fatal error occurred, no output PDF file produced!

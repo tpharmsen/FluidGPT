@@ -11,27 +11,30 @@
 %\tdplotsetmaincoords{-30}{-10}  % elevation=60°, azimuth=120°
 
 
+\def\InputColor{rgb:black,5;white,4}
 
-\def\InputColor{rgb:black,10;white,2} % input
-\def\BlockAColor{rgb:red,5;white,2} % window
-\def\BlockBColor{rgb:orange,5;white,2} % shifted window
-\def\BlockCColor{rgb:yellow,5;white,2} % time 
-\def\BlockDColor{rgb:purple,5;blue,1;white,2} % Full pos
-\def\BlockEColor{rgb:brown,5;white,2} % ConvXNext
-\def\MergeColor{rgb:cyan,5;blue,3;white,2}  % merge and unmerge
-\def\TimeInjectColor{rgb:green,5;white,2} % time injection stuff
-\def\BlackColor{rgb:black,5;white,2}
-\def\Opacity{0.5}
-\def\SkipBlockColor{rgb:blue,3;green,2;white,2}
+\def\BlockAColor{rgb:blue,7;white,2}
+\def\BlockBColor{rgb:teal,7;white,2}
+\def\BlockCColor{rgb:orange,7;white,2}
+\def\BlockDColor{rgb:purple,7;white,2}
+
+\def\BlockEColor{rgb:brown,6;black,1;white,2}
+\def\MergeColor{rgb:gray,5;white,4}
+\def\TimeInjectColor{rgb:black,12;white,2}
+
+\def\BlackColor{rgb:black,8;white,1}
+\def\SkipBlockColor{rgb:cyan,5;black,1;white,2}
+
+\def\Opacity{0.75}
 
 % for the global and local skip connections
 \def\skipshift{6}
 \def\skipshiftsmall{2}
 
 % patch visualization stuff
-\def\PatchHeight{8.5}
+\def\PatchHeight{8}
 \def\PatchWidth{0.3}
-\def\PatchDepth{8.5}
+\def\PatchDepth{8}
 \def\xShift{-2} 
 
 \newcommand{\midarrow}{\tikz \draw[-{Stealth[width=2mm]},line width =1mm,draw=\BlackColor] (-0.3,0) -- ++(0.3,0);}
@@ -47,15 +50,14 @@
         \pgfmathtruncatemacro{\icol}{int((\col+3)/2)}
         \pic[shift={(0,\row,\col)}] at (0,0,0) 
             {Box={
-                name=in_\irow_\icol,
+                name=out_\irow_\icol,
                 caption= ,
                 fill=\InputColor,
                 opacity=\Opacity,
                 height=\PatchHeight,
                 width=\PatchWidth,
                 depth=\PatchDepth
-            }
-        };
+            }};
     }
 }
 
@@ -436,7 +438,26 @@
         }
     };
 
-\pic[shift={ (2,0,0) }] at (7c-east) 
+\foreach \row in {-3,-1,1,3} { 
+    \foreach \col in {-3,-1,1,3} { 
+        \pgfmathtruncatemacro{\irow}{int((\row+3)/2)}
+        \pgfmathtruncatemacro{\icol}{int((\col+3)/2)}
+        \pic[shift={(2,\row,\col)}] at (7c-east) 
+            {Box={
+                name=out_\irow_\icol,
+                caption= ,
+                fill=\InputColor,
+                opacity=\Opacity,
+                height=\PatchHeight,
+                width=\PatchWidth,
+                depth=\PatchDepth
+            }};
+    }
+}
+
+\coordinate (unpatchify-center) at ($(7c-east) + (2,0,0)$);
+
+\pic[shift={(2,0,0)}] at (unpatchify-center)
     {Box={
         name=output,
         caption=Output ,
@@ -449,6 +470,7 @@
         depth=40
         }
     };
+
 
 \pic[shift={ (0,0,0) }] at (-2,7,0) 
     {Box={
@@ -488,7 +510,8 @@
 \draw [connection]  (merge5-east)    -- node {\midarrow} (6a-west);
 \draw [connection]  (6c-east)    -- node {\midarrow} (merge6-west);
 \draw [connection]  (merge6-east)    -- node {\midarrow} (7a-west);
-\draw [connection]  (7c-east)    -- node {\midarrow} (output-west);
+\draw [connection]  (7c-east)    -- node {\midarrow} (unpatchify-center);
+\draw [connection]  (unpatchify-center)    -- node {\midarrow} (output-west);
 
 
 \path (0,0,0) -- (1a-west) coordinate[pos=0.5] (skip1a);
@@ -504,7 +527,8 @@
 \path (merge5-east) -- (6a-west) coordinate[pos=0.5] (skip6a);
 \path (6c-east) -- (merge6-west) coordinate[pos=0.5] (skip6b);
 \path (merge6-east) -- (7a-west) coordinate[pos=0.5] (skip7a);
-\path (7c-east) -- (output-west) coordinate[pos=0.5] (skip7b);
+\path (7c-east) -- (unpatchify-center) coordinate[pos=0.5] (skip7b);
+%\path (unpatchify-center) -- (output-west)
 
 \coordinate (globalskip1-out) at ($(skip1b) + (0,0,3*\skipshift)$);
 \coordinate (globalskip2-out) at ($(skip2b) + (0,0,2*\skipshift)$);
@@ -631,6 +655,7 @@
     \node[anchor=west, text width=240, align=left]
         at (\x+2.0,\y+0.75) {\text};
 }
+
 
 \end{scope}
 
