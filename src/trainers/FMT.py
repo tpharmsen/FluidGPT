@@ -263,7 +263,12 @@ class FMTmodel(L.LightningModule):
 
         target = batch
         prior = self._generate_prior(target)
-        tf = torch.rand(target.size(0), device=target.device)
+        #tf = torch.rand(target.size(0), device=target.device)
+        t_grid = torch.tensor(
+            [0.01, 0.05, 0.10, 0.25, 0.75, 0.90, 0.95, 0.99],
+            device=target.device
+        )
+        tf = t_grid[torch.arange(target.size(0), device=target.device) % len(t_grid)]
         t_expand = tf.view(-1, 1, 1, 1, 1).repeat(
             1, target.shape[1], target.shape[2], target.shape[3], target.shape[4]
         )
