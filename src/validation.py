@@ -296,7 +296,9 @@ class ModelValidation:
 
             #self.train_datasets.append(Subset(dataset_SS, train_sampler.indices))
             self.val_datasets.append(Subset(dataset_SS, val_sampler.indices))
+            
             self.valtraj_datasets.append(Subset(dataset_SS, val_sampler.val_trajs))
+            
             #self.val_forward_datasets.append(Subset(dataset_FS, val_forward_sampler.indices))
             #self.train_samplers.append(train_sampler)
             self.val_samplers.append(val_sampler)
@@ -401,6 +403,8 @@ class ModelValidation:
             dataloader = self.get_dataloader(d, mode='ss')
             traj_indices = len(self.val_samplers[d].indices)
             print(f"\nDataset: {self.cd.datasets[d]['name']}") 
+            print(len(self.val_samplers[d].indices), "i/o pairs")
+            print(len(self.val_samplers[d].val_trajs), "full trajectories")
             cumulative_se_sum = 0.0
             cumulative_ae_sum = 0.0
             cumulative_y2_sum = 0.0
