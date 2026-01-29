@@ -18,7 +18,7 @@ echo "GPU devices request: $GPU_DEVICES_REQUEST"
 echo "Container name: $CONTAINER_NAME"
 echo "DO NOT USE GIT BASH FOR THIS SCRIPT (IT WILL CHANGE THE PATHING OF PVCs)"
 
-runai training submit $CONTAINER_NAME \
+runai training workspace $CONTAINER_NAME \
 --image "harbor.spike.tue.nl/fluidgpt/fluidgpt-fm-ssh:latest" \
 --project "fluidgpt" \
 --user-group-source "fromTheImage" \
