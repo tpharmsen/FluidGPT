@@ -405,6 +405,7 @@ class ModelValidation:
             print(f"\nDataset: {self.cd.datasets[d]['name']}") 
             print(len(self.val_samplers[d].indices), "i/o pairs")
             print(len(self.val_samplers[d].val_trajs), "full trajectories")
+            print(self.val_samplers[d].indices[:100])
             cumulative_se_sum = 0.0
             cumulative_ae_sum = 0.0
             cumulative_y2_sum = 0.0
