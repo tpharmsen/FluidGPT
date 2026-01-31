@@ -316,7 +316,7 @@ class ModelValidation:
                 #"val_forward_idxs": val_forward_sampler.indices,
             }
             if self.cb.save_on:
-                save_split_path = self.cb.save_path + "validation/" + self.cb.folder_out + "traj_splits/"
+                save_split_path = self.cb.save_path + "validation/" + self.trainer + "/" + self.cb.folder_out + "traj_splits/"
                 os.makedirs(save_split_path, exist_ok=True)
                 save_split_path += "traj_split_" + item["name"] + ".json"
                 if save_split_path is None:
