@@ -444,7 +444,7 @@ class ModelValidation:
                             #print(y.shape)
                             yhat = self._generate_prior(y)
                             #print(yhat.shape)
-                            mode = 2
+                            mode = 3
                             if mode == 1:
                                 for _, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
                                     pred = self.model(yhat, t.to(y.device).expand(yhat.size(0)))
