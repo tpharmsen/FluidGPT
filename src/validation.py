@@ -450,14 +450,14 @@ class ModelValidation:
                                 #print(pred.shape)
                                 yhat = yhat + (1 / steps) * pred.detach()
                             """
-                            mode = 5
+                            mode = 1
                             if mode == 1:
                                 for _, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
                                     pred = self.model(yhat, t.to(y.device).expand(yhat.size(0)))
                                     #print(pred.shape)
                                     yhat = yhat + (1 / steps) * pred.detach()
                             elif mode == 2:
-                                steps = 5
+                                steps = 8
                                 dt = 1.0 / steps
                                 ts = torch.linspace(0, 1, steps + 1, device=y.device)
 
@@ -491,7 +491,7 @@ class ModelValidation:
                                     pred = self.model(yhat, t.expand(yhat.size(0)))
                                     yhat = yhat + dt * pred.detach()
                             elif mode == 4:
-                                steps = 40
+                                steps = 30
                                 for _, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
                                     pred = self.model(yhat, t.to(y.device).expand(yhat.size(0)))
                                     #print(pred.shape)
