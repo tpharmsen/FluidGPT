@@ -444,7 +444,7 @@ class ModelValidation:
                             #print(y.shape)
                             yhat = self._generate_prior(y)
                             #print(yhat.shape)
-                            """
+                            
                             for _, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
                                 pred = self.model(yhat, t.to(y.device).expand(yhat.size(0)))
                                 #print(pred.shape)
@@ -523,7 +523,7 @@ class ModelValidation:
                                     )
 
                                     yhat = yhat + (dt / 6.0) * (k1 + 2*k2 + 2*k3 + k4).detach()
-                            
+                            """
                             #raise NotImplementedError("Temporary stop for debugging.")
                             
                             y, yhat = y.permute(0,2,1,3,4), yhat.permute(0,2,1,3,4)
@@ -577,9 +577,6 @@ class ModelValidation:
                 torch.cuda.synchronize()
                 end_time = time.time()
                 print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, timer: {end_time - time_start:.4f} s", flush=True)
-                #print()
-                if i == 2:
-                    break
                 
             rrmse = (cumulative_se_sum / cumulative_y2_sum) ** 0.5  
             rae = cumulative_ae_sum / cumulative_yabs_sum 
