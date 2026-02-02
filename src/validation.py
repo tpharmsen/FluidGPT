@@ -444,10 +444,80 @@ class ModelValidation:
                             #print(y.shape)
                             yhat = self._generate_prior(y)
                             #print(yhat.shape)
-                            for _, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
-                                pred = self.model(yhat, t.to(y.device).expand(yhat.size(0)))
-                                #print(pred.shape)
-                                yhat = yhat + (1 / steps) * pred.detach()
+                            mode = 1
+                            if mode == 1:
+                                for _, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
+                                    pred = self.model(yhat, t.to(y.device).expand(yhat.size(0)))
+                                    #print(pred.shape)
+                                    yhat = yhat + (1 / steps) * pred.detach()
+                            elif mode == 2:
+                                steps = 5
+                                dt = 1.0 / steps
+                                ts = torch.linspace(0, 1, steps + 1, device=y.device)
+
+                                for i in range(steps):
+                                    t = ts[i]
+                                    t_expand = t.expand(yhat.size(0))
+
+                                    k1 = self.model(yhat, t_expand)
+
+                                    k2 = self.model(
+                                        yhat + 0.5 * dt * k1,
+                                        (t + 0.5 * dt).expand(yhat.size(0))
+                                    )
+
+                                    k3 = self.model(
+                                        yhat + 0.5 * dt * k2,
+                                        (t + 0.5 * dt).expand(yhat.size(0))
+                                    )
+
+                                    k4 = self.model(
+                                        yhat + dt * k3,
+                                        (t + dt).expand(yhat.size(0))
+                                    )
+
+                                    yhat = yhat + (dt / 6.0) * (k1 + 2*k2 + 2*k3 + k4).detach()
+                            elif mode == 3:
+                                eps = 1e-3 
+                                ts = torch.linspace(eps, 1.0, steps, device=y.device)
+                                dt = 1.0 / steps
+                                for t in ts:
+                                    pred = self.model(yhat, t.expand(yhat.size(0)))
+                                    yhat = yhat + dt * pred.detach()
+                            elif mode == 4:
+                                steps = 40
+                                for _, t in enumerate(torch.linspace(0, 1, steps+1)[:-1], start=1):
+                                    pred = self.model(yhat, t.to(y.device).expand(yhat.size(0)))
+                                    #print(pred.shape)
+                                    yhat = yhat + (1 / steps) * pred.detach()
+                            elif mode == 5:
+                                steps = 10
+                                dt = 1.0 / steps
+                                ts = torch.linspace(0, 1, steps + 1, device=y.device)
+
+                                for i in range(steps):
+                                    t = ts[i]
+                                    t_expand = t.expand(yhat.size(0))
+
+                                    k1 = self.model(yhat, t_expand)
+
+                                    k2 = self.model(
+                                        yhat + 0.5 * dt * k1,
+                                        (t + 0.5 * dt).expand(yhat.size(0))
+                                    )
+
+                                    k3 = self.model(
+                                        yhat + 0.5 * dt * k2,
+                                        (t + 0.5 * dt).expand(yhat.size(0))
+                                    )
+
+                                    k4 = self.model(
+                                        yhat + dt * k3,
+                                        (t + dt).expand(yhat.size(0))
+                                    )
+
+                                    yhat = yhat + (dt / 6.0) * (k1 + 2*k2 + 2*k3 + k4).detach()
+                            
                             #raise NotImplementedError("Temporary stop for debugging.")
                             
                             y, yhat = y.permute(0,2,1,3,4), yhat.permute(0,2,1,3,4)
@@ -502,6 +572,8 @@ class ModelValidation:
                 end_time = time.time()
                 print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, timer: {end_time - time_start:.4f} s", flush=True)
                 #print()
+                if i == 3:
+                    break
                 #if i == 5:
                 #    break
     
