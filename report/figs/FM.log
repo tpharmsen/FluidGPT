@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2025.10.6)  28 JAN 2026 16:07
+This is LuaHBTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=lualatex 2025.10.6)  3 FEB 2026 19:09
  restricted system commands enabled.
 **FM.tex
 (./FM.tex
@@ -462,27 +462,27 @@ Inserting `l3color' in `luaotfload.parse_color'.
 (./FM.aux)
 \openout1 = FM.aux
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 42.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 43.
 LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 4
-2.
+3.
  (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 42.
-LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -506,31 +506,31 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Overfull \hbox (7.08069pt too wide) in paragraph at lines 76--76
+Overfull \hbox (7.08069pt too wide) in paragraph at lines 77--77
  [][][]\TU/lmr/bx/n/10 In- 
  []
 
 
-Overfull \hbox (9.75069pt too wide) in paragraph at lines 76--76
+Overfull \hbox (9.75069pt too wide) in paragraph at lines 77--77
  \TU/lmr/bx/n/10 put[] 
  []
 
 
-Overfull \hbox (15.83069pt too wide) in paragraph at lines 472--472
+Overfull \hbox (15.83069pt too wide) in paragraph at lines 473--473
  [][][]\TU/lmr/bx/n/10 Out- 
  []
 
 
-Overfull \hbox (9.75069pt too wide) in paragraph at lines 472--472
+Overfull \hbox (9.75069pt too wide) in paragraph at lines 473--473
  \TU/lmr/bx/n/10 put[] 
  []
 
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 485.
+(Font)              <7> on input line 486.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 485.
+(Font)              <5> on input line 486.
 
-Overfull \hbox (1.35487pt too wide) in paragraph at lines 485--485
+Overfull \hbox (1.35487pt too wide) in paragraph at lines 486--486
  [][][]$\OML/cmm/m/it/10 t[]$[] 
  []
 
@@ -544,14 +544,14 @@ L3 programming layer <2024-01-22>
 )
 
 Here is how much of LuaTeX's memory you used:
- 22164 strings out of 476553
+ 22162 strings out of 476553
  931570,1977958 words of node,token memory allocated
  413 words of node memory still in use:
    3 hlist, 1 vlist, 1 rule, 2 glue, 3 kern, 1 glyph, 5 attribute, 48 glue_spec,
  5 attribute_list, 2 write nodes
    avail lists: 1:2,2:58720,3:44871,4:412,5:96,6:416,7:37013,8:6,9:25476,10:1,11
 :78
- 43697 multiletter control sequences out of 65536+600000
+ 43695 multiletter control sequences out of 65536+600000
  27 fonts using 1608431 bytes
  117i,11n,114p,405b,1353s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf/fonts/opentype/public/lm/lmroman10-bold.otf></usr/share/texmf/
@@ -560,7 +560,7 @@ ublic/lm/lmroman10-regular.otf></usr/share/texlive/texmf-dist/fonts/type1/public
 /amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
 ts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 r10.pfb>
-Output written on FM.pdf (1 page, 48548 bytes).
+Output written on FM.pdf (1 page, 48526 bytes).
 
 PDF statistics: 44 PDF objects out of 1000 (max. 8388607)
  28 compressed objects within 1 object stream
