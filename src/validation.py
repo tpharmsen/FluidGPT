@@ -163,8 +163,8 @@ def read_command():
         os.makedirs(cb.save_path + cb.folder_out, exist_ok=True)
     if args.out != None:
         cb.wandb_name = args.out
-    if args.calc not in ["ss", "ssms", "ms", "spectra", "all"]:
-        raise ValueError("Invalid calculation type specified. Choose from 'ss', 'ssms', 'ms', 'spectra', or 'all'.")
+    if args.calc not in ["ss", "ssms", "ms", "spectra", "msspectra", "all"]:
+        raise ValueError("Invalid calculation type specified. Choose from 'ss', 'ssms', 'ms', 'spectra', 'msspectra' or 'all'.")
     if args.fm_samples is None and args.trainer == "FM":
         raise ValueError("For FM trainer, --fm_samples argument must be provided.")
     if args.dsplit == 0:
