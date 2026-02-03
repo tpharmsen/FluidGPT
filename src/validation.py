@@ -1066,6 +1066,13 @@ if __name__ == "__main__":
         code = model_validation.calculate_spectra_plots_per_dataset()
         if code: print("SP Success") 
         else: print("SP Failure")
+    elif calc == "msspectra":
+        code = model_validation.calculate_rollout_error_per_dataset()
+        if code: print("MS Success") 
+        else: print("MS Failure")
+        code = model_validation.calculate_spectra_plots_per_dataset()
+        if code: print("SP Success") 
+        else: print("SP Failure")
     elif calc == "all":
         code = model_validation.calculate_ss_error_per_dataset()
         if code: print("SS Success") 
