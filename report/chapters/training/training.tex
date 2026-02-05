@@ -1,4 +1,4 @@
-\chapter*{Training and Validation}
+\section{Training and Validation}
 %- explain that i made a custom framework to faciliate training and validation on slurm-based, container-based HPC systems and local devices.
 %- explain that the framework is modular and configurable via config files
 %- explain the 8 times data paralellism and effective batch size
@@ -14,7 +14,7 @@
 %- define error metrics relative rmse and absolute
 %- validation in float32/float64?
 
-\section{Training procedure}
+\subsection{Training procedure}
 
 Training Framework and System Abstraction
 
@@ -68,7 +68,7 @@ All large-scale experiments were conducted on the state of the art NVIDIA DGX B2
 	\label{tab:fluidgpt_hparams}
 \end{table}
 
-\section{Validation}
+\subsection{Validation}
 
 %for each dataset (20% validation split)
 %- explain single next-timeblock validation
@@ -82,7 +82,7 @@ All large-scale experiments were conducted on the state of the art NVIDIA DGX B2
 
 For each dataset, 20\% of the available trajectories were reserved for validation and were not used during training. All validation metrics were computed exclusively on this held-out split. Validation was designed to assess both short-term predictive accuracy and long-horizon temporal stability of the learned dynamics.
 
-\subsection{Model-Specific Validation}
+\subsubsection{Model-Specific Validation}
 
 \paragraph{Deterministic Autoregressive Model.}
 The deterministic autoregressive (AR) model produces a static prediction for a given input sequence. Both single-step and rollout validations therefore yield a deterministic predicted trajectory, which is directly compared against ground truth using pointwise and spectral physics metrics.
@@ -90,7 +90,7 @@ The deterministic autoregressive (AR) model produces a static prediction for a g
 \paragraph{Probabilistic Flow-Matching Model.}
 The probabilistic flow-matching model defines a conditional distribution over future states. During validation, 16 independent samples were drawn for each input sequence. Metrics were computed over the resulting ensemble, enabling analysis of both the mean prediction and the variability across samples. 
 
-\subsection{Velocity Integration for Flow Matching}
+\subsubsection{Velocity Integration for Flow Matching}
 The flow-matching model predicts \emph{velocity increments} rather than absolute states. To generate the next physical state, a sample is first drawn from a prior distribution. The initial physical state is then integrated forward in \emph{flowtime} using the learned velocity field (the model), conditioned on the current physical state. Here, \emph{flowtime} $t$ is an auxiliary, continuous variable that parameterizes the transformation from the prior distribution to the predicted physical state. It is important to note that this is not the real physical time of the fluid system. Actually, it represents the trajectory along which the model deforms a sample into a physically plausible next state.
 
 Formally, given an initial state $x_0$ and a learned velocity field $v_\theta(x,t)$, the integration in flowtime is expressed as
@@ -99,7 +99,7 @@ x(T) = x(0) + \int_{0}^{T} v_\theta\bigl(x(t), t\bigr) \, dt,
 \end{equation}
 where $T$ is the end of the flowtime interval. This continuous integration transforms the latent sample into a prediction in physical space. For the validation, we employed a simple Euler integration scheme with 20 discrete flowtime steps to approximate this integral.
 
-\subsection{Single-Step Validation}
+\subsubsection{Single-Step Validation}
 As an initial evaluation, both models were assessed using a single next-timeblock prediction setting. Given a ground-truth input sequence, the models predict the immediate next temporal block without feeding back their own predictions. This evaluation isolates the one-step transition accuracy and avoids error accumulation effects inherent to autoregressive rollouts. Thus this next-timeblock error metric consists of the average error of the next 5 timesteps.
 
 \begin{equation}
@@ -110,10 +110,10 @@ As an initial evaluation, both models were assessed using a single next-timebloc
 \text{RAE} = \frac{\sum_{i=1}^{N} \left| y_i - \hat{y}_i \right|}{\sum_{i=1}^{N} \left| y_i \right|}
 \end{equation}
 
-\subsection{Autoregressive Rollout Validation}
+\subsubsection{Autoregressive Rollout Validation}
 To evaluate long-term behavior, both models were deployed in an autoregressive rollout configuration. Starting from an initial ground-truth context, model predictions were recursively fed back as inputs to generate future states. Prediction errors were computed at each timestep throughout the rollout horizon, enabling analysis of stability over time. 
 
-\subsection{Spectral Diagnostics}
+\subsubsection{Spectral Diagnostics}
 In addition to pointwise errors, validation focused on physically motivated spectral diagnostics. For each predicted and ground-truth state, the log-scaled kinetic energy spectrum $E(k)$ and enstrophy spectrum $Z(k)$ were computed by Fourier transforming the velocity field and aggregating contributions over isotropic shells in wavenumber space.
 
 Scale-resolved spectral errors were defined as
