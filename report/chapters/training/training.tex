@@ -42,31 +42,7 @@ Hardware Platform
 
 All large-scale experiments were conducted on the state of the art NVIDIA DGX B200 unified AI platform, leveraging its high-bandwidth interconnect, large GPU memory capacity and high compute power. Training and evaluation were executed within containerized environments, ensuring consistent software dependencies across runs.
 
-\begin{table}[htbp]
-	\centering
-	\renewcommand{\arraystretch}{1.2} % increase row height for readability
-	\begin{tabular}{lcc}
-		\hline
-		\textbf{Hyperparameter} & \textbf{Deterministic Model} & \textbf{Probabilistic Model} \\
-		\hline
-		Model Name & FluidGPT-AR & FluidGPT-FM \\
-        Model Parameters & 31.6 M & 46.0 M \\
-        Training time & ... & 3d 18h 6m 18s \\ 
-        Data split seed & 227 & 227 \\
-        GPU allocation & 8x NVIDIA B200 & 8x NVIDIA B200 \\
-        epochs & 100 & 120 \\
-        Effective batch size & 1408 & 1408 \\
-        init lr & $2 \times 10^{-4}$ & $4 \times 10^{-4}$ \\
-        warmup epochs & 4 & 4 \\
-        lr decay & 0.1 & 0.1 \\
-        lr milestones & 43, 63, 83 & 63, 83, 103 \\
-        optimizer & AdamW & AdamW \\
-        weight decay & $1 \times 10^{-2}$ & $1 \times 10^{-4}$ \\
-		\hline
-	\end{tabular}
-	\caption{Comparison of training parameters between the deterministic and probabilistic FluidGPT models.}
-	\label{tab:fluidgpt_hparams}
-\end{table}
+\input{chapters/training/train_hparams.tex}
 
 \subsection{Validation}
 

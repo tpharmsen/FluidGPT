@@ -1,0 +1,23 @@
+
+\begin{table}[t]
+\centering
+\caption{Comparison of training hyperparameters between deterministic \\and probabilistic FluidGPT models.}
+\label{tab:fluidgpt_hparams}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Hyperparameter} & \textbf{Deterministic models} & \textbf{Probabilistic models} \\
+\midrule
+Training Time           & --               & 3d 18h 6m 18s    \\
+Data Split Seed         & 227              & 227              \\
+GPU Allocation          & 8$\times$ NVIDIA B200 & 8$\times$ NVIDIA B200 \\
+Epochs                  & 100              & 120              \\
+Effective Batch Size    & 1408             & 1408             \\
+Initial Learning Rate   & $2\times10^{-4}$ & $4\times10^{-4}$ \\
+Warmup Epochs           & 4                & 4                \\
+Learning Rate Decay     & 0.1              & 0.1              \\
+LR Milestones           & 43, 63, 83       & 63, 83, 103      \\
+Optimizer               & AdamW            & AdamW            \\
+Weight Decay            & $1\times10^{-2}$ & $1\times10^{-4}$ \\
+\bottomrule
+\end{tabular}
+\end{table}

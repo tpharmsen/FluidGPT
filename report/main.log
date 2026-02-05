@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.6)  5 FEB 2026 16:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.6)  5 FEB 2026 18:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -940,32 +940,57 @@ Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 Package: filemod-expmin 2011/09/19 v1.2 Get and compare file modification times
  (expandable; minimal)
 ))
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2023/08/05 v3.6o Customizing captions (AR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
+\caption@tempdima=\dimen319
+\captionmargin=\dimen320
+\caption@leftmargin=\dimen321
+\caption@rightmargin=\dimen322
+\caption@width=\dimen323
+\caption@indent=\dimen324
+\caption@parindent=\dimen325
+\caption@hangindent=\dimen326
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count352
+\c@continuedfloat=\count353
+Package caption Info: float package is loaded.
+Package caption Info: hyperref package is loaded.
+Package caption Info: listings package is loaded.
+Package caption Info: longtable package is loaded.
+
+(/usr/share/texlive/texmf-dist/tex/latex/caption/ltcaption.sty
+Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
+))
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count352
+\l__color_backend_stack_int=\count354
 \l__pdf_internal_box=\box93
 )
 (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1033,24 +1058,24 @@ LaTeX Font Info:    ... okay on input line 111.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring OFF on input line 111.
+Package hyperref Info: Link coloring OFF on input line 113.
 (./main.out) (./main.out)
 \@outlinefile=\write4
 \openout4 = `main.out'.
 
-LaTeX Info: Redefining \microtypecontext on input line 111.
-Package microtype Info: Applying patch `item' on input line 111.
-Package microtype Info: Applying patch `toc' on input line 111.
-Package microtype Info: Applying patch `eqnum' on input line 111.
-Package microtype Info: Applying patch `footnote' on input line 111.
-Package microtype Info: Applying patch `verbatim' on input line 111.
+LaTeX Info: Redefining \microtypecontext on input line 113.
+Package microtype Info: Applying patch `item' on input line 113.
+Package microtype Info: Applying patch `toc' on input line 113.
+Package microtype Info: Applying patch `eqnum' on input line 113.
+Package microtype Info: Applying patch `footnote' on input line 113.
+Package microtype Info: Applying patch `verbatim' on input line 113.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `alltext-nott'.
-LaTeX Info: Redefining \showhyphens on input line 111.
+LaTeX Info: Redefining \showhyphens on input line 113.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -1060,16 +1085,16 @@ File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 )
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count353
-\scratchdimen=\dimen319
+\scratchcounter=\count355
+\scratchdimen=\dimen327
 \scratchbox=\box94
-\nofMPsegments=\count354
-\nofMParguments=\count355
+\nofMPsegments=\count356
+\nofMParguments=\count357
 \everyMPshowfont=\toks53
-\MPscratchCnt=\count356
-\MPscratchDim=\dimen320
-\MPnumerator=\count357
-\makeMPintoPDFobject=\count358
+\MPscratchCnt=\count358
+\MPscratchDim=\dimen328
+\MPnumerator=\count359
+\makeMPintoPDFobject=\count360
 \everyMPtoPDFconversion=\toks54
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -1080,13 +1105,15 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-\c@lstlisting=\count359
+\c@lstlisting=\count361
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
 
 (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 115
+LaTeX Font Info:    Trying to load font information for U+msa on input line 117
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
@@ -1095,7 +1122,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 115
+LaTeX Font Info:    Trying to load font information for U+msb on input line 117
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -1105,7 +1132,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 1
-15.
+17.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
@@ -1115,7 +1142,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Trying to load font information for T1+phv on input line 12
-3.
+5.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2020/03/25 scalable font definitions for T1/phv.
@@ -1127,28 +1154,29 @@ Package microtype Info: Loading generic protrusion settings for font family
 
 (./chapters/intro/introduction.tex
 
-Package natbib Warning: Citation `Nielsen2024FrontierCFD' on page 1 undefined o
-n input line 13.
+Package natbib Warning: Author undefined for citation`Nielsen2024FrontierCFD' 
+(natbib)                on page 1 on input line 13.
 
 
-Package natbib Warning: Citation `Akgul2024LiquidCoolingPlate' on page 1 undefi
-ned on input line 13.
+Package natbib Warning: Author undefined for citation`Akgul2024LiquidCoolingPla
+te' 
+(natbib)                on page 1 on input line 13.
 
 
-Package natbib Warning: Citation `Perinajova2024' on page 1 undefined on input 
-line 13.
+Package natbib Warning: Author undefined for citation`Perinajova2024' 
+(natbib)                on page 1 on input line 13.
 
 
-Package natbib Warning: Citation `SuarezVazquez2025' on page 1 undefined on inp
-ut line 13.
+Package natbib Warning: Author undefined for citation`SuarezVazquez2025' 
+(natbib)                on page 1 on input line 13.
 
 
-Package natbib Warning: Citation `Zhang2022surrogateCFD' on page 1 undefined on
- input line 15.
+Package natbib Warning: Author undefined for citation`Zhang2022surrogateCFD' 
+(natbib)                on page 1 on input line 15.
 
 
-Package natbib Warning: Citation `kim2018deepfluids' on page 1 undefined on inp
-ut line 23.
+Package natbib Warning: Author undefined for citation`kim2018deepfluids' 
+(natbib)                on page 1 on input line 23.
 
 [1
 
@@ -1157,97 +1185,91 @@ ut line 23.
 st/fonts/enc/dvips/base/8r.enc}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-su
 per-t1.enc}]
 
-Package natbib Warning: Citation `ronneberger2015u' on page 2 undefined on inpu
-t line 25.
+Package natbib Warning: Author undefined for citation`ronneberger2015u' 
+(natbib)                on page 2 on input line 25.
 
 
-Package natbib Warning: Citation `chen2020u' on page 2 undefined on input line 
-25.
+Package natbib Warning: Author undefined for citation`chen2020u' 
+(natbib)                on page 2 on input line 25.
 
 
-Package natbib Warning: Citation `suter2022surrogate' on page 2 undefined on in
-put line 25.
+Package natbib Warning: Author undefined for citation`suter2022surrogate' 
+(natbib)                on page 2 on input line 25.
 
 
-Package natbib Warning: Citation `prihatno20202d' on page 2 undefined on input 
-line 25.
+Package natbib Warning: Author undefined for citation`prihatno20202d' 
+(natbib)                on page 2 on input line 25.
 
 
-Package natbib Warning: Citation `zhu2019physics' on page 2 undefined on input 
-line 27.
+Package natbib Warning: Author undefined for citation`zhu2019physics' 
+(natbib)                on page 2 on input line 27.
 
 
-Package natbib Warning: Citation `sun2020surrogate' on page 2 undefined on inpu
-t line 27.
+Package natbib Warning: Author undefined for citation`sun2020surrogate' 
+(natbib)                on page 2 on input line 27.
 
 
-Package natbib Warning: Citation `haghighat2022gapinn' on page 2 undefined on i
-nput line 27.
+Package natbib Warning: Author undefined for citation`haghighat2022gapinn' 
+(natbib)                on page 2 on input line 27.
 
 
-Package natbib Warning: Citation `li2020fourier' on page 2 undefined on input l
-ine 32.
+Package natbib Warning: Author undefined for citation`li2020fourier' 
+(natbib)                on page 2 on input line 32.
 
 
-Package natbib Warning: Citation `lu2021deeponet' on page 2 undefined on input 
-line 32.
+Package natbib Warning: Author undefined for citation`vaswani2017attention' 
+(natbib)                on page 2 on input line 37.
 
 
-Package natbib Warning: Citation `li2020graph' on page 2 undefined on input lin
-e 32.
+Package natbib Warning: Author undefined for citation`mccabe2023mpp' 
+(natbib)                on page 2 on input line 37.
 
 
-Package natbib Warning: Citation `vaswani2017attention' on page 2 undefined on 
-input line 37.
+Package natbib Warning: Author undefined for citation`herde2024poseidon' 
+(natbib)                on page 2 on input line 37.
 
 
-Package natbib Warning: Citation `mccabe2023mpp' on page 2 undefined on input l
-ine 37.
+Package natbib Warning: Author undefined for citation`liu2024prose' 
+(natbib)                on page 2 on input line 37.
 
 
-Package natbib Warning: Citation `herde2024poseidon' on page 2 undefined on inp
-ut line 37.
+Package natbib Warning: Author undefined for citation`lu2021deeponet' 
+(natbib)                on page 2 on input line 37.
 
 
-Package natbib Warning: Citation `liu2024prose' on page 2 undefined on input li
-ne 37.
+Package natbib Warning: Author undefined for citation`polymathicAI2024' 
+(natbib)                on page 2 on input line 37.
 
 
-Package natbib Warning: Citation `lu2021deeponet' on page 2 undefined on input 
-line 37.
+Package natbib Warning: Author undefined for citation`yang2025p3d' 
+(natbib)                on page 2 on input line 37.
 
 
-Package natbib Warning: Citation `polymathicAI2024' on page 2 undefined on inpu
-t line 37.
+Package natbib Warning: Author undefined for citation`maulik2020probabilistic' 
+
+(natbib)                on page 2 on input line 44.
 
 
-Package natbib Warning: Citation `yang2025p3d' on page 2 undefined on input lin
-e 37.
-
-
-Package natbib Warning: Citation `maulik2020probabilistic' on page 2 undefined 
-on input line 44.
-
-
-Package natbib Warning: Citation `zheng2023uncertainty' on page 2 undefined on 
-input line 44.
+Package natbib Warning: Author undefined for citation`zheng2023uncertainty' 
+(natbib)                on page 2 on input line 44.
 
 [2]
 
-Package natbib Warning: Citation `gao2024bayesian' on page 3 undefined on input
- line 46.
+Package natbib Warning: Author undefined for citation`gao2024bayesian' 
+(natbib)                on page 3 on input line 46.
 
 
-Package natbib Warning: Citation `mucke2025physicsaware' on page 3 undefined on
- input line 46.
+Package natbib Warning: Author undefined for citation`mucke2025physicsaware' 
+(natbib)                on page 3 on input line 46.
 
 
-Package natbib Warning: Citation `geneva2020multi' on page 3 undefined on input
- line 48.
+Package natbib Warning: Author undefined for citation`geneva2020multi' 
+(natbib)                on page 3 on input line 48.
 
 
-Package natbib Warning: Citation `vadeboncoeur2022probabilistic' on page 3 unde
-fined on input line 48.
+Package natbib Warning: Author undefined for citation`vadeboncoeur2022probabili
+stic' 
+(natbib)                on page 3 on input line 48.
 
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 5
 6.
@@ -1256,139 +1278,86 @@ File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 ) [3])
 (./chapters/problem/problemformulation.tex [4]
 
-Package natbib Warning: Citation `Kolmogorov1941' on page 5 undefined on input 
-line 49.
+Package natbib Warning: Author undefined for citation`Kolmogorov1941' 
+(natbib)                on page 5 on input line 49.
 
-<chapters/problem/energyspectrumscheme.png, id=130, 637.38126pt x 498.86375pt>
+<chapters/problem/energyspectrumscheme.png, id=290, 637.38126pt x 498.86375pt>
 File: chapters/problem/energyspectrumscheme.png Graphic file (type png)
 <use chapters/problem/energyspectrumscheme.png>
 Package pdftex.def Info: chapters/problem/energyspectrumscheme.png  used on inp
 ut line 53.
 (pdftex.def)             Requested size: 238.49341pt x 186.6624pt.
 
-Package natbib Warning: Citation `Kolmogorov1941' on page 5 undefined on input 
-line 63.
+Package natbib Warning: Author undefined for citation`Kolmogorov1941' 
+(natbib)                on page 5 on input line 63.
 
-[5
-pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) ha
-s been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.83 \subsubsection{Prediction Task}
-                                     <./chapters/problem/energyspectrumscheme.p
-ng (PNG copy)>] [6]) (./chapters/datasets/datasets.tex [7]
-Underfull \hbox (badness 10000) in paragraph at lines 36--36
+[5 <./chapters/problem/energyspectrumscheme.png (PNG copy)>] [6])
+(./chapters/datasets/datasets.tex [7] (./chapters/datasets/datasets_specs.tex
+Underfull \hbox (badness 10000) in paragraph at lines 19--19
 []|\T1/ptm/m/n/9 (+20) PDEBench-
  []
 
 
-Underfull \hbox (badness 7613) in paragraph at lines 43--43
+Underfull \hbox (badness 7613) in paragraph at lines 25--25
 []|\T1/ptm/m/n/9 (+20) Turbulent-dominant, com-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 49--49
+Underfull \hbox (badness 10000) in paragraph at lines 30--30
 []|\T1/ptm/m/n/9 (+20) PDEGym-NS-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 50--50
+Underfull \hbox (badness 10000) in paragraph at lines 31--31
 []|\T1/ptm/m/n/9 (+20) Incompressible, Gaus-sian
  []
 
 
-Underfull \hbox (badness 1609) in paragraph at lines 62--62
+Underfull \hbox (badness 1609) in paragraph at lines 41--41
 []|\T1/ptm/m/n/9 (+20) Incompressible, piecewise-
  []
 
 
-Underfull \hbox (badness 4084) in paragraph at lines 68--68
+Underfull \hbox (badness 4084) in paragraph at lines 46--46
 []|\T1/ptm/m/n/9 (+20) Incompressible, Brow-n-ian
  []
 
+)
 
-Overfull \hbox (174.66458pt too wide) in paragraph at lines 21--86
- [][] 
- []
+Package natbib Warning: Author undefined for citation`Jakob2021FluidFlowDataset
+' 
+(natbib)                on page 8 on input line 32.
 
-
-Package natbib Warning: Citation `Jakob2021FluidFlowDataset' on page 8 undefine
-d on input line 104.
-
-[8
-pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has
- been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.306 
-      ]) (./chapters/models/models.tex
+[8]) (./chapters/models/models.tex
 Package standalone Info: generated file figs/FM.pdf newer then source file figs
 /FM.tex on input line 23.
-<figs/FM.pdf, id=182, 1079.70381pt x 587.92848pt>
+<figs/FM.pdf, id=338, 1079.70381pt x 587.92848pt>
 File: figs/FM.pdf Graphic file (type pdf)
 <use figs/FM.pdf>
 Package pdftex.def Info: figs/FM.pdf  used on input line 23.
 (pdftex.def)             Requested size: 397.48499pt x 216.43565pt.
+ (./chapters/models/AR_hparams.tex)
+(./chapters/models/FM_hparams.tex)) (./chapters/training/training.tex [9]
+Underfull \vbox (badness 1803) has occurred while \output is active []
 
-Overfull \hbox (90.12163pt too wide) in paragraph at lines 37--62
- [][] 
- []
-
-) (./chapters/training/training.tex [9] [10
-pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) ha
-s been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.28 
-     
-pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has
- been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.28 
-      <./figs/FM.pdf>] [11
-pdfTeX warning (ext4): destination with the same identifier (name{table.3}) has
- been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.84 
-     ] [12]) (./chapters/results/results.tex)
-(./chapters/conclusion/conclusion.tex) (./main.bbl [13] [14])
-(./appendices/appendices.tex)
-
-Package natbib Warning: There were undefined citations.
-
-[15] (./main.aux
-
-Package natbib Warning: Citation(s) may have changed.
-(natbib)                Rerun to get citations correct.
-
-)
+ [10 <./figs/FM.pdf>] (./chapters/training/train_hparams.tex) [11] [12])
+(./chapters/results/results.tex) (./chapters/conclusion/conclusion.tex)
+(./main.bbl [13] [14]) (./appendices/appendices.tex) [15] (./main.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-Package rerunfilecheck Warning: File `main.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: 5E2FDE8C34870C82CD347C21378317B3;1951
-(rerunfilecheck)             After:  6A7F59E6EC60F20B2B49838D9B215248;5466.
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: 6A7F59E6EC60F20B2B49838D9B215248;5466.
  ) 
 Here is how much of TeX's memory you used:
- 32964 strings out of 474222
- 645761 string characters out of 5748733
- 1946975 words of memory out of 5000000
- 54169 multiletter control sequences out of 15000+600000
- 616486 words of font info for 285 fonts, out of 8000000 for 9000
+ 34373 strings out of 474222
+ 673614 string characters out of 5748733
+ 1944975 words of memory out of 5000000
+ 55563 multiletter control sequences out of 15000+600000
+ 615749 words of font info for 279 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 95i,12n,99p,1493b,863s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 95i,11n,117p,1493b,863s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share
 /texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texli
@@ -1406,15 +1375,14 @@ live/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dis
 t/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts
 /type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf/fonts/type1/public/
-cm-super/sftt0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1000.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf
--dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/urw/times/utmri8a.pfb>
-Output written on main.pdf (15 pages, 439393 bytes).
+cm-super/sftt1000.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/u
+hvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (15 pages, 424548 bytes).
 PDF statistics:
- 438 PDF objects out of 1000 (max. 8388607)
- 334 compressed objects within 4 object streams
- 120 named destinations out of 1000 (max. 500000)
- 59647 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 544 PDF objects out of 1000 (max. 8388607)
+ 441 compressed objects within 5 object streams
+ 122 named destinations out of 1000 (max. 500000)
+ 59335 words of extra memory for PDF output out of 61914 (max. 10000000)
 
