@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.6)  5 FEB 2026 19:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.6)  5 FEB 2026 19:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1293,32 +1293,32 @@ Package natbib Warning: Author undefined for citation`Kolmogorov1941'
 
 [5 <./chapters/problem/energyspectrumscheme.png (PNG copy)>] [6])
 (./chapters/datasets/datasets.tex [7] (./chapters/datasets/datasets_specs.tex
-Underfull \hbox (badness 10000) in paragraph at lines 19--19
+Underfull \hbox (badness 10000) in paragraph at lines 20--20
 []|\T1/ptm/m/n/9 (+20) PDEBench-
  []
 
 
-Underfull \hbox (badness 7613) in paragraph at lines 25--25
-[]|\T1/ptm/m/n/9 (+20) Turbulent-dominant, com-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 30--30
-[]|\T1/ptm/m/n/9 (+20) PDEGym-NS-
+Underfull \hbox (badness 10000) in paragraph at lines 26--26
+[]|\T1/ptm/m/n/9 (+20) Compressible, turbulent-
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 31--31
+[]|\T1/ptm/m/n/9 (+20) PDEGym-NS-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 32--32
 []|\T1/ptm/m/n/9 (+20) Incompressible, Gaus-sian
  []
 
 
-Underfull \hbox (badness 1609) in paragraph at lines 41--41
+Underfull \hbox (badness 1609) in paragraph at lines 42--42
 []|\T1/ptm/m/n/9 (+20) Incompressible, piecewise-
  []
 
 
-Underfull \hbox (badness 4084) in paragraph at lines 46--46
+Underfull \hbox (badness 4084) in paragraph at lines 47--47
 []|\T1/ptm/m/n/9 (+20) Incompressible, Brow-n-ian
  []
 
@@ -1351,11 +1351,11 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 6A7F59E6EC60F20B2B49838D9B215248;5466.
  ) 
 Here is how much of TeX's memory you used:
- 34373 strings out of 474222
- 673614 string characters out of 5748733
+ 34370 strings out of 474222
+ 673590 string characters out of 5748733
  1944975 words of memory out of 5000000
  55563 multiletter control sequences out of 15000+600000
- 615749 words of font info for 279 fonts, out of 8000000 for 9000
+ 615619 words of font info for 277 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  95i,11n,117p,1493b,863s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
@@ -1379,7 +1379,7 @@ cm-super/sftt1000.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/u
 hvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr
 /share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/
 texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (15 pages, 425032 bytes).
+Output written on main.pdf (15 pages, 425033 bytes).
 PDF statistics:
  544 PDF objects out of 1000 (max. 8388607)
  441 compressed objects within 5 object streams

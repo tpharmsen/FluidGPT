@@ -101,8 +101,8 @@ The model $\mathcal{M}$ is a function of the input sequence $\mathbf{S}_{\text{i
 
 This problem is tackled using two distinct modeling approaches, which define the specific mathematical targets of the prediction. Both models now condition their output on a sequence of the $k$ most recent past states, $\mathbf{S}_{\text{hist}} = \{ \mathbf{U}_{i-k+1}, \ldots, \mathbf{U}_i \}$, and are trained to predict a bundle of $\Delta T$ future states, $\mathbf{S}_{\text{pred}} = \{ \mathbf{U}_{i+1}, \ldots, \mathbf{U}_{i+\Delta T} \}$.
 
-\paragraph{1. Short-Sequence Deterministic Prediction (Auto-Regressive, $\Delta T = 3$)}
-This approach models the conditional expectation of a short-sequence bundle of future states, $\mathbb{E}[\mathbf{S}_{\text{out}} | \mathbf{S}_{\text{in}}]$. It utilizes a function $f_{\theta}$ that maps the historical sequence to the predicted future sequence:
+\paragraph{1. Deterministic Prediction}
+This approach models the conditional expectation of a short-sequence bundle of five future states, $\mathbb{E}[\mathbf{S}_{\text{out}} | \mathbf{S}_{\text{in}}]$. It utilizes a function $f_{\theta}$ that maps the historical sequence to the predicted future sequence:
 \begin{equation*}
 f_{\theta}: \mathbf{S}_{\text{in}} \mapsto \mathbf{S}_{\text{out}}
 \end{equation*}
@@ -116,10 +116,10 @@ The learning objective for the model parameters $\theta$ is the minimization of 
 \begin{equation*}
 \mathcal{L}_{\text{AR}}(\theta) = \mathbb{E}_{(\mathbf{S}_{\text{in}}, \mathbf{S}_{\text{out}}) \sim \mathcal{D}} \left[ \| \mathbf{S}_{\text{out}} - f_{\theta}(\mathbf{S}_{\text{in}}) \|_2^2 \right].
 \end{equation*}
-This method prioritizes short-term accuracy and computation time above long-term accuracy.
 
-\paragraph{2. Long-Sequence Probabilistic Prediction (Flow Matching, $\Delta T = 12$)}
-Given the turbulent nature of the system, the evolution over a long horizon $T$ is better described by the transition of a probability distribution $p(\mathbf{U}_{T_0+T} | \mathbf{S}_{\text{in}})$ rather than a deterministic one. % This model uses the full input history $\mathbf{S}_{\text{in}}$ (where $T_0$ is the total history length) to model the distribution of the final state $\mathbf{U}_{T_0+T}$.
+
+\paragraph{2. Probabilistic Prediction (Flow Matching)}
+Given the possible turbulent nature of the system, the evolution over a long horizon $T$ is better described by the transition of a probability distribution $p(\mathbf{U}_{T_0+T} | \mathbf{S}_{\text{in}})$ rather than a deterministic one. % This model uses the full input history $\mathbf{S}_{\text{in}}$ (where $T_0$ is the total history length) to model the distribution of the final state $\mathbf{U}_{T_0+T}$.
 
 The goal is to train a model $\mathcal{M}_{\phi}$ with parameters $\phi$ that effectively models this conditional probability distribution:
 \begin{equation*}
@@ -139,9 +139,6 @@ Denote the loss term for the Flow Matching model as $\mathcal{L}_{\text{FM}}$. F
 	\big\|_2^2
 	\right].
 \end{equation*}
-
-This probabilistic formulation allows the model to capture the inherent stochasticity and multimodality of long-term system evolution, complementing the deterministic short-sequence model and enabling stable extrapolation over extended horizons.
-
 
 \subsection{Pre-training Datasets and Preliminary Domain Coverage}
 
@@ -165,20 +162,13 @@ We aim to select datasets with coverage of the following type:
 
 Collectively, the coverage ensures that the pre-training process exposes the model to a broad spectrum of physical behaviours. A detailed description of each dataset, including its generation method, resolution, and specific parameters, will be provided in the methodology section.
 
-\section*{Research Questions}
+\section{Research Questions}
 
 This work focuses on building a foundation model that is both rollout-stable and physically consistent for a wide domain space of Navier–Stokes flows, relying solely on velocity-field inputs. To tackle this, we take a dual approach, leveraging deterministic and probabilistic modeling techniques. The following research questions highlight the objectives of our study.
 
-\begin{tcolorbox}[
-	colback=gray!10,
-	colframe= gray!10,
-	boxrule=0pt,
-	sharp corners,
-	enhanced
-	]
-	\begin{enumerate}
-		\item Can we develop a rollout-stable and physics-consistent deterministic model that generalizes across diverse Navier–Stokes scenarios using only velocity-field inputs, trained on large-scale, multi-source pretraining data?
-		\item Can a probabilistic model outperform the above approach in both qualitative and physics-consistency metrics over long sequences?
-		\item How do the short-term deterministic and long-term probabilistic models compare in terms of computational cost and inference time for full sequence generation?
-	\end{enumerate}
-\end{tcolorbox}
+\begin{enumerate}
+	\item Can we develop a well-generalising determinstic benchmark for deterministic model that generalizes across diverse Navier–Stokes scenarios using only velocity-field inputs, trained on large-scale, multi-source pretraining data?
+	\item Can we develop a well-generalising probabilistic model that outperforms a deterministic approach in single next-timeblock prediction?
+	\item How do these model approaches compare in terms of long-term rollout stability and physical consistency across the diverse Navier–Stokes regimes represented in the pre-training datasets?
+\end{enumerate}
+
