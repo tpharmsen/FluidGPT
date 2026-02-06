@@ -5,6 +5,9 @@
 \usetikzlibrary{positioning}
 \usetikzlibrary{3d} %for including external image 
 \usetikzlibrary{calc}
+\usetikzlibrary{decorations.pathreplacing}
+\usepackage{bm}
+\tikzset{every node/.style={font=\Large}}
 %\usepackage{tikz-3dplot}
 
 % Set the viewing angles: {elevation}{azimuth}
@@ -66,8 +69,6 @@
     {Box={
         name=input,
         caption=Input ,
-        xlabel={{64, }},
-        zlabel=256,
         fill=\InputColor,
         opacity=\Opacity,
         height=40,
@@ -80,8 +81,6 @@
     {Box={
         name=1a,
         caption= ,
-        xlabel={{64, }},
-        zlabel=256,
         fill=\BlockAColor,
         opacity=\Opacity,
         height=40,
@@ -93,9 +92,7 @@
 \pic[shift={(0,0,0)}] at (1a-east) 
     {Box={
         name=1b,
-        caption=x N,
-        xlabel={{64, }},
-        zlabel=256,
+        caption=,
         fill=\BlockBColor,
         opacity=\Opacity,
         height=40,
@@ -108,8 +105,6 @@
     {Box={
         name=1c,
         caption= ,
-        xlabel={{64, }},
-        zlabel=256,
         fill=\BlockCColor,
         opacity=\Opacity,
         height=40,
@@ -135,8 +130,6 @@
     {Box={
         name=2a,
         caption= ,
-        xlabel={{64, }},
-        zlabel=256,
         fill=\BlockAColor,
         opacity=\Opacity,
         height=20,
@@ -148,9 +141,7 @@
 \pic[shift={(0,0,0)}] at (2a-east) 
     {Box={
         name=2b,
-        caption=x N,
-        xlabel={{64, }},
-        zlabel=256,
+        caption=,
         fill=\BlockBColor,
         opacity=\Opacity,
         height=20,
@@ -163,8 +154,6 @@
     {Box={
         name=2c,
         caption= ,
-        xlabel={{64, }},
-        zlabel=256,
         fill=\BlockCColor,
         opacity=\Opacity,
         height=20,
@@ -191,8 +180,6 @@
     {Box={
         name=3a,
         caption= ,
-        xlabel={{64, }},
-        zlabel=256,
         fill=\BlockAColor,
         opacity=\Opacity,
         height=10,
@@ -205,9 +192,7 @@
 \pic[shift={(0,0,0)}] at (3a-east) 
     {Box={
         name=3b,
-        caption=x N,
-        xlabel={{64, }},
-        zlabel=256,
+        caption=,
         fill=\BlockBColor,
         opacity=\Opacity,
         height=10,
@@ -220,8 +205,6 @@
     {Box={
         name=3c,
         caption=,
-        xlabel={{64, }},
-        zlabel=256,
         fill=\BlockCColor,
         opacity=\Opacity,
         height=10,
@@ -248,8 +231,6 @@
     {Box={
         name=4a,
         caption= ,
-        xlabel={{64, }},
-        zlabel=256,
         fill=\BlockDColor,
         opacity=\Opacity,
         height=5,
@@ -261,9 +242,7 @@
 \pic[shift={(0,0,0)}] at (4a-east) 
     {Box={
         name=4b,
-        caption=x N,
-        xlabel={{64, }},
-        zlabel=256,
+        caption=,
         fill=\BlockCColor,
         opacity=\Opacity,
         height=5,
@@ -289,8 +268,6 @@
     {Box={
         name=5a,
         caption= ,
-        xlabel={{64, }},
-        zlabel=256,
         fill=\BlockAColor,
         opacity=\Opacity,
         height=10,
@@ -302,9 +279,7 @@
 \pic[shift={(0,0,0)}] at (5a-east) 
     {Box={
         name=5b,
-        caption=x N,
-        xlabel={{64, }},
-        zlabel=256,
+        caption=,
         fill=\BlockBColor,
         opacity=\Opacity,
         height=10,
@@ -317,8 +292,6 @@
     {Box={
         name=5c,
         caption= ,
-        xlabel={{64, }},
-        zlabel=256,
         fill=\BlockCColor,
         opacity=\Opacity,
         height=10,
@@ -331,8 +304,6 @@
     {Box={
         name=merge5,
         caption= ,
-        xlabel={{64, }},
-        zlabel=256,
         fill=\MergeColor,
         opacity=\Opacity,
         height=20,
@@ -345,8 +316,6 @@
     {Box={
         name=6a,
         caption= ,
-        xlabel={{64, }},
-        zlabel=256,
         fill=\BlockAColor,
         opacity=\Opacity,
         height=20,
@@ -358,9 +327,7 @@
 \pic[shift={(0,0,0)}] at (6a-east) 
     {Box={
         name=6b,
-        caption=x N,
-        xlabel={{64, }},
-        zlabel=256,
+        caption=,
         fill=\BlockBColor,
         opacity=\Opacity,
         height=20,
@@ -373,8 +340,6 @@
     {Box={
         name=6c,
         caption= ,
-        xlabel={{64, }},
-        zlabel=256,
         fill=\BlockCColor,
         opacity=\Opacity,
         height=20,
@@ -387,8 +352,6 @@
     {Box={
         name=merge6,
         caption= ,
-        xlabel={{64, }},
-        zlabel=256,
         fill=\MergeColor,
         opacity=\Opacity,
         height=40,
@@ -401,8 +364,6 @@
     {Box={
         name=7a,
         caption= ,
-        xlabel={{64, }},
-        zlabel=256,
         fill=\BlockAColor,
         opacity=\Opacity,
         height=40,
@@ -414,9 +375,7 @@
 \pic[shift={(0,0,0)}] at (7a-east) 
     {Box={
         name=7b,
-        caption=x N,
-        xlabel={{64, }},
-        zlabel=256,
+        caption=,
         fill=\BlockBColor,
         opacity=\Opacity,
         height=40,
@@ -429,8 +388,6 @@
     {Box={
         name=7c,
         caption= ,
-        xlabel={{64, }},
-        zlabel=256,
         fill=\BlockCColor,
         opacity=\Opacity,
         height=40,
@@ -462,8 +419,6 @@
     {Box={
         name=output,
         caption=Output ,
-        xlabel={{64, }},
-        zlabel=256,
         fill=\InputColor,
         opacity=\Opacity,
         height=40,
@@ -476,19 +431,19 @@
 \pic[shift={ (0,0,0) }] at (-2,7,0) 
     {Box={
         name=t_start,
-        caption=\textbf{$t_\lambda$},
+        caption=$\mathbf{t_f}$,
         fill=\TimeInjectColor,
         opacity=\Opacity,
-        height=1,
-        width=0.5,
-        depth=1
+        height=1.5,
+        width=1.5,
+        depth=1.5
         }
     };
 
 \pic[shift={ (14,0,0) }] at (t_start-east) 
     {Box={
         name=t_inj,
-        caption=\textbf{$f(t_{\lambda})$},
+        caption=,
         fill=\TimeInjectColor,
         opacity=\Opacity,
         height=4,
@@ -496,6 +451,9 @@
         depth=4
         }
     };
+
+\node[anchor=west] at ($(t_inj-east) + (0.5,0,0)$) {$\mathbf{\mathcal{F}(t_f)}$};
+
     
 \draw [connection]  (input-east)    -- node {\midarrow} (0,0,0);
 \draw [connection]  (0,0,0)    -- node {\midarrow} (1a-west);
@@ -631,16 +589,16 @@
         -- node{\midarrow} (\i a-north);
 }
 
-\begin{scope}[shift={(1,9,0)}, scale=0.15]
+\begin{scope}[shift={(-1,9.5,0)}, scale=0.3]
 
-\def\colwidth{50}   % horizontal spacing
+\def\colwidth{27}   % horizontal spacing
 \def\rowheight{4}   % vertical spacing
 \def\ncols{4}       % entries per row (2 rows total)
 
 \foreach \i/\color/\text in {
-    0/\InputColor/(Un)Patchify (+Positional Encoding),
-    1/\BlockAColor/Normal window spatial attention block,
-    2/\BlockBColor/Shifted window spatial attention block,
+    0/\InputColor/(Un)Patchify \\(+Positional Encoding),
+    1/\BlockAColor/Normal window spatial \\attention block,
+    2/\BlockBColor/Shifted window spatial \\attention block,
     3/\BlockCColor/Temporal attention block,
     4/\BlockDColor/Full spatial attention block,
     5/\BlockEColor/ConvXNext block,
@@ -654,13 +612,66 @@
         (\x,\y) rectangle +(2.3,2.3);
 
     \node[anchor=west, text width=240, align=left]
-        at (\x+2.0,\y+0.75) {\text};
+        at (\x+2.5,\y+1) {\textbf{\text}};
 }
-
-
 \end{scope}
 
+\foreach \block in {1,2,3,5,6,7} {
 
+    % Adjust patch width based on block
+    \pgfmathsetmacro{\pw}{\PatchDepth} % default patch width
+
+    \ifnum\block=2
+        \pgfmathsetmacro{\pw}{\PatchDepth/2}
+    \fi
+    \ifnum\block=6
+        \pgfmathsetmacro{\pw}{\PatchDepth/2}
+    \fi
+    \ifnum\block=3
+        \pgfmathsetmacro{\pw}{\PatchDepth/4}
+    \fi
+    \ifnum\block=5
+        \pgfmathsetmacro{\pw}{\PatchDepth/4}
+    \fi
+
+    % Coordinates
+    \coordinate (fb-bl-\block) at ($(\block a-west |- \block b-south)$);
+    \coordinate (fb-fl-\block) at ($(fb-bl-\block) + (0,0,\pw/2)$);
+    \coordinate (fb-br-\block) at ($(\block c-east |- \block b-south) + (0,0,\pw/2)$);
+
+    % Gap from model and vertical height
+    \def\gap{-0.3}
+    \def\vheight{0.15}
+
+    % Horizontal line
+    \draw[line width=0.8pt] 
+        ($(fb-fl-\block) + (0,\gap,0)$) -- ($(fb-br-\block) + (0,\gap,0)$);
+
+    % Vertical lines to mimic [ ]
+    \draw[line width=0.8pt] ($(fb-fl-\block) + (0,\gap,0)$) -- ++(0,\vheight,0);
+    \draw[line width=0.8pt] ($(fb-br-\block) + (0,\gap,0)$) -- ++(0,\vheight,0);
+
+    % Label
+    \node at ($(fb-fl-\block)!0.5!(fb-br-\block) + (0,2*\gap,0)$) {$\times N$};
+}
+
+\def\gap{-0.3}
+\def\vheight{0.15}
+
+\coordinate (fb-bl-4) at ($(4a-west |- 4a-south)$); % bottom-left corner
+\coordinate (fb-fl-4) at ($(fb-bl-4) + (0,0,\PatchDepth/16)$); % front-left
+\coordinate (fb-br-4) at ($ (4b-east |- 4a-south) + (0,0,\PatchDepth/16) $); % front-right
+
+% Horizontal line
+\draw[line width=0.8pt] 
+    ($(fb-fl-4) + (0,\gap,0)$) -- ($(fb-br-4) + (0,\gap,0)$);
+
+% Vertical lines to mimic [ ]
+\draw[line width=0.8pt] ($(fb-fl-4) + (0,\gap,0)$) -- ++(0,\vheight,0); % left vertical
+\draw[line width=0.8pt] ($(fb-br-4) + (0,\gap,0)$) -- ++(0,\vheight,0); % right vertical
+
+% Label
+\node at ($(fb-fl-4)!0.5!(fb-br-4) + (0,2*\gap,0)$) {$\times N$};
 
 \end{tikzpicture}
 \end{document}
