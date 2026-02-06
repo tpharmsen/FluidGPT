@@ -31,7 +31,7 @@ Four foundation models were trained within this unified framework. The first is 
 
 Both models were trained using the same optimization strategy to ensure a fair comparison. Learning rates were tuned using a schedule consisting of an initial warmup phase, followed by stepwise decay at predefined milestones. The warmup phase mitigates optimization instability during early training, particularly for large models and distributed settings, while milestone-based decay improves convergence during later stages of training. Due to the sampling nature of the flow-matching model, a slightly higher initial learning rate was used compared to the deterministic AR model. Also, the flow-matching models are trained for longer at pre-decay learning rates to account for the increased complexity of learning a conditional distribution. All training is done with bfloat16 reduced precision to balance computational efficiency with numerical stability.
 
-\paragraph{Hardware Platform & paralellism}
+\paragraph{Hardware Platform and parallelism}
 
 All large-scale experiments were conducted on the state of the art NVIDIA DGX B200 unified AI platform, leveraging its high-bandwidth interconnect, large GPU memory capacity and high compute power. Training and evaluation were executed within containerized environments, ensuring consistent software dependencies across runs. Training was performed using data parallelism across 8 devices, resulting in an effective batch size equal to eight times the per-device batch size of 176. This parallelism was essential to stabilize optimization and maintain throughput given the high-dimensional spatial-temporal data and large model capacity.
 
