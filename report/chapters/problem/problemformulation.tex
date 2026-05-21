@@ -161,18 +161,10 @@ Collectively, the coverage ensures that the pre-training process exposes the mod
 This work focuses on building a foundation model that is both rollout-stable and physically consistent for a wide domain space of Navier–Stokes flows, relying solely on velocity-field inputs. To tackle this, we take a dual approach, leveraging deterministic and probabilistic modeling techniques. The following research questions highlight the objectives of our study.
 
 \begin{enumerate}
-	\item question about comparison on single next timeblock ar vs fm
-	\item question about question about rollout 
-	\item question about physics correctness
-	\item idea: deterministic averages, probailistic conserves fallout of vortices -> 
 	
-	\item Can we develop a deterministic baseline that generalises across diverse Navier-Stokes scenarios using only velocity-field inputs, trained on large-scale multi-source pretraining data?
-	\item Can a probabilistic approach yield better results than the deterministic benchmark in the scope of:
-	\subitem Single next time-block prediction
-	\subitem Rollout prediction
-	\subitem Energy and Enstrophy spectra statistics
-	%\item Can we develop a well-generalising determinstic benchmark for deterministic model that generalizes across diverse Navier–Stokes scenarios using only velocity-field inputs, trained on large-scale, multi-source pretraining data?
-	%\item Can we develop a well-generalising probabilistic model that outperforms a deterministic approach in single next-timeblock prediction?
-	%\item How do these model approaches compare in terms of long-term rollout stability and physical consistency across the diverse Navier–Stokes regimes represented in the pre-training datasets?
+	\item \textbf{Can probabilistic flow matching models outperform deterministic baselines in predicting subsequent system states of Navier-Stokes dynamics, when trained on a heterogeneous multi-source dataset spanning a wide variety of physical parameters and flow regimes?}
+	\item \textbf{How does autoregressive rollout error accumulate over time for probabilistic versus deterministic models, and does the probabilistic formulation confer greater long-horizon stability across datasets of varying temporal length?}
+	\item \textbf{Does changing model depth and parameter count yield greater performance gains for probabilistic flow matching models than for deterministic models, in both single block and rollout prediction settings?}
+	\item \textbf{Do the predicted system states satisfy physical characteristics as measured by spectral analysis, and do probabilistic models produce spectrally more consistent predictions than deterministic models across flow regimes}
 \end{enumerate}
 
