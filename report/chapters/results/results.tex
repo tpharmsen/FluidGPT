@@ -31,7 +31,37 @@ REGENERATE FIGURES FIRST -> define story -> REGEN FIG FINAL
 \end{figure}
 
 - explain the probabilistic models perform better than deterministic models on almost all datasets
-- not on pdesines? certain frequencies difficult to do
+- higher dimensional datasets with more turbulence or compressibility instead of incompressibility condition have higher error. 
+- probablistic model does not perform better on pdegym sines dataset, possibly due to wrong frequency initalization of prior distribution flowmatching
+- also we can see that increasing depth and amount of parameters on probabilistic models yield a greater improvement in score compared to increasing depth and amount of parameter for deterministic models.
+
+\textbf{Probabilistic vs.\ deterministic models.} The best flow matching model outperforms the best deterministic counterparts on nearly all datasets. This is expected given the 
+inherent stochasticity of turbulent fluid dynamics: a deterministic model is constrained 
+to produce a single point estimate of the subsequent system state, whereas a probabilistic 
+model learns a distribution over plausible futures and can better capture the multi-modal 
+nature of the solution space. By conditioning on a learned prior and flowing towards the 
+target distribution, the flow matching models are better equipped to represent uncertainty 
+in the predicted state block. %The larger error bars of the probabilitic models on the compressible dataset (pdebench-comp) indicate a larger uncertainty within the diverging state-space of the navier-stokes time progression. 
+
+\textbf{Effect of dataset complexity.} Error magnitudes are notably higher on 
+higher-dimensional datasets characterised by strong turbulence or compressible flow 
+conditions, compared to datasets satisfying the incompressibility assumption. This aligns 
+with the increased complexity of the underlying dynamics: compressible and highly turbulent 
+regimes exhibit sharper gradients and finer-scale structure that are more challenging to 
+predict across multiple time steps simultaneously.
+
+\textbf{Exception: PDEGym sines dataset.} The probabilistic models do not demonstrate 
+a clear advantage on the PDEGym sines dataset. We attribute this to a mismatch between 
+the dominant frequencies present in the data and the frequency initialisation of the prior 
+distribution used in the flow matching procedure. Due to a bigger mismatch in frequencies and the inability of the model to create shard interfaces in the fluid, the transport problem becomes a more difficult task, yielding a less inaccurate output of the model.
+
+\textbf{Scaling behaviour.} A further distinction between the two model families emerges 
+when comparing shallow and deep variants within each. Changing model depth and parameter 
+count yields a more pronounced reduction in error for the probabilistic models than for 
+the deterministic ones. This suggests that the additional capacity is more effectively 
+utilised when the model has the expressive power to refine a distributional estimate, 
+whereas deterministic models may saturate earlier or be limited by the intrinsic 
+irreducibility of the static point-estimation objective.
 
 \subsection{MSE error}
 
