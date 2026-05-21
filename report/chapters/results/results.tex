@@ -30,10 +30,15 @@ REGENERATE FIGURES FIRST -> define story -> REGEN FIG FINAL
 	\label{fig:____________}
 \end{figure}
 
+
+
 - explain the probabilistic models perform better than deterministic models on almost all datasets
 - higher dimensional datasets with more turbulence or compressibility instead of incompressibility condition have higher error. 
 - probablistic model does not perform better on pdegym sines dataset, possibly due to wrong frequency initalization of prior distribution flowmatching
 - also we can see that increasing depth and amount of parameters on probabilistic models yield a greater improvement in score compared to increasing depth and amount of parameter for deterministic models.
+
+Figure~\ref{fig:____________} reports the sum of squares error across all nine datasets, 
+revealing several consistent trends in model performance.
 
 \textbf{Probabilistic vs.\ deterministic models.} The best flow matching model outperforms the best deterministic counterparts on nearly all datasets. This is expected given the 
 inherent stochasticity of turbulent fluid dynamics: a deterministic model is constrained 
@@ -72,9 +77,56 @@ irreducibility of the static point-estimation objective.
 	\label{fig:____________}
 \end{figure}
 
-- explain error accumulation almost all cases better in 
+- In most datasets the error accumulates less quickly for the flowmatching models than the deterministic ones
+- some datasets have less diverging system states according to the probalistic models
+- It seems the deterministic models are very similar to each other, while the probabilistic models differ significantly to eachother. An increase in parameters leads to significant reduce in error accumulation for the probablistic models
+- Once again the pdegym sines dataset works better to predict deterministic, and the pdebench-incomp dataset has a very high accumulation of error (due to the fact that this dataset includes forcing of fluid and the model is not informed of this forcing)
+- on the shorter temporal length datasets we can see that we have spikes on the outsides of the temporal block prediction, indicating strong information spread edge conditions, especially for the deterministic models.
 
-AR VS FM
+Figure~\ref{fig:____________} presents the autoregressive rollout MSE across all nine 
+datasets, where each model is applied recurrently to predict successive blocks of system 
+states. The rollout length varies between datasets, reflecting differences in the 
+temporal extent of each benchmark.
+
+\textbf{Error accumulation rate.} The flow matching models accumulate error more slowly 
+over the course of the rollout on the majority of datasets. Beyond the lower absolute 
+error observed in the previous section, this suggests that the probabilistic models 
+produce predictions that are more dynamically consistent, limiting the compounding of 
+errors across autoregressive steps. On several datasets, the probabilistic models also 
+yield less divergent rollout trajectories, indicating that the predicted system states 
+remain closer to a physically plausible regime for longer.
+
+\textbf{Intra-family scaling behaviour.} A clear asymmetry emerges in how the two model 
+families respond to increased capacity. The two deterministic models produce nearly 
+identical rollout curves across datasets, suggesting that additional depth and parameters 
+provide limited benefit within the deterministic framework and that these models may be 
+approaching the ceiling of what point-estimation objectives can recover. In contrast, the 
+two probabilistic variants differ substantially from one another: the deeper, 
+higher-parameter flow matching model exhibits a marked reduction in error accumulation 
+relative to its smaller counterpart, confirming the scaling trend observed in the SS 
+error analysis and indicating that additional capacity is more productively absorbed when 
+learning a distributional representation of the dynamics.
+
+\textbf{Boundary artefacts in short-horizon datasets.} On datasets with shorter temporal 
+block lengths, the rollout curves exhibit characteristic spikes at the edges of each 
+predicted block. These artefacts are consistent with strong information spread at the 
+temporal boundaries of the block prediction: the model has limited context near the edges 
+of each window, producing elevated local error that then partially recovers toward the 
+block interior. This effect is most pronounced for the deterministic models, suggesting 
+that the probabilistic formulation provides some degree of regularisation at block 
+boundaries, possibly through the smoothing effect of the learned prior.
+
+\textbf{Dataset-specific observations.} Two datasets warrant individual discussion. First, 
+the PDEGym sines dataset again favours the deterministic models, consistent with the 
+hypothesis raised in Section that the prior frequency initialisation is 
+misspecified for this benchmark. Second, the PDEBench incompressible dataset exhibits 
+the highest error accumulation of all evaluated benchmarks across all models. This is 
+attributable to the presence of external body forcing in this dataset: the fluid is 
+subject to a forcing term that drives the dynamics, yet none of the models are provided 
+with this forcing signal as input. The models must therefore account for the effect of 
+an unobserved driver, making accurate rollout prediction substantially harder and 
+introducing a persistent source of error that compounds with each autoregressive step.
+
 \subsection{Physics}
 
 AR VS FM
