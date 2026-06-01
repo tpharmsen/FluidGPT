@@ -55,11 +55,6 @@ From this survey, several gaps remain, which our work directly addresses:
 	\item \textbf{Long-Term Stability and Physical Consistency:} Many existing studies report per-step or short-horizon error metrics but do not extensively validate long rollouts in turbulent regimes. Accumulation of error and divergence from physical invariants (e.g. energy, enstrophy, divergence-free constraint) remain major obstacles.
 	\item \textbf{Unified Modeling Across Parameter Regimes:} While foundation model approaches exist, they rarely confront the full diversity within a single system (e.g. compressible vs. incompressible Navier–Stokes, varying Mach/Reynolds regimes, geometric constraints).
 	\item \textbf{Architectural Trade-offs:} Larger transformer-based PDE models are powerful but heavy; lighter architectures show promise but require careful design to maintain generalization.
-	
-	\item \textbf{Can probabilistic flow matching models outperform deterministic baselines in predicting subsequent system states of Navier-Stokes dynamics, when trained on a heterogeneous multi-source dataset spanning a wide variety of physical parameters and flow regimes?}
-	\item \textbf{How does autoregressive rollout error accumulate over time for probabilistic versus deterministic models, and does the probabilistic formulation confer greater long-horizon stability across datasets of varying temporal length?}
-	\item \textbf{Does changing model depth and parameter count yield greater performance gains for probabilistic flow matching models than for deterministic models, in both single block and rollout prediction settings?}
-	\item \textbf{Do the predicted system states satisfy physical characteristics as measured by spectral analysis, and do probabilistic models produce spectrally more consistent predictions than deterministic models across flow regimes}
 \end{itemize}
 
 \subsection{Foundational model goal}

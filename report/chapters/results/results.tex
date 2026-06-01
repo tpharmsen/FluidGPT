@@ -10,9 +10,6 @@
  	- physics
  - describe datasets in detail
 
- 
-
-
 for each following point compare the AR vs FM:
 - show per-dataset single next timeblock error
 - show per-dataset rollout error with t on x-axis
@@ -26,10 +23,9 @@ REGENERATE FIGURES FIRST -> define story -> REGEN FIG FINAL
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{figs/results/ssbox_rae.png}
-	\caption{caption...}
-	\label{fig:____________}
+	\caption{Boxplot of relative absolute error of the single next-timeblock prediction for each of the four surrogate foundation models, grouped by dataset. The models are trained on the same trajectory-datasplit and evaluated in zero-shot fashion on the validation datset. For the flowmatching models, FM-d2 and FM-d3, 16 samples are taken for each input-output pair. The graph mostly the flowmatching model FM-d2 outperforming the other models, except on the pdebench-incomp and pdegym-sines dataset. All models seem to have difficulty predicting the more complex pdebench-comp dataset.}
+	\label{fig:ssbox}
 \end{figure}
-
 
 
 - explain the probabilistic models perform better than deterministic models on almost all datasets
@@ -37,10 +33,10 @@ REGENERATE FIGURES FIRST -> define story -> REGEN FIG FINAL
 - probablistic model does not perform better on pdegym sines dataset, possibly due to wrong frequency initalization of prior distribution flowmatching
 - also we can see that increasing depth and amount of parameters on probabilistic models yield a greater improvement in score compared to increasing depth and amount of parameter for deterministic models.
 
-Figure~\ref{fig:____________} reports the sum of squares error across all nine datasets, 
+Figure \ref{fig:ssbox} reports the per-sample relative per-sample error across all nine datasets, 
 revealing several consistent trends in model performance.
 
-\textbf{Probabilistic vs.\ deterministic models.} The best flow matching model outperforms the best deterministic counterparts on nearly all datasets. This is expected given the 
+\textbf{Probabilistic vs.\ deterministic models.} The flowmatching model FM-d2 outperforms the deterministic counterparts on nearly all datasets. This is expected given the 
 inherent stochasticity of turbulent fluid dynamics: a deterministic model is constrained 
 to produce a single point estimate of the subsequent system state, whereas a probabilistic 
 model learns a distribution over plausible futures and can better capture the multi-modal 
@@ -73,8 +69,8 @@ irreducibility of the static point-estimation objective.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{figs/results/msgraph_all_rae.png}
-	\caption{caption...}
-	\label{fig:____________}
+	\caption{3x3 subplot of the per-sample relative absolute error of rollout predictions for all models grouped per dataset. The models are used in autogressive fashion to predict the full-length trajectory, starting with the first available input timeblock containing the initialization conditions. The flowmatching models are taking 16 global rollout samples for each existing trajectory in the zero-shot validation dataset and use a new prior distribution sample for each individual input-output prediction during the autoregressive rollout. Flowmatching model FM-d2 outperforms all other models, except for pdegym-sines. Error accumulation patterns are different across datasets and models. }
+	\label{fig:rollout}
 \end{figure}
 
 - In most datasets the error accumulates less quickly for the flowmatching models than the deterministic ones
@@ -83,7 +79,7 @@ irreducibility of the static point-estimation objective.
 - Once again the pdegym sines dataset works better to predict deterministic, and the pdebench-incomp dataset has a very high accumulation of error (due to the fact that this dataset includes forcing of fluid and the model is not informed of this forcing)
 - on the shorter temporal length datasets we can see that we have spikes on the outsides of the temporal block prediction, indicating strong information spread edge conditions, especially for the deterministic models.
 
-Figure~\ref{fig:____________} presents the autoregressive rollout MSE across all nine 
+Figure \ref{fig:rollout} presents the autoregressive rollout MSE across all nine 
 datasets, where each model is applied recurrently to predict successive blocks of system 
 states. The rollout length varies between datasets, reflecting differences in the 
 temporal extent of each benchmark.
@@ -127,6 +123,45 @@ with this forcing signal as input. The models must therefore account for the eff
 an unobserved driver, making accurate rollout prediction substantially harder and 
 introducing a persistent source of error that compounds with each autoregressive step.
 
-\subsection{Physics}
+\subsection{Spectrum analysis}
 
-AR VS FM
+Figure \ref{fig:energyspectrum} presents the energy spectrum error ratio for three special case datasets: \textit{amira}, \textit{pdegym-sines}, and \textit{pdegym-bb}. The energy spectra are computed from both the predicted and reference trajectories at selected rollout timesteps, after which the ratio between the two spectra is calculated for each wavenumber. Values above one indicate an overprediction of energy at a particular wavenumber, while values below one indicate an underprediction. The three respective datasets have been chosen for spectrum-inspection due to the difference in error accumulation during rollout
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figs/results/spectra/spectrum_E.png}
+	\caption{Log-log plot of the energy spectrum error ratio per wavenumber for three special case datasets for models FM-d2 and AR-d2 only. Using the incompressibility assumption, the energy spectrum is calculated at two specific timesteps in the rollout prediction and the reference trajectory, of which the the error ratio is calculated. For the dataset amira at t=20 and t=200 the energy spectrum values are calculated, and for the rest of the datasets at t=5 and t=20. For the flowmatching model 16 rollout samples are drawn, from which the median is plotted in the graphs. Values above 1 indicates overprediction of energy at that wavenumber and under 1 means underprediction compared to the true energy spectrum. A trend emerges that higher wavenumbers are increasingly overpredicted, indicating that higher frequency might not be predicted as well as the lower frequencies.}
+	\label{fig:energyspectrum}
+\end{figure}
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! new legend for other datasets t=5 missing
+In Figure \ref{fig:energyspectrum} three special cases are shown for datasets amira, pdegym-sines and pdegym-bb
+- Explain large and middle size eddies are perfectly predicted in the diagram, but there is difficulty in prediction in the dissipation zones
+- explain that the energy at higher wavenumbers is overpredicted for all datasets and results in accumulation of error in rollout use.
+- for pdegym-sines there is also a slight underprediction also at higher wavenumbers
+- explain that the reason that the flowmatching models are better is because at the first deviation from left to right on the error ratio figures the deterministic models are more off than the flowmatching models. This is especially visible in the amira dataset. The overall rollout error as seen in Figure \ref{fig:rollout} is smaller for the rest of the datasets, and thus the difference in these graphs are less visible.
+- explain that a single small pixel error in prediction induces a wide range of frequencies in the frequency spectrum. 
+- Also explain that the higher wavenumbers have way less energy in a typical system, so the error ratio being very high in the figure doesnt mean a big error in the non-frequency domain of the predictions
+- explain also that in the higher wavenumbers (dissipation zone) the energy spectrum converges to 0, causing the ratio to explode because of dividing by nearly 0
+
+
+
+
+For all three datasets, the energy-containing and inertial-range scales are predicted accurately. The error ratio remains close to unity for low and intermediate wavenumbers, demonstrating that the models successfully capture the large and medium-sized flow structures that contain most of the system's energy. The deviations occur in the last bit of intertial-range to dissipation range at higher wavenumbers, where the models exhibit increasing difficulty in accurately reproducing the smallest scales of the flow.
+
+A consistent trend across all datasets is the overprediction of energy at higher wavenumbers. This indicates that the models introduce excess high-frequency content during rollout, causing errors to accumulate over time. Such behaviour is expected to contribute to the gradual degradation of rollout quality observed in Figure \ref{fig:rollout}. The \textit{pdegym-sines} dataset additionally exhibits a slight underprediction at certain middle to high wavenumbers before transitioning to overprediction.
+
+The overall superiority of the Flow Matching models becomes apparent when examining the first significant deviation of the error ratio from unity. At this point, the deterministic autoregressive models generally deviate more strongly than their Flow Matching counterparts, indicating a more accurate preservation of the spectral energy distribution. This effect is particularly pronounced for the \textit{amira} dataset, where the difference between the models is clearly visible. For the dataset \textit{pdegym-bb}, the overall rollout errors shown in Figure \ref{fig:rollout} are smaller, which consequently reduces the visual separation between the spectral error curves. For the dataset \textit{pdegym-sines} the deterministic model performs better, which can be derived from the more accurate middle wavenumbers compared to the flowmatching model. This might be linked to the inability of the flowmatching model architecture to handle certain frequencies that are dominant in the pdegym-sines dataset.
+
+It should be noted that spectral errors can appear amplified compared to errors in the spatial domain. A small local prediction error, such as a single-pixel deviation, contributes energy across a broad range of frequencies after the Fourier transform is applied. Consequently, relatively minor spatial inaccuracies can manifest as widespread deviations in the energy spectrum. Furthermore, higher wavenumbers typically contain substantially less energy than lower wavenumbers in turbulent and dissipative systems as seen in Figure \ref{fig:energyspectrumscheme}. Therefore, a large error ratio at high wavenumbers does not imply a large error in the original spatial field.
+
+Finally, caution should be exercised when interpreting the largest error ratios in the dissipation range. As the true energy spectrum approaches zero at sufficiently high wavenumbers, the denominator of the error ratio becomes very small. Even minor absolute differences between the predicted and reference spectra can therefore produce extremely large ratio values. The apparent divergence of the curves at the highest wavenumbers should thus be interpreted as a consequence of dividing by near-zero energy levels rather than as evidence of catastrophic prediction errors.
+
+
+
+
+
+
+
+

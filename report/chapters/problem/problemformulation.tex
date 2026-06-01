@@ -44,8 +44,8 @@ where $\hat{\mathbf{u}}(\mathbf{k})$ denotes the Fourier transform of the veloci
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.6\textwidth]{chapters/problem/energyspectrumscheme.png}
-	\caption{Schematic of typical energy cascade process of Navier-Stokes governed system. Energy is injected at highest wavenumbers and dissipated at lowest wavenumbers. Energy is transferred in sequential manner across the scales in between, referred to as the inertial subrange.}
+	\includegraphics[width=0.8\textwidth]{figs/turbulence_scales2.png}
+	\caption{Schematic of typical energy cascade process of Navier-Stokes governed system. Energy is injected at highest wavenumbers and dissipated at lowest wavenumbers. Energy is transferred in sequential manner across the scales in between, referred to as the inertial subrange. Note that most of the energy in the system is contained in the larger size vortices.}
 	\label{fig:energyspectrumscheme}
 \end{figure}
 
@@ -164,7 +164,6 @@ This work focuses on building a foundation model that is both rollout-stable and
 	
 	\item \textbf{Can probabilistic flow matching models outperform deterministic baselines in predicting subsequent system states of Navier-Stokes dynamics, when trained on a heterogeneous multi-source dataset spanning a wide variety of physical parameters and flow regimes?}
 	\item \textbf{How does autoregressive rollout error accumulate over time for probabilistic versus deterministic models, and does the probabilistic formulation confer greater long-horizon stability across datasets of varying temporal length?}
-	\item \textbf{Does changing model depth and parameter count yield greater performance gains for probabilistic flow matching models than for deterministic models, in both single block and rollout prediction settings?}
 	\item \textbf{Do the predicted system states satisfy physical characteristics as measured by spectral analysis, and do probabilistic models produce spectrally more consistent predictions than deterministic models across flow regimes}
 \end{enumerate}
 
