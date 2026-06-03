@@ -79,50 +79,51 @@
 \@writefile{toc}{\contentsline {chapter}{\numberline {4}Models}{12}{chapter.4}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{ch:models}{{4}{12}{Models}{chapter.4}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4.1}Overview of the Modeling Approaches}{12}{section.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.2}Shared Backbone Architecture}{12}{section.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Swin Transformer Backbone}{12}{subsection.4.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Space-Then-Time Attention Factorization}{12}{subsection.4.2.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Illustration of the space-then-time attention masking pattern used in the backbone architecture.}}{12}{figure.caption.10}\protected@file@percent }
-\newlabel{fig:BlockExplainer}{{4.1}{12}{Illustration of the space-then-time attention masking pattern used in the backbone architecture}{figure.caption.10}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}UNet-style Multi-scale Architecture}{13}{subsection.4.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.4}Patch Embedding and Reconstruction}{13}{subsection.4.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.5}Hierarchical Patch Merging and Expansion}{13}{subsection.4.2.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.3}Deterministic Autoregressive Model}{13}{section.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}Problem Formulation}{13}{subsection.4.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}Next-Step Prediction Strategy}{13}{subsection.4.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.3}Architecture Overview}{13}{subsection.4.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.4}Hyperparameter Configurations}{13}{subsection.4.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.4}Flow-Matching Model}{13}{section.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.1}Problem Formulation}{13}{subsection.4.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Shared Transformer Backbone}{12}{subsection.4.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Space-Then-Time Attention Factorization}{12}{subsection.4.1.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Illustration of the space-then-time attention masking pattern used in the backbone architecture. The left and middle figure show the two subsequent steps of the spatial attention mask and the right figure shows the temporal attention mask.}}{12}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:BlockExplainer}{{4.1}{12}{Illustration of the space-then-time attention masking pattern used in the backbone architecture. The left and middle figure show the two subsequent steps of the spatial attention mask and the right figure shows the temporal attention mask}{figure.caption.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.3}UNet-style Multi-scale Architecture}{13}{subsection.4.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.4}Patch Embedding and Reconstruction}{13}{subsection.4.1.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.5}Hierarchical Patch Merging and Expansion}{13}{subsection.4.1.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}Deterministic Model}{13}{section.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Prediction}{13}{subsection.4.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Architecture Overview}{13}{subsection.4.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Hyperparameter Configurations}{13}{subsection.4.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}Flow-Matching Model}{13}{section.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}Prediction}{13}{subsection.4.3.1}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Architecture overview of the deterministic model.}}{14}{figure.caption.11}\protected@file@percent }
 \newlabel{fig:det_model_architecture}{{4.2}{14}{Architecture overview of the deterministic model}{figure.caption.11}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Hyperparameters for deterministic FluidGPT models.}}{14}{table.caption.12}\protected@file@percent }
 \newlabel{tab:fluidgpt_hparams_det}{{4.1}{14}{Hyperparameters for deterministic FluidGPT models}{table.caption.12}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.2}Flow-Time Conditioning}{14}{subsection.4.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.3}Prior Distribution Construction}{14}{subsection.4.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.4}Sampling and Integration}{15}{subsection.4.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.5}Architecture Overview}{15}{subsection.4.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}Flow-Time Conditioning}{14}{subsection.4.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.3}Prior Distribution Construction}{14}{subsection.4.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.4}Sampling and Integration}{15}{subsection.4.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.5}Architecture Overview}{15}{subsection.4.3.5}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Architecture overview of the flow-matching model.}}{15}{figure.caption.13}\protected@file@percent }
 \newlabel{fig:fm_model_architecture}{{4.3}{15}{Architecture overview of the flow-matching model}{figure.caption.13}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.6}Hyperparameter Configurations}{15}{subsection.4.4.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.5}Model Scaling and Architectural Variants}{15}{section.4.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.6}Summary}{15}{section.4.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.6}Hyperparameter Configurations}{15}{subsection.4.3.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}Model Scaling and Architectural Variants}{15}{section.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.5}Summary}{15}{section.4.5}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces Hyperparameters for probabilistic FluidGPT models.}}{16}{table.caption.14}\protected@file@percent }
 \newlabel{tab:fluidgpt_hparams_prob}{{4.2}{16}{Hyperparameters for probabilistic FluidGPT models}{table.caption.14}{}}
 \@writefile{toc}{\contentsline {chapter}{\numberline {5}Training and Validation}{17}{chapter.5}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {5.1}Training procedure}{17}{section.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}Model Training}{17}{subsection.5.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}Optimization and Learning Rate Scheduling}{17}{subsection.5.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5.2}Hardware Platform and parallelism}{17}{section.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5.3}Validation}{17}{section.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}Training Procedure}{17}{section.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}Training Framework and System Abstraction}{17}{subsection.5.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}Model Training}{17}{subsection.5.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.3}Optimization and Learning Rate Scheduling}{17}{subsection.5.1.3}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces Comparison of training hyperparameters between deterministic  and probabilistic FluidGPT models.}}{18}{table.caption.15}\protected@file@percent }
 \newlabel{tab:fluidgpt_hparams}{{5.1}{18}{Comparison of training hyperparameters between deterministic \\and probabilistic FluidGPT models}{table.caption.15}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.1}Model- and dataset-specific Validation}{18}{subsection.5.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}Hardware Platform and Parallelism}{18}{section.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Validation}{18}{section.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.1}Error Metrics}{18}{subsection.5.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.2}Model- and Dataset-Specific Validation}{18}{subsection.5.3.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Deterministic Model.}{18}{section*.16}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Flow-Matching Model.}{18}{section*.17}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Flow-Matching Model.}{19}{section*.17}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{Single-Step Validation}{19}{section*.18}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{Rollout Validation}{19}{section*.19}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{Spectral Diagnostics}{19}{section*.20}\protected@file@percent }
