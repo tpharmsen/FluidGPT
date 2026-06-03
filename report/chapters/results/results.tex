@@ -1,4 +1,4 @@
-\section{Results}
+\chapter{Results}
 
 - join meeting wednesday and resubmit form 4 with new dates
  - redefine research questions
@@ -18,7 +18,7 @@ for each following point compare the AR vs FM:
 
 REGENERATE FIGURES FIRST -> define story -> REGEN FIG FINAL
 
-\subsection{SS error}
+\section{Single-step prediction}
 
 \begin{figure}[H]
 	\centering
@@ -64,7 +64,7 @@ utilised when the model has the expressive power to refine a distributional esti
 whereas deterministic models may saturate earlier or be limited by the intrinsic 
 irreducibility of the static point-estimation objective.
 
-\subsection{MSE error}
+\section{Rollout prediction}
 
 \begin{figure}[H]
 	\centering
@@ -123,7 +123,7 @@ with this forcing signal as input. The models must therefore account for the eff
 an unobserved driver, making accurate rollout prediction substantially harder and 
 introducing a persistent source of error that compounds with each autoregressive step.
 
-\subsection{Spectrum analysis}
+\section{Spectrum analysis}
 
 Figure \ref{fig:energyspectrum} presents the energy spectrum error ratio for three special case datasets: \textit{amira}, \textit{pdegym-sines}, and \textit{pdegym-bb}. The energy spectra are computed from both the predicted and reference trajectories at selected rollout timesteps, after which the ratio between the two spectra is calculated for each wavenumber. Values above one indicate an overprediction of energy at a particular wavenumber, while values below one indicate an underprediction. The three respective datasets have been chosen for spectrum-inspection due to the difference in error accumulation during rollout
 

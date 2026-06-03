@@ -1,4 +1,4 @@
-\section{Problem Formulation}
+\chapter{Problem Formulation}
 
 - Explain PDE -> Navier Stokes and characteristics
 - Explain energy and enstrophy spectra
@@ -12,7 +12,7 @@
 
 This chapter formally defines the research problem, establishing the specific physical PDE system, the constraints imposed by large-scale pretraining data, and the mathematical framework for the two proposed AI surrogate models.
 
-\subsection{Navier-Stokes System}
+\section{Navier-Stokes System}
 
 
 
@@ -30,7 +30,7 @@ In the special case of incompressible flow, the simplification $\frac{d\rho}{dt}
 
 \vspace{1em}
 
-\paragraph{Characteristics of the Navier–Stokes System.}
+\subsection{Characteristics of the Navier–Stokes System.}
 The Navier–Stokes system shows complex dynamical behavior characterized by creation, advection, and dissipation of vortical structures, often referred to as eddies. Large eddies break down into smaller eddies in a cascading process, transferring energy across lowering scales until it dissipates at the smallest (viscous) level. This process is chaotic and highly sensitive to initial conditions, leading to stochastic-like macroscopic behavior even though the governing equations are deterministic. Capturing this behavior accurately is a core challenge for surrogate models, especially those that must generalize across varying flow regimes and boundary conditions. 
 
 \vspace{1em}
@@ -58,7 +58,7 @@ where $\boldsymbol{\omega} = \nabla \times \mathbf{u}$ is the vorticity field. F
 
 
 
-\subsection{Machine Learning Objective}
+\section{Machine Learning Objective}
 
 The objective of this work is to construct a model $\mathcal{M}$ that predicts the future evolution of a continuous-time, partial differential equation (PDE) system, specifically the Navier-Stokes equations, across a wide and diverse parameter space.
 
@@ -74,7 +74,7 @@ where $u_x$ and $u_y$ are the velocity components in the $x$ and $y$ directions,
 
 with appropriate initial conditions and boundary conditions. The vector $\mathbf{c} \in \mathcal{C}$ denotes a set of system parameters (Reynolds number $Re$, domain geometry, and boundary conditions, etc.) that condition the flow.
 
-\subsubsection{Prediction Task}
+\subsection{Prediction Task}
 
 In the context of a discrete-time, data-driven surrogate model, the spatial domain $\Omega$ is discretized into a grid, $\mathbf{x} \in \Omega_h$ with resolution $128^2$. The system state at a time step $t_i$ is represented by a high-dimensional tensor $\mathbf{U}_i \in \mathbb{R}^{N_x \times N_y \times 2}$, where $N_x, N_y$ are the number of grid points in the spatial dimensions, and $2$ represents the input flow variables ($u_x$ and $u_y$).
 
@@ -91,11 +91,11 @@ The model $\mathcal{M}$ is a function of the input sequence $\mathbf{S}_{\text{i
 \mathcal{M}(\mathbf{S}_{\text{in}}) \approx \mathcal{P}_{\mathbf{c}}(\mathbf{S}_{\text{in}})
 \end{equation*}
 
-\subsection{Dual Modelling Approach}
+\section{Dual Modelling Approach}
 
 This problem is tackled using two distinct modeling approaches, which define the specific mathematical targets of the prediction. Both models now condition their output on a sequence of the $k$ most recent past states, $\mathbf{S}_{\text{hist}} = \{ \mathbf{U}_{i-k+1}, \ldots, \mathbf{U}_i \}$, and are trained to predict a bundle of $\Delta T$ future states, $\mathbf{S}_{\text{pred}} = \{ \mathbf{U}_{i+1}, \ldots, \mathbf{U}_{i+\Delta T} \}$.
 
-\paragraph{1. Deterministic Prediction}
+\subsection{1. Deterministic Prediction}
 This approach models the conditional expectation of a short-sequence bundle of five future states, $\mathbb{E}[\mathbf{S}_{\text{out}} | \mathbf{S}_{\text{in}}]$. It utilizes a function $f_{\theta}$ that maps the historical sequence to the predicted future sequence:
 \begin{equation*}
 f_{\theta}: \mathbf{S}_{\text{in}} \mapsto \mathbf{S}_{\text{out}}
@@ -112,7 +112,7 @@ The learning objective for the model parameters $\theta$ is the minimization of 
 \end{equation*}
 
 
-\paragraph{2. Probabilistic Prediction (Flow Matching)}
+\subsection{2. Probabilistic Prediction (Flow Matching)}
 Given the possible turbulent nature of the system, the evolution over a long horizon $T$ is better described by the transition of a probability distribution $p(\mathbf{U}_{T_0+T} | \mathbf{S}_{\text{in}})$ rather than a deterministic one. % This model uses the full input history $\mathbf{S}_{\text{in}}$ (where $T_0$ is the total history length) to model the distribution of the final state $\mathbf{U}_{T_0+T}$.
 
 The goal is to train a model $\mathcal{M}_{\phi}$ with parameters $\phi$ that effectively models this conditional probability distribution:
@@ -134,7 +134,7 @@ Denote the loss term for the Flow Matching model as $\mathcal{L}_{\text{FM}}$. F
 	\right].
 \end{equation*}
 
-\subsection{Pre-training Datasets and Preliminary Domain Coverage}
+\section{Pre-training Datasets and Preliminary Domain Coverage}
 
 To enable the model to generalise across the full range of Navier–Stokes regimes, a diverse ensemble of 2-dimensional pre-training datasets is needed. The Navier–Stokes equation exhibits a broad spectrum of behaviour depending on flow type (laminar or turbulent), compressibility, boundary conditions, and external forcing. Capturing these variations requires data originating from multiple numerical solvers, simulation conditions, and initialisation schemes. For our datasets we seek uniform grid simulated data.
 

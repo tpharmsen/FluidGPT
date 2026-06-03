@@ -1,4 +1,4 @@
-\section{Training and Validation}
+\chapter{Training and Validation}
 %- explain that i made a custom framework to faciliate training and validation on slurm-based, container-based HPC systems and local devices.
 %- explain that the framework is modular and configurable via config files
 %- explain the 8 times data paralellism and effective batch size
@@ -14,7 +14,7 @@
 %- define error metrics relative rmse and absolute
 %- validation in float32/float64?
 
-\subsection{Training procedure}
+\section{Training procedure}
 \begin{comment}
 Training Framework and System Abstraction
 
@@ -23,21 +23,21 @@ To support large-scale experimentation across heterogeneous compute environments
 The framework is fully modular and configurable through declarative configuration files, allowing model architectures, optimization parameters, data handling, and distributed training settings to be adjusted without modifying core training code. This design was critical for systematically comparing multiple model classes under controlled experimental conditions.
 
 \end{comment}
-\paragraph{Model Training}
+\subsection{Model Training}
 
 Four foundation models were trained within this unified framework. The first is a deterministic autoregressive (AR) model, which predicts the next temporal state conditioned on a fixed history window. The second is a probabilistic flow-matching model, which learns a conditional distribution over future states and enables stochastic sampling during inference. For the flow-matching model, the prior-distribution is generated on the go with correlated gaussian noise. The noise is generated as pure gaussian noise, with a gaussian filter with a standard deviation of 4 in spatial directions and 1 in temporal direction applied to introduce correlation. Applying spatial-correlation of the prior distribution is not only reducing the sharpness of interfaces in the fluids, but also reduces the state-space from which the model has to learn to transform to the target distribution, making the learning task easier.
 
-\paragraph{Optimization and Learning Rate Scheduling}
+\subsection{Optimization and Learning Rate Scheduling}
 
 Both models were trained using the same optimization strategy to ensure a fair comparison. Learning rates were tuned using a schedule consisting of an initial warmup phase, followed by stepwise decay at predefined milestones. The warmup phase mitigates optimization instability during early training, particularly for large models and distributed settings, while milestone-based decay improves convergence during later stages of training. Due to the sampling nature of the flow-matching model, a slightly higher initial learning rate was used compared to the deterministic AR model. Also, the flow-matching models are trained for longer at pre-decay learning rates to account for the increased complexity of learning a conditional distribution. All training is done with bfloat16 reduced precision to balance computational efficiency with numerical stability.
 
-\paragraph{Hardware Platform and parallelism}
+\section{Hardware Platform and parallelism}
 
 All large-scale experiments were conducted on the state of the art NVIDIA DGX B200 unified AI platform, leveraging its high-bandwidth interconnect, large GPU memory capacity and high compute power. Training and evaluation were executed within containerized environments, ensuring consistent software dependencies across runs. Training was performed using data parallelism across 8 devices, resulting in an effective batch size equal to eight times the per-device batch size of 176. This parallelism was essential to stabilize optimization and maintain throughput given the high-dimensional spatial-temporal data and large model capacity.
 
 \input{chapters/training/train_hparams.tex}
 
-\subsection{Validation}
+\section{Validation}
 
 %for each dataset (20% validation split)
 %- explain single next-timeblock validation
@@ -63,7 +63,7 @@ For each dataset, 20\% of the available trajectories were reserved for validatio
 where $y_i$ is the ground truth value and $\hat{y}_i$ is the predicted value for the $i$-th sample, and $N$ is the total number of samples. These metrics provide a scale-invariant measure of prediction error, allowing for meaningful comparison across different datasets and model configurations. All validation is done in float32 precision to prioritize accurate error measurement over computational efficiency.
 
 
-\subsubsection{Model- and dataset-specific Validation}
+\subsection{Model- and dataset-specific Validation}
 
 \paragraph{Deterministic Model.}
 The deterministic autoregressive (AR) model produces a static prediction for a given input sequence. Both single-step and rollout validations therefore yield a deterministic predicted trajectory, which is directly compared against ground truth using pointwise and spectral physics metrics. The model can trivially be used in autoregressive fashion by feeding in the output timeblock as input timeblock.
