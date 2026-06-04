@@ -1,0 +1,111 @@
+\chapter{Models}\label{ch:models}
+
+\section{Overview of the Modeling Approaches}
+
+This chapter introduces two modeling approaches for spatiotemporal fluid dynamics prediction: a deterministic autoregressive model and a flow-matching generative model. Both approaches share a common hierarchical Swin Transformer backbone with additional temporal information flow, but differ in their conditioning strategy and prediction formulation. The deterministic model directly maps past velocity fields to future states, whereas the flow-matching model learns to conditionally flow a probability distribution.
+
+
+\subsection{Shared Transformer Backbone}
+
+Both models are built on a shared spatiotemporal backbone designed for efficient modeling of high-dimensional fluid flow data. The backbone is based on the Swin Transformer \citet{Liu2021SwinTA}, which enables hierarchical feature extraction via shifted window self-attention. This design allows the model to capture both local and long-range spatial dependencies while maintaining computational efficiency through localized attention computation. Additionally, the backbone has been altered for additional information spread in the temporal axis.
+
+\subsection{Space-Then-Time Attention Factorization}
+
+To incorporate temporal structure, we employ a space-then-time attention scheme. In this formulation, self-attention is first applied across spatial dimensions and subsequently across the temporal dimension. This factorization reduces memory usage and computational cost while preserving predictive performance. The corresponding attention masking strategy is illustrated in Figure~\ref{fig:BlockExplainer}. In practice, multiple Space-Then-Time attention blocks are used sequentially for smoother and more robust information spread.
+
+\begin{figure}[h]
+	\centering
+	\makebox[\textwidth][c]{
+		\includestandalone[width=0.8\textwidth]{figs/BlockExplainerAll}
+	}
+	\caption{Illustration of the space-then-time attention masking pattern used in the backbone architecture. The left and middle figure show the two subsequent steps of the spatial attention mask and the right figure shows the temporal attention mask.}
+	\label{fig:BlockExplainer}
+\end{figure}
+
+\subsection{UNet-style Multi-scale Architecture}
+
+The Swin Transformer backbone is embedded within a UNet-style encoder-decoder structure with skip connections. This design enables multi-scale feature extraction while preserving fine-grained spatial information. Skip connections are implemented using ConvNeXt-style blocks, which facilitate stable gradient propagation and information flow across resolution scales. Each level of the Unet focusses on a different spatial scale of information spread, with the deepest layer programmed for an spatial all-to-all attention mask.
+
+\subsection{Patch Embedding and Reconstruction}
+
+At the input stage, the two-dimensional velocity field is partitioned into non-overlapping square patches. Each patch is projected into a latent embedding space using a learned MLP. Learned positional and temporal embeddings are added to each patch embedding to encode spatial and temporal structure.
+
+At the output stage, the latent embeddings are projected back to the original velocity field dimension using an MLP and reassembled into the full spatial grid.
+
+\subsection{Hierarchical Patch Merging and Expansion}
+
+As depth increases in the encoder, groups of four neighboring patches are merged into a single token with double size embedding dimension. This operation progressively reduces spatial resolution while increasing receptive field size. This from of compression throughout the depth of the model also realises a form of regularization and generalisation. In the decoder, the reverse operation is applied to recover full spatial resolution.
+
+\section{Deterministic Model}
+
+\subsection{Prediction}
+
+The deterministic model receives as input a sequence of the past five velocity field states and directly predicts the next five states. Due to the grouping of five subsequent states of the system, we aim to reduce the amount of compounding error from recursive inference.
+
+
+\subsection{Architecture Overview}
+
+The deterministic model uses the shared backbone described in the previous section. It operates on the same patchified spatiotemporal representation and produces a direct mapping from past states to subsequent future states.
+
+\begin{figure}[h]
+	\centering
+	\makebox[\textwidth][c]{
+		\includestandalone[width=1\textwidth]{figs/FM}
+	}
+	\caption{Architecture overview of the deterministic model.}
+	\label{fig:det_model_architecture}
+\end{figure}
+
+\subsection{Hyperparameter Configurations}
+
+Two deterministic model variants are evaluated. One uses smaller patch sizes with higher embedding dimensionality and greater depth, while the other uses larger patch sizes with reduced embedding dimensionality and depth. This design allows exploration of the trade-off between local resolution and global context modeling.
+
+\input{chapters/models/AR_hparams.tex}
+
+\section{Flow-Matching Model}
+
+\subsection{Prediction}
+
+The flow-matching model conditions on the same five past velocity field states as the deterministic model. In addition, it concatenates a noise sample drawn from a prior distribution. The model learns to predict a velocity field that transforms the noisy sample into a physically consistent future state. Note that the term velocity does not refer to the physical velocity of the Navier-Stokes flow, but instead refers to the flow from noisy distribution to the learned distribution of subsequent states. Even though the model itself is still deterministic, the nature of sampling from the prior distribution makes this model a probabilistic model.
+
+\subsection{Flow-Time Conditioning}
+
+Flow-time is encoded using a high-dimensional sinusoidal embedding, which is processed by an MLP with SiLU activations. This embedding is reintroduced with concatenation onto the embeddings at each start of the Space-Then-Time attention block sequence. This ensuring that temporal information is available throughout the network and is not lost during the attention processes.
+
+\subsection{Prior Distribution Construction}
+
+The prior distribution is generated by applying a Gaussian filter to pure Gaussian noise. This introduces spatial and temporal correlations, resulting in a structured noise field. The standard deviations for the Gaussian filter are set to 4 in spatial dimensions and 1 in the temporal dimension, based on empirical tuning. Putting a Gaussian filter over the raw Gaussian noise acts as a low-pass filter
+resulting in a easier learning problem and thus decreasing the amount of time required for the model to converge while training.
+
+\subsection{Sampling and Integration}
+
+The model predicts a velocity increment field conditioned on flow-time. The final predicted state is obtained by integrating this velocity field over flow-time using a numerical integration scheme. We use a euler-integration scheme with 20 steps.
+
+\subsection{Architecture Overview}
+
+The flow-matching model shares the same backbone architecture as the deterministic model, with the primary difference being the inclusion of flow-time conditioning and noise input.
+
+\begin{figure}[h]
+	\centering
+	\makebox[\textwidth][c]{
+		\includestandalone[width=1\textwidth]{figs/FM}
+	}
+	\caption{Architecture overview of the flow-matching model.}
+	\label{fig:fm_model_architecture}
+\end{figure}
+
+\subsection{Hyperparameter Configurations}
+
+As with the deterministic model, two variants are evaluated for flow matching. These variants differ in patch size, embedding dimension, depth, and number of attention blocks per layer, enabling a systematic study of model capacity versus resolution trade-offs.
+
+\input{chapters/models/FM_hparams.tex}
+
+\section{Model Scaling and Architectural Variants}
+
+Both modeling approaches are evaluated under two architectural regimes. One configuration uses smaller patch sizes with higher embedding dimensions and deeper networks, while the other uses larger patch sizes with reduced embedding capacity. This allows us to investigate the trade-off between fine-grained spatial resolution and global contextual reasoning. Note that patch fusion results in a double size embedding dimension and fourfold pixel size receptiveness, thus making the second depth embeddings of the d-3 models and the first depth embeddings of the d-2 models equivalent in size and pixel-correspondence.
+
+Additionally, the number of space-then-time attention blocks per layer is varied as a hyperparameter to control computational cost and define less difference in representational capacity between the d2 and d3-models.
+
+\section{Summary}
+
+In summary, both models share a unified Swin-Transformer-based spatiotemporal backbone with UNet-style multi-scale structure. The deterministic model directly maps past states to future states, while the flow-matching model learns a continuous generative process conditioned on noise and flow-time. These differences primarily arise in the conditioning strategy and output formulation rather than the underlying architecture.

@@ -1,0 +1,28 @@
+
+\begin{table}[t]
+\centering
+\caption{Hyperparameters for probabilistic FluidGPT models.}
+\label{tab:fluidgpt_hparams_prob}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Hyperparameter} & \textbf{FM-d2} & \textbf{FM-d3} \\
+\midrule
+Temporal Bundling             & 5 + 5 (cond.) & 5 + 5 (cond.) \\
+Embedding Dimension           & 128          & 64           \\
+Embedder Encoding/Decoding    & linear       & linear       \\
+Patch Shape                   & $8{\times}8{\times}2$ & $4{\times}4{\times}2$ \\
+Embedder Hidden Dim.          & 512          & 256          \\
+Flow-time Embedding Dim.      & 256          & 256          \\
+Flow-time Injection Size      & [32,64,128]  & [16,32,64,128] \\
+Model Depth                   & 2            & 3            \\
+Stage Blocks (per-depth)      & [3,3,3,3,3]  & [2,2,2,2,2,2,2] \\
+Number of Heads (per-depth)   & [8,16,32,16,8] & [4,8,16,32,16,8,4] \\
+Window Attention Size         & $4{\times}4$ & $4{\times}4$ \\
+Attention Masking             & not on cond. & not on cond. \\
+Activation Function           & GELU         & GELU         \\
+Skip Block                    & convnext     & convnext     \\
+Gradient Flowthrough Skips    & true (all)   & true (all)   \\
+Model Parameters              & 64.3\,M      & 46.0\,M      \\
+\bottomrule
+\end{tabular}
+\end{table}

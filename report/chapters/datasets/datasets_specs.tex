@@ -1,0 +1,64 @@
+
+\begin{table}[t]
+\centering
+\caption{Overview of Navier-Stokes datasets used in this work.}
+\small
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{p{2.6cm} p{3.6cm} p{3.2cm} p{2.4cm} p{6.2cm}}
+\toprule
+\textbf{Name} &
+\textbf{Navier--Stokes Type} &
+\textbf{Data Resolution       (Traj $\times$ T $\times$ X $\times$ Y)} &
+\textbf{Domain space} \\
+\midrule
+AmiraSet &
+Incompressible, laminar to turbulent &
+$8000 \times 1001 \times 512^2$ &
+Periodic $[0,1]^2 \times [0,10]$ \\
+
+\midrule
+PDEBench-2DINICNS &
+Incompressible, with forcing &
+$1100 \times 1000 \times 512^2$ &
+Dirichlet $[0,1]^2 \times [0,5]$ \\
+
+PDEBench-2DCNS &
+Compressible, turbulent-dominant &
+$44000 \times 21 \times 128^2-512^2$ &
+Periodic $[0,1]^2 \times [0,1]$ \\
+
+\midrule
+PDEGym-NS-Gauss &
+Incompressible, Gaussian init. &
+$20000 \times 21 \times 128^2$ &
+Periodic $[0,1]^2 \times [0,1]$ \\
+
+PDEGym-NS-Sines &
+Incompressible, sines init. &
+$20000 \times 21 \times 128^2$ &
+Periodic $[0,1]^2 \times [0,1]$ \\
+
+PDEGym-NS-PwC &
+Incompressible, piecewise-constant vorticity init. &
+$20000 \times 21 \times 128^2$ &
+Periodic $[0,1]^2 \times [0,1]$ \\
+
+PDEGym-NS-BB &
+Incompressible, Brownian bridge init. &
+$20000 \times 21 \times 128^2$ & 
+Periodic $[0,1]^2 \times [0,1]$ \\
+
+PDEGym-NS-SL &
+Incompressible, shear layer init. &
+$29580 \times 21 \times 128^2$ &
+Periodic $[0,1]^2 \times [0,1]$ \\
+
+PDEGym-NS-SVS &
+Incompressible, sine vortex sheet init. &
+$20000 \times 21 \times 128^2$ &
+Periodic $[0,1]^2 \times [0,1]$ \\
+\bottomrule
+\end{tabular}
+
+\label{table:properties}
+\end{table}

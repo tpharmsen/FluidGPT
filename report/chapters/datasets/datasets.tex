@@ -1,0 +1,54 @@
+\section{Datasets}
+
+- Explain dataset selection and criteria
+- section for each dataset and their specs and how it fits into the total set
+- preprocessing -> spatial, temporal, filetypes
+
+
+
+
+\subsection{Dataset selection}
+
+Following from the specifications from the problem formulation chapter, a total of 9 datasets have been selected for the task. In table ... all important information can be found. The raw datasize of all datasets add up to about 20 Terabytes of data. The datasets combined make up for a broad coverage of the Navier-Stokes domain space, with variations in flow type, boundary conditions, and initialisation schemes. This diversity is crucial for training a foundation model that can generalise across different regimes of fluid dynamics. 80\% of the trajectories of each dataset are used for training, while 20\% of trajectories are reserved for zero-shot fashion validation and testing. The datasets are preprocessed to ensure consistency in spatial and temporal resolution, and to facilitate efficient loading during training. 
+
+- mention total size of files
+
+\input{chapters/datasets/datasets_specs.tex}
+
+\subsubsection{AMIRASET}
+
+A Fluid Flow Data Set for Machine Learning
+
+This data set contains an ensemble simulation of 8,000 unsteady 2D flows, each having spatially-periodic boundary conditions. The simulation was done with Gerris flow solver and is carried out on a regular grid. The 8,000 flows are ordered from laminar configurations to turbulent configurations with reynolds numbers ranging from 1 to 4096 and kinematic viscosities ranging from 1e-5 to 1e-4. The raw files add up to about 15.2 TeraBytes of data. A detailed description of the data set can be found in:
+J. Jakob, M. Gross and T. Günther, "A Fluid Flow Data Set for Machine Learning and its Application to Neural Flow Map Interpolation," in IEEE Transactions on Visualization and Computer Graphics, vol. 27, no. 2, pp. 1279-1289, Feb. 2021, doi: 10.1109/TVCG.2020.3028947. The data is stored in .am files with resolution 512 x 512 x 1001, which is downsampled and stored in accessible .hdf5 format files.
+\citet{Jakob2021FluidFlowDataset}
+
+\subsubsection{PDEBENCH}
+
+The PDEBench dataset consists of multiple datasets, of which 2 are selected for this work. The first one is the PDEBench 2D Incompressible dataset, which contains 1100 trajectories of 2D incompressible Navier-Stokes simulations with external forcing. The system uses Dirichlet boundary conditions and is simulated on a regular grid with a resolution of $512^2$. :
+
+The second one is the PDEBench-2DCNS dataset, which contains 44000 trajectories of 2D compressible turbulent-dominant Navier-Stokes simulations. The dynamic viscosity varies from $10^{-8}$ to $10^{-1}$, the bulk viscosity varies also from $10^{-8}$ to $10^{-1}$, variation across the fluid velocity is applied, ranging from Mach Number 0.1 to 1. The system uses periodic boundary conditions and is simulated on a regular grid with a resolution varying from $128^2$ to $512^2$. 
+
+\subsubsection{PDEGYM}
+
+The PDEGym dataset consists of multiple datasets, of which 6 are selected for this work. The datasets are generated with the AZEBAN spectral hyperviscosity code, which is a pseudo-spectral code for simulating incompressible fluid flows. The simulations are performed on a uniform grid in time and space, with periodic boundary conditions. Each dataset contains approximately 20000 trajectories of 2D incompressible Navier-Stokes simulations with different initialisation schemes, such as Gaussian random fields, sine waves, piecewise-constant vorticity fields, Brownian bridges, shear layers and sine vortex sheets. The resolution of the simulations is $128^2$ and each trajectory contains 21 snapshots. A detailed description of the data set can be found in: ...
+the dynamic viscosity is set to a small value of $\nu = 4 \times 10^{-4}$.
+
+
+\subsection{Preprocessing}
+
+interpolate to same spatial and time domain
+
+The pre-processing of the used datasets consist interpolation on the spatial domain and sub-sampling on the temporal domain.
+\subsubsection{Spatial interpolation}
+
+All simulations of the datasets are done on the unit grid, with a resolution varying from $128^2$ to $512^2$, like mentioned in the table above. Since our models functions with a static grid input, all datasets are interpolated to a grid of $128^2$ as this is the minimum of the set of resolutions. As the grid points of the simulation are not placed homogeneously in the unit square, custom interpolation with new grid point locations has to be done to reduce the high resolution unit square to a $128^2$ unit square.
+
+\subsubsection{Temporal sampling}
+As the model assumes a static temporal difference of $$\delta T=0.05$$ between subsequent system states, every dataset must be interpolated accordingly. By chance all the datasets share common multipliers for their temporal resolution the datasets are sub-sampled by their aligned resolution levels. This means that for each $$[0,1]$$ simulation time range 20 frames exist, yielding varying trajectory snapshot lengths of 21 to 201.
+
+\subsubsection{Filetype conversion}
+
+The original datasets are stored in large .am, .h5, .hdf5 and .nc type files. In table ... the size, channel content and resolution can be seen. Due to the total size of the dataset it is not possible to store the preprocessed dataset inside memory of the GPUs for quick fetching of batching during training. Thus, the preprocessed data must be efficiently stored on disk for quick reading. For storage of the preprocessed data the filetype h5 is chosen, for quick random access. Each dataset is converted from their original format into a hierarchical structure with one file corresponding to one trajectory in the original dataset. Custom preprocessing scripts have been written for each dataset to preprocess the data in a single shot manner, such that preprocessing does not have to be done just before training. These scripts not only perform spatial interpolation and temporal sampling, but also select the $V_x$ and $V_y$ channels and remove the rest for compact storage. For most datasets libraries have been used to read its data, but for the .am files a custom parsing function had to be written to read out the data since no corresponding libraries exist. For each folder with a preprocessed dataset a metadata file is written with statistics, which is used for normalisation and prefetching of data during training.
+
+table of each dataset and resolution

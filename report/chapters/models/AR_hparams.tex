@@ -1,0 +1,25 @@
+
+\begin{table}[t]
+\centering
+\caption{Hyperparameters for deterministic FluidGPT models.}
+\label{tab:fluidgpt_hparams_det}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Hyperparameter} & \textbf{AR-d2} & \textbf{AR-d3} \\
+\midrule
+Temporal Bundling             & 5            & 5            \\
+Embedding Dimension           & 96           & 48           \\
+Embedder Encoding/Decoding    & linear       & linear       \\
+Patch Shape                   & $8{\times}8{\times}2$ & $4{\times}4{\times}2$ \\
+Embedder Hidden Dim.          & 512          & 256          \\
+Model Depth                   & 2            & 3            \\
+Stage Blocks (per-depth)      & [3,3,3,3,3]  & [2,2,2,2,2,2,2] \\
+Number of Heads (per-depth)   & [4,8,16,8,4] & [4,8,8,16,8,8,4] \\
+Window Attention Size         & $4{\times}4$ & $4{\times}4$ \\
+Activation Function           & GELU         & GELU         \\
+Skip Block                    & convnext     & convnext     \\
+Gradient Flowthrough Skips    & true (all)   & true (all)   \\
+Model Parameters              & 24.7\,M      & 17.9\,M      \\
+\bottomrule
+\end{tabular}
+\end{table}
