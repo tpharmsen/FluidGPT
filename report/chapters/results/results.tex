@@ -123,7 +123,7 @@ with this forcing signal as input. The models must therefore account for the eff
 an unobserved driver, making accurate rollout prediction substantially harder and 
 introducing a persistent source of error that compounds with each autoregressive step.
 
-\section{Spectrum analysis}
+\section{Spectrum analysis}\label{se:spectraresults}
 
 Figure \ref{fig:energyspectrum} presents the energy spectrum error ratio for three special case datasets: \textit{amira}, \textit{pdegym-sines}, and \textit{pdegym-bb}. The energy spectra are computed from both the predicted and reference trajectories at selected rollout timesteps, after which the ratio between the two spectra is calculated for each wavenumber. Values above one indicate an overprediction of energy at a particular wavenumber, while values below one indicate an underprediction. The three respective datasets have been chosen for spectrum-inspection due to the difference in error accumulation during rollout
 

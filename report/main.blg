@@ -1,54 +1,55 @@
-This is BibTeX, Version 0.99d (TeX Live 2023/Debian)
+This is BibTeX, Version 0.99d (TeX Live 2025/Debian)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: main.aux
-The style file: unsrt.bst
+The style file: unsrtnat.bst
 Database file #1: references.bib
 Repeated entry---line 160 of file references.bib
  : @article{herde2024poseidon
  :                           ,
 I'm skipping whatever remains of this entry
+Warning--I didn't find a database entry for "Liu2021SwinTA"
 Warning--empty journal in ronneberger2015u
 Warning--empty journal in prihatno20202d
 Warning--empty journal in vaswani2017attention
 You've used 30 entries,
-            1791 wiz_defined-function locations,
-            601 strings with 10201 characters,
-and the built_in function-call counts, 6466 in all, are:
-= -- 498
-> -- 448
-< -- 4
-+ -- 160
-- -- 130
-* -- 421
-:= -- 1134
-add.period$ -- 91
+            2481 wiz_defined-function locations,
+            730 strings with 11831 characters,
+and the built_in function-call counts, 12095 in all, are:
+= -- 927
+> -- 866
+< -- 11
++ -- 321
+- -- 260
+* -- 987
+:= -- 2070
+add.period$ -- 113
 call.type$ -- 30
-change.case$ -- 30
-chr.to.int$ -- 0
+change.case$ -- 60
+chr.to.int$ -- 29
 cite$ -- 33
-duplicate$ -- 282
-empty$ -- 538
-format.name$ -- 130
-if$ -- 1383
-int.to.chr$ -- 0
-int.to.str$ -- 30
+duplicate$ -- 581
+empty$ -- 955
+format.name$ -- 300
+if$ -- 2495
+int.to.chr$ -- 2
+int.to.str$ -- 31
 missing$ -- 29
-newline$ -- 153
-num.names$ -- 30
-pop$ -- 89
+newline$ -- 180
+num.names$ -- 90
+pop$ -- 247
 preamble$ -- 1
-purify$ -- 0
+purify$ -- 30
 quote$ -- 0
-skip$ -- 136
+skip$ -- 352
 stack$ -- 0
-substring$ -- 226
-swap$ -- 60
+substring$ -- 286
+swap$ -- 92
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 0
+type$ -- 210
 warning$ -- 3
-while$ -- 51
-width$ -- 32
-write$ -- 310
+while$ -- 81
+width$ -- 0
+write$ -- 419
 (There was 1 error message)

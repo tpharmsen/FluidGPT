@@ -36,13 +36,13 @@
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{toc}{\contentsline {section}{\numberline {2.1}Convolutional Fluid dynamics models}{3}{section.2.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2.2}Neural PDE operator learning}{3}{section.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2.3}PDE Foundation Models}{3}{section.2.3}\protected@file@percent }
 \citation{maulik2020probabilistic}
 \citation{zheng2023uncertainty}
 \citation{gao2024bayesian}
 \citation{mucke2025physicsaware}
 \citation{geneva2020multi}
 \citation{vadeboncoeur2022probabilistic}
+\@writefile{toc}{\contentsline {section}{\numberline {2.3}PDE Foundation Models}{4}{section.2.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2.4}Probabilistic Modeling of Fluid Flows}{4}{section.2.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2.5}Gaps, Challenges, and Our Positioning}{4}{section.2.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2.6}Foundational model goal}{5}{section.2.6}\protected@file@percent }
@@ -51,6 +51,7 @@
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{toc}{\contentsline {section}{\numberline {3.1}Navier-Stokes System}{6}{section.3.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Characteristics of the Navier–Stokes System.}{6}{subsection.3.1.1}\protected@file@percent }
+\newlabel{sec:energyspectra}{{3.1.1}{6}{Characteristics of the Navier–Stokes System}{subsection.3.1.1}{}}
 \citation{Kolmogorov1941}
 \citation{Kolmogorov1941}
 \@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Schematic of typical energy cascade process of Navier-Stokes governed system. Energy is injected at highest wavenumbers and dissipated at lowest wavenumbers. Energy is transferred in sequential manner across the scales in between, referred to as the inertial subrange. Note that most of the energy in the system is contained in the larger size vortices.}}{7}{figure.caption.2}\protected@file@percent }
@@ -106,7 +107,6 @@
 \newlabel{fig:fm_model_architecture}{{4.3}{15}{Architecture overview of the flow-matching model}{figure.caption.13}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.3.6}Hyperparameter Configurations}{15}{subsection.4.3.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {4.4}Model Scaling and Architectural Variants}{15}{section.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.5}Summary}{15}{section.4.5}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces Hyperparameters for probabilistic FluidGPT models.}}{16}{table.caption.14}\protected@file@percent }
 \newlabel{tab:fluidgpt_hparams_prob}{{4.2}{16}{Hyperparameters for probabilistic FluidGPT models}{table.caption.14}{}}
 \@writefile{toc}{\contentsline {chapter}{\numberline {5}Training and Validation}{17}{chapter.5}\protected@file@percent }
@@ -119,61 +119,62 @@
 \@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces Comparison of training hyperparameters between deterministic  and probabilistic FluidGPT models.}}{18}{table.caption.15}\protected@file@percent }
 \newlabel{tab:fluidgpt_hparams}{{5.1}{18}{Comparison of training hyperparameters between deterministic \\and probabilistic FluidGPT models}{table.caption.15}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {5.2}Hardware Platform and Parallelism}{18}{section.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5.3}Validation}{18}{section.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.1}Error Metrics}{18}{subsection.5.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.2}Model- and Dataset-Specific Validation}{18}{subsection.5.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Deterministic Model.}{18}{section*.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Training hyperparameters}{18}{section.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.4}Validation}{18}{section.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.1}Error Metrics}{18}{subsection.5.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.2}Model- and Dataset-Specific Validation}{19}{subsection.5.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Deterministic Model.}{19}{section*.16}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Flow-Matching Model.}{19}{section*.17}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{Single-Step Validation}{19}{section*.18}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{Rollout Validation}{19}{section*.19}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Spectral Diagnostics}{19}{section*.20}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}Results}{20}{chapter.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Spectral Diagnostics}{20}{section*.20}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Results}{21}{chapter.6}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {6.1}Single-step prediction}{20}{section.6.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces Boxplot of relative absolute error of the single next-timeblock prediction for each of the four surrogate foundation models, grouped by dataset. The models are trained on the same trajectory-datasplit and evaluated in zero-shot fashion on the validation datset. For the flowmatching models, FM-d2 and FM-d3, 16 samples are taken for each input-output pair. The graph mostly the flowmatching model FM-d2 outperforming the other models, except on the pdebench-incomp and pdegym-sines dataset. All models seem to have difficulty predicting the more complex pdebench-comp dataset.}}{20}{figure.caption.21}\protected@file@percent }
-\newlabel{fig:ssbox}{{6.1}{20}{Boxplot of relative absolute error of the single next-timeblock prediction for each of the four surrogate foundation models, grouped by dataset. The models are trained on the same trajectory-datasplit and evaluated in zero-shot fashion on the validation datset. For the flowmatching models, FM-d2 and FM-d3, 16 samples are taken for each input-output pair. The graph mostly the flowmatching model FM-d2 outperforming the other models, except on the pdebench-incomp and pdegym-sines dataset. All models seem to have difficulty predicting the more complex pdebench-comp dataset}{figure.caption.21}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.2}Rollout prediction}{22}{section.6.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces 3x3 subplot of the per-sample relative absolute error of rollout predictions for all models grouped per dataset. The models are used in autogressive fashion to predict the full-length trajectory, starting with the first available input timeblock containing the initialization conditions. The flowmatching models are taking 16 global rollout samples for each existing trajectory in the zero-shot validation dataset and use a new prior distribution sample for each individual input-output prediction during the autoregressive rollout. Flowmatching model FM-d2 outperforms all other models, except for pdegym-sines. Error accumulation patterns are different across datasets and models. }}{22}{figure.caption.22}\protected@file@percent }
-\newlabel{fig:rollout}{{6.2}{22}{3x3 subplot of the per-sample relative absolute error of rollout predictions for all models grouped per dataset. The models are used in autogressive fashion to predict the full-length trajectory, starting with the first available input timeblock containing the initialization conditions. The flowmatching models are taking 16 global rollout samples for each existing trajectory in the zero-shot validation dataset and use a new prior distribution sample for each individual input-output prediction during the autoregressive rollout. Flowmatching model FM-d2 outperforms all other models, except for pdegym-sines. Error accumulation patterns are different across datasets and models}{figure.caption.22}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.3}Spectrum analysis}{23}{section.6.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces Log-log plot of the energy spectrum error ratio per wavenumber for three special case datasets for models FM-d2 and AR-d2 only. Using the incompressibility assumption, the energy spectrum is calculated at two specific timesteps in the rollout prediction and the reference trajectory, of which the the error ratio is calculated. For the dataset amira at t=20 and t=200 the energy spectrum values are calculated, and for the rest of the datasets at t=5 and t=20. For the flowmatching model 16 rollout samples are drawn, from which the median is plotted in the graphs. Values above 1 indicates overprediction of energy at that wavenumber and under 1 means underprediction compared to the true energy spectrum. A trend emerges that higher wavenumbers are increasingly overpredicted, indicating that higher frequency might not be predicted as well as the lower frequencies.}}{23}{figure.caption.23}\protected@file@percent }
-\newlabel{fig:energyspectrum}{{6.3}{23}{Log-log plot of the energy spectrum error ratio per wavenumber for three special case datasets for models FM-d2 and AR-d2 only. Using the incompressibility assumption, the energy spectrum is calculated at two specific timesteps in the rollout prediction and the reference trajectory, of which the the error ratio is calculated. For the dataset amira at t=20 and t=200 the energy spectrum values are calculated, and for the rest of the datasets at t=5 and t=20. For the flowmatching model 16 rollout samples are drawn, from which the median is plotted in the graphs. Values above 1 indicates overprediction of energy at that wavenumber and under 1 means underprediction compared to the true energy spectrum. A trend emerges that higher wavenumbers are increasingly overpredicted, indicating that higher frequency might not be predicted as well as the lower frequencies}{figure.caption.23}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Single-step prediction}{21}{section.6.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces Boxplot of relative absolute error of the single next-timeblock prediction for each of the four surrogate foundation models, grouped by dataset. The models are trained on the same trajectory-datasplit and evaluated in zero-shot fashion on the validation datset. For the flowmatching models, FM-d2 and FM-d3, 16 samples are taken for each input-output pair. The graph mostly the flowmatching model FM-d2 outperforming the other models, except on the pdebench-incomp and pdegym-sines dataset. All models seem to have difficulty predicting the more complex pdebench-comp dataset.}}{21}{figure.caption.21}\protected@file@percent }
+\newlabel{fig:ssbox}{{6.1}{21}{Boxplot of relative absolute error of the single next-timeblock prediction for each of the four surrogate foundation models, grouped by dataset. The models are trained on the same trajectory-datasplit and evaluated in zero-shot fashion on the validation datset. For the flowmatching models, FM-d2 and FM-d3, 16 samples are taken for each input-output pair. The graph mostly the flowmatching model FM-d2 outperforming the other models, except on the pdebench-incomp and pdegym-sines dataset. All models seem to have difficulty predicting the more complex pdebench-comp dataset}{figure.caption.21}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}Rollout prediction}{23}{section.6.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces 3x3 subplot of the per-sample relative absolute error of rollout predictions for all models grouped per dataset. The models are used in autogressive fashion to predict the full-length trajectory, starting with the first available input timeblock containing the initialization conditions. The flowmatching models are taking 16 global rollout samples for each existing trajectory in the zero-shot validation dataset and use a new prior distribution sample for each individual input-output prediction during the autoregressive rollout. Flowmatching model FM-d2 outperforms all other models, except for pdegym-sines. Error accumulation patterns are different across datasets and models. }}{23}{figure.caption.22}\protected@file@percent }
+\newlabel{fig:rollout}{{6.2}{23}{3x3 subplot of the per-sample relative absolute error of rollout predictions for all models grouped per dataset. The models are used in autogressive fashion to predict the full-length trajectory, starting with the first available input timeblock containing the initialization conditions. The flowmatching models are taking 16 global rollout samples for each existing trajectory in the zero-shot validation dataset and use a new prior distribution sample for each individual input-output prediction during the autoregressive rollout. Flowmatching model FM-d2 outperforms all other models, except for pdegym-sines. Error accumulation patterns are different across datasets and models}{figure.caption.22}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.3}Spectrum analysis}{24}{section.6.3}\protected@file@percent }
+\newlabel{se:spectraresults}{{6.3}{24}{Spectrum analysis}{section.6.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces Log-log plot of the energy spectrum error ratio per wavenumber for three special case datasets for models FM-d2 and AR-d2 only. Using the incompressibility assumption, the energy spectrum is calculated at two specific timesteps in the rollout prediction and the reference trajectory, of which the the error ratio is calculated. For the dataset amira at t=20 and t=200 the energy spectrum values are calculated, and for the rest of the datasets at t=5 and t=20. For the flowmatching model 16 rollout samples are drawn, from which the median is plotted in the graphs. Values above 1 indicates overprediction of energy at that wavenumber and under 1 means underprediction compared to the true energy spectrum. A trend emerges that higher wavenumbers are increasingly overpredicted, indicating that higher frequency might not be predicted as well as the lower frequencies.}}{24}{figure.caption.23}\protected@file@percent }
+\newlabel{fig:energyspectrum}{{6.3}{24}{Log-log plot of the energy spectrum error ratio per wavenumber for three special case datasets for models FM-d2 and AR-d2 only. Using the incompressibility assumption, the energy spectrum is calculated at two specific timesteps in the rollout prediction and the reference trajectory, of which the the error ratio is calculated. For the dataset amira at t=20 and t=200 the energy spectrum values are calculated, and for the rest of the datasets at t=5 and t=20. For the flowmatching model 16 rollout samples are drawn, from which the median is plotted in the graphs. Values above 1 indicates overprediction of energy at that wavenumber and under 1 means underprediction compared to the true energy spectrum. A trend emerges that higher wavenumbers are increasingly overpredicted, indicating that higher frequency might not be predicted as well as the lower frequencies}{figure.caption.23}{}}
 \bibstyle{unsrtnat}
 \bibdata{references}
-\@writefile{toc}{\contentsline {chapter}{\numberline {7}Conclusion}{25}{chapter.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Conclusion}{26}{chapter.7}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\bibcite{Nielsen2024FrontierCFD}{{1}{}{{}}{{}}}
-\bibcite{Akgul2024LiquidCoolingPlate}{{2}{}{{}}{{}}}
-\bibcite{Perinajova2024}{{3}{}{{}}{{}}}
-\bibcite{SuarezVazquez2025}{{4}{}{{}}{{}}}
-\bibcite{Zhang2022surrogateCFD}{{5}{}{{}}{{}}}
-\bibcite{kim2018deepfluids}{{6}{}{{}}{{}}}
-\bibcite{ronneberger2015u}{{7}{}{{}}{{}}}
-\bibcite{chen2020u}{{8}{}{{}}{{}}}
-\bibcite{suter2022surrogate}{{9}{}{{}}{{}}}
-\bibcite{prihatno20202d}{{10}{}{{}}{{}}}
-\bibcite{zhu2019physics}{{11}{}{{}}{{}}}
-\bibcite{sun2020surrogate}{{12}{}{{}}{{}}}
-\bibcite{haghighat2022gapinn}{{13}{}{{}}{{}}}
-\bibcite{li2020fourier}{{14}{}{{}}{{}}}
-\bibcite{lu2021deeponet}{{15}{}{{}}{{}}}
-\bibcite{li2020graph}{{16}{}{{}}{{}}}
-\bibcite{vaswani2017attention}{{17}{}{{}}{{}}}
-\bibcite{mccabe2023mpp}{{18}{}{{}}{{}}}
-\bibcite{herde2024poseidon}{{19}{}{{}}{{}}}
-\bibcite{liu2024prose}{{20}{}{{}}{{}}}
-\bibcite{polymathicAI2024}{{21}{}{{}}{{}}}
-\bibcite{yang2025p3d}{{22}{}{{}}{{}}}
-\bibcite{maulik2020probabilistic}{{23}{}{{}}{{}}}
-\bibcite{zheng2023uncertainty}{{24}{}{{}}{{}}}
-\bibcite{gao2024bayesian}{{25}{}{{}}{{}}}
-\bibcite{mucke2025physicsaware}{{26}{}{{}}{{}}}
-\bibcite{geneva2020multi}{{27}{}{{}}{{}}}
-\bibcite{vadeboncoeur2022probabilistic}{{28}{}{{}}{{}}}
-\bibcite{Kolmogorov1941}{{29}{}{{}}{{}}}
-\bibcite{Jakob2021FluidFlowDataset}{{30}{}{{}}{{}}}
-\providecommand\NAT@force@numbers{}\NAT@force@numbers
-\@writefile{toc}{\contentsline {section}{\numberline {.1}Additional Material}{27}{section.Alph0.1}\protected@file@percent }
-\gdef \@abspage@last{27}
+\bibcite{Nielsen2024FrontierCFD}{{1}{2024}{{Nielsen et~al.}}{{Nielsen, Walden, Nastac, Wang, Jones, Lohry, Anderson, Diskin, Liu, Rumsey, Iyer, Moran, and Zubair}}}
+\bibcite{Akgul2024LiquidCoolingPlate}{{2}{2024}{{Akg{\"u}l and Er{\c c}el}}{{}}}
+\bibcite{Perinajova2024}{{3}{2024}{{Perinajov\'{a} et~al.}}{{Perinajov\'{a}, van~de Ven, Roelse, Xu, Juffermans, Westenberg, Lamb, and Kenjere\v {s}}}}
+\bibcite{SuarezVazquez2025}{{4}{2025}{{Suárez-Vázquez et~al.}}{{Suárez-Vázquez, Martínez, and Gómez}}}
+\bibcite{Zhang2022surrogateCFD}{{5}{2022}{{Zhang et~al.}}{{Zhang, Dey, Veeraraghavan, Kulkarni, and Chakraborty}}}
+\bibcite{mccabe2023mpp}{{6}{2023}{{McCabe et~al.}}{{McCabe, R{\'e}galdo-Saint~Blancard, Holden~Parker, Ohana, Cranmer, Bietti, Eickenberg, Golkar, Krawezik, Lanusse, et~al.}}}
+\bibcite{herde2024poseidon}{{7}{2024}{{Herde et~al.}}{{Herde, Raoni{\'c}, Rohner, K{\"a}ppeli, Molinaro, de~B{\'e}zenac, and Mishra}}}
+\bibcite{liu2024prose}{{8}{2024}{{Liu et~al.}}{{Liu, Sun, He, Pinney, Zhang, and Schaeffer}}}
+\bibcite{polymathicAI2024}{{9}{2024}{{Team}}{{}}}
+\bibcite{kim2018deepfluids}{{10}{2018}{{Kim et~al.}}{{Kim, Azevedo, and Thuerey}}}
+\bibcite{ronneberger2015u}{{11}{2015}{{Ronneberger et~al.}}{{Ronneberger, Fischer, and Brox}}}
+\bibcite{chen2020u}{{12}{2020}{{Chen et~al.}}{{Chen, Viquerat, and Hachem}}}
+\bibcite{suter2022surrogate}{{13}{2022}{{Suter et~al.}}{{Suter, G{\"a}hler, M{\"u}ller, Hutter, and Hanebutte}}}
+\bibcite{prihatno20202d}{{14}{2020}{{Prihatno and Kang}}{{}}}
+\bibcite{zhu2019physics}{{15}{2019}{{Zhu et~al.}}{{Zhu, Zabaras, Koutsourelakis, and Perdikaris}}}
+\bibcite{sun2020surrogate}{{16}{2020}{{Sun et~al.}}{{Sun, Gao, Pan, and Wang}}}
+\bibcite{haghighat2022gapinn}{{17}{2022}{{Haghighat and Juanes}}{{}}}
+\bibcite{li2020fourier}{{18}{2020{}}{{Li et~al.}}{{Li, Kovachki, Azizzadenesheli, Anandkumar, Stuart, and Bhattacharya}}}
+\bibcite{lu2021deeponet}{{19}{2021}{{Lu et~al.}}{{Lu, Jin, Pang, Zhang, and Karniadakis}}}
+\bibcite{li2020graph}{{20}{2020{}}{{Li et~al.}}{{Li, Kovachki, Azizzadenesheli, and Anandkumar}}}
+\bibcite{vaswani2017attention}{{21}{2017}{{Vaswani et~al.}}{{Vaswani, Shazeer, Parmar, Uszkoreit, Jones, Gomez, Kaiser, and Polosukhin}}}
+\bibcite{yang2025p3d}{{22}{2025}{{Yang et~al.}}{{Yang, Zhang, and Li}}}
+\bibcite{maulik2020probabilistic}{{23}{2020}{{Maulik et~al.}}{{Maulik, Fukami, Ramachandran, Fukagata, and Taira}}}
+\bibcite{zheng2023uncertainty}{{24}{2023}{{Zheng et~al.}}{{Zheng, Chen, and Li}}}
+\bibcite{gao2024bayesian}{{25}{2024}{{Gao et~al.}}{{Gao, Guo, and Li}}}
+\bibcite{mucke2025physicsaware}{{26}{2025}{{Mücke and Sanderse}}{{}}}
+\bibcite{geneva2020multi}{{27}{2020}{{Geneva and Zabaras}}{{}}}
+\bibcite{vadeboncoeur2022probabilistic}{{28}{2022}{{Vadeboncoeur et~al.}}{{Vadeboncoeur, Frolov, and Sargsyan}}}
+\bibcite{Kolmogorov1941}{{29}{1941}{{Kolmogorov}}{{}}}
+\bibcite{Jakob2021FluidFlowDataset}{{30}{2021}{{Jakob et~al.}}{{Jakob, Gross, and G{\"u}nther}}}
+\@writefile{toc}{\contentsline {section}{\numberline {.1}Additional Material}{29}{section.Alph0.1}\protected@file@percent }
+\gdef \@abspage@last{29}

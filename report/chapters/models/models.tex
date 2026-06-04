@@ -102,10 +102,7 @@ As with the deterministic model, two variants are evaluated for flow matching. T
 
 \section{Model Scaling and Architectural Variants}
 
-Both modeling approaches are evaluated under two architectural regimes. One configuration uses smaller patch sizes with higher embedding dimensions and deeper networks, while the other uses larger patch sizes with reduced embedding capacity. This allows us to investigate the trade-off between fine-grained spatial resolution and global contextual reasoning. Note that patch fusion results in a double size embedding dimension and fourfold pixel size receptiveness, thus making the second depth embeddings of the d-3 models and the first depth embeddings of the d-2 models equivalent in size and pixel-correspondence.
+Both modeling approaches are evaluated under two architectural regimes. One configuration uses smaller patch sizes with higher embedding dimensions and deeper networks, while the other uses larger patch sizes with reduced embedding capacity. The size of mlp layers is adjusted accordingly to maintain a consistent computational budget for its patch size. Additionally, the number of space-then-time attention blocks per layer is varied as a hyperparameter to control computational cost and define less difference in representational capacity between the d2 and d3-models. These choices allow us to investigate the trade-off between fine-grained spatial resolution and global contextual reasoning. 
 
-Additionally, the number of space-then-time attention blocks per layer is varied as a hyperparameter to control computational cost and define less difference in representational capacity between the d2 and d3-models.
+Note that patch fusion results in a double size embedding dimension and fourfold pixel size receptiveness, thus making the second depth embeddings of the d-3 models and the first depth embeddings of the d-2 models equivalent in size and pixel-correspondence.
 
-\section{Summary}
-
-In summary, both models share a unified Swin-Transformer-based spatiotemporal backbone with UNet-style multi-scale structure. The deterministic model directly maps past states to future states, while the flow-matching model learns a continuous generative process conditioned on noise and flow-time. These differences primarily arise in the conditioning strategy and output formulation rather than the underlying architecture.

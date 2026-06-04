@@ -1,185 +1,180 @@
-\begin{thebibliography}{10}
+\begin{thebibliography}{30}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem{Nielsen2024FrontierCFD}
-Eric~J. Nielsen, Andrew Walden, George Nastac, Lixin Wang, William Jones,
-  Michael Lohry, W.~Kyle Anderson, Boris Diskin, Yang Liu, Christopher~L.
-  Rumsey, Pradeep Iyer, Patrick Moran, and Mohammad Zubair.
-\newblock Large-scale computational fluid dynamics simulations of aerospace
-  configurations on the frontier exascale system.
-\newblock In {\em AIAA Aviation Forum \& ASCEND 2024}, pages 1--32. American
-  Institute of Aeronautics and Astronautics, 2024.
+\bibitem[Nielsen et~al.(2024)Nielsen, Walden, Nastac, Wang, Jones, Lohry, Anderson, Diskin, Liu, Rumsey, Iyer, Moran, and Zubair]{Nielsen2024FrontierCFD}
+Eric~J. Nielsen, Andrew Walden, George Nastac, Lixin Wang, William Jones, Michael Lohry, W.~Kyle Anderson, Boris Diskin, Yang Liu, Christopher~L. Rumsey, Pradeep Iyer, Patrick Moran, and Mohammad Zubair.
+\newblock Large-scale computational fluid dynamics simulations of aerospace configurations on the frontier exascale system.
+\newblock In \emph{AIAA Aviation Forum \& ASCEND 2024}, pages 1--32. American Institute of Aeronautics and Astronautics, 2024.
+\newblock \doi{10.2514/6.2024-3866}.
 
-\bibitem{Akgul2024LiquidCoolingPlate}
+\bibitem[Akg{\"u}l and Er{\c c}el(2024)]{Akgul2024LiquidCoolingPlate}
 M.~Bahattin Akg{\"u}l and Furkan~Sinan Er{\c c}el.
-\newblock Thermal performance analysis of a liquid cooling plate for power
-  electronics.
-\newblock {\em Celal Bayar University Journal of Science}, 20(4):72--81, 2024.
+\newblock Thermal performance analysis of a liquid cooling plate for power electronics.
+\newblock \emph{Celal Bayar University Journal of Science}, 20\penalty0 (4):\penalty0 72--81, 2024.
+\newblock \doi{10.18466/cbayarfbe.1528939}.
 
-\bibitem{Perinajova2024}
-R.~Perinajov\'{a}, T.~van~de Ven, E.~Roelse, F.~Xu, J.~Juffermans, J.J.M.
-  Westenberg, H.~Lamb, and S.~Kenjere\v{s}.
-\newblock A comprehensive mri-based computational model of blood flow in
-  compliant aorta using radial basis function interpolation.
-\newblock {\em BioMedical Engineering OnLine}, 23:69, 2024.
+\bibitem[Perinajov\'{a} et~al.(2024)Perinajov\'{a}, van~de Ven, Roelse, Xu, Juffermans, Westenberg, Lamb, and Kenjere\v{s}]{Perinajova2024}
+R.~Perinajov\'{a}, T.~van~de Ven, E.~Roelse, F.~Xu, J.~Juffermans, J.J.M. Westenberg, H.~Lamb, and S.~Kenjere\v{s}.
+\newblock A comprehensive mri-based computational model of blood flow in compliant aorta using radial basis function interpolation.
+\newblock \emph{BioMedical Engineering OnLine}, 23:\penalty0 69, 2024.
+\newblock \doi{10.1186/s12938-024-01251-x}.
+\newblock URL \url{https://doi.org/10.1186/s12938-024-01251-x}.
 
-\bibitem{SuarezVazquez2025}
+\bibitem[Suárez-Vázquez et~al.(2025)Suárez-Vázquez, Martínez, and Gómez]{SuarezVazquez2025}
 J.~Suárez-Vázquez, P.~Martínez, and R.~Gómez.
-\newblock Numerical weather modelling and large eddy simulations of strong-wind
-  events in coastal mountainous terrain.
-\newblock {\em Applied Sciences}, 15(14):7683, 2025.
+\newblock Numerical weather modelling and large eddy simulations of strong-wind events in coastal mountainous terrain.
+\newblock \emph{Applied Sciences}, 15\penalty0 (14):\penalty0 7683, 2025.
+\newblock \doi{10.3390/app15147683}.
 
-\bibitem{Zhang2022surrogateCFD}
-Tongtao Zhang, Biswadip Dey, Krishna Veeraraghavan, Harshad Kulkarni, and Amit
-  Chakraborty.
+\bibitem[Zhang et~al.(2022)Zhang, Dey, Veeraraghavan, Kulkarni, and Chakraborty]{Zhang2022surrogateCFD}
+Tongtao Zhang, Biswadip Dey, Krishna Veeraraghavan, Harshad Kulkarni, and Amit Chakraborty.
 \newblock Demystifying the data need of ml-surrogates for cfd simulations.
-\newblock {\em arXiv preprint arXiv:2205.08355}, 2022.
+\newblock \emph{arXiv preprint arXiv:2205.08355}, 2022.
+\newblock URL \url{https://arxiv.org/abs/2205.08355}.
 
-\bibitem{kim2018deepfluids}
-Byungsoo Kim, Vasco Azevedo, and Nils Thuerey.
-\newblock Deep fluids: A generative network for parameterized fluid
-  simulations.
-\newblock {\em Computer Graphics Forum}, 2018.
-
-\bibitem{ronneberger2015u}
-Olaf Ronneberger, Philipp Fischer, and Thomas Brox.
-\newblock {U-Net}: Convolutional networks for biomedical image segmentation.
-\newblock pages 234--241, 2015.
-
-\bibitem{chen2020u}
-Junfeng Chen, Jonathan Viquerat, and Elie Hachem.
-\newblock {U-net} architectures for fast prediction in fluid mechanics.
-\newblock {\em Computers \& Fluids}, 205:104591, 2020.
-
-\bibitem{suter2022surrogate}
-Timo Suter, Tim G{\"a}hler, Matthias M{\"u}ller, Marc Hutter, and Hinnerk
-  Hanebutte.
-\newblock Surrogate modeling of fluid dynamics with a multigrid u-net.
-\newblock {\em arXiv preprint arXiv:2205.15545}, 2022.
-
-\bibitem{prihatno20202d}
-Alvian Prihatno and Hyok-Chan Kang.
-\newblock 2d fluid flows prediction based on u-net architecture.
-\newblock pages 31--33, 2020.
-
-\bibitem{zhu2019physics}
-Yifei Zhu, Nicholas Zabaras, Phaedon~S. Koutsourelakis, and Paris Perdikaris.
-\newblock Physics-constrained deep learning for high-dimensional surrogate
-  modeling and uncertainty quantification without labeled data.
-\newblock {\em Journal of Computational Physics}, 2019.
-
-\bibitem{sun2020surrogate}
-Liyuan Sun, Hongwei Gao, Shubin Pan, and Jian-Xun Wang.
-\newblock Surrogate modeling for fluid flows based on physics-constrained deep
-  learning without simulation data.
-\newblock {\em Computer Methods in Applied Mechanics and Engineering}, 2020.
-
-\bibitem{haghighat2022gapinn}
-Ehsan Haghighat and Ruben Juanes.
-\newblock Gapinn: Geometry-aware physics-informed neural networks.
-\newblock {\em Advances in Modeling and Simulation in Engineering Sciences},
-  2022.
-
-\bibitem{li2020fourier}
-Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, Anima Anandkumar, Andrew
-  Stuart, and Kaushik Bhattacharya.
-\newblock Fourier neural operator for parametric partial differential
-  equations.
-\newblock {\em arXiv preprint arXiv:2010.08895}, 2020.
-
-\bibitem{lu2021deeponet}
-Lu~Lu, Pengzhan Jin, Guofei Pang, Zhiping Zhang, and George~E. Karniadakis.
-\newblock Learning nonlinear operators via deeponet based on the universal
-  approximation theorem of operators.
-\newblock {\em Nature Machine Intelligence}, 2021.
-
-\bibitem{li2020graph}
-Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, and Anima Anandkumar.
-\newblock Graph neural operator for parametric partial differential equations.
-\newblock {\em arXiv preprint arXiv:2003.03485}, 2020.
-
-\bibitem{vaswani2017attention}
-Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones,
-  Aidan~N Gomez, {\L}ukasz Kaiser, and Illia Polosukhin.
-\newblock Attention is all you need.
-\newblock pages 5998--6008, 2017.
-
-\bibitem{mccabe2023mpp}
-Michael McCabe, Bruno R{\'e}galdo-Saint~Blancard, Liam Holden~Parker, Ruben
-  Ohana, Miles Cranmer, Alberto Bietti, Michael Eickenberg, Siavash Golkar,
-  Geraud Krawezik, Francois Lanusse, et~al.
+\bibitem[McCabe et~al.(2023)McCabe, R{\'e}galdo-Saint~Blancard, Holden~Parker, Ohana, Cranmer, Bietti, Eickenberg, Golkar, Krawezik, Lanusse, et~al.]{mccabe2023mpp}
+Michael McCabe, Bruno R{\'e}galdo-Saint~Blancard, Liam Holden~Parker, Ruben Ohana, Miles Cranmer, Alberto Bietti, Michael Eickenberg, Siavash Golkar, Geraud Krawezik, Francois Lanusse, et~al.
 \newblock Multiple physics pretraining for physical surrogate models.
-\newblock {\em arXiv preprint arXiv:2310.02994}, 2023.
+\newblock \emph{arXiv preprint arXiv:2310.02994}, 2023.
+\newblock URL \url{https://arxiv.org/abs/2310.02994}.
 
-\bibitem{herde2024poseidon}
-Maximilian Herde, Bogdan Raoni{\'c}, Tobias Rohner, Roger K{\"a}ppeli, Roberto
-  Molinaro, Emmanuel de~B{\'e}zenac, and Siddhartha Mishra.
+\bibitem[Herde et~al.(2024)Herde, Raoni{\'c}, Rohner, K{\"a}ppeli, Molinaro, de~B{\'e}zenac, and Mishra]{herde2024poseidon}
+Maximilian Herde, Bogdan Raoni{\'c}, Tobias Rohner, Roger K{\"a}ppeli, Roberto Molinaro, Emmanuel de~B{\'e}zenac, and Siddhartha Mishra.
 \newblock Poseidon: Efficient foundation models for pdes.
-\newblock {\em arXiv preprint arXiv:2405.19101}, 2024.
+\newblock \emph{arXiv preprint arXiv:2405.19101}, 2024.
+\newblock \doi{10.48550/arXiv.2405.19101}.
+\newblock URL \url{https://arxiv.org/abs/2405.19101}.
 
-\bibitem{liu2024prose}
-Yuxuan Liu, Jingmin Sun, Xinjie He, Griffin Pinney, Zecheng Zhang, and Hayden
-  Schaeffer.
-\newblock Prose-fd: A multimodal pde foundation model for learning multiple
-  operators for forecasting fluid dynamics.
-\newblock {\em arXiv preprint arXiv:2409.09811}, 2024.
+\bibitem[Liu et~al.(2024)Liu, Sun, He, Pinney, Zhang, and Schaeffer]{liu2024prose}
+Yuxuan Liu, Jingmin Sun, Xinjie He, Griffin Pinney, Zecheng Zhang, and Hayden Schaeffer.
+\newblock Prose-fd: A multimodal pde foundation model for learning multiple operators for forecasting fluid dynamics.
+\newblock \emph{arXiv preprint arXiv:2409.09811}, 2024.
+\newblock URL \url{https://arxiv.org/abs/2409.09811}.
 
-\bibitem{polymathicAI2024}
+\bibitem[Team(2024)]{polymathicAI2024}
 Polymathic~AI Team.
 \newblock Polymathic ai: Multi-physics pretraining (mpp) initiative.
 \newblock \url{https://polymathic-ai.org/blog/mpp/}, 2024.
 
-\bibitem{yang2025p3d}
+\bibitem[Kim et~al.(2018)Kim, Azevedo, and Thuerey]{kim2018deepfluids}
+Byungsoo Kim, Vasco Azevedo, and Nils Thuerey.
+\newblock Deep fluids: A generative network for parameterized fluid simulations.
+\newblock \emph{Computer Graphics Forum}, 2018.
+\newblock URL \url{https://arxiv.org/abs/1806.02071}.
+
+\bibitem[Ronneberger et~al.(2015)Ronneberger, Fischer, and Brox]{ronneberger2015u}
+Olaf Ronneberger, Philipp Fischer, and Thomas Brox.
+\newblock {U-Net}: Convolutional networks for biomedical image segmentation.
+\newblock pages 234--241, 2015.
+\newblock URL \url{https://arxiv.org/abs/1505.04597}.
+
+\bibitem[Chen et~al.(2020)Chen, Viquerat, and Hachem]{chen2020u}
+Junfeng Chen, Jonathan Viquerat, and Elie Hachem.
+\newblock {U-net} architectures for fast prediction in fluid mechanics.
+\newblock \emph{Computers \& Fluids}, 205:\penalty0 104591, 2020.
+\newblock URL \url{https://arxiv.org/abs/1912.00030}.
+
+\bibitem[Suter et~al.(2022)Suter, G{\"a}hler, M{\"u}ller, Hutter, and Hanebutte]{suter2022surrogate}
+Timo Suter, Tim G{\"a}hler, Matthias M{\"u}ller, Marc Hutter, and Hinnerk Hanebutte.
+\newblock Surrogate modeling of fluid dynamics with a multigrid u-net.
+\newblock \emph{arXiv preprint arXiv:2205.15545}, 2022.
+\newblock URL \url{https://arxiv.org/abs/2205.15545}.
+
+\bibitem[Prihatno and Kang(2020)]{prihatno20202d}
+Alvian Prihatno and Hyok-Chan Kang.
+\newblock 2d fluid flows prediction based on u-net architecture.
+\newblock pages 31--33, 2020.
+
+\bibitem[Zhu et~al.(2019)Zhu, Zabaras, Koutsourelakis, and Perdikaris]{zhu2019physics}
+Yifei Zhu, Nicholas Zabaras, Phaedon~S. Koutsourelakis, and Paris Perdikaris.
+\newblock Physics-constrained deep learning for high-dimensional surrogate modeling and uncertainty quantification without labeled data.
+\newblock \emph{Journal of Computational Physics}, 2019.
+\newblock URL \url{https://doi.org/10.1016/j.jcp.2019.07.035}.
+
+\bibitem[Sun et~al.(2020)Sun, Gao, Pan, and Wang]{sun2020surrogate}
+Liyuan Sun, Hongwei Gao, Shubin Pan, and Jian-Xun Wang.
+\newblock Surrogate modeling for fluid flows based on physics-constrained deep learning without simulation data.
+\newblock \emph{Computer Methods in Applied Mechanics and Engineering}, 2020.
+\newblock URL \url{https://doi.org/10.1016/j.cma.2019.112732}.
+
+\bibitem[Haghighat and Juanes(2022)]{haghighat2022gapinn}
+Ehsan Haghighat and Ruben Juanes.
+\newblock Gapinn: Geometry-aware physics-informed neural networks.
+\newblock \emph{Advances in Modeling and Simulation in Engineering Sciences}, 2022.
+\newblock URL \url{https://doi.org/10.1186/s40323-022-00221-z}.
+
+\bibitem[Li et~al.(2020{\natexlab{a}})Li, Kovachki, Azizzadenesheli, Anandkumar, Stuart, and Bhattacharya]{li2020fourier}
+Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, Anima Anandkumar, Andrew Stuart, and Kaushik Bhattacharya.
+\newblock Fourier neural operator for parametric partial differential equations.
+\newblock \emph{arXiv preprint arXiv:2010.08895}, 2020{\natexlab{a}}.
+
+\bibitem[Lu et~al.(2021)Lu, Jin, Pang, Zhang, and Karniadakis]{lu2021deeponet}
+Lu~Lu, Pengzhan Jin, Guofei Pang, Zhiping Zhang, and George~E. Karniadakis.
+\newblock Learning nonlinear operators via deeponet based on the universal approximation theorem of operators.
+\newblock \emph{Nature Machine Intelligence}, 2021.
+
+\bibitem[Li et~al.(2020{\natexlab{b}})Li, Kovachki, Azizzadenesheli, and Anandkumar]{li2020graph}
+Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, and Anima Anandkumar.
+\newblock Graph neural operator for parametric partial differential equations.
+\newblock \emph{arXiv preprint arXiv:2003.03485}, 2020{\natexlab{b}}.
+
+\bibitem[Vaswani et~al.(2017)Vaswani, Shazeer, Parmar, Uszkoreit, Jones, Gomez, Kaiser, and Polosukhin]{vaswani2017attention}
+Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan~N Gomez, {\L}ukasz Kaiser, and Illia Polosukhin.
+\newblock Attention is all you need.
+\newblock pages 5998--6008, 2017.
+\newblock URL \url{http://arxiv.org/abs/1706.03762}.
+
+\bibitem[Yang et~al.(2025)Yang, Zhang, and Li]{yang2025p3d}
 Wenxuan Yang, Jie Zhang, and Cheng Li.
-\newblock P3d: A unified framework for deterministic and probabilistic pde
-  surrogate modeling.
-\newblock {\em arXiv preprint arXiv:2509.10186}, 2025.
+\newblock P3d: A unified framework for deterministic and probabilistic pde surrogate modeling.
+\newblock \emph{arXiv preprint arXiv:2509.10186}, 2025.
 
-\bibitem{maulik2020probabilistic}
-Romit Maulik, Kai Fukami, Rishabh Ramachandran, Koji Fukagata, and Kunihiko
-  Taira.
-\newblock Probabilistic neural networks for fluid flow surrogate modeling and
-  uncertainty quantification.
-\newblock {\em arXiv preprint arXiv:2005.04271}, 2020.
+\bibitem[Maulik et~al.(2020)Maulik, Fukami, Ramachandran, Fukagata, and Taira]{maulik2020probabilistic}
+Romit Maulik, Kai Fukami, Rishabh Ramachandran, Koji Fukagata, and Kunihiko Taira.
+\newblock Probabilistic neural networks for fluid flow surrogate modeling and uncertainty quantification.
+\newblock \emph{arXiv preprint arXiv:2005.04271}, 2020.
 
-\bibitem{zheng2023uncertainty}
+\bibitem[Zheng et~al.(2023)Zheng, Chen, and Li]{zheng2023uncertainty}
 Lin Zheng, Yifeng Chen, and Dong Li.
-\newblock Uncertainty-aware surrogate models for airfoil flow simulations using
-  diffusion probabilistic models.
-\newblock {\em AIAA Journal}, 2023.
+\newblock Uncertainty-aware surrogate models for airfoil flow simulations using diffusion probabilistic models.
+\newblock \emph{AIAA Journal}, 2023.
+\newblock URL \url{https://doi.org/10.2514/1.J063440}.
 
-\bibitem{gao2024bayesian}
+\bibitem[Gao et~al.(2024)Gao, Guo, and Li]{gao2024bayesian}
 Chenglong Gao, Zongyi Guo, and Wei Li.
 \newblock Bayesian conditional diffusion models for spatiotemporal turbulence.
-\newblock {\em Computer Methods in Applied Mechanics and Engineering}, 2024.
+\newblock \emph{Computer Methods in Applied Mechanics and Engineering}, 2024.
+\newblock URL \url{https://doi.org/10.1016/j.cma.2024.116122}.
 
-\bibitem{mucke2025physicsaware}
+\bibitem[Mücke and Sanderse(2025)]{mucke2025physicsaware}
 Lukas Mücke and Benjamin Sanderse.
-\newblock Physics-aware generative models for turbulent fluid flows based on
-  stochastic interpolants.
-\newblock {\em arXiv preprint arXiv:2504.05852}, 2025.
+\newblock Physics-aware generative models for turbulent fluid flows based on stochastic interpolants.
+\newblock \emph{arXiv preprint arXiv:2504.05852}, 2025.
 
-\bibitem{geneva2020multi}
+\bibitem[Geneva and Zabaras(2020)]{geneva2020multi}
 Nicholas Geneva and Nicholas Zabaras.
 \newblock Multi-fidelity generative modeling of turbulence.
-\newblock {\em Journal of Computational Physics}, 2020.
+\newblock \emph{Journal of Computational Physics}, 2020.
+\newblock URL \url{https://arxiv.org/abs/2006.04731}.
 
-\bibitem{vadeboncoeur2022probabilistic}
+\bibitem[Vadeboncoeur et~al.(2022)Vadeboncoeur, Frolov, and Sargsyan]{vadeboncoeur2022probabilistic}
 Philippe Vadeboncoeur, Sergey Frolov, and Khachik Sargsyan.
-\newblock Fully probabilistic deep models for forward and inverse problems in
-  parametric pdes.
-\newblock {\em arXiv preprint arXiv:2208.04856}, 2022.
+\newblock Fully probabilistic deep models for forward and inverse problems in parametric pdes.
+\newblock \emph{arXiv preprint arXiv:2208.04856}, 2022.
 
-\bibitem{Kolmogorov1941}
+\bibitem[Kolmogorov(1941)]{Kolmogorov1941}
 N.~Kolmogorov, A.\.
-\newblock The local structure of turbulence in incompressible viscous fluid for
-  very large reynolds’ numbers.
-\newblock {\em Doklady Akademii Nauk SSSR}, 30(4):301--305, 1941.
+\newblock The local structure of turbulence in incompressible viscous fluid for very large reynolds’ numbers.
+\newblock \emph{Doklady Akademii Nauk SSSR}, 30\penalty0 (4):\penalty0 301--305, 1941.
 
-\bibitem{Jakob2021FluidFlowDataset}
+\bibitem[Jakob et~al.(2021)Jakob, Gross, and G{\"u}nther]{Jakob2021FluidFlowDataset}
 Janis Jakob, Markus Gross, and Thomas G{\"u}nther.
-\newblock A fluid flow data set for machine learning and its application to
-  neural flow map interpolation.
-\newblock {\em IEEE Transactions on Visualization and Computer Graphics},
-  27(2):1279--1289, 2021.
+\newblock A fluid flow data set for machine learning and its application to neural flow map interpolation.
+\newblock \emph{IEEE Transactions on Visualization and Computer Graphics}, 27\penalty0 (2):\penalty0 1279--1289, 2021.
+\newblock \doi{10.1109/TVCG.2020.3028947}.
 
 \end{thebibliography}

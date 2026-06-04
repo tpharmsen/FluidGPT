@@ -20,11 +20,18 @@ Both model classes were trained using the same optimization strategy to facilita
 
 Due to the stochastic sampling nature of flow-matching inference, a slightly higher initial learning rate was applied to the flow-matching models compared to the deterministic AR counterparts. Additionally, flow-matching models were trained for a longer duration at pre-decay learning rates to account for the increased complexity of learning a conditional distribution. All training was performed in \texttt{bfloat16} reduced precision to balance computational efficiency with numerical stability.
 
+At each epoch the model is saved and the validation error is computed. The model with the lowest validation error is selected as the final model for full evaluation. This early stopping strategy ensures that the final reported results reflect the best generalization performance observed during training, rather than the final epoch which may be affected by overfitting.
+
 \section{Hardware Platform and Parallelism}
 
-All large-scale experiments were conducted on the NVIDIA DGX B200 unified AI platform, which provides a high-bandwidth GPU interconnect, large per-device memory capacity, and high aggregate compute throughput. Training and evaluation were executed within containerized environments to ensure consistent software dependencies across experimental runs.
+All large-scale experiments were conducted on the revolutionary NVIDIA DGX B200 unified AI platform, which provides a high-bandwidth GPU interconnect, large per-device memory capacity, and high aggregate compute throughput. Using Docker, training and evaluation was executed within containerized environments to ensure consistent software dependencies across experimental runs.
 
 Training was distributed across 8 GPUs using data parallelism, resulting in an effective batch size equal to eight times the per-device batch size of 176, yielding an effective batch size of 1408. This level of parallelism was essential both to stabilize the optimization dynamics and to maintain adequate throughput given the high-dimensional spatiotemporal data and large model capacity.
+
+\section{Training hyperparameters}
+
+All hyperparameters related to optimization, learning rate scheduling, and distributed training settings are detailed in the Table \ref{tab:fluidgpt_hparams}. Most of the hyperparameters were shared between the deterministic and probabilistic models to ensure a fair comparison. The differences in Learning rate step-down milestones is motivated by the different training durations and convergence dynamics of the two model classes. The flow-matching models were trained for a longer duration at pre-decay learning rates to allow sufficient time for learning the more complex conditional distribution, while the deterministic AR models converged more quickly and thus benefited from earlier decay. The different weight decay parameter reflects the different regularization needs of the two model classes, with the flow-matching models requiring a much smaller weight decay to avoid underfitting as the state space of the target distribution is much larger than that of the deterministic model.
+Trivially, the data split seed was kept constant across all experiments to ensure that the same training and validation splits were used for both model classes, further enhancing the comparability of results.
 
 \input{chapters/training/train_hparams.tex}
 
@@ -54,25 +61,25 @@ The deterministic AR model produces a single, fixed prediction for a given input
 \paragraph{Flow-Matching Model.}
 The probabilistic flow-matching model defines a conditional distribution over future states. During validation, 16 independent samples were drawn for each input sequence, allowing analysis of the predicted distribution's spread and calibration. For the single next-timeblock validation on the Amira dataset, a reduced number of 8 samples were drawn due to computational constraints. Error distributions are computed in a per-sample fashion and subsequently aggregated across all drawn samples.
 
-As the flow-matching model predicts \emph{velocity increments} rather than absolute states, generating the next physical state requires numerical integration in \emph{flow-time} $t_f$. Flow-time is an auxiliary continuous variable that parameterizes the learned transport map from the prior distribution to the target distribution. Formally, given a prior sample $x(0)$ and a learned velocity field $v_\theta(x, t_f)$ conditioned on the current physical state, the predicted state is obtained as
+As the flow-matching model predicts \emph{state increments} rather than absolute states, generating the next physical state requires numerical integration in \emph{flow-time} $t_f$. Flow-time is an auxiliary continuous variable that parameterizes the learned transport map from the prior distribution to the target distribution. Formally, given a prior sample $x(0)$ and a learned velocity field $v_\theta(x, t_f)$ conditioned on the current physical state, the predicted state is obtained as
 
 \begin{equation}
 	x(1) = x(0) + \int_{0}^{1} v_\theta\bigl(x(t_f), t_f\bigr) \, \mathrm{d}{t_f}.
 \end{equation}
 
-For validation, this integral is approximated using a simple Euler scheme with 20 discrete flow-time steps. The prior distribution used at inference time is identical to that used during training. Once a sample has been mapped to a physical state, it can be fed back as conditioning input to the model, enabling autoregressive rollouts in the same manner as the deterministic model.
+For validation, this integral is approximated using a simple Euler scheme with 20 discrete flow-time steps. The prior distribution used at inference time is identical to that used during training. After a sample has been mapped to a physical state through the integration process, it can be fed back as conditioning input to the model in order to enable autoregressive rollouts. Note that the flow-matching model's autoregressive rollout is inherently stochastic due to the sampling of the prior at each step, resulting in a distribution of predicted trajectories rather than a single deterministic trajectory. 
 
 \subsubsection{Single-Step Validation}
 
-As an initial evaluation, both models were assessed in a single next-timeblock prediction setting. Given a ground-truth input sequence, each model predicts the immediately following temporal block without feeding back its own predictions. This isolates one-step transition accuracy and eliminates error accumulation effects that arise in autoregressive rollouts. The reported metric is the average per-sample error over the next 5 predicted timesteps, aggregated across all input--output pairs in the validation dataset.
+As an initial evaluation, both models were assessed in a single next-timeblock prediction setting. Given a ground-truth input sequence, each model predicts the immediately following temporal block without feeding back its own predictions. This isolates one-step transition accuracy and eliminates error accumulation effects that arise in autoregressive rollouts. The reported metric is the average per-sample error over the next 5 predicted timesteps, aggregated across all input-output pairs in the validation dataset.
 
 \subsubsection{Rollout Validation}
 
-To evaluate long-term temporal behavior, both models were deployed in an autoregressive rollout configuration. Starting from the first 5 ground-truth physical states of each validation trajectory, model predictions were recursively fed back as inputs to generate the full future trajectory. Prediction errors were computed at each timestep throughout the rollout horizon, enabling analysis of error accumulation and long-term stability.
+To evaluate long-term temporal behavior, both models were deployed in an autoregressive rollout configuration. Starting from the first 5 ground-truth physical states of each validation trajectory, model predictions were recursively fed back as inputs to generate the full future trajectory. Prediction errors were computed at each timestep throughout the rollout horizon, enabling analysis of error accumulation and long-term stability. Note that the first timestep containing the initialization conditions of the fluid trajectory is also included and thus this evaluation step assesses the model's ability to handle non-natural initial conditions, which is a critical aspect of model robustness.
 
 \subsubsection{Spectral Diagnostics}
 
-In addition to pointwise metrics, validation included physics-informed spectral diagnostics to assess whether the models correctly reproduce the scale distribution of energy and enstrophy. For each predicted and ground-truth state, the log-scaled kinetic energy spectrum $E(k)$ and enstrophy spectrum $Z(k)$ were computed by Fourier-transforming the velocity field and aggregating spectral contributions over isotropic shells in wavenumber space.
+In addition to pointwise metrics, validation included physics-informed spectral diagnostics to assess whether the models correctly reproduce the scale distribution of energy and enstrophy. For each predicted and ground-truth state, the log-scaled kinetic energy spectrum $E(k)$ and enstrophy spectrum $Z(k)$ were computed by Fourier-transforming the velocity field and aggregating spectral contributions over isotropic shells in wavenumber space, as described in \ref{sec:energyspectra}.
 
 Scale-resolved spectral errors were defined as
 
@@ -84,4 +91,5 @@ Scale-resolved spectral errors were defined as
 
 allowing direct comparison of model fidelity across a broad range of spatial scales. These spectral diagnostics complement the pointwise metrics by detecting physically meaningful errors that may be invisible to aggregate norms, such as incorrect energy transfer across scales or spurious dissipation at small scales.
 
-Define ratios!!!!!!!!!!!!!
+As each fluid trajectory has its own reference spectra corresponding to the system state at that time $t$, it is not meaningful to show an average graph of the spectra across the dataset. Instead, we analyze the distribution of spectral errors across the dataset by calculating the ratio between the predicted and true spectra for each trajectory, and then averaging this ratio across all trajectories to obtain a distribution of spectral errors as a function of wavenumber. This approach allows us to assess whether the models are systematically over- or under-predicting energy and enstrophy at specific scales, which is critical for understanding their physical fidelity. The results of this analysis are presented in Section \ref{se:spectraresults}.
+
