@@ -1,7 +1,7 @@
 wandb
-datasets
-output
-models
+/datasets
+/output
+/models
 lightning_logs
 __pycache__/
 slurmlogs
