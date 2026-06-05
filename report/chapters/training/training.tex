@@ -79,17 +79,25 @@ To evaluate long-term temporal behavior, both models were deployed in an autoreg
 
 \subsubsection{Spectral Diagnostics}
 
-In addition to pointwise metrics, validation included physics-informed spectral diagnostics to assess whether the models correctly reproduce the scale distribution of energy and enstrophy. For each predicted and ground-truth state, the log-scaled kinetic energy spectrum $E(k)$ and enstrophy spectrum $Z(k)$ were computed by Fourier-transforming the velocity field and aggregating spectral contributions over isotropic shells in wavenumber space, as described in \ref{sec:energyspectra}.
+In addition to pointwise metrics, validation included physics-informed spectral diagnostics to assess whether the models correctly reproduce the scale distribution of energy and enstrophy. For each predicted and ground-truth state, the log-scaled kinetic energy spectrum $E(k)$ and enstrophy spectrum $Z(k)$ were computed by Fourier-transforming the velocity field and aggregating spectral contributions over isotropic shells in wavenumber space, as described in Section \ref{sec:energyspectra}.
 
 Scale-resolved spectral errors were defined as
 
 \begin{equation}
-	\varepsilon_E(k) = \left| \log E_{\mathrm{pred}}(k) - \log E_{\mathrm{true}}(k) \right|,
+	\bar{R}_E(k)
+	=
+	\frac{1}{N}
+	\sum_{i=1}^{N}
+	\frac{E_{\mathrm{pred}}^{(i)}(k)}
+		{E_{\mathrm{true}}^{(i)}(k)},
 	\qquad
-	\varepsilon_Z(k) = \left| \log Z_{\mathrm{pred}}(k) - \log Z_{\mathrm{true}}(k) \right|,
+	\bar{R}_Z(k)
+	=
+	\frac{1}{N}
+	\sum_{i=1}^{N}
+	\frac{Z_{\mathrm{pred}}^{(i)}(k)}
+		{Z_{\mathrm{true}}^{(i)}(k)}.
 \end{equation}
 
-allowing direct comparison of model fidelity across a broad range of spatial scales. These spectral diagnostics complement the pointwise metrics by detecting physically meaningful errors that may be invisible to aggregate norms, such as incorrect energy transfer across scales or spurious dissipation at small scales.
-
-As each fluid trajectory has its own reference spectra corresponding to the system state at that time $t$, it is not meaningful to show an average graph of the spectra across the dataset. Instead, we analyze the distribution of spectral errors across the dataset by calculating the ratio between the predicted and true spectra for each trajectory, and then averaging this ratio across all trajectories to obtain a distribution of spectral errors as a function of wavenumber. This approach allows us to assess whether the models are systematically over- or under-predicting energy and enstrophy at specific scales, which is critical for understanding their physical fidelity. The results of this analysis are presented in Section \ref{se:spectraresults}.
+As each fluid trajectory has its own reference spectra corresponding to the system state at that time $t$, it is not meaningful to show an average graph of the spectra across the dataset. Instead, we analyze the distribution of spectral errors across the dataset by calculating the ratio between the predicted and true spectra for each trajectory, and then averaging this ratio across all trajectories to obtain a distribution of spectral errors as a function of wavenumber. This approach allows us to assess whether the models are systematically over- or under-predicting energy and enstrophy at specific scales, which is critical for understanding their physical fidelity. The results of this analysis are presented in Section \ref{se:spectraresults}. The spectral error ratio values are visualized in log-log plots, which facilitate comparison to the characteristic power-law slopes of the kinetic energy and enstrophy spectra in turbulent flows. Deviations from the expected spectral slopes can indicate specific deficiencies in the model's ability to capture certain physical processes, such as energy cascade dynamics or small-scale dissipation.
 
