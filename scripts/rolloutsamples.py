@@ -493,7 +493,7 @@ if __name__ == "__main__":
         CB = "surf-high", CD = "spike-preprocAll",
         CM = "ar-final-d2", CT = "ar-final",
         ckpt = "models/ar-d2-9/epoch=0048-val_SS_loss_checkpoint=0.0027003738.ckpt",
-        dsplit = [7],
+        dsplit = [2],
     ),
     dict(
         label    = "AR-d3",
@@ -501,24 +501,24 @@ if __name__ == "__main__":
         CB = "surf-high", CD = "spike-preprocAll",
         CM = "ar-final-d3", CT = "ar-final",
         ckpt = "models/ar-d3-6/epoch=0055-val_SS_loss_checkpoint=0.0028912849.ckpt",
-        dsplit = [7],
+        dsplit = [2],
     ),
     dict(
         label    = "FM-d2",
         trainer  = "FM",
         CB = "surf-high", CD = "spike-preprocAll",
-        CM = "fm-final", CT = "fm-final",
+        CM = "fm-final-d2", CT = "fm-final",
         ckpt = "models/fm-d2-9/epoch=0098-val_SS_loss_checkpoint=0.0002288722.ckpt",
-        dsplit = [7],
+        dsplit = [2],
         fm_samples = 1,
     ),
     dict(
         label    = "FM-d3",
         trainer  = "FM",
         CB = "surf-high", CD = "spike-preprocAll",
-        CM = "fm-final", CT = "fm-final",
+        CM = "fm-final-d3", CT = "fm-final",
         ckpt = "models/fm-d3-6/epoch=0098-val_SS_loss_checkpoint=0.0002519532.ckpt",
-        dsplit = [7],
+        dsplit = [2],
         fm_samples = 1,
     )
 ]
@@ -549,10 +549,10 @@ if __name__ == "__main__":
         torch.cuda.empty_cache()
 
     print("\nAll models done, now plotting...")
+    T = traj_true_unnorm.shape[1]
+    timesteps = [5, 6, 8, T // 2 + 2, T - 1]
 
-    timesteps = [5, 6, 7, 8, 9]
-
-    fig, axes = plt.subplots(5, len(timesteps), figsize=(3 * len(timesteps), 7))
+    fig, axes = plt.subplots(5, len(timesteps), figsize=(4 * len(timesteps), 15))
     #fig.suptitle(f"Radial velocity components for trajectory {traj_idx} from dataset {DATASET_NAME}", fontsize=16)
     row = 0
     trajtrue_denorm = results[0][2].squeeze()  # (T, C, H, W)
@@ -568,7 +568,7 @@ if __name__ == "__main__":
 
         axes[row, col].set_title(f"t={t}", fontsize=11)
         if col == 0:
-            axes[row, col].set_ylabel(r"$True \sqrt{x^2+y^2}$", fontsize=12, rotation=90, labelpad=20)
+            axes[row, col].set_ylabel(r"True $\sqrt{x^2+y^2}$", fontsize=12, rotation=0, labelpad=20)
 
     
     for row in range(1, 5):
@@ -585,7 +585,7 @@ if __name__ == "__main__":
 
             axes[row, col].set_title(f"t={t}", fontsize=11)
             if col == 0:
-                axes[row, col].set_ylabel(r"$Pred \sqrt{x^2+y^2}$", fontsize=12, rotation=90, labelpad=20)
+                axes[row, col].set_ylabel(rf"Pred {results[row-1][0]}$ \sqrt{{x^2+y^2}}$", fontsize=12, rotation=0, labelpad=20)
 
     plt.tight_layout()
     plt.savefig('scripts/temp/lalala2.png')
