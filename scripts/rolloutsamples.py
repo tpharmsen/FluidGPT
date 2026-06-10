@@ -343,7 +343,7 @@ class ModelValidationPlot:
             raise ValueError(f"Unknown noisetype {self.ct.noise_type}")
         return prior
 
-    def calculate_rollout_error_per_dataset(self):
+    def rollout_tensor(self):
         # Get indices for each dataset
         self.model.eval()
         print("\nStarting Multi-step rollout error calculation...")
@@ -473,46 +473,120 @@ class ModelValidationPlot:
             """
             print(f"MS error {self.cd.datasets[d]['name']} calculation done.")
 
-            N_STEPS_TO_PLOT = 5
-            CHANNEL_X = 0
-            CHANNEL_Y = 1
-            traj_denorm = unnorm_yhat.squeeze(0).cpu()
-            print("Trajectory shape for plotting:", traj_denorm.shape)
-            #raise NotImplementedError("Stop for plotting.")
-            T = traj_denorm.shape[0]
-            timesteps = [5, 6, 7, 8, 9]
-
-            fig, axes = plt.subplots(2, len(timesteps), figsize=(3 * len(timesteps), 4))
-            #fig.suptitle(f"Radial velocity components for trajectory {traj_idx} from dataset {DATASET_NAME}", fontsize=16)
-            ax = axes.flatten()
-            for col, t in enumerate(timesteps):
-                frame = traj_denorm[t]  # (C, H, W)
-
-                vx = frame[CHANNEL_X]
-                vy = frame[CHANNEL_Y]
-                data = np.sqrt(vx**2 + vy**2)
-                im = ax[col].imshow(data.numpy(), cmap="viridis", origin="lower")
-                ax[col].set_xticks([])
-                ax[col].set_yticks([])
-
-                ax[col].set_title(f"t={t}", fontsize=11)
-                if col == 0:
-                    ax[col].set_ylabel(r"$\sqrt{x^2+y^2}$", fontsize=12, rotation=90, labelpad=20)
-
-            plt.tight_layout()
-
-            plt.savefig('scripts/temp/lalala2.png')
-            plt.show()
 
         del individual_rrmse_errors
         del individual_rae_errors
-        return 1
+        return unnorm_yhat, unnorm_y, mean_rae_per_timestep, mean_rrmse_per_timestep
 
 
 if __name__ == "__main__":
-    cb, cd, cm, ct, trainer, model_path, calc, fm_samples, dsplit = read_command()
+    #cb, cd, cm, ct, trainer, model_path, calc, fm_samples, dsplit = read_command()
     """
     python3 scripts/rolloutsamples.py --trainer MTT --CB surf-high --CD spike-preprocAll --CM ar-final-d2 --CT ar-final --out sampletest --model_path models/ar-d2-9/epoch=0048-val_SS_loss_checkpoint=0.0027003738.ckpt --calc ms --dsplit 7
     """
-    model_plotting = ModelValidationPlot(cb, cd, cm, ct, trainer, model_path, calc, fm_samples, dsplit)
-    model_plotting.calculate_rollout_error_per_dataset()
+
+    trajectory_idx = 0
+    models_cfg = [
+    dict(
+        label    = "AR-d2",
+        trainer  = "MTT",
+        CB = "surf-high", CD = "spike-preprocAll",
+        CM = "ar-final-d2", CT = "ar-final",
+        ckpt = "models/ar-d2-9/epoch=0048-val_SS_loss_checkpoint=0.0027003738.ckpt",
+        dsplit = [7],
+    ),
+    dict(
+        label    = "AR-d3",
+        trainer  = "MTT",
+        CB = "surf-high", CD = "spike-preprocAll",
+        CM = "ar-final-d3", CT = "ar-final",
+        ckpt = "models/ar-d3-6/epoch=0055-val_SS_loss_checkpoint=0.0028912849.ckpt",
+        dsplit = [7],
+    ),
+    dict(
+        label    = "FM-d2",
+        trainer  = "FM",
+        CB = "surf-high", CD = "spike-preprocAll",
+        CM = "fm-final", CT = "fm-final",
+        ckpt = "models/fm-d2-9/epoch=0098-val_SS_loss_checkpoint=0.0002288722.ckpt",
+        dsplit = [7],
+        fm_samples = 1,
+    ),
+    dict(
+        label    = "FM-d3",
+        trainer  = "FM",
+        CB = "surf-high", CD = "spike-preprocAll",
+        CM = "fm-final", CT = "fm-final",
+        ckpt = "models/fm-d3-6/epoch=0098-val_SS_loss_checkpoint=0.0002519532.ckpt",
+        dsplit = [7],
+        fm_samples = 1,
+    )
+]
+
+    #model_plotting = ModelValidationPlot(cb, cd, cm, ct, trainer, model_path, calc, fm_samples, dsplit)
+    #traj_true_unnorm, traj_pred_unnorm, rae_errors, rrmse_errors = model_plotting.calculate_rollout_error_per_dataset()
+    results = []   # list of (label, pred_denorm, true_denorm, rrmse_per_t)
+
+    for cfg in models_cfg:
+        print(f"\n{'='*50}\nLoading: {cfg['label']}\n{'='*50}")
+        cb = load_yaml_as_dotdict(f"conf/base/{cfg['CB']}.yaml")
+        cd = load_yaml_as_dotdict(f"conf/data/{cfg['CD']}.yaml")
+        cm = load_yaml_as_dotdict(f"conf/model/{cfg['CM']}.yaml")
+        ct = load_yaml_as_dotdict(f"conf/training/{cfg['CT']}.yaml")
+
+        mv = ModelValidationPlot(
+            cb, cd, cm, ct,
+            trainer    = cfg['trainer'],
+            model_path = cfg['ckpt'],
+            calc       = 'ms',
+            fm_samples = cfg.get('fm_samples', 1),
+            dsplit     = cfg['dsplit'],
+        )
+
+        traj_true_unnorm, traj_pred_unnorm, rae_errors, rrmse_errors = mv.rollout_tensor()
+        results.append((cfg['label'], trajectory_idx, traj_pred_unnorm.cpu(), traj_true_unnorm.cpu(), rae_errors, rrmse_errors))
+        del mv
+        torch.cuda.empty_cache()
+
+    print("\nAll models done, now plotting...")
+
+    timesteps = [5, 6, 7, 8, 9]
+
+    fig, axes = plt.subplots(5, len(timesteps), figsize=(3 * len(timesteps), 7))
+    #fig.suptitle(f"Radial velocity components for trajectory {traj_idx} from dataset {DATASET_NAME}", fontsize=16)
+    row = 0
+    trajtrue_denorm = results[0][2].squeeze()  # (T, C, H, W)
+    for col, t in enumerate(timesteps):
+        frame = trajtrue_denorm[t]  # (C, H, W)
+
+        vx = frame[0]
+        vy = frame[1]
+        data = np.sqrt(vx**2 + vy**2)
+        im = axes[row, col].imshow(data.numpy(), cmap="viridis", origin="lower")
+        axes[row,col].set_xticks([])
+        axes[row, col].set_yticks([])
+
+        axes[row, col].set_title(f"t={t}", fontsize=11)
+        if col == 0:
+            axes[row, col].set_ylabel(r"$True \sqrt{x^2+y^2}$", fontsize=12, rotation=90, labelpad=20)
+
+    
+    for row in range(1, 5):
+        traj_denorm = results[row-1][3].squeeze()  # (T, C, H, W)
+        for col, t in enumerate(timesteps):
+            frame = traj_denorm[t]  # (C, H, W)
+
+            vx = frame[0]
+            vy = frame[1]
+            data = np.sqrt(vx**2 + vy**2)
+            im = axes[row, col].imshow(data.numpy(), cmap="viridis", origin="lower")
+            axes[row,col].set_xticks([])
+            axes[row, col].set_yticks([])
+
+            axes[row, col].set_title(f"t={t}", fontsize=11)
+            if col == 0:
+                axes[row, col].set_ylabel(r"$Pred \sqrt{x^2+y^2}$", fontsize=12, rotation=90, labelpad=20)
+
+    plt.tight_layout()
+    plt.savefig('scripts/temp/lalala2.png')
+    print("All done.")
