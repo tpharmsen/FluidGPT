@@ -321,7 +321,7 @@ class ModelValidationPlot:
         print("Using device:", torch.cuda.get_device_name(), "with batch size", self.batch_size)
         return DataLoader(dataset,
                 batch_size=self.batch_size, #1, #int(self.ct.batch_size / 8), ################################################################### temporary
-                shuffle=False, ###################################################################################3 also temporary
+                shuffle=True, ###################################################################################3 also temporary
                 drop_last=False,
                 pin_memory=self.ct.pin_memory, 
                 num_workers=self.ct.num_workers, 
@@ -343,8 +343,10 @@ class ModelValidationPlot:
             raise ValueError(f"Unknown noisetype {self.ct.noise_type}")
         return prior
 
-    def rollout_tensor(self):
+    def rollout_tensor(self, traj = None):
         # Get indices for each dataset
+        if traj is None:
+            raise ValueError("Trajectory index must be provided for rollout error calculation.")
         self.model.eval()
         print("\nStarting Multi-step rollout error calculation...")
 
@@ -361,9 +363,7 @@ class ModelValidationPlot:
                 testtraj = testtraj.permute(0,2,1,3,4)
             timesteps = testtraj.shape[1]
             print("Timesteps in trajectory:", timesteps)
-            dataloader = self.get_dataloader(d, mode='ms')
-            #print(ytest.shape)
-            # Lists to store errors for each timestep
+            #dataloader = self.get_dataloader(d, mode='ms')
             if self.trainer == "MTT":
                 self.samples = 1
                 #print("Timesteps:", timesteps)
@@ -374,75 +374,73 @@ class ModelValidationPlot:
                 individual_rrmse_errors = [list( list() for k in range(len(trajs))) for _ in range(timesteps)]
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
 
-            for i, batch in enumerate(dataloader):
+            #for i, batch in enumerate(dataloader):
+            batch = dataset.dataset.get_single_traj(trajs[traj])
+            if self.trainer == "MTT":
+                batch = batch.unsqueeze(0) 
+            #elif self.trainer == "FM":
+            #    batch = batch.permute(0,2,1,3,4)
+            print(f"\n{batch.shape}\n")
+            for sample_idx in range(self.samples):
+                yfull = batch.cuda()
+                with torch.no_grad():
+                    y = yfull.clone()
+                    if self.trainer == "MTT":
+                        y = y.cuda()
+                        #print("y shape:", y.shape)
+                        x = y[:,:self.cm.temporal_bundling]
+                        yhat_rollout = rollout_det(x, self.model, y.shape[1] // self.cm.temporal_bundling + 1)
+                        #print(yhat_rollout.shape, y.shape)
+                    elif self.trainer == "FM":
+                        y = y.cuda()
+                        y = y.squeeze(1)
+                        #print(y.shape)
 
-                torch.cuda.synchronize()
-                time_start = time.time()
-                for sample_idx in range(self.samples):
-                    yfull = batch.cuda()
-                    with torch.no_grad():
-                        y = yfull.clone()
-                        if self.trainer == "MTT":
-                            y = y.cuda()
-                            #print("y shape:", y.shape)
-                            x = y[:,:self.cm.temporal_bundling]
-                            yhat_rollout = rollout_det(x, self.model, y.shape[1] // self.cm.temporal_bundling + 1)
-                            #print(yhat_rollout.shape, y.shape)
-                        elif self.trainer == "FM":
-                            y = y.cuda()
-                            y = y.squeeze(1)
-                            #print(y.shape)
-
-                            #print("y shape:", y.shape)
-                            x = self._generate_prior(y[:,:,:self.cm.temporal_bundling])
-                            #print(x.shape)
-                            yhat_rollout = rollout_prb(x, self.model, int(np.ceil((y.shape[2] - self.ct.from_frame) / (self.cm.temporal_bundling - self.ct.from_frame))), 
-                                        self.ct.int_steps, self.ct.from_frame, noisetype=self.ct.noise_type,
-                                        sigma_time = self.ct.sigma_time if self.ct.noise_type == 'gaussiangaussian' else None, sigma_space = self.ct.sigma_space if self.ct.noise_type == 'gaussiangaussian' else None)
-                            #print(yhat_rollout.shape)
-                            #print("Rollout shape before permute:", yhat_rollout.shape)
-                            yhat_rollout, y = yhat_rollout.permute(0,2,1,3,4), y.permute(0,2,1,3,4)
-                        else:
-                            raise ValueError("Trainer not recognized in rollout error calculation.")
-                        yhat_rollout = yhat_rollout[:, :y.shape[1]] 
-                        
-                        #y, yhat_rollout = y.squeeze(0), yhat_rollout.squeeze(0)
-                        unnorm_yhat = yhat_rollout * self.global_std + self.global_mean
-                        unnorm_y = y * self.global_std + self.global_mean
-                        
-                        #print("Rollout shape:", unnorm_yhat.shape)
-                        #print("Ground truth shape:", unnorm_y.shape)
-                        diff = unnorm_yhat - unnorm_y
-                        #print(diff.shape)
-                        #raise NotImplementedError("Temporary stop for debugging.")
-                        # Calculate the error for each timestep in the rollout
+                        #print("y shape:", y.shape)
+                        x = self._generate_prior(y[:,:,:self.cm.temporal_bundling])
+                        #print(x.shape)
+                        yhat_rollout = rollout_prb(x, self.model, int(np.ceil((y.shape[2] - self.ct.from_frame) / (self.cm.temporal_bundling - self.ct.from_frame))), 
+                                    self.ct.int_steps, self.ct.from_frame, noisetype=self.ct.noise_type,
+                                    sigma_time = self.ct.sigma_time if self.ct.noise_type == 'gaussiangaussian' else None, sigma_space = self.ct.sigma_space if self.ct.noise_type == 'gaussiangaussian' else None)
                         #print(yhat_rollout.shape)
-                        reduce_dims = tuple(range(2, diff.ndim)) # reduce over all but batch and time
-                        se_sum = diff.pow(2).sum(dim=reduce_dims)         
-                        ae_sum = diff.abs().sum(dim=reduce_dims)           
-                        y2_sum = unnorm_y.pow(2).sum(dim=reduce_dims)      
-                        yabs_sum = unnorm_y.abs().sum(dim=reduce_dims)
+                        #print("Rollout shape before permute:", yhat_rollout.shape)
+                        yhat_rollout, y = yhat_rollout.permute(0,2,1,3,4), y.permute(0,2,1,3,4)
+                    else:
+                        raise ValueError("Trainer not recognized in rollout error calculation.")
+                    yhat_rollout = yhat_rollout[:, :y.shape[1]] 
+                    
+                    #y, yhat_rollout = y.squeeze(0), yhat_rollout.squeeze(0)
+                    unnorm_yhat = yhat_rollout * self.global_std + self.global_mean
+                    unnorm_y = y * self.global_std + self.global_mean
+                    
+                    #print("Rollout shape:", unnorm_yhat.shape)
+                    #print("Ground truth shape:", unnorm_y.shape)
+                    diff = unnorm_yhat - unnorm_y
+                    #print(diff.shape)
+                    #raise NotImplementedError("Temporary stop for debugging.")
+                    # Calculate the error for each timestep in the rollout
+                    #print(yhat_rollout.shape)
+                    reduce_dims = tuple(range(2, diff.ndim)) # reduce over all but batch and time
+                    se_sum = diff.pow(2).sum(dim=reduce_dims)         
+                    ae_sum = diff.abs().sum(dim=reduce_dims)           
+                    y2_sum = unnorm_y.pow(2).sum(dim=reduce_dims)      
+                    yabs_sum = unnorm_y.abs().sum(dim=reduce_dims)
 
-                        batch_rrmse = torch.sqrt(se_sum / y2_sum)
-                        batch_rae = ae_sum / yabs_sum
-                        #print("Batch RRMSE shape:", batch_rrmse.shape)
-                        #raise NotImplementedError("Temporary stop for debugging.")
-                        
-                        if self.trainer == "MTT": 
-                            for b in range(batch_rrmse.shape[0]): 
-                                for t in range(batch_rrmse.shape[1]): 
-                                    individual_rrmse_errors[t].append(batch_rrmse[b, t].item())
-                                    individual_rae_errors[t].append(batch_rae[b, t].item())
-                        elif self.trainer == "FM": 
-                            for b in range(batch_rrmse.shape[0]): 
-                                for t in range(batch_rrmse.shape[1]): 
-                                    individual_rrmse_errors[t][i * self.batch_size + b].append(batch_rrmse[b, t].item())
-                                    individual_rae_errors[t][i * self.batch_size + b].append(batch_rae[b, t].item())
-                torch.cuda.synchronize()
-                end_time = time.time()
-                print(f"Progress: {i}/{len(dataloader)} batches, samplecount: {self.samples}, Timer: {end_time - time_start:.4f} s", flush=True)
-                if i == 0:
-                    break
+                    batch_rrmse = torch.sqrt(se_sum / y2_sum)
+                    batch_rae = ae_sum / yabs_sum
+                    #print("Batch RRMSE shape:", batch_rrmse.shape)
+                    #raise NotImplementedError("Temporary stop for debugging.")
+                    
+                    if self.trainer == "MTT": 
+                        for b in range(batch_rrmse.shape[0]): 
+                            for t in range(batch_rrmse.shape[1]): 
+                                individual_rrmse_errors[t].append(batch_rrmse[b, t].item())
+                                individual_rae_errors[t].append(batch_rae[b, t].item())
+                    elif self.trainer == "FM": 
+                        for b in range(batch_rrmse.shape[0]): 
+                            for t in range(batch_rrmse.shape[1]): 
+                                individual_rrmse_errors[t][b].append(batch_rrmse[b, t].item())
+                                individual_rae_errors[t][b].append(batch_rae[b, t].item())
             """
             #print(len(individual_rrmse_errors), len(individual_rrmse_errors[0]))
             save_error_path = self.cb.save_path + "validation/" + self.trainer + "/" + self.cb.folder_out + "ms_error/"
@@ -480,12 +478,8 @@ class ModelValidationPlot:
 
 
 if __name__ == "__main__":
-    #cb, cd, cm, ct, trainer, model_path, calc, fm_samples, dsplit = read_command()
-    """
-    python3 scripts/rolloutsamples.py --trainer MTT --CB surf-high --CD spike-preprocAll --CM ar-final-d2 --CT ar-final --out sampletest --model_path models/ar-d2-9/epoch=0048-val_SS_loss_checkpoint=0.0027003738.ckpt --calc ms --dsplit 7
-    """
 
-    trajectory_idx = 0
+    traj_list = [10]
     models_cfg = [
     dict(
         label    = "AR-d2",
@@ -495,6 +489,7 @@ if __name__ == "__main__":
         ckpt = "models/ar-d2-9/epoch=0048-val_SS_loss_checkpoint=0.0027003738.ckpt",
         dsplit = [2],
     ),
+    """
     dict(
         label    = "AR-d3",
         trainer  = "MTT",
@@ -521,60 +516,42 @@ if __name__ == "__main__":
         dsplit = [2],
         fm_samples = 1,
     )
-]
+    """
+    ]
 
-    #model_plotting = ModelValidationPlot(cb, cd, cm, ct, trainer, model_path, calc, fm_samples, dsplit)
-    #traj_true_unnorm, traj_pred_unnorm, rae_errors, rrmse_errors = model_plotting.calculate_rollout_error_per_dataset()
-    results = []   # list of (label, pred_denorm, true_denorm, rrmse_per_t)
+    for traj_idx in traj_list:
+        results = []
+        for cfg in models_cfg:
+            print(f"\n{'='*50}\nLoading: {cfg['label']}\n{'='*50}")
+            cb = load_yaml_as_dotdict(f"conf/base/{cfg['CB']}.yaml")
+            cd = load_yaml_as_dotdict(f"conf/data/{cfg['CD']}.yaml")
+            cm = load_yaml_as_dotdict(f"conf/model/{cfg['CM']}.yaml")
+            ct = load_yaml_as_dotdict(f"conf/training/{cfg['CT']}.yaml")
 
-    for cfg in models_cfg:
-        print(f"\n{'='*50}\nLoading: {cfg['label']}\n{'='*50}")
-        cb = load_yaml_as_dotdict(f"conf/base/{cfg['CB']}.yaml")
-        cd = load_yaml_as_dotdict(f"conf/data/{cfg['CD']}.yaml")
-        cm = load_yaml_as_dotdict(f"conf/model/{cfg['CM']}.yaml")
-        ct = load_yaml_as_dotdict(f"conf/training/{cfg['CT']}.yaml")
+            mv = ModelValidationPlot(
+                cb, cd, cm, ct,
+                trainer    = cfg['trainer'],
+                model_path = cfg['ckpt'],
+                calc       = 'ms',
+                fm_samples = cfg.get('fm_samples', 1),
+                dsplit     = cfg['dsplit'],
+            )
 
-        mv = ModelValidationPlot(
-            cb, cd, cm, ct,
-            trainer    = cfg['trainer'],
-            model_path = cfg['ckpt'],
-            calc       = 'ms',
-            fm_samples = cfg.get('fm_samples', 1),
-            dsplit     = cfg['dsplit'],
-        )
+            traj_true_unnorm, traj_pred_unnorm, rae_errors, rrmse_errors = mv.rollout_tensor(traj_idx)
+            results.append((cfg['label'], traj_idx, traj_pred_unnorm.cpu(), traj_true_unnorm.cpu(), rae_errors, rrmse_errors))
+            del mv
+            torch.cuda.empty_cache()
 
-        traj_true_unnorm, traj_pred_unnorm, rae_errors, rrmse_errors = mv.rollout_tensor()
-        results.append((cfg['label'], trajectory_idx, traj_pred_unnorm.cpu(), traj_true_unnorm.cpu(), rae_errors, rrmse_errors))
-        del mv
-        torch.cuda.empty_cache()
+        print("\nAll models done, now plotting...")
+        T = traj_true_unnorm.shape[1]
+        timesteps = [5, 6, 8, T // 2 + 2, T - 1]
 
-    print("\nAll models done, now plotting...")
-    T = traj_true_unnorm.shape[1]
-    timesteps = [5, 6, 8, T // 2 + 2, T - 1]
-
-    fig, axes = plt.subplots(5, len(timesteps), figsize=(4 * len(timesteps), 15))
-    #fig.suptitle(f"Radial velocity components for trajectory {traj_idx} from dataset {DATASET_NAME}", fontsize=16)
-    row = 0
-    trajtrue_denorm = results[0][2].squeeze()  # (T, C, H, W)
-    for col, t in enumerate(timesteps):
-        frame = trajtrue_denorm[t]  # (C, H, W)
-
-        vx = frame[0]
-        vy = frame[1]
-        data = np.sqrt(vx**2 + vy**2)
-        im = axes[row, col].imshow(data.numpy(), cmap="viridis", origin="lower")
-        axes[row,col].set_xticks([])
-        axes[row, col].set_yticks([])
-
-        axes[row, col].set_title(f"t={t}", fontsize=11)
-        if col == 0:
-            axes[row, col].set_ylabel(r"True $\sqrt{x^2+y^2}$", fontsize=12, rotation=0, labelpad=20)
-
-    
-    for row in range(1, 5):
-        traj_denorm = results[row-1][3].squeeze()  # (T, C, H, W)
+        fig, axes = plt.subplots(5, len(timesteps), figsize=(4 * len(timesteps), 15))
+        #fig.suptitle(f"Radial velocity components for trajectory {traj_idx} from dataset {DATASET_NAME}", fontsize=16)
+        row = 0
+        trajtrue_denorm = results[0][2].squeeze()  # (T, C, H, W)
         for col, t in enumerate(timesteps):
-            frame = traj_denorm[t]  # (C, H, W)
+            frame = trajtrue_denorm[t]  # (C, H, W)
 
             vx = frame[0]
             vy = frame[1]
@@ -585,8 +562,26 @@ if __name__ == "__main__":
 
             axes[row, col].set_title(f"t={t}", fontsize=11)
             if col == 0:
-                axes[row, col].set_ylabel(rf"Pred {results[row-1][0]}$ \sqrt{{x^2+y^2}}$", fontsize=12, rotation=0, labelpad=20)
+                axes[row, col].set_ylabel("Target", fontsize=12, rotation=0, labelpad=20)
 
-    plt.tight_layout()
-    plt.savefig('scripts/temp/lalala2.png')
+        
+        for row in range(1, 5):
+            traj_denorm = results[row-1][3].squeeze()  # (T, C, H, W)
+            for col, t in enumerate(timesteps):
+                frame = traj_denorm[t]  # (C, H, W)
+
+                vx = frame[0]
+                vy = frame[1]
+                data = np.sqrt(vx**2 + vy**2)
+                im = axes[row, col].imshow(data.numpy(), cmap="viridis", origin="lower")
+                axes[row,col].set_xticks([])
+                axes[row, col].set_yticks([])
+
+                axes[row, col].set_title(f"t={t}", fontsize=11)
+                if col == 0:
+                    axes[row, col].set_ylabel(f"{results[row-1][0]}", fontsize=12, rotation=0, labelpad=20)
+
+        fig.supylabel(f"$\sqrt{{x^2+y^2}}$", rotation=90)
+        plt.tight_layout()
+        plt.savefig(f'scripts/temp/lalala{traj_idx}.png')
     print("All done.")
