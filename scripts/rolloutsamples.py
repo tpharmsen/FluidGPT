@@ -524,7 +524,7 @@ if __name__ == "__main__":
             print("\nAll models done, now plotting...")
 
             T = traj_true_unnorm.shape[1]
-            timesteps = [5, 6, 7, (T - 5) // 3 + 5, 2 * (T - 5) // 3 + 5, T - 1]
+            timesteps = [0, 1, 2, (T) // 3, 2 * (T) // 3, T - 1]
 
             trajtrue_denorm = results[0][2].squeeze()
 
@@ -549,6 +549,8 @@ if __name__ == "__main__":
             plt.tight_layout()
             plt.savefig(f'scripts/temp/target_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png')
             del fig, axes, ax
+
+            timesteps = [5, 6, 7, (T - 5) // 3 + 5, 2 * (T - 5) // 3 + 5, T - 1]
 
             fig, axes = plt.subplots(5, len(timesteps), figsize=(3 * len(timesteps), 18))
             #fig.suptitle(f"Radial velocity components for trajectory {traj_idx} from dataset {DATASET_NAME}", fontsize=16)
