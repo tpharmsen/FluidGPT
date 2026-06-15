@@ -34,12 +34,22 @@ Two datasets from the PDEBench benchmark suite~\citep{takamoto2022pdebench} are 
  
 \paragraph{PDEBench-2DCNS.}
 This dataset contains 44000 trajectories of two-dimensional compressible Navier-Stokes simulations in the turbulence-dominant regime. Dynamic and bulk viscosities each vary independently over the range $[10^{-8},\,10^{-1}]$, and the flow speed spans Mach numbers from $0.1$ to $1.0$, capturing both subsonic and transonic conditions. Simulations employ periodic boundary conditions on grids ranging from $128^2$ to $512^2$. This model is particularly valuable for exposing the foundation model to compressibility effects, which are absent in the other datasets. As only the velocity components of the flow are retained for training, the model must learn to infer density and pressure effects indirectly from the velocity fields. The raw data, stored in \texttt{.hdf5} format at resolutions of $128 \times 128 \times 21$ to $512 \times 512 \times 21$ time steps, occupy approximately 4.4\,TB. they are subsequently downsampled and converted to a uniform resolution of $128^2$ as part of the preprocessing pipeline described in Section~\ref{se:preprocessing}. This dataset is further referred to as \textit{pdebench-comp}. In Figure~
-
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\textwidth]{figs/fluidtrajpreds/target_pdebench-comp_22164.png}
-	\caption{....}
-	\label{}
+    \centering
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=0.8\textwidth]{figs/fluidtrajpreds/target_pdebench-comp_22164.png}
+        \caption{}
+        \label{fig:compa}
+    \end{subfigure}
+    \begin{subfigure}{\textwidth}
+        \centering
+        \includegraphics[width=0.8\textwidth]{figs/fluidtrajpreds/target_pdebench-comp_2083.png}
+        \caption{}
+        \label{fig:compb}
+    \end{subfigure}
+    \caption{Overall figure caption here.}
+    \label{fig:all}
 \end{figure}
  
 
@@ -78,27 +88,27 @@ The datasets differ solely in their initialisation scheme, providing a controlle
     \end{subfigure}
     \begin{subfigure}{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figs/fluidtrajpreds/target_amira_102.png}
+        \includegraphics[width=\textwidth]{figs/fluidtrajpreds/target_pdegym-sl_9281.png}
         \caption{................}
         \label{fig:c}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figs/fluidtrajpreds/target_amira_102.png}
+        \includegraphics[width=\textwidth]{figs/fluidtrajpreds/target_pdegym-svs_2725.png}
         \caption{...........}
         \label{fig:d}
     \end{subfigure}
     \begin{subfigure}{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figs/fluidtrajpreds/target_amira_102.png}
+        \includegraphics[width=\textwidth]{figs/fluidtrajpreds/target_pdegym-bb_17830.png}
         \caption{..}
         \label{fig:e}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{figs/fluidtrajpreds/target_amira_102.png}
+        \includegraphics[width=\textwidth]{figs/fluidtrajpreds/target_pdegym-pwc_19616.png}
         \caption{....}
         \label{fig:f}
     \end{subfigure}

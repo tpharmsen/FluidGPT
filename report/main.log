@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025/Debian) (preloaded format=pdflatex 2026.5.21)  15 JUN 2026 17:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025/Debian) (preloaded format=pdflatex 2026.5.21)  15 JUN 2026 18:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -945,32 +945,38 @@ Package caption Info: longtable package is loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/caption/ltcaption.sty
 Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
 ))
+(/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2023/07/28 v1.6b Sub-captions (AR)
+Package caption Info: New subtype `subfigure' on input line 238.
+\c@subfigure=\count369
+Package caption Info: New subtype `subtable' on input line 238.
+\c@subtable=\count370
+)
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count369
+\l__color_backend_stack_int=\count371
 )
-(./main.aux)
+No file main.aux.
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 113.
-LaTeX Font Info:    ... okay on input line 113.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 113.
-LaTeX Font Info:    ... okay on input line 113.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 113.
-LaTeX Font Info:    ... okay on input line 113.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 113.
-LaTeX Font Info:    ... okay on input line 113.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 113.
-LaTeX Font Info:    ... okay on input line 113.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 113.
-LaTeX Font Info:    ... okay on input line 113.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 113.
-LaTeX Font Info:    ... okay on input line 113.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 113.
-LaTeX Font Info:    ... okay on input line 113.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 113.
-LaTeX Font Info:    ... okay on input line 113.
-
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -1037,20 +1043,20 @@ LaTeX Font Info:    ... okay on input line 113.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring OFF on input line 113.
+Package hyperref Info: Link coloring OFF on input line 114.
 \@outlinefile=\write4
 \openout4 = `main.out'.
 
 Package microtype Info: Patching varwidth to enable character protrusion.
 \MT@vwid@leftmargin=\dimen330
 \MT@vwid@rightmargin=\dimen331
-LaTeX Info: Redefining \microtypecontext on input line 113.
-Package microtype Info: Applying patch `item' on input line 113.
-Package microtype Info: Applying patch `toc' on input line 113.
-Package microtype Info: Applying patch `eqnum' on input line 113.
-Package microtype Info: Applying patch `footnote' on input line 113.
-Package microtype Info: Applying patch `verbatim' on input line 113.
-LaTeX Info: Redefining \microtypesetup on input line 113.
+LaTeX Info: Redefining \microtypecontext on input line 114.
+Package microtype Info: Applying patch `item' on input line 114.
+Package microtype Info: Applying patch `toc' on input line 114.
+Package microtype Info: Applying patch `eqnum' on input line 114.
+Package microtype Info: Applying patch `footnote' on input line 114.
+Package microtype Info: Applying patch `verbatim' on input line 114.
+LaTeX Info: Redefining \microtypesetup on input line 114.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -1066,16 +1072,16 @@ File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 )
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count370
+\scratchcounter=\count372
 \scratchdimen=\dimen332
 \scratchbox=\box94
-\nofMPsegments=\count371
-\nofMParguments=\count372
+\nofMPsegments=\count373
+\nofMParguments=\count374
 \everyMPshowfont=\toks53
-\MPscratchCnt=\count373
+\MPscratchCnt=\count375
 \MPscratchDim=\dimen333
-\MPnumerator=\count374
-\makeMPintoPDFobject=\count375
+\MPnumerator=\count376
+\makeMPintoPDFobject=\count377
 \everyMPtoPDFconversion=\toks54
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -1086,7 +1092,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-\c@lstlisting=\count376
+\c@lstlisting=\count378
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 
@@ -1094,7 +1100,7 @@ Package caption Info: End \AtBeginDocument code.
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 117
+LaTeX Font Info:    Trying to load font information for U+msa on input line 118
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
@@ -1103,7 +1109,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 117
+LaTeX Font Info:    Trying to load font information for U+msb on input line 118
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -1370,46 +1376,116 @@ Package natbib Warning: Citation `takamoto2022pdebench' on page 11 undefined on
 LaTeX Warning: Reference `se:preprocessing' on page 11 undefined on input line 
 36.
 
+<figs/fluidtrajpreds/target_pdebench-comp_22164.png, id=149, 1300.86pt x 289.08
+pt>
+File: figs/fluidtrajpreds/target_pdebench-comp_22164.png Graphic file (type png
+)
+<use figs/fluidtrajpreds/target_pdebench-comp_22164.png>
+Package pdftex.def Info: figs/fluidtrajpreds/target_pdebench-comp_22164.png  us
+ed on input line 41.
+(pdftex.def)             Requested size: 317.9892pt x 70.66422pt.
+<figs/fluidtrajpreds/target_pdebench-comp_2083.png, id=150, 1300.86pt x 289.08p
+t>
+File: figs/fluidtrajpreds/target_pdebench-comp_2083.png Graphic file (type png)
+
+<use figs/fluidtrajpreds/target_pdebench-comp_2083.png>
+Package pdftex.def Info: figs/fluidtrajpreds/target_pdebench-comp_2083.png  use
+d on input line 47.
+(pdftex.def)             Requested size: 317.9892pt x 70.66422pt.
 
 LaTeX Warning: Reference `se:preprocessing' on page 11 undefined on input line 
-39.
+57.
 
+[11 <./figs/fluidtrajpreds/target_amira_102.png> <./figs/fluidtrajpreds/target_
+pdebench-comp_22164.png> <./figs/fluidtrajpreds/target_pdebench-comp_2083.png>]
+<figs/fluidtrajpreds/target_pdebench-incomp_965.png, id=164, 1300.86pt x 289.08
+pt>
+File: figs/fluidtrajpreds/target_pdebench-incomp_965.png Graphic file (type png
+)
+<use figs/fluidtrajpreds/target_pdebench-incomp_965.png>
+Package pdftex.def Info: figs/fluidtrajpreds/target_pdebench-incomp_965.png  us
+ed on input line 61.
+(pdftex.def)             Requested size: 317.9892pt x 70.66422pt.
 
-LaTeX Warning: Reference `se:preprocessing' on page 11 undefined on input line 
-47.
+LaTeX Warning: Reference `se:preprocessing' on page 12 undefined on input line 
+72.
 
-[11 <./figs/fluidtrajpreds/target_amira_102.png>]
+<figs/fluidtrajpreds/target_pdegym-gauss_14250.png, id=165, 1300.86pt x 289.08p
+t>
+File: figs/fluidtrajpreds/target_pdegym-gauss_14250.png Graphic file (type png)
 
-LaTeX Warning: Reference `ss:fileformat' on page 12 undefined on input line 53.
+<use figs/fluidtrajpreds/target_pdegym-gauss_14250.png>
+Package pdftex.def Info: figs/fluidtrajpreds/target_pdegym-gauss_14250.png  use
+d on input line 78.
+(pdftex.def)             Requested size: 190.79109pt x 42.39412pt.
+<figs/fluidtrajpreds/target_pdegym-sines_5493.png, id=166, 1300.86pt x 289.08pt
+>
+File: figs/fluidtrajpreds/target_pdegym-sines_5493.png Graphic file (type png)
+<use figs/fluidtrajpreds/target_pdegym-sines_5493.png>
+Package pdftex.def Info: figs/fluidtrajpreds/target_pdegym-sines_5493.png  used
+ on input line 85.
+(pdftex.def)             Requested size: 190.79109pt x 42.39412pt.
+<figs/fluidtrajpreds/target_pdegym-sl_9281.png, id=167, 1300.86pt x 289.08pt>
+File: figs/fluidtrajpreds/target_pdegym-sl_9281.png Graphic file (type png)
+<use figs/fluidtrajpreds/target_pdegym-sl_9281.png>
+Package pdftex.def Info: figs/fluidtrajpreds/target_pdegym-sl_9281.png  used on
+ input line 91.
+(pdftex.def)             Requested size: 190.79109pt x 42.39412pt.
+<figs/fluidtrajpreds/target_pdegym-svs_2725.png, id=168, 1300.86pt x 289.08pt>
+File: figs/fluidtrajpreds/target_pdegym-svs_2725.png Graphic file (type png)
+<use figs/fluidtrajpreds/target_pdegym-svs_2725.png>
+Package pdftex.def Info: figs/fluidtrajpreds/target_pdegym-svs_2725.png  used o
+n input line 98.
+(pdftex.def)             Requested size: 190.79109pt x 42.39412pt.
+<figs/fluidtrajpreds/target_pdegym-bb_17830.png, id=169, 1300.86pt x 289.08pt>
+File: figs/fluidtrajpreds/target_pdegym-bb_17830.png Graphic file (type png)
+<use figs/fluidtrajpreds/target_pdegym-bb_17830.png>
+Package pdftex.def Info: figs/fluidtrajpreds/target_pdegym-bb_17830.png  used o
+n input line 104.
+(pdftex.def)             Requested size: 190.79109pt x 42.39412pt.
+<figs/fluidtrajpreds/target_pdegym-pwc_19616.png, id=170, 1300.86pt x 289.08pt>
 
+File: figs/fluidtrajpreds/target_pdegym-pwc_19616.png Graphic file (type png)
+<use figs/fluidtrajpreds/target_pdegym-pwc_19616.png>
+Package pdftex.def Info: figs/fluidtrajpreds/target_pdegym-pwc_19616.png  used 
+on input line 111.
+(pdftex.def)             Requested size: 190.79109pt x 42.39412pt.
 
+LaTeX Warning: Reference `ss:fileformat' on page 12 undefined on input line 123
+.
 
-LaTeX Warning: Reference `tab:datasetproperties' on page 12 undefined on input 
-line 62.
+[12 <./figs/fluidtrajpreds/target_pdebench-incomp_965.png> <./figs/fluidtrajpre
+ds/target_pdegym-gauss_14250.png> <./figs/fluidtrajpreds/target_pdegym-sines_54
+93.png> <./figs/fluidtrajpreds/target_pdegym-sl_9281.png> <./figs/fluidtrajpred
+s/target_pdegym-svs_2725.png> <./figs/fluidtrajpreds/target_pdegym-bb_17830.png
+> <./figs/fluidtrajpreds/target_pdegym-pwc_19616.png>]
 
-) (./chapters/models/models.tex [12]
+LaTeX Warning: Reference `tab:datasetproperties' on page 13 undefined on input 
+line 132.
+
+) (./chapters/models/models.tex [13]
 Chapter 5.
 
-Package natbib Warning: Citation `Liu2021SwinTA' on page 13 undefined on input 
+Package natbib Warning: Citation `Liu2021SwinTA' on page 14 undefined on input 
 line 10.
 
 
-LaTeX Warning: Reference `fig:BlockExplainer' on page 13 undefined on input lin
+LaTeX Warning: Reference `fig:BlockExplainer' on page 14 undefined on input lin
 e 14.
 
 Package standalone Info: generated file figs/BlockExplainerAll.pdf newer then s
 ource file figs/BlockExplainerAll.tex on input line 20.
-<figs/BlockExplainerAll.pdf, id=168, 949.52545pt x 312.80867pt>
+<figs/BlockExplainerAll.pdf, id=195, 949.52545pt x 312.80867pt>
 File: figs/BlockExplainerAll.pdf Graphic file (type pdf)
 <use figs/BlockExplainerAll.pdf>
 Package pdftex.def Info: figs/BlockExplainerAll.pdf  used on input line 20.
 (pdftex.def)             Requested size: 317.9892pt x 104.75932pt.
-[13
+[14
 
  <./figs/BlockExplainerAll.pdf>]
 Package standalone Info: generated file figs/FM.pdf newer then source file figs
 /FM.tex on input line 54.
-<figs/FM.pdf, id=181, 1086.8505pt x 618.69044pt>
+<figs/FM.pdf, id=206, 1086.8505pt x 618.69044pt>
 File: figs/FM.pdf Graphic file (type pdf)
 <use figs/FM.pdf>
 Package pdftex.def Info: figs/FM.pdf  used on input line 54.
@@ -1418,52 +1494,52 @@ Package pdftex.def Info: figs/FM.pdf  used on input line 54.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-(./chapters/models/AR_hparams.tex) [14]
+(./chapters/models/AR_hparams.tex) [15]
 Underfull \vbox (badness 4739) has occurred while \output is active []
 
- [15 <./figs/FM.pdf>]
+ [16 <./figs/FM.pdf>]
 Package standalone Info: generated file figs/FM.pdf newer then source file figs
 /FM.tex on input line 92.
 File: figs/FM.pdf Graphic file (type pdf)
 <use figs/FM.pdf>
 Package pdftex.def Info: figs/FM.pdf  used on input line 92.
 (pdftex.def)             Requested size: 397.48499pt x 226.26855pt.
- (./chapters/models/FM_hparams.tex)) (./chapters/training/training.tex [16] [17
+ (./chapters/models/FM_hparams.tex)) (./chapters/training/training.tex [17] [18
 ]
 Chapter 6.
 
-LaTeX Warning: Reference `ch:models' on page 18 undefined on input line 13.
+LaTeX Warning: Reference `ch:models' on page 19 undefined on input line 13.
 
-[18
+[19
 
 ]
 
-LaTeX Warning: Reference `tab:fluidgpt_hparams' on page 19 undefined on input l
+LaTeX Warning: Reference `tab:fluidgpt_hparams' on page 20 undefined on input l
 ine 33.
 
-(./chapters/training/train_hparams.tex) [19] [20]
+(./chapters/training/train_hparams.tex) [20] [21]
 
-LaTeX Warning: Reference `sec:energyspectra' on page 21 undefined on input line
+LaTeX Warning: Reference `sec:energyspectra' on page 22 undefined on input line
  82.
 
 
-LaTeX Warning: Reference `se:spectraresults' on page 21 undefined on input line
+LaTeX Warning: Reference `se:spectraresults' on page 22 undefined on input line
  102.
 
-) (./chapters/results/results.tex [21]
+) (./chapters/results/results.tex [22]
 Chapter 7.
-<figs/results/ssbox_rae.png, id=285, 578.16pt x 433.62pt>
+<figs/results/ssbox_rae.png, id=310, 578.16pt x 433.62pt>
 File: figs/results/ssbox_rae.png Graphic file (type png)
 <use figs/results/ssbox_rae.png>
 Package pdftex.def Info: figs/results/ssbox_rae.png  used on input line 25.
 (pdftex.def)             Requested size: 317.9892pt x 238.49173pt.
-[22
+[23
 
  <./figs/results/ssbox_rae.png>]
 
-LaTeX Warning: Reference `fig:ssbox' on page 23 undefined on input line 36.
+LaTeX Warning: Reference `fig:ssbox' on page 24 undefined on input line 36.
 
-<figs/results/msgraph_all_rae.png, id=294, 1084.05pt x 867.24pt>
+<figs/results/msgraph_all_rae.png, id=319, 1084.05pt x 867.24pt>
 File: figs/results/msgraph_all_rae.png Graphic file (type png)
 <use figs/results/msgraph_all_rae.png>
 Package pdftex.def Info: figs/results/msgraph_all_rae.png  used on input line 7
@@ -1472,48 +1548,83 @@ Package pdftex.def Info: figs/results/msgraph_all_rae.png  used on input line 7
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [23]
+ [24]
 
-LaTeX Warning: Reference `fig:rollout' on page 24 undefined on input line 82.
+LaTeX Warning: Reference `fig:rollout' on page 25 undefined on input line 82.
 
-[24 <./figs/results/msgraph_all_rae.png>]
+[25 <./figs/results/msgraph_all_rae.png>]
 
-LaTeX Warning: Reference `fig:energyspectrum' on page 25 undefined on input lin
+LaTeX Warning: Reference `fig:energyspectrum' on page 26 undefined on input lin
 e 128.
 
-<figs/results/spectra/spectrum_E.png, id=307, 1011.78pt x 289.08pt>
+<figs/results/spectra/spectrum_E.png, id=333, 1011.78pt x 289.08pt>
 File: figs/results/spectra/spectrum_E.png Graphic file (type png)
 <use figs/results/spectra/spectrum_E.png>
 Package pdftex.def Info: figs/results/spectra/spectrum_E.png  used on input lin
 e 132.
 (pdftex.def)             Requested size: 317.9892pt x 90.85336pt.
 
-LaTeX Warning: Reference `fig:energyspectrum' on page 25 undefined on input lin
+LaTeX Warning: Reference `fig:energyspectrum' on page 26 undefined on input lin
 e 139.
 
 
-LaTeX Warning: Reference `fig:rollout' on page 25 undefined on input line 143.
+LaTeX Warning: Reference `fig:rollout' on page 26 undefined on input line 143.
 
-[25 <./figs/results/spectra/spectrum_E.png>]
+[26 <./figs/results/spectra/spectrum_E.png>]
 
-LaTeX Warning: Reference `fig:rollout' on page 26 undefined on input line 153.
-
-
-LaTeX Warning: Reference `fig:rollout' on page 26 undefined on input line 155.
+LaTeX Warning: Reference `fig:rollout' on page 27 undefined on input line 153.
 
 
-LaTeX Warning: Reference `fig:energyspectrumscheme' on page 26 undefined on inp
+LaTeX Warning: Reference `fig:rollout' on page 27 undefined on input line 155.
+
+
+LaTeX Warning: Reference `fig:energyspectrumscheme' on page 27 undefined on inp
 ut line 157.
 
-) (./chapters/conclusion/conclusion.tex [26]
+) (./chapters/conclusion/conclusion.tex [27]
 Chapter 8.
-) (./main.bbl) (./appendices/appendices.tex)
+)
+No file main.bbl.
+(./appendices/appendices.tex [28
+
+]
+Appendix A.
+(./appendices/fluidtrajpreds.tex
+<figs/fluidtrajpreds/preds_amira_102.png, id=350, 1300.86pt x 1300.86pt>
+File: figs/fluidtrajpreds/preds_amira_102.png Graphic file (type png)
+<use figs/fluidtrajpreds/preds_amira_102.png>
+Package pdftex.def Info: figs/fluidtrajpreds/preds_amira_102.png  used on input
+ line 5.
+(pdftex.def)             Requested size: 397.48499pt x 397.48624pt.
+<figs/fluidtrajpreds/preds_pdebench-comp_22164.png, id=351, 1300.86pt x 1300.86
+pt>
+File: figs/fluidtrajpreds/preds_pdebench-comp_22164.png Graphic file (type png)
+
+<use figs/fluidtrajpreds/preds_pdebench-comp_22164.png>
+Package pdftex.def Info: figs/fluidtrajpreds/preds_pdebench-comp_22164.png  use
+d on input line 11.
+(pdftex.def)             Requested size: 397.48499pt x 397.48624pt.
+
+Underfull \vbox (badness 3838) has occurred while \output is active []
+
+ [29
+
+ <./figs/fluidtrajpreds/preds_amira_102.png>]
+<figs/fluidtrajpreds/preds_pdebench-comp_2083.png, id=360, 1300.86pt x 1300.86p
+t>
+File: figs/fluidtrajpreds/preds_pdebench-comp_2083.png Graphic file (type png)
+<use figs/fluidtrajpreds/preds_pdebench-comp_2083.png>
+Package pdftex.def Info: figs/fluidtrajpreds/preds_pdebench-comp_2083.png  used
+ on input line 17.
+(pdftex.def)             Requested size: 397.48499pt x 397.48624pt.
+))
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [30 <./figs/fluidtrajpreds/preds_pdebench-comp_22164.png>]
 
 Package natbib Warning: There were undefined citations.
 
-[27
-
-] (./main.aux)
+[31 <./figs/fluidtrajpreds/preds_pdebench-comp_2083.png>] (./main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
@@ -1532,16 +1643,16 @@ Package rerunfilecheck Warning: File `main.out' has changed.
 
 Package rerunfilecheck Info: Checksums for `main.out':
 (rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  0E7DBAF240CB5BD704E12FAA92C981B7;11176.
+(rerunfilecheck)             After:  7E82F7AFF1654E5073465C7A8221996B;11391.
  ) 
 Here is how much of TeX's memory you used:
- 33947 strings out of 467533
- 666487 string characters out of 5422138
- 1108685 words of memory out of 5000000
- 61781 multiletter control sequences out of 15000+600000
+ 34171 strings out of 467533
+ 673610 string characters out of 5422138
+ 1111433 words of memory out of 5000000
+ 61994 multiletter control sequences out of 15000+600000
  689171 words of font info for 300 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 98i,12n,117p,1493b,530s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 98i,12n,117p,1493b,615s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texli
@@ -1565,10 +1676,10 @@ nts/symbols/msbm10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1000.p
 fb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/
 texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-d
 ist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (27 pages, 2708909 bytes).
+Output written on main.pdf (31 pages, 13809461 bytes).
 PDF statistics:
- 449 PDF objects out of 1000 (max. 8388607)
- 328 compressed objects within 4 object streams
- 129 named destinations out of 1000 (max. 500000)
- 63168 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 499 PDF objects out of 1000 (max. 8388607)
+ 350 compressed objects within 4 object streams
+ 140 named destinations out of 1000 (max. 500000)
+ 63228 words of extra memory for PDF output out of 74296 (max. 10000000)
 
