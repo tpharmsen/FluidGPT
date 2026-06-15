@@ -460,8 +460,8 @@ class ModelValidationPlot:
 
 if __name__ == "__main__":
 
-    traj_list = [0,1,2]
-    dataset_idx = 2
+    traj_list = [0] #[0,1,2,3,4]
+    dataset_list = [1,2,3,4,5,6,7,8,9]
     models_cfg = [
     dict(
         label    = "AR-d2",
@@ -469,7 +469,7 @@ if __name__ == "__main__":
         CB = "surf-high", CD = "spike-preprocAll",
         CM = "ar-final-d2", CT = "ar-final",
         ckpt = "models/ar-d2-9/epoch=0048-val_SS_loss_checkpoint=0.0027003738.ckpt",
-        dsplit = [dataset_idx],
+        #dsplit = [dataset_idx],
     ),
     dict(
         label    = "AR-d3",
@@ -477,7 +477,7 @@ if __name__ == "__main__":
         CB = "surf-high", CD = "spike-preprocAll",
         CM = "ar-final-d3", CT = "ar-final",
         ckpt = "models/ar-d3-6/epoch=0055-val_SS_loss_checkpoint=0.0028912849.ckpt",
-        dsplit = [dataset_idx],
+        #dsplit = [dataset_idx],
     ),
     dict(
         label    = "FM-d2",
@@ -485,7 +485,7 @@ if __name__ == "__main__":
         CB = "surf-high", CD = "spike-preprocAll",
         CM = "fm-final-d2", CT = "fm-final",
         ckpt = "models/fm-d2-9/epoch=0098-val_SS_loss_checkpoint=0.0002288722.ckpt",
-        dsplit = [dataset_idx],
+        #dsplit = [dataset_idx],
         fm_samples = 1,
     ),
     dict(
@@ -494,62 +494,45 @@ if __name__ == "__main__":
         CB = "surf-high", CD = "spike-preprocAll",
         CM = "fm-final-d3", CT = "fm-final",
         ckpt = "models/fm-d3-6/epoch=0098-val_SS_loss_checkpoint=0.0002519532.ckpt",
-        dsplit = [dataset_idx],
+        #dsplit = [dataset_idx],
         fm_samples = 1,
     )
     ]
+    for dsplit_idx in dataset_list:
+        for traj_idx in traj_list:
+            results = []
+            for cfg in models_cfg:
+                print(f"\n{'='*50}\nLoading: {cfg['label']}\n{'='*50}")
+                cb = load_yaml_as_dotdict(f"conf/base/{cfg['CB']}.yaml")
+                cd = load_yaml_as_dotdict(f"conf/data/{cfg['CD']}.yaml")
+                cm = load_yaml_as_dotdict(f"conf/model/{cfg['CM']}.yaml")
+                ct = load_yaml_as_dotdict(f"conf/training/{cfg['CT']}.yaml")
 
-    for traj_idx in traj_list:
-        results = []
-        for cfg in models_cfg:
-            print(f"\n{'='*50}\nLoading: {cfg['label']}\n{'='*50}")
-            cb = load_yaml_as_dotdict(f"conf/base/{cfg['CB']}.yaml")
-            cd = load_yaml_as_dotdict(f"conf/data/{cfg['CD']}.yaml")
-            cm = load_yaml_as_dotdict(f"conf/model/{cfg['CM']}.yaml")
-            ct = load_yaml_as_dotdict(f"conf/training/{cfg['CT']}.yaml")
+                mv = ModelValidationPlot(
+                    cb, cd, cm, ct,
+                    trainer    = cfg['trainer'],
+                    model_path = cfg['ckpt'],
+                    calc       = 'ms',
+                    fm_samples = cfg.get('fm_samples', 1),
+                    dsplit     = dsplit_idx,
+                )
 
-            mv = ModelValidationPlot(
-                cb, cd, cm, ct,
-                trainer    = cfg['trainer'],
-                model_path = cfg['ckpt'],
-                calc       = 'ms',
-                fm_samples = cfg.get('fm_samples', 1),
-                dsplit     = cfg['dsplit'],
-            )
+                traj_true_unnorm, traj_pred_unnorm, actual_traj_idx, rae_errors, rrmse_errors = mv.rollout_tensor(traj_idx)
+                results.append((cfg['label'], actual_traj_idx, traj_pred_unnorm.cpu(), traj_true_unnorm.cpu(), rae_errors, rrmse_errors))
+                del mv
+                torch.cuda.empty_cache()
 
-            traj_true_unnorm, traj_pred_unnorm, actual_traj_idx, rae_errors, rrmse_errors = mv.rollout_tensor(traj_idx)
-            results.append((cfg['label'], actual_traj_idx, traj_pred_unnorm.cpu(), traj_true_unnorm.cpu(), rae_errors, rrmse_errors))
-            del mv
-            torch.cuda.empty_cache()
+            print("\nAll models done, now plotting...")
 
-        print("\nAll models done, now plotting...")
+            T = traj_true_unnorm.shape[1]
+            timesteps = [5, 6, 8, (T - 10) // 3, 2 * (T - 10) // 3 + 2, T - 1]
 
-        T = traj_true_unnorm.shape[1]
-        timesteps = [5, 6, 8, T // 2 + 2, T - 1]
-
-        fig, axes = plt.subplots(5, len(timesteps), figsize=(3 * len(timesteps), 15))
-        #fig.suptitle(f"Radial velocity components for trajectory {traj_idx} from dataset {DATASET_NAME}", fontsize=16)
-        row = 0
-        trajtrue_denorm = results[0][2].squeeze()  # (T, C, H, W)
-        for col, t in enumerate(timesteps):
-            frame = trajtrue_denorm[t]  # (C, H, W)
-
-            vx = frame[0]
-            vy = frame[1]
-            data = np.sqrt(vx**2 + vy**2)
-            im = axes[row, col].imshow(data.numpy(), cmap="viridis", origin="lower")
-            axes[row,col].set_xticks([])
-            axes[row, col].set_yticks([])
-
-            axes[row, col].set_title(f"t={t}", fontsize=12)
-            if col == 0:
-                axes[row, col].set_ylabel("Target", fontsize=12, rotation=0, labelpad=20)
-
-        
-        for row in range(1, 5):
-            traj_denorm = results[row-1][3].squeeze()  # (T, C, H, W)
+            fig, axes = plt.subplots(5, len(timesteps), figsize=(3 * len(timesteps), 18))
+            #fig.suptitle(f"Radial velocity components for trajectory {traj_idx} from dataset {DATASET_NAME}", fontsize=16)
+            row = 0
+            trajtrue_denorm = results[0][2].squeeze()  # (T, C, H, W)
             for col, t in enumerate(timesteps):
-                frame = traj_denorm[t]  # (C, H, W)
+                frame = trajtrue_denorm[t]  # (C, H, W)
 
                 vx = frame[0]
                 vy = frame[1]
@@ -557,24 +540,41 @@ if __name__ == "__main__":
                 im = axes[row, col].imshow(data.numpy(), cmap="viridis", origin="lower")
                 axes[row,col].set_xticks([])
                 axes[row, col].set_yticks([])
-                #if row == 4:
-                    #axes[row, col].set_xlabel(f"Timestep {t}", fontsize=12)
-                    #axes[row, col].set_title(f"t={t}", fontsize=11)
-                if col == 0:
-                    axes[row, col].set_ylabel(f"{results[row-1][0]}", fontsize=12, rotation=0, labelpad=20)
-                error = results[row-1][5][t]
-                axes[row, col].text(
-                    0.98, 0.98,
-                    f"Error: {error:.4f}",
-                    transform=axes[row, col].transAxes,
-                    ha="right",
-                    va="top",
-                    fontsize=12,
-                    bbox=dict(facecolor="white", alpha=0.4, edgecolor="none")
-                )
 
-        fig.suptitle(f"Radial velocity components for trajectory {results[0][1]} from dataset {cd.datasets[dataset_idx - 1]['name']}", fontsize=22)
-        fig.supylabel(f"$\sqrt{{x^2+y^2}}$", rotation=90)
-        plt.tight_layout()
-        plt.savefig(f'scripts/temp/preds_{cd.datasets[dataset_idx - 1]['name']}_{results[0][1]}.png')
-    print("All done.")
+                axes[row, col].set_title(f"t={t}", fontsize=12)
+                if col == 0:
+                    axes[row, col].set_ylabel("Target", fontsize=12, rotation=0, labelpad=20)
+
+            
+            for row in range(1, 5):
+                traj_denorm = results[row-1][3].squeeze()  # (T, C, H, W)
+                for col, t in enumerate(timesteps):
+                    frame = traj_denorm[t]  # (C, H, W)
+
+                    vx = frame[0]
+                    vy = frame[1]
+                    data = np.sqrt(vx**2 + vy**2)
+                    im = axes[row, col].imshow(data.numpy(), cmap="viridis", origin="lower")
+                    axes[row,col].set_xticks([])
+                    axes[row, col].set_yticks([])
+                    #if row == 4:
+                        #axes[row, col].set_xlabel(f"Timestep {t}", fontsize=12)
+                        #axes[row, col].set_title(f"t={t}", fontsize=11)
+                    if col == 0:
+                        axes[row, col].set_ylabel(f"{results[row-1][0]}", fontsize=12, rotation=0, labelpad=20)
+                    error = results[row-1][5][t]
+                    axes[row, col].text(
+                        0.98, 0.98,
+                        f"Error: {error:.4f}",
+                        transform=axes[row, col].transAxes,
+                        ha="right",
+                        va="top",
+                        fontsize=12,
+                        bbox=dict(facecolor="white", alpha=0.4, edgecolor="none")
+                    )
+
+            fig.suptitle(f"Radial velocity components for trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=22)
+            fig.supylabel(f"$\sqrt{{x^2+y^2}}$", rotation=90)
+            plt.tight_layout()
+            plt.savefig(f'scripts/temp/preds_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png')
+        print(f"Done with dataset {dsplit_idx}")
