@@ -459,8 +459,7 @@ class ModelValidationPlot:
 
 
 if __name__ == "__main__":
-
-    traj_list = [0] #[0,1,2,3,4]
+    traj_list =  [0,1,2,3,4,5,6,7,8,9]
     dataset_list = [1,2,3,4,5,6,7,8,9]
     models_cfg = [
     dict(
@@ -525,12 +524,36 @@ if __name__ == "__main__":
             print("\nAll models done, now plotting...")
 
             T = traj_true_unnorm.shape[1]
-            timesteps = [5, 6, 8, (T - 10) // 3, 2 * (T - 10) // 3 + 2, T - 1]
+            timesteps = [5, 6, 7, (T - 5) // 3 + 5, 2 * (T - 5) // 3 + 5, T - 1]
+
+            trajtrue_denorm = results[0][2].squeeze()
+
+            fig, axes = plt.subplots(1, len(timesteps), figsize=(3 * len(timesteps), 4))
+            ax = axes.flatten()
+            for col, t in enumerate(timesteps):
+                frame = trajtrue_denorm[t]  # (C, H, W)
+
+                vx = frame[0]
+                vy = frame[1]
+                data = np.sqrt(vx**2 + vy**2)
+                im = ax[col].imshow(data.numpy(), cmap="viridis", origin="lower")
+                ax[col].set_xticks([])
+                ax[col].set_yticks([])
+
+                ax[col].set_title(f"t={t}", fontsize=11)
+                if col == 0:
+                    ax[col].set_ylabel(r"$\sqrt{x^2+y^2}$", fontsize=12, rotation=90, labelpad=20)
+
+            fig.suptitle(f"Ground truth radial velocity components for trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=22)
+            #fig.supylabel(f"$\sqrt{{x^2+y^2}}$", rotation=90)
+            plt.tight_layout()
+            plt.savefig(f'scripts/temp/target_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png')
+            del fig, axes, ax
 
             fig, axes = plt.subplots(5, len(timesteps), figsize=(3 * len(timesteps), 18))
             #fig.suptitle(f"Radial velocity components for trajectory {traj_idx} from dataset {DATASET_NAME}", fontsize=16)
             row = 0
-            trajtrue_denorm = results[0][2].squeeze()  # (T, C, H, W)
+              # (T, C, H, W)
             for col, t in enumerate(timesteps):
                 frame = trajtrue_denorm[t]  # (C, H, W)
 
@@ -573,7 +596,7 @@ if __name__ == "__main__":
                         bbox=dict(facecolor="white", alpha=0.4, edgecolor="none")
                     )
 
-            fig.suptitle(f"Radial velocity components for trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=22)
+            fig.suptitle(f"Radial velocity components of model predictions for trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=22)
             fig.supylabel(f"$\sqrt{{x^2+y^2}}$", rotation=90)
             plt.tight_layout()
             plt.savefig(f'scripts/temp/preds_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png')
