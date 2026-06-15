@@ -19,7 +19,13 @@ For each dataset, 80\,\% of the available trajectories were assigned to the trai
 \label{ss:amiraset}
  
 AMIRASET is a large-scale ensemble of 8000 unsteady two-dimensional flows generated with the Gerris flow solver~\citep{Jakob2021FluidFlowDataset}. All simulations are performed on a regular $512^2$ grid with spatially periodic boundary conditions. The ensemble spans a wide dynamic range: Reynolds numbers vary from $1$ to $4096$ and kinematic viscosities from $10^{-5}$ to $10^{-4}$, ordering trajectories from laminar to fully turbulent regimes. The raw data, stored in the \texttt{.am} format at a resolution of $512 \times 512 \times 1001$ time steps, occupy approximately 16\,TB; they are subsequently downsampled and converted to \texttt{.hdf5} as part of the preprocessing pipeline described in Section~\ref{se:preprocessing}.
- 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figs/fluidtrajpreds/target_amira_102.png}
+	\caption{....}
+	\label{}
+\end{figure}
 % ------------------------------------------------------------
 \subsection{PDEBENCH}
 \label{ss:pdebench}
@@ -28,9 +34,23 @@ Two datasets from the PDEBench benchmark suite~\citep{takamoto2022pdebench} are 
  
 \paragraph{PDEBench-2DINS.}
 This dataset contains 1100 trajectories of two-dimensional incompressible Navier-Stokes simulations with external forcing. The domain uses Dirichlet boundary conditions and is discretised on a regular $512^2$ grid. Even though it is not the goal to pass external forcing information to the model, the model might benefit from exposure to the resulting dynamics during training. The raw data, stored in \texttt{.h5} format at a resolution of $512 \times 512 \times 1000$ time steps, occupy approximately 1.1\,TB; they are subsequently downsampled and converted to \texttt{.hdf5} as part of the preprocessing pipeline described in Section~\ref{se:preprocessing}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figs/fluidtrajpreds/target_pdebench-comp_22164.png}
+	\caption{....}
+	\label{}
+\end{figure}
  
 \paragraph{PDEBench-2DCNS.}
 This dataset contains 44000 trajectories of two-dimensional compressible Navier-Stokes simulations in the turbulence-dominant regime. Dynamic and bulk viscosities each vary independently over the range $[10^{-8},\,10^{-1}]$, and the flow speed spans Mach numbers from $0.1$ to $1.0$, capturing both subsonic and transonic conditions. Simulations employ periodic boundary conditions on grids ranging from $128^2$ to $512^2$. This model is particularly valuable for exposing the foundation model to compressibility effects, which are absent in the other datasets. As only the velocity components of the flow are retained for training, the model must learn to infer density and pressure effects indirectly from the velocity fields. The raw data, stored in \texttt{.hdf5} format at resolutions of $128 \times 128 \times 21$ to $512 \times 512 \times 21$ time steps, occupy approximately 4.4\,TB. they are subsequently downsampled and converted to a uniform resolution of $128^2$ as part of the preprocessing pipeline described in Section~\ref{se:preprocessing}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figs/fluidtrajpreds/target_pdebench-incomp_965.png}
+	\caption{....}
+	\label{}
+\end{figure}
  
 % ------------------------------------------------------------
 \subsection{PDEGYM}
@@ -38,7 +58,44 @@ This dataset contains 44000 trajectories of two-dimensional compressible Navier-
  
 Six datasets from the PDEGym collection are included. All simulations were generated with the AZEBAN spectral hyperviscosity solver, a pseudo-spectral code for incompressible flows that enforces periodic boundary conditions on a uniform space-time grid. Each dataset contains approximately 20000 trajectories of two-dimensional incompressible Navier-Stokes flow at a spatial resolution of $128^2$ with 21 temporal snapshots per trajectory. The kinematic viscosity is fixed at $\nu = 4 \times 10^{-4}$ across all six datasets.
  
-The datasets differ solely in their initialisation scheme, providing a controlled study of how initial conditions affect downstream flow statistics. The six schemes are: Gaussian random fields, sine waves, piecewise-constant vorticity fields, Brownian bridges, shear layers, and sine vortex sheets. The first two schemes are commonly used in the literature to generate initial conditions for turbulence simulations, while the remaining four are novel schemes designed to produce qualitatively different flow structures and statistics. The raw data, stored in \texttt{.nc} format at a resolution of $128 \times 128 \times 21$ time steps, occupy approximately 1.2\,TB; they are subsequently converted to \texttt{.hdf5} as part of the preprocessing pipeline described in Section~\ref{se:preprocessing}.
+The datasets differ solely in their initialisation scheme, providing a controlled study of how initial conditions affect downstream flow statistics. The six schemes are: Gaussian random fields, sine waves, piecewise-constant vorticity fields, Brownian bridges, shear layers, and sine vortex sheets. The first two schemes are commonly used in the literature to generate initial conditions for turbulence simulations, while the remaining four are novel schemes designed to produce qualitatively different flow structures and statistics. The raw data, stored in \texttt{.nc} format at a resolution of $128 \times 128 \times 21$ time steps are subsequently converted to \texttt{.hdf5} as part of the preprocessing pipeline described in Section~\ref{se:preprocessing}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figs/fluidtrajpreds/target_pdegym-gauss_14250.png}
+	\caption{....}
+	\label{}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figs/fluidtrajpreds/target_pdegym-sines_5493.png}
+	\caption{....}
+	\label{}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figs/fluidtrajpreds/target_amira_102.png}
+	\caption{....}
+	\label{}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figs/fluidtrajpreds/target_amira_102.png}
+	\caption{....}
+	\label{}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figs/fluidtrajpreds/target_amira_102.png}
+	\caption{....}
+	\label{}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{figs/fluidtrajpreds/target_amira_102.png}
+	\caption{....}
+	\label{}
+\end{figure}
  
 % ============================================================
 \section{Preprocessing}
