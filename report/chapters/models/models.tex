@@ -28,6 +28,8 @@ In this formulation, self-attention is first applied across spatial dimensions u
 
 The Swin Transformer backbone is embedded within a UNet-style encoder-decoder structure with skip connections. This design enables multi-scale feature extraction while preserving fine-grained spatial information. Additionally, the output dimensions of the model are the same size as the input, which is not the case with the classification output of the traditional Swin Transformer. Skip connections are implemented using ConvNeXt-style blocks, which facilitate stable gradient propagation and information flow across resolution scales. Each level of the Unet focusses on a different spatial scale of information spread, with the deepest layer programmed for an spatial all-to-all attention mask.
 
+
+
 \subsection{Patch Embedding and Reconstruction}
 
 At the input stage, the two-dimensional velocity field is partitioned into non-overlapping square patches. Each patch is projected into a latent embedding space using a learned 2-layer MLP. Static positional and temporal embeddings are added to each patch embedding to encode spatial and temporal structure. A single patch resembles both the x- and y-component of a part of the velocity field for a single time step.
@@ -52,7 +54,7 @@ The deterministic model uses the shared backbone described in the previous secti
 \begin{figure}[h]
 	\centering
 	\makebox[\textwidth][c]{
-		\includestandalone[width=1\textwidth]{figs/FM}
+		\includestandalone[width=1\textwidth]{figs/AM}
 	}
 	\caption{Architecture overview of the deterministic model.}
 	\label{fig:det_model_architecture}
@@ -60,7 +62,7 @@ The deterministic model uses the shared backbone described in the previous secti
 
 \subsection{Hyperparameter Configurations}
 
-Two deterministic model variants are evaluated. One uses smaller patch sizes with higher embedding dimensionality and greater depth, while the other uses larger patch sizes with reduced embedding dimensionality and depth. This design allows exploration of the trade-off between local resolution and global context modeling.
+Two deterministic model variants are evaluated. One uses finer patch sizes with lower embedding dimensionality and greater depth, while the other uses larger patch sizes with increased embedding dimensionality and depth. This design allows exploration of the trade-off between local resolution and global context modeling. The amount of space-then-time attention blocks per layer is also varied as a hyperparameter to control computational cost and define less difference in representational capacity between the d2 and d3-models. The two variants are denoted as AR-d2 and AR-d3, referring to their respective depth/patch fusions and corresponding parameter configurations. The specific hyperparameter settings for each variant are detailed in Table~\ref{tab:fluidgpt_hparams_det}.
 
 \input{chapters/models/AR_hparams.tex}
 
@@ -92,7 +94,7 @@ The flow-matching model shares the same backbone architecture as the determinist
 	\makebox[\textwidth][c]{
 		\includestandalone[width=1\textwidth]{figs/FM}
 	}
-	\caption{Architecture overview of the flow-matching model.}
+	\caption{Architecture overview of the probabilistic flow-matching model. The most significant difference between this model and the standard deterministic variant is the injection of flow-time.}
 	\label{fig:fm_model_architecture}
 \end{figure}
 
