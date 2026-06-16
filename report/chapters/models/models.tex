@@ -2,16 +2,18 @@
 
 \section{Overview of the Modeling Approaches}
 
-This chapter introduces two modeling approaches for spatiotemporal fluid dynamics prediction: a deterministic autoregressive model and a flow-matching generative model. Both approaches share a common hierarchical Swin Transformer backbone with additional temporal information flow, but differ in their conditioning strategy and prediction formulation. The deterministic model directly maps past velocity fields to future states, whereas the flow-matching model learns to conditionally flow a probability distribution.
+This chapter introduces two modeling approaches for spatiotemporal fluid dynamics prediction: a deterministic generative model and a flow-matching generative model. Both approaches share a common hierarchical Swin-based Transformer backbone with additional temporal information flow, but differ in their conditioning strategy and prediction formulation. The sharing of the backbone allows for a fair comparison of the two approaches while isolating the effects of the different generative modeling strategies. The deterministic model directly maps past velocity fields to future states, whereas the flow-matching model learns to conditionally flow a probability distribution.
 
+\subsection{Original Swin Backbone}
 
-\subsection{Shared Transformer Backbone}
+The shared backbone is based on the original Swin Transformer \citet{Liu2021SwinTA}, which enables hierarchical feature extraction via shifted window self-attention. The shifted window mechanism allows for efficient local attention computation while maintaining the ability to capture long-range dependencies through hierarchical feature aggregation. The backbone consists of multiple stages, each containing several Swin Transformer blocks, with embedding merging layers between stages to reduce spatial resolution while increasing feature dimensionality and receptive field of applied attention mechanisms. The original Swin Transformer is designed for image classification tasks, but we adapt it for spatiotemporal fluid dynamics prediction by incorporating temporal information and modifying the attention mechanism to handle sequential data. Two challenges here are the extra temporal dimension and the need to return the processed data to the original spatial resolution instead of a classification output.
 
-Both models are built on a shared spatiotemporal backbone designed for efficient modeling of high-dimensional fluid flow data. The backbone is based on the Swin Transformer \citet{Liu2021SwinTA}, which enables hierarchical feature extraction via shifted window self-attention. This design allows the model to capture both local and long-range spatial dependencies while maintaining computational efficiency through localized attention computation. Additionally, the backbone has been altered for additional information spread in the temporal axis.
+\subsection{Space-Then-Time Attention Backbone}
 
-\subsection{Space-Then-Time Attention Factorization}
+To incorporate temporal structure, we employ a custom space-then-time attention block. As temporal interactions, spacings and lengths are typically different than spatial interactions, it makes sense to factorize the attention mechanism into two seperate stages. Additionally, using a seperate attention stage for the temporal dimension allows for possibly more efficient and effective modeling of temporal dependencies, which is highly relevnant for large-scale foundation training tasks. This is motivated by the paper >>>>>>>>>>>>>>BCAT, which concludes that a space-then-time mechanism is more efficient while negligibly affecting predictive performance.
+In this formulation, self-attention is first applied across spatial dimensions using the spatial windows of the original swin transformer block and subsequently in straight line across the temporal dimension. The corresponding attention masking strategy is illustrated in Figure~\ref{fig:BlockExplainer}. In practice, multiple Space-Then-Time attention blocks are used sequentially for smoother and more robust information spread.
 
-To incorporate temporal structure, we employ a space-then-time attention scheme. In this formulation, self-attention is first applied across spatial dimensions and subsequently across the temporal dimension. This factorization reduces memory usage and computational cost while preserving predictive performance. The corresponding attention masking strategy is illustrated in Figure~\ref{fig:BlockExplainer}. In practice, multiple Space-Then-Time attention blocks are used sequentially for smoother and more robust information spread.
+#################### include evidence as temporal bcat model thingy.
 
 \begin{figure}[h]
 	\centering
@@ -24,17 +26,17 @@ To incorporate temporal structure, we employ a space-then-time attention scheme.
 
 \subsection{UNet-style Multi-scale Architecture}
 
-The Swin Transformer backbone is embedded within a UNet-style encoder-decoder structure with skip connections. This design enables multi-scale feature extraction while preserving fine-grained spatial information. Skip connections are implemented using ConvNeXt-style blocks, which facilitate stable gradient propagation and information flow across resolution scales. Each level of the Unet focusses on a different spatial scale of information spread, with the deepest layer programmed for an spatial all-to-all attention mask.
+The Swin Transformer backbone is embedded within a UNet-style encoder-decoder structure with skip connections. This design enables multi-scale feature extraction while preserving fine-grained spatial information. Additionally, the output dimensions of the model are the same size as the input, which is not the case with the classification output of the traditional Swin Transformer. Skip connections are implemented using ConvNeXt-style blocks, which facilitate stable gradient propagation and information flow across resolution scales. Each level of the Unet focusses on a different spatial scale of information spread, with the deepest layer programmed for an spatial all-to-all attention mask.
 
 \subsection{Patch Embedding and Reconstruction}
 
-At the input stage, the two-dimensional velocity field is partitioned into non-overlapping square patches. Each patch is projected into a latent embedding space using a learned MLP. Learned positional and temporal embeddings are added to each patch embedding to encode spatial and temporal structure.
+At the input stage, the two-dimensional velocity field is partitioned into non-overlapping square patches. Each patch is projected into a latent embedding space using a learned 2-layer MLP. Static positional and temporal embeddings are added to each patch embedding to encode spatial and temporal structure. A single patch resembles both the x- and y-component of a part of the velocity field for a single time step.
 
-At the output stage, the latent embeddings are projected back to the original velocity field dimension using an MLP and reassembled into the full spatial grid.
+At the output stage, the latent embeddings are projected back to the original velocity field dimension using a learned 3-layer MLP and reassembled into the full spatial grid.
 
 \subsection{Hierarchical Patch Merging and Expansion}
 
-As depth increases in the encoder, groups of four neighboring patches are merged into a single token with double size embedding dimension. This operation progressively reduces spatial resolution while increasing receptive field size. This from of compression throughout the depth of the model also realises a form of regularization and generalisation. In the decoder, the reverse operation is applied to recover full spatial resolution.
+As depth increases in the encoder, groups of four neighbouring patches are merged into a single token with double size embedding dimension with a single dense connected layer. This operation progressively reduces spatial resolution while increasing receptive field size. This form of compression throughout the depth of the model also realises a form of regularization and generalisation. In the decoder, the reverse operation is applied to recover full spatial resolution.
 
 \section{Deterministic Model}
 
