@@ -1396,4 +1396,158 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 ]
 Package standalone Info: generated file figs/FM.pdf newer then source file figs/FM.tex on input line 56.
-<figs/FM.pdf
+<figs/FM.pdf, id=222, 1086.8505pt x 618.69044pt>
+File: figs/FM.pdf Graphic file (type pdf)
+<use figs/FM.pdf>
+Package pdftex.def Info: figs/FM.pdf  used on input line 56.
+(pdftex.def)             Requested size: 397.48499pt x 226.26855pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[17 <./figs/BlockExplainerAll.pdf>] (./chapters/models/AR_hparams.tex) [18 <./figs/FM.pdf>]
+Package standalone Info: generated file figs/FM.pdf newer then source file figs/FM.tex on input line 94.
+File: figs/FM.pdf Graphic file (type pdf)
+<use figs/FM.pdf>
+Package pdftex.def Info: figs/FM.pdf  used on input line 94.
+(pdftex.def)             Requested size: 397.48499pt x 226.26855pt.
+ (./chapters/models/FM_hparams.tex) [19]) (./chapters/training/training.tex [20]
+Chapter 6.
+
+LaTeX Warning: Reference `ch:models' on page 21 undefined on input line 13.
+
+[21
+
+]
+
+LaTeX Warning: Reference `tab:fluidgpt_hparams' on page 22 undefined on input line 33.
+
+(./chapters/training/train_hparams.tex) [22] [23]
+
+LaTeX Warning: Reference `sec:energyspectra' on page 24 undefined on input line 82.
+
+
+LaTeX Warning: Reference `se:spectraresults' on page 24 undefined on input line 102.
+
+) (./chapters/results/results.tex [24]
+Chapter 7.
+<figs/results/ssbox_rae.png, id=329, 578.16pt x 433.62pt>
+File: figs/results/ssbox_rae.png Graphic file (type png)
+<use figs/results/ssbox_rae.png>
+Package pdftex.def Info: figs/results/ssbox_rae.png  used on input line 25.
+(pdftex.def)             Requested size: 317.9892pt x 238.49173pt.
+[25
+
+ <./figs/results/ssbox_rae.png>]
+
+LaTeX Warning: Reference `fig:ssbox' on page 26 undefined on input line 36.
+
+<figs/results/msgraph_all_rae.png, id=339, 1084.05pt x 867.24pt>
+File: figs/results/msgraph_all_rae.png Graphic file (type png)
+<use figs/results/msgraph_all_rae.png>
+Package pdftex.def Info: figs/results/msgraph_all_rae.png  used on input line 71.
+(pdftex.def)             Requested size: 317.9892pt x 254.39119pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [26]
+
+LaTeX Warning: Reference `fig:rollout' on page 27 undefined on input line 82.
+
+[27 <./figs/results/msgraph_all_rae.png>]
+
+LaTeX Warning: Reference `fig:energyspectrum' on page 28 undefined on input line 128.
+
+<figs/results/spectra/spectrum_E.png, id=351, 1011.78pt x 289.08pt>
+File: figs/results/spectra/spectrum_E.png Graphic file (type png)
+<use figs/results/spectra/spectrum_E.png>
+Package pdftex.def Info: figs/results/spectra/spectrum_E.png  used on input line 132.
+(pdftex.def)             Requested size: 317.9892pt x 90.85336pt.
+
+LaTeX Warning: Reference `fig:energyspectrum' on page 28 undefined on input line 139.
+
+
+LaTeX Warning: Reference `fig:rollout' on page 28 undefined on input line 143.
+
+[28 <./figs/results/spectra/spectrum_E.png>]
+
+LaTeX Warning: Reference `fig:rollout' on page 29 undefined on input line 153.
+
+
+LaTeX Warning: Reference `fig:rollout' on page 29 undefined on input line 155.
+
+
+LaTeX Warning: Reference `fig:energyspectrumscheme' on page 29 undefined on input line 157.
+
+) (./chapters/conclusion/conclusion.tex [29]
+Chapter 8.
+) (./main.bbl) (./appendices/appendices.tex [30
+
+]
+Appendix A.
+(./appendices/fluidtrajpreds.tex
+<figs/fluidtrajpreds/preds_amira_102.png, id=368, 1300.86pt x 1300.86pt>
+File: figs/fluidtrajpreds/preds_amira_102.png Graphic file (type png)
+<use figs/fluidtrajpreds/preds_amira_102.png>
+Package pdftex.def Info: figs/fluidtrajpreds/preds_amira_102.png  used on input line 5.
+(pdftex.def)             Requested size: 397.48499pt x 397.48624pt.
+<figs/fluidtrajpreds/preds_pdebench-comp_22164.png, id=369, 1300.86pt x 1300.86pt>
+File: figs/fluidtrajpreds/preds_pdebench-comp_22164.png Graphic file (type png)
+<use figs/fluidtrajpreds/preds_pdebench-comp_22164.png>
+Package pdftex.def Info: figs/fluidtrajpreds/preds_pdebench-comp_22164.png  used on input line 11.
+(pdftex.def)             Requested size: 397.48499pt x 397.48624pt.
+
+Underfull \vbox (badness 3838) has occurred while \output is active []
+
+ [31
+
+ <./figs/fluidtrajpreds/preds_amira_102.png>]
+<figs/fluidtrajpreds/preds_pdebench-comp_2083.png, id=379, 1300.86pt x 1300.86pt>
+File: figs/fluidtrajpreds/preds_pdebench-comp_2083.png Graphic file (type png)
+<use figs/fluidtrajpreds/preds_pdebench-comp_2083.png>
+Package pdftex.def Info: figs/fluidtrajpreds/preds_pdebench-comp_2083.png  used on input line 17.
+(pdftex.def)             Requested size: 397.48499pt x 397.48624pt.
+))
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [32 <./figs/fluidtrajpreds/preds_pdebench-comp_22164.png>]
+
+Package natbib Warning: There were undefined citations.
+
+[33 <./figs/fluidtrajpreds/preds_pdebench-comp_2083.png>] (./main.aux)
+ ***********
+LaTeX2e <2025-11-01>
+L3 programming layer <2026-01-19>
+ ***********
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `main.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `main.out':
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  4A1337ED44503CCD853B55A8B7E6E511;11326.
+ ) 
+Here is how much of TeX's memory you used:
+ 34213 strings out of 467533
+ 674143 string characters out of 5422138
+ 1110424 words of memory out of 5000000
+ 62003 multiletter control sequences out of 15000+600000
+ 690002 words of font info for 310 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 98i,12n,117p,1535b,689s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1000.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (33 pages, 13822322 bytes).
+PDF statistics:
+ 520 PDF objects out of 1000 (max. 8388607)
+ 369 compressed objects within 4 object streams
+ 152 named destinations out of 1000 (max. 500000)
+ 63228 words of extra memory for PDF output out of 74296 (max. 10000000)
+
