@@ -13,7 +13,7 @@ The shared backbone is based on the original Swin Transformer \citet{Liu2021Swin
 To incorporate temporal structure, we employ a custom space-then-time attention block. As temporal interactions, spacings and lengths are typically different than spatial interactions, it makes sense to factorize the attention mechanism into two seperate stages. Additionally, using a seperate attention stage for the temporal dimension allows for possibly more efficient and effective modeling of temporal dependencies, which is highly relevnant for large-scale foundation training tasks. This is motivated by the paper >>>>>>>>>>>>>>BCAT, which concludes that a space-then-time mechanism is more efficient while negligibly affecting predictive performance.
 In this formulation, self-attention is first applied across spatial dimensions using the spatial windows of the original swin transformer block and subsequently in straight line across the temporal dimension. The corresponding attention masking strategy is illustrated in Figure~\ref{fig:BlockExplainer}. In practice, multiple Space-Then-Time attention blocks are used sequentially for smoother and more robust information spread.
 
-#################### include evidence as temporal bcat model thingy.
+include evidence as temporal bcat model thingy.
 
 \begin{figure}[h]
 	\centering
@@ -54,7 +54,7 @@ The deterministic model uses the shared backbone described in the previous secti
 \begin{figure}[h]
 	\centering
 	\makebox[\textwidth][c]{
-		\includestandalone[width=1\textwidth]{figs/AM}
+		\includestandalone[width=1\textwidth]{figs/AR}
 	}
 	\caption{Architecture overview of the deterministic model.}
 	\label{fig:det_model_architecture}
