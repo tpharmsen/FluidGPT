@@ -18,7 +18,7 @@ This chapter formally defines the research problem, establishing the specific ph
 
 The Navier–Stokes equations describe the dynamics of fluid flow through a set of coupled, nonlinear partial differential equations that enforce conservation of both mass and momentum. In this work, we focus on the two-dimensional, isothermal case, governed by the following equations:
 
-\begin{gather}
+\begin{gather}\label{eq:navierstokes}
 \partial_t \rho + \nabla \cdot (\rho \mathbf{u}) = 0, \\
 \partial_t \mathbf{u} + (\mathbf{u} \cdot \nabla) \mathbf{u} = -\frac{1}{\rho} \nabla p + \frac{1}{\rho} \nabla \cdot \boldsymbol{\tau} + \mathbf{f}, \\
 B_i(\mathbf{u}, p)|_{\partial \Omega} = g_i, \quad \mathbf{u}(0) = A, \quad x \in \Omega=[0,1]^2.
