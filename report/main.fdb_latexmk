@@ -1,21 +1,19 @@
 # Fdb version 4
-["bibtex main"] 1781624414.20616 "main.aux" "main.bbl" "main" 1781624414.48422 2
+["bibtex main"] 1781627194.88475 "main.aux" "main.bbl" "main" 1781627195.06771 2
   "./references.bib" 1764265005.78469 11415 735076a5f84797a2c006424b5298c28f ""
   "/usr/share/texlive/texmf-dist/bibtex/bst/natbib/unsrtnat.bst" 1233624470 24550 a41a6405f4de768c43e871d9fbce2bc8 ""
-  "main.aux" 1781624406.19676 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "main.aux" 1781627186.87805 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1781624396.61063 "/home/tpharmsen/Documents/FluidGPT/report/main.tex" "main.pdf" "main" 1781624413.89817 0
+["pdflatex"] 1781627177.17551 "/home/tpharmsen/Documents/FluidGPT/report/main.tex" "main.pdf" "main" 1781627184.7841 0
   "/etc/texmf/web2c/texmf.cnf" 1779373291.94424 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/tpharmsen/Documents/FluidGPT/report/main.tex" 1781538712.2179 3842 609da8949f4309c3f489f942328852cf ""
+  "/home/tpharmsen/Documents/FluidGPT/report/main.tex" 1781626705.24627 3842 609da8949f4309c3f489f942328852cf ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmb8r.tfm" 1136768653 4524 6bce29db5bc272ba5f332261583fee9c ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmb8t.tfm" 1136768653 6880 f19b8995b61c334d78fc734065f6b4d4 ""
-  "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmbi8r.tfm" 1136768653 4480 10409ed8bab5aea9ec9a78028b763919 ""
-  "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmbi8t.tfm" 1136768653 6784 37b32cc10800b5afa030d935c393695a ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmr8c.tfm" 1136768653 1352 fa28a7e6d323c65ce7d13d5342ff6be2 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmr8r.tfm" 1136768653 4408 25b74d011a4c66b7f212c0cc3c90061b ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmr8t.tfm" 1136768653 6672 e3ab9e37e925f3045c9005e6d1473d56 ""
@@ -69,11 +67,9 @@
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb" 1248133631 32442 c975af247b6702f7ca0c299af3616b80 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb" 1248133631 34694 ad62b13721ee8eda1dcc8993c8bd7041 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb" 1136849748 44729 811d6c62865936705a31c797a1d5dada ""
-  "/usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb" 1136849748 44656 0cbca70e0534538582128f6b54593cca ""
   "/usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb" 1136849748 46026 6dab18b61c907687b520c72847215a68 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb" 1136849748 45458 a3faba884469519614ca56ba5f6b1de1 ""
   "/usr/share/texlive/texmf-dist/fonts/vf/adobe/times/ptmb8t.vf" 1136768653 2340 df9c920cc5688ebbf16a93f45ce7bdd3 ""
-  "/usr/share/texlive/texmf-dist/fonts/vf/adobe/times/ptmbi8t.vf" 1136768653 2324 51908dae6e03953a90119973962f0e4d ""
   "/usr/share/texlive/texmf-dist/fonts/vf/adobe/times/ptmr8c.vf" 1136768653 3556 8a9a6dcbcd146ef985683f677f4758a6 ""
   "/usr/share/texlive/texmf-dist/fonts/vf/adobe/times/ptmr8t.vf" 1136768653 2348 91706c542228501c410c266421fbe30c ""
   "/usr/share/texlive/texmf-dist/fonts/vf/adobe/times/ptmri8t.vf" 1136768653 2328 6cd7df782b09b29cfc4d93e55b6b9a59 ""
@@ -272,8 +268,8 @@
   "appendices/appendices.tex" 1781540463.16383 259 931d943d50eee762acf518eb340f94c9 ""
   "appendices/fluidtrajpreds.tex" 1781541839.85297 488 36cf5e47157fa20b75da15927e20e6a7 ""
   "chapters/conclusion/conclusion.tex" 1780498434.81968 561 e6ab457e3ee71e222c9ee87f862748fb ""
-  "chapters/datasets/datasets.tex" 1781624388.04131 18167 8635153412b49fd69ef5c504ec9630af ""
-  "chapters/datasets/datasets_specs.tex" 1781623990.86588 1637 ecc3e5c0dec4a6cc471ae9e81c64c35a ""
+  "chapters/datasets/datasets.tex" 1781627176.70941 19740 cadc63c35a723a3511aaf5c28c0c22f3 ""
+  "chapters/datasets/datasets_specs.tex" 1781626692.76952 1636 d5da7b1cfe0c075cb4fb5e73be7749a4 ""
   "chapters/intro/introduction.tex" 1780590238.91912 10824 941361de1be3316acffdf9bd791d6f2e ""
   "chapters/models/AR_hparams.tex" 1780670949.08392 1106 f286d0dd30d486c432e78ad1595bfef6 ""
   "chapters/models/FM_hparams.tex" 1780670951.78891 1303 1e2941f0a76459d3f99edff6d31cf4f4 ""
@@ -303,10 +299,10 @@
   "figs/results/msgraph_all_rae.png" 1779820496.17495 1397053 5d091bbb2a1312e0b0184eb2c080a7fe ""
   "figs/results/spectra/spectrum_E.png" 1779997105.06127 364286 c42ff83faf0e853763e09663651c576d ""
   "figs/results/ssbox_rae.png" 1779820430.70827 240970 8fcfef297f5a8fe8c4c15ec7b72ff738 ""
-  "main.aux" 1781624406.19676 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
-  "main.bbl" 1781624414.47354 0 d41d8cd98f00b204e9800998ecf8427e "bibtex main"
+  "main.aux" 1781627186.87805 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "main.bbl" 1781627195.06454 0 d41d8cd98f00b204e9800998ecf8427e "bibtex main"
   "main.out" 0 -1 0 "pdflatex"
-  "main.tex" 1781538712.2179 3842 609da8949f4309c3f489f942328852cf ""
+  "main.tex" 1781626705.24627 3842 609da8949f4309c3f489f942328852cf ""
   "neurips_2025.sty" 1747031216 13023 2817c1b954c70ec3156371423da6545c ""
   (generated)
   "main.aux"

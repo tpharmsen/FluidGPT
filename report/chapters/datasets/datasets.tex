@@ -6,13 +6,13 @@
 \section{Dataset Selection}
 \label{se:datasetselection}
  
-Based on the selection criteria outlined in Section~\ref{se:datasetconditions}, nine distinct datasets were chosen for this study. Their key physical and computational characteristics are summarised in Table~\ref{tab:datasetproperties}. Collectively, the raw data comprise approximately $21~\text{TB}$ of simulation state histories.
- 
-The selected datasets span a broad region of the Navier-Stokes problem space, covering a diverse range of flow regimes, boundary conditions, external forcing mechanisms, and initialisation procedures. This structural diversity is a deliberate design choice: training a foundation model capable of generalising across fluid-dynamics scenarios requires exposure to qualitatively different transport phenomena and invariant manifolds during training, rather than a large but narrow corpus drawn from a single regime.
- 
-For each dataset, $80\%$ of the available trajectories were assigned to the training split, while the remaining $20\%$ were held out for validation and zero-shot evaluation. Prior to training, all datasets were preprocessed to enforce a common spatial and temporal resolution and to enable efficient, parallelised data loading, as described in Section~\ref{se:preprocessing}. For both training and validation, only the velocity fields ($V_x$, $V_y$) were retained; all other physical channels (e.g., pressure, density, passive tracers) were discarded. This minimizes storage and computational overhead while challenging the foundation model to implicitly infer latent fields and missing structural information from the evolution of the velocity field alone.
+Based on the selection criteria outlined in Section~\ref{se:datasetconditions}, nine distinct datasets were chosen for this study. Their key physical and computational characteristics are summarised in Table~\ref{tab:datasetproperties}. Collectively, the raw data adds up to approximately $21~\text{TB}$ of simulated fluid trajectories. The selected datasets span a broad region of the Navier-Stokes problem space, covering a diverse range of flow regimes, boundary conditions, external forcing mechanisms, and initialisation procedures. This structural diversity is a deliberate design choice: training a foundation model capable of generalising across fluid-dynamics scenarios requires exposure to qualitatively different transport phenomena during training, rather than a large but narrow-domain dataset drawn from a single regime. The challenge here is to prepare these heterogeneous datasets in a way that preserves their unique characteristics while ensuring compatibility with the model architecture and training pipeline, which is described in this section.
  
 \input{chapters/datasets/datasets_specs}
+
+For each dataset, $80\%$ of the available trajectories were assigned to the training split, while the remaining $20\%$ were held out for validation and zero-shot evaluation. Prior to training, all datasets were preprocessed to enforce a common spatial and temporal resolution and to enable efficient, parallelised data loading, as described in Section~\ref{se:preprocessing}. For both training and validation, only the velocity fields ($V_x$, $V_y$) were retained, all other physical channels (e.g., pressure, density, passive tracers) were discarded. This minimizes storage and computational overhead while challenging the foundation model to implicitly infer latent fields and missing structural information from the evolution of the velocity field alone.
+ 
+
  
 % =========================================================================
 \subsection{Amira}
@@ -55,7 +55,7 @@ The dataset features two distinct initialization regimes designed to seed varied
     utilising $n = 4$ primary modes with amplitude scaling defined by $A_i = \bar{v}/|k|^d$, where $d=2$ for the two-dimensional domain, and the characteristic velocity scale is bounded by the local speed of sound ($\bar{v} = c_s M$, with $c_s = \sqrt{\Gamma p / \rho}$). To suppress unphysical, spurious acoustic shocks at $t=0$, the compressible component of the velocity field is mathematically removed via a Helmholtz decomposition in Fourier space, retaining strictly the divergence-free component for the initial state.
 \end{enumerate}
 
-The raw data are stored in \texttt{.hdf5} format across spatial dimensions from $128 \times 128 \times 21$ to $512 \times 512 \times 21$ spatio-temporal steps. All trajectories are downsampled to a uniform spatial resolution of $128^2$ during preprocessing, which is explained in Section~\ref{se:preprocessing}. This dataset is hereafter referred to as \textit{pdebench-comp}. Sample temporal evolutions from both initialisation conditions are presented in Figure~\ref{fig:comp} for easier conceptualization.
+The raw data is stored in \texttt{.hdf5} format across spatial dimensions from $128 \times 128 \times 21$ to $512 \times 512 \times 21$ spatio-temporal steps. All trajectories are downsampled to a uniform spatial resolution of $128^2$ during preprocessing, which is explained in Section~\ref{se:preprocessing}. This dataset is hereafter referred to as \textit{pdebench-comp}. Sample temporal evolutions from both initialisation conditions are presented in Figure~\ref{fig:comp} for easier conceptualization.
 
 \begin{figure}[H]
     \centering
@@ -157,7 +157,10 @@ The raw data, originally stored in the \texttt{.nc} (NetCDF) format, are convert
 \label{se:preprocessing}
  
 All datasets are preprocessed offline before training begins to produce a unified body of data at a common spatial resolution and temporal cadence. The preprocessing pipeline consists of three stages: spatial interpolation, temporal subsampling, and file-format conversion. Dedicated preprocessing scripts were written for each source dataset to execute these stages in a single pass, avoiding redundant computation during training. The preprocessed data is stored on disk in a format that supports efficient random-access loading during training, as described in Section~\ref{ss:fileformat}. As the preprocessed datasets are still too large to fit in GPU memory, the data loader fetches batches of trajectories from disk on-the-fly during training.
-% No data augmentation, focus lies on size of dataset.
+
+As for the training data, no data augmentation is applied during preprocessing. The focus of this work is on evaluating the model's ability to learn from the raw, unprocessed trajectories and to generalise across different flow regimes and initial conditions, rather than on artificially increasing the dataset size through transformations, which is commonly done in training foundation models. As such, the preprocessed datasets are intended to be as close as possible to the original raw data, with only the necessary adjustments for spatial and temporal alignment and efficient storage.
+
+The normalisation of the velocity fields is performed on-the-fly during training using the mean and standard deviation computed from the training split of each dataset, which are stored in the metadata files generated during preprocessing. This allows the model to learn from the raw velocity values while ensuring that the input data is appropriately scaled for training stability and convergence. 
  
 % ------------------------------------------------------------
 \subsection{Spatial Interpolation}
@@ -186,10 +189,10 @@ interpolation artefacts in the preprocessed trajectories.
 % ------------------------------------------------------------
 \subsection{File-Format Conversion and Storage}
 \label{ss:fileformat}
- 
-The source datasets are distributed in several formats: \texttt{.am}, \texttt{.h5}, \texttt{.hdf5}, and \texttt{.nc}. Their combined size precludes caching preprocessed data in GPU memory. To support efficient random-access loading during training, all preprocessed trajectories are stored individually as \texttt{.hdf5} files, one file per trajectory. This layout allows the data loader to fetch arbitrary trajectories without reading or decompressing unrelated data.
- 
-During conversion, only the horizontal and vertical velocity components ($V_x$, $V_y$) are retained; all other channels are discarded to minimise storage footprint and to challenge the model to infer missing information from the velocity fields alone. For datasets distributed in the proprietary \texttt{.am} format (i.e., AMIRASET), no existing parsing library was available, so a custom binary parser was implemented.
- 
-Alongside the per-trajectory files, a metadata file is written for each dataset recording per-channel statistics (mean and standard deviation). These statistics are used both for input normalisation during training and for efficient data prefetching.
+
+The source datasets are distributed in several formats: \texttt{.am}, \texttt{.h5}, \texttt{.hdf5}, and \texttt{.nc}. Their combined size precludes caching preprocessed data in GPU memory. To support efficient random-access loading during training, all preprocessed trajectories are stored individually as \texttt{.hdf5} files, one file per trajectory. This layout allows the data loader to fetch arbitrary trajectories without reading or decompressing unrelated data. Alongside the per-trajectory files, a metadata file is written for each dataset recording dataset-specific statistics used for normalisation and quick-access indexing. 
+
+During conversion, only the horizontal and vertical velocity components ($V_x$, $V_y$) are retained; all other channels are discarded to minimise storage footprint and to challenge the model to infer missing information from the velocity fields alone. For datasets distributed in the proprietary \texttt{.am} format, no existing parsing library was available, so a custom-made binary parser was implemented.
+
+
  
