@@ -29,7 +29,6 @@ include evidence as temporal bcat model thingy.
 The Swin Transformer backbone is embedded within a UNet-style encoder-decoder structure with skip connections. This design enables multi-scale feature extraction while preserving fine-grained spatial information. Additionally, the output dimensions of the model are the same size as the input, which is not the case with the classification output of the traditional Swin Transformer. Skip connections are implemented using ConvNeXt-style blocks, which facilitate stable gradient propagation and information flow across resolution scales. Each level of the Unet focusses on a different spatial scale of information spread, with the deepest layer programmed for an spatial all-to-all attention mask.
 
 
-
 \subsection{Patch Embedding and Reconstruction}
 
 At the input stage, the two-dimensional velocity field is partitioned into non-overlapping square patches. Each patch is projected into a latent embedding space using a learned 2-layer MLP. Static positional and temporal embeddings are added to each patch embedding to encode spatial and temporal structure. A single patch resembles both the x- and y-component of a part of the velocity field for a single time step.
@@ -39,6 +38,212 @@ At the output stage, the latent embeddings are projected back to the original ve
 \subsection{Hierarchical Patch Merging and Expansion}
 
 As depth increases in the encoder, groups of four neighbouring patches are merged into a single token with double size embedding dimension with a single dense connected layer. This operation progressively reduces spatial resolution while increasing receptive field size. This form of compression throughout the depth of the model also realises a form of regularization and generalisation. In the decoder, the reverse operation is applied to recover full spatial resolution.
+
+% =========================================================
+\section{Mathematical Formulation}
+% =========================================================
+
+This section provides the formal mathematical description of the core components shared by both models. We introduce notation, then derive the patch embedding, positional encoding, windowed cosine attention with continuous relative position bias, temporal attention, and the hierarchical patch merging/expansion operations.
+
+\subsection{Notation}
+
+Let $\mathbf{u} \in \mathbb{R}^{B \times T \times C \times H \times W}$ denote a batch of velocity fields, where $B$ is the batch size, $T$ is the number of time steps, $C=2$ is the number of velocity components ($u_x$, $u_y$), and $H \times W$ is the spatial resolution. Patch size is $(p_H, p_W)$, so the spatial patch grid has resolution $\hat{H} = H/p_H$ and $\hat{W} = W/p_W$, giving $N = \hat{H}\hat{W}$ patches per time step. The latent embedding dimension is $d$.
+
+\subsection{Patch Embedding}
+
+Each spatial patch $\mathbf{p}_{t,n} \in \mathbb{R}^{C \cdot p_H \cdot p_W}$ is extracted by unfolding the input field. The patch sequence for a single batch element is arranged as $\mathbf{P} \in \mathbb{R}^{T \times N \times (C \cdot p_H \cdot p_W)}$. Each patch is then projected into the latent space by a two-layer MLP:
+
+\begin{equation}
+    \mathbf{z}_{t,n} = W_2 \, \sigma\!\left(W_1 \, \mathbf{p}_{t,n} + \mathbf{b}_1\right) + \mathbf{b}_2,
+    \qquad
+    \mathbf{z}_{t,n} \in \mathbb{R}^{d},
+\end{equation}
+
+where $W_1 \in \mathbb{R}^{d_h \times (C p_H p_W)}$, $W_2 \in \mathbb{R}^{d \times d_h}$, and $\sigma$ is the activation function (GELU by default). The full encoded representation is $\mathbf{Z} \in \mathbb{R}^{B \times T \times N \times d}$.
+
+The decoder projects back to pixel space with a symmetric three-layer MLP followed by spatial reassembly (folding):
+
+\begin{equation}
+    \hat{\mathbf{p}}_{t,n} = W_5 \, \sigma\!\left(W_4 \, \sigma\!\left(W_3 \, \mathbf{z}_{t,n}\right)\right) \in \mathbb{R}^{C \cdot p_H \cdot p_W}.
+\end{equation}
+
+\subsection{Spatiotemporal Positional Encoding}
+
+Spatial position is encoded with factorised row and column embeddings. Let $\mathbf{e}^{\text{row}}_i \in \mathbb{R}^{d/2}$ and $\mathbf{e}^{\text{col}}_j \in \mathbb{R}^{d/2}$ be learned parameters for row $i$ and column $j$, respectively. A full spatial embedding at grid position $(i,j)$ is obtained by concatenation:
+
+\begin{equation}
+    \mathbf{s}_{i,j} = \left[\mathbf{e}^{\text{row}}_i \;\|\; \mathbf{e}^{\text{col}}_j\right] \in \mathbb{R}^{d}.
+\end{equation}
+
+A separate learned temporal embedding $\mathbf{e}^{\text{time}}_t \in \mathbb{R}^{d}$ encodes the time step. The combined positional encoding added to each token is:
+
+\begin{equation}
+    \mathbf{Z}_{b,t,n,\cdot} \leftarrow \mathbf{Z}_{b,t,n,\cdot} + \mathbf{s}_{i(n),j(n)} + \mathbf{e}^{\text{time}}_t,
+\end{equation}
+
+where $i(n)$ and $j(n)$ denote the row and column indices of patch $n$ in the spatial grid.
+
+\subsection{Windowed Cosine Attention with Continuous Relative Position Bias}
+
+\paragraph{Window partitioning.}
+The spatial token map at a given level is reshaped to $(\hat{H}, \hat{W})$ and partitioned into non-overlapping windows of size $w \times w$. For a shifted-window block, the map is first cyclically shifted by $(\lfloor w/2 \rfloor, \lfloor w/2 \rfloor)$ pixels before partitioning, and the shift is reversed afterwards. Each window contains $M = w^2$ tokens and is processed independently, yielding an effective batch of $\frac{\hat{H}\hat{W}}{w^2}$ windows per sample per time step.
+
+\paragraph{Query, key, value projection.}
+For tokens $\mathbf{X} \in \mathbb{R}^{M \times d}$ within a window, queries, keys, and values are computed as:
+
+\begin{equation}
+    \mathbf{Q} = \mathbf{X} W^Q, \quad
+    \mathbf{K} = \mathbf{X} W^K, \quad
+    \mathbf{V} = \mathbf{X} W^V,
+\end{equation}
+
+where $W^Q, W^K, W^V \in \mathbb{R}^{d \times d}$. Separate additive biases $\mathbf{b}^q$ and $\mathbf{b}^v$ are used for queries and values; no bias is applied to keys, following \citet{Liu2021SwinTA}.
+
+\paragraph{Cosine attention.}
+Rather than scaled dot-product attention, we use cosine attention with a learnable per-head scaling factor:
+
+\begin{equation}
+    A_{ij}^{(h)} = \tau^{(h)} \cdot \frac{\mathbf{q}_i^{(h)}}{\|\mathbf{q}_i^{(h)}\|} \cdot \frac{\mathbf{k}_j^{(h)}}{\|\mathbf{k}_j^{(h)}\|},
+\end{equation}
+
+where $h$ indexes the attention head, and $\tau^{(h)} = \exp\!\left(\min\!\left(\lambda^{(h)},\, \ln 100\right)\right)$ is a learned, clamped temperature parameter initialised to $\tau^{(h)} = 10$. The clamping ensures $\tau^{(h)} \leq 100$, preventing attention collapse to a hard argmax.
+
+\paragraph{Continuous relative position bias (CPB).}
+Rather than a discrete relative position bias table, we follow \citet{Liu2021SwinV2} and use a small MLP to generate biases from normalised, log-scaled relative coordinate offsets. For a pair of tokens at positions $(i, j)$ within the window, the 2D relative offset $\Delta\mathbf{r}_{ij} \in \mathbb{R}^2$ is first normalised by the window size and then mapped through a log-linear compression:
+
+\begin{equation}
+    \tilde{\Delta r} = \operatorname{sign}(\Delta r) \cdot \frac{\log_2(|\Delta r| + 1)}{\log_2 8},
+    \qquad \Delta r \in \{-(w-1), \ldots, w-1\}.
+\end{equation}
+
+The compressed offset is fed into a two-layer MLP with a single hidden layer of size 512 to yield per-head biases:
+
+\begin{equation}
+    \mathbf{b}^{\text{cpb}}(\Delta\mathbf{r}_{ij}) = W_{\text{cpb},2}\,\operatorname{ReLU}\!\left(W_{\text{cpb},1}\,\tilde{\Delta\mathbf{r}}_{ij}\right) \in \mathbb{R}^{H_{\text{heads}}}.
+\end{equation}
+
+The bias is then passed through a sigmoid and scaled to the range $[0, 16]$:
+
+\begin{equation}
+    B^{(h)}_{ij} = 16 \cdot \sigma\!\left(\mathbf{b}^{\text{cpb}}_{h}(\Delta\mathbf{r}_{ij})\right).
+\end{equation}
+
+\paragraph{Attention output.}
+The full pre-softmax attention logit for head $h$ is:
+
+\begin{equation}
+    \hat{A}^{(h)}_{ij} = A^{(h)}_{ij} + B^{(h)}_{ij}.
+\end{equation}
+
+After applying softmax over the key dimension, the output for head $h$ is:
+
+\begin{equation}
+    \mathbf{O}^{(h)} = \operatorname{softmax}\!\left(\hat{\mathbf{A}}^{(h)}\right) \mathbf{V}^{(h)}.
+\end{equation}
+
+The outputs of all heads are concatenated and projected:
+
+\begin{equation}
+    \mathbf{O} = \left[\mathbf{O}^{(1)} \;\|\; \cdots \;\|\; \mathbf{O}^{(H_{\text{heads}})}\right] W^O.
+\end{equation}
+
+\paragraph{Spatial Swin block residual structure.}
+A full Spatial Swin block applies windowed attention followed by a feed-forward MLP, both with pre-norm and residual connections:
+
+\begin{align}
+    \mathbf{X}' &= \mathbf{X} + \operatorname{LN}\!\left(\operatorname{WA}(\mathbf{X})\right), \\
+    \mathbf{X}'' &= \mathbf{X}' + \operatorname{LN}\!\left(\operatorname{MLP}(\mathbf{X}')\right),
+\end{align}
+
+where $\operatorname{WA}(\cdot)$ denotes the windowed attention operation described above and $\operatorname{MLP}(\cdot)$ is a two-layer feed-forward network with hidden dimension $\lfloor d \cdot r \rfloor$ and expansion ratio $r = 4$.
+
+\subsection{Temporal Self-Attention}
+
+After each spatial attention stage, a dedicated temporal attention block operates independently on the time dimension for each spatial token. Given the sequence of embeddings at a fixed spatial location $n$, arranged as $\mathbf{X}_n \in \mathbb{R}^{T \times d}$, temporal attention is computed with the same cosine formulation and a per-head learnable temperature $\tau_{\text{temp}}^{(h)}$:
+
+\begin{equation}
+    A^{(h)}_{\text{temp},st} = \tau^{(h)}_{\text{temp}} \cdot \frac{\mathbf{q}_s^{(h)}}{\|\mathbf{q}_s^{(h)}\|} \cdot \frac{\mathbf{k}_t^{(h)}}{\|\mathbf{k}_t^{(h)}\|}.
+\end{equation}
+
+\paragraph{Temporal relative position bias.}
+A scalar relative position bias is computed from log-compressed relative time offsets. For relative temporal offset $\delta = s - t \in \{-(T-1), \ldots, T-1\}$:
+
+\begin{equation}
+    \tilde{\delta} = \operatorname{sign}(\delta) \cdot \frac{\log_2(|\delta| + 1)}{\log_2 2},
+\end{equation}
+
+and the bias for head $h$ is a directly learnable lookup:
+
+\begin{equation}
+    b_{\text{temp},h}(\delta) = \mathbf{B}_{\text{temp}}\!\left[\delta + T - 1,\, h\right],
+\end{equation}
+
+where $\mathbf{B}_{\text{temp}} \in \mathbb{R}^{(2T-1) \times H_{\text{heads}}}$ is a registered buffer populated from the log-compressed offsets at initialisation and not updated during training.
+
+\paragraph{Attention masking.}
+Depending on the configuration, an optional causal mask may be applied. In the \emph{custom} masking scheme, tokens in the conditioning window $[0, T_c)$ are prevented from attending to or being attended to by predicted tokens $[T_c, T)$. The mask is defined as
+
+\begin{equation}
+    \mathbf{M}^{\text{custom}}_{st} = \begin{cases} -\infty & \text{if } s < T_c \text{ or } t < T_c,\\ 0 & \text{otherwise,} \end{cases}
+\end{equation}
+
+and enforces strict separation between the conditioning and prediction windows. 
+
+\paragraph{Temporal block residual structure.}
+The temporal block reshapes the representation to $\mathbb{R}^{(B \cdot N) \times T \times d}$, applies attention and a feed-forward MLP with pre-norm and residual connections, then reshapes back to $\mathbb{R}^{B \times T \times N \times d}$.
+
+\subsection{Hierarchical Patch Merging and Expansion}
+
+\paragraph{Patch merging (encoder).}
+At each encoder depth transition, four spatially adjacent tokens are concatenated and linearly projected to halve the token count while doubling the embedding dimension:
+
+\begin{equation}
+    \mathbf{z}_{\text{merged}} = W_{\text{merge}} \begin{bmatrix} \mathbf{z}_{2i,2j} \\ \mathbf{z}_{2i+1,2j} \\ \mathbf{z}_{2i,2j+1} \\ \mathbf{z}_{2i+1,2j+1} \end{bmatrix},
+    \qquad W_{\text{merge}} \in \mathbb{R}^{2d \times 4d}.
+\end{equation}
+
+This reduces the token map from $(\hat{H}, \hat{W})$ to $(\hat{H}/2, \hat{W}/2)$ and increases the embedding dimension from $d$ to $2d$.
+
+\paragraph{Patch expansion (decoder).}
+The reverse operation first doubles the channel dimension with a linear layer, then rearranges channels back into spatial positions:
+
+\begin{equation}
+    \mathbf{z}_{\text{exp}} = W_{\text{unmerge}} \, \mathbf{z}_{\text{bottleneck}},
+    \qquad W_{\text{unmerge}} \in \mathbb{R}^{2d \times d},
+\end{equation}
+
+followed by a pixel-shuffle-style rearrangement that maps the $(2d)$-dimensional channel vector at each token back to a $(d)$-dimensional vector at each of four spatially neighbouring locations, recovering the original resolution.
+
+\paragraph{Skip connections.}
+Encoder features at each resolution level are passed to the corresponding decoder level via skip connections processed by a ConvNeXt-style block $f_{\text{skip}}$:
+
+\begin{equation}
+    \mathbf{x}_{\text{dec}} \leftarrow \mathbf{x}_{\text{dec}} + f_{\text{skip}}(\mathbf{x}_{\text{enc}}),
+\end{equation}
+
+where $f_{\text{skip}}$ applies depthwise spatial convolutions over the patch grid to allow channel mixing and local spatial smoothing before addition.
+
+\subsection{Flow-Time Conditioning (Flow-Matching Model Only)}
+
+The flow-matching model introduces an additional conditioning signal: a scalar flow-time $\tau \in [0, 1]$ that parameterises the integration path from the prior to the data distribution. Flow-time is embedded via a high-dimensional sinusoidal encoding. For embedding dimension $d_\tau$, the sinusoidal features are:
+
+\begin{equation}
+    \boldsymbol{\phi}(\tau)_k = \begin{cases}
+        \sin\!\left(\tau \cdot \omega_k\right) & k \leq d_\tau/2, \\
+        \cos\!\left(\tau \cdot \omega_{k - d_\tau/2}\right) & k > d_\tau/2,
+    \end{cases}
+    \qquad \omega_k = 10000^{-2k/d_\tau}.
+\end{equation}
+
+This is then processed by a two-layer MLP with SiLU activations to produce a conditioning vector $\mathbf{c}(\tau) \in \mathbb{R}^{d}$, which is concatenated onto the token sequence at the start of each Space-Then-Time attention block sequence:
+
+\begin{equation}
+    \tilde{\mathbf{Z}} = \left[\mathbf{c}(\tau) \;\|\; \mathbf{Z}\right]_{\text{sequence}},
+\end{equation}
+
+so that flow-time information is available to both spatial and temporal attention at every depth of the network. After the attention blocks, the conditioning vector is removed before proceeding to the next stage. At the new stage, the flow-time embedding is re-concatenated again, ensuring that temporal conditioning is consistently integrated throughout the network.
+
+% =========================================================
 
 \section{Deterministic Model}
 
@@ -109,4 +314,3 @@ As with the deterministic model, two variants are evaluated for flow matching. T
 Both modeling approaches are evaluated under two architectural regimes. One configuration uses smaller patch sizes with higher embedding dimensions and deeper networks, while the other uses larger patch sizes with reduced embedding capacity. The size of mlp layers is adjusted accordingly to maintain a consistent computational budget for its patch size. Additionally, the number of space-then-time attention blocks per layer is varied as a hyperparameter to control computational cost and define less difference in representational capacity between the d2 and d3-models. These choices allow us to investigate the trade-off between fine-grained spatial resolution and global contextual reasoning. 
 
 Note that patch fusion results in a double size embedding dimension and fourfold pixel size receptiveness, thus making the second depth embeddings of the d-3 models and the first depth embeddings of the d-2 models equivalent in size and pixel-correspondence.
-

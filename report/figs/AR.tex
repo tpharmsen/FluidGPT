@@ -23,7 +23,6 @@
 
 \def\BlockEColor{rgb:brown,6;black,1;white,2}
 \def\MergeColor{rgb:gray,5;white,4}
-\def\TimeInjectColor{rgb:black,12;white,2}
 
 \def\BlackColor{rgb:black,8;white,1}
 \def\SkipBlockColor{rgb:cyan,5;black,1;white,2}
@@ -46,7 +45,6 @@
 \begin{document}
 \begin{tikzpicture}%[tdplot_main_coords]
 \tikzstyle{connection}=[thick,every node/.style={sloped,allow upside down},draw=\BlackColor,opacity=0.8]
-
 
 \foreach \row in {-3,-1,1,3} { 
     \foreach \col in {-3,-1,1,3} { 
@@ -428,31 +426,6 @@
     };
 
 
-\pic[shift={ (0,0,0) }] at (-2,7,0) 
-    {Box={
-        name=t_start,
-        caption=$\mathbf{t_f}$,
-        fill=\TimeInjectColor,
-        opacity=\Opacity,
-        height=1.5,
-        width=1.5,
-        depth=1.5
-        }
-    };
-
-\pic[shift={ (14,0,0) }] at (t_start-east) 
-    {Box={
-        name=t_inj,
-        caption=,
-        fill=\TimeInjectColor,
-        opacity=\Opacity,
-        height=4,
-        width=2,
-        depth=4
-        }
-    };
-
-\node[anchor=west] at ($(t_inj-east) + (0.5,0,0)$) {$\mathbf{\mathcal{F}(t_f)}$};
 
     
 \draw [connection]  (input-east)    -- node {\midarrow} (0,0,0);
@@ -573,22 +546,6 @@
 
 
 
-\draw [connection]  (t_start-east)    -- node {\midarrow} (t_inj-west);
-
-\foreach \i in {1,2,3,4,5,6,7} {
-    % midpoint: half vertical distance
-    \coordinate (t-\i a-mid) at ($(t_inj-south)!0.5!(\i a-north)$);
-
-    % horizontal turn toward block
-    \coordinate (t-\i a-turn) at ($(t-\i a-mid -| \i a-north)$);
-
-    \draw [connection]
-        (t_inj-south)
-        -- node{\midarrow} (t-\i a-mid)
-        -- node{\midarrow} (t-\i a-turn)
-        -- node{\midarrow} (\i a-north);
-}
-
 \begin{scope}[shift={(-1,9.5,0)}, scale=0.3]
 
 \def\colwidth{27}   % horizontal spacing
@@ -602,8 +559,7 @@
     3/\BlockCColor/Temporal attention block,
     4/\BlockDColor/Full spatial attention block,
     5/\BlockEColor/ConvXNext block,
-    6/\MergeColor/(Un)Merge,
-    7/\TimeInjectColor/Flowtime injection
+    6/\MergeColor/(Un)Merge
 }{
     \pgfmathsetmacro{\x}{mod(\i,\ncols)*\colwidth}
     \pgfmathsetmacro{\y}{-floor(\i/\ncols)*\rowheight}

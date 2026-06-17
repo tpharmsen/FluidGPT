@@ -128,3 +128,96 @@
 \@writefile{toc}{\contentsline {section}{\numberline {5.1}Overview of the Modeling Approaches}{16}{section.5.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1.1}Original Swin Backbone}{16}{subsection.5.1.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1.2}Space-Then-Time Attention Backbone}{16}{subsection.5.1.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.1}{\ignorespaces Illustration of the space-then-time attention masking pattern used in the backbone architecture. The left and middle figure show the two subsequent steps of the spatial attention mask and the right figure shows the temporal attention mask.}}{17}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:BlockExplainer}{{5.1}{17}{Illustration of the space-then-time attention masking pattern used in the backbone architecture. The left and middle figure show the two subsequent steps of the spatial attention mask and the right figure shows the temporal attention mask}{figure.caption.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.3}UNet-style Multi-scale Architecture}{17}{subsection.5.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.4}Patch Embedding and Reconstruction}{17}{subsection.5.1.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.5}Hierarchical Patch Merging and Expansion}{17}{subsection.5.1.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}Mathematical Formulation}{17}{section.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.1}Notation}{17}{subsection.5.2.1}\protected@file@percent }
+\citation{Liu2021SwinTA}
+\citation{Liu2021SwinV2}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.2}Patch Embedding}{18}{subsection.5.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.3}Spatiotemporal Positional Encoding}{18}{subsection.5.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.4}Windowed Cosine Attention with Continuous Relative Position Bias}{18}{subsection.5.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Window partitioning.}{18}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Query, key, value projection.}{18}{section*.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Cosine attention.}{18}{section*.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Continuous relative position bias (CPB).}{19}{section*.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Attention output.}{19}{section*.15}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Spatial Swin block residual structure.}{19}{section*.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.5}Temporal Self-Attention}{19}{subsection.5.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Temporal relative position bias.}{20}{section*.17}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Attention masking.}{20}{section*.18}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Temporal block residual structure.}{20}{section*.19}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.6}Hierarchical Patch Merging and Expansion}{20}{subsection.5.2.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Patch merging (encoder).}{20}{section*.20}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Patch expansion (decoder).}{20}{section*.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Skip connections.}{20}{section*.22}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.7}Flow-Time Conditioning (Flow-Matching Model Only)}{21}{subsection.5.2.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Deterministic Model}{21}{section.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.1}Prediction}{21}{subsection.5.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.2}Architecture Overview}{21}{subsection.5.3.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.2}{\ignorespaces Architecture overview of the deterministic model.}}{21}{figure.caption.23}\protected@file@percent }
+\newlabel{fig:det_model_architecture}{{5.2}{21}{Architecture overview of the deterministic model}{figure.caption.23}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.3}Hyperparameter Configurations}{22}{subsection.5.3.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces Hyperparameters for deterministic FluidGPT models.}}{22}{table.caption.24}\protected@file@percent }
+\newlabel{tab:fluidgpt_hparams_det}{{5.1}{22}{Hyperparameters for deterministic FluidGPT models}{table.caption.24}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.4}Flow-Matching Model}{22}{section.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.1}Prediction}{22}{subsection.5.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.2}Flow-Time Conditioning}{22}{subsection.5.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.3}Prior Distribution Construction}{22}{subsection.5.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.4}Sampling and Integration}{23}{subsection.5.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.5}Architecture Overview}{23}{subsection.5.4.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5.3}{\ignorespaces Architecture overview of the probabilistic flow-matching model. The most significant difference between this model and the standard deterministic variant is the injection of flow-time.}}{23}{figure.caption.25}\protected@file@percent }
+\newlabel{fig:fm_model_architecture}{{5.3}{23}{Architecture overview of the probabilistic flow-matching model. The most significant difference between this model and the standard deterministic variant is the injection of flow-time}{figure.caption.25}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.6}Hyperparameter Configurations}{23}{subsection.5.4.6}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces Hyperparameters for probabilistic FluidGPT models.}}{24}{table.caption.26}\protected@file@percent }
+\newlabel{tab:fluidgpt_hparams_prob}{{5.2}{24}{Hyperparameters for probabilistic FluidGPT models}{table.caption.26}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.5}Model Scaling and Architectural Variants}{24}{section.5.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Training and Validation}{25}{chapter.6}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Training Procedure}{25}{section.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.1}Training Framework and System Abstraction}{25}{subsection.6.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.2}Model Training}{25}{subsection.6.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.3}Optimization and Learning Rate Scheduling}{25}{subsection.6.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}Hardware Platform and Parallelism}{26}{section.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.3}Training hyperparameters}{26}{section.6.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6.1}{\ignorespaces Comparison of training hyperparameters between deterministic  and probabilistic FluidGPT models.}}{26}{table.caption.27}\protected@file@percent }
+\newlabel{tab:fluidgpt_hparams}{{6.1}{26}{Comparison of training hyperparameters between deterministic \\and probabilistic FluidGPT models}{table.caption.27}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.4}Validation}{26}{section.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4.1}Error Metrics}{26}{subsection.6.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4.2}Model- and Dataset-Specific Validation}{27}{subsection.6.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Deterministic Model.}{27}{section*.28}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Flow-Matching Model.}{27}{section*.29}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Single-Step Validation}{27}{section*.30}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Rollout Validation}{27}{section*.31}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Spectral Diagnostics}{28}{section*.32}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Results}{29}{chapter.7}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {7.1}Single-step prediction}{29}{section.7.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces Boxplot of relative absolute error of the single next-timeblock prediction for each of the four surrogate foundation models, grouped by dataset. The models are trained on the same trajectory-datasplit and evaluated in zero-shot fashion on the validation datset. For the flowmatching models, FM-d2 and FM-d3, 16 samples are taken for each input-output pair. The graph mostly the flowmatching model FM-d2 outperforming the other models, except on the pdebench-incomp and pdegym-sines dataset. All models seem to have difficulty predicting the more complex pdebench-comp dataset.}}{29}{figure.caption.33}\protected@file@percent }
+\newlabel{fig:ssbox}{{7.1}{29}{Boxplot of relative absolute error of the single next-timeblock prediction for each of the four surrogate foundation models, grouped by dataset. The models are trained on the same trajectory-datasplit and evaluated in zero-shot fashion on the validation datset. For the flowmatching models, FM-d2 and FM-d3, 16 samples are taken for each input-output pair. The graph mostly the flowmatching model FM-d2 outperforming the other models, except on the pdebench-incomp and pdegym-sines dataset. All models seem to have difficulty predicting the more complex pdebench-comp dataset}{figure.caption.33}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.2}Rollout prediction}{31}{section.7.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7.2}{\ignorespaces 3x3 subplot of the per-sample relative absolute error of rollout predictions for all models grouped per dataset. The models are used in autogressive fashion to predict the full-length trajectory, starting with the first available input timeblock containing the initialization conditions. The flowmatching models are taking 16 global rollout samples for each existing trajectory in the zero-shot validation dataset and use a new prior distribution sample for each individual input-output prediction during the autoregressive rollout. Flowmatching model FM-d2 outperforms all other models, except for pdegym-sines. Error accumulation patterns are different across datasets and models. }}{31}{figure.caption.34}\protected@file@percent }
+\newlabel{fig:rollout}{{7.2}{31}{3x3 subplot of the per-sample relative absolute error of rollout predictions for all models grouped per dataset. The models are used in autogressive fashion to predict the full-length trajectory, starting with the first available input timeblock containing the initialization conditions. The flowmatching models are taking 16 global rollout samples for each existing trajectory in the zero-shot validation dataset and use a new prior distribution sample for each individual input-output prediction during the autoregressive rollout. Flowmatching model FM-d2 outperforms all other models, except for pdegym-sines. Error accumulation patterns are different across datasets and models}{figure.caption.34}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.3}Spectrum analysis}{32}{section.7.3}\protected@file@percent }
+\newlabel{se:spectraresults}{{7.3}{32}{Spectrum analysis}{section.7.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.3}{\ignorespaces Log-log plot of the energy spectrum error ratio per wavenumber for three special case datasets for models FM-d2 and AR-d2 only. Using the incompressibility assumption, the energy spectrum is calculated at two specific timesteps in the rollout prediction and the reference trajectory, of which the the error ratio is calculated. For the dataset amira at t=20 and t=200 the energy spectrum values are calculated, and for the rest of the datasets at t=5 and t=20. For the flowmatching model 16 rollout samples are drawn, from which the median is plotted in the graphs. Values above 1 indicates overprediction of energy at that wavenumber and under 1 means underprediction compared to the true energy spectrum. A trend emerges that higher wavenumbers are increasingly overpredicted, indicating that higher frequency might not be predicted as well as the lower frequencies.}}{32}{figure.caption.35}\protected@file@percent }
+\newlabel{fig:energyspectrum}{{7.3}{32}{Log-log plot of the energy spectrum error ratio per wavenumber for three special case datasets for models FM-d2 and AR-d2 only. Using the incompressibility assumption, the energy spectrum is calculated at two specific timesteps in the rollout prediction and the reference trajectory, of which the the error ratio is calculated. For the dataset amira at t=20 and t=200 the energy spectrum values are calculated, and for the rest of the datasets at t=5 and t=20. For the flowmatching model 16 rollout samples are drawn, from which the median is plotted in the graphs. Values above 1 indicates overprediction of energy at that wavenumber and under 1 means underprediction compared to the true energy spectrum. A trend emerges that higher wavenumbers are increasingly overpredicted, indicating that higher frequency might not be predicted as well as the lower frequencies}{figure.caption.35}{}}
+\bibstyle{unsrtnat}
+\bibdata{references}
+\@writefile{toc}{\contentsline {chapter}{\numberline {8}Conclusion}{34}{chapter.8}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}Appendix}{35}{appendix.A}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\newlabel{app:appendices}{{A}{35}{Appendix}{appendix.A}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {A.1}Trajectory-specific prediction visualizations}{35}{section.A.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {A.1}{\ignorespaces ....}}{35}{figure.caption.36}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {A.2}{\ignorespaces ....}}{36}{figure.caption.37}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {A.3}{\ignorespaces ....}}{37}{figure.caption.38}\protected@file@percent }
+\gdef \@abspage@last{37}
