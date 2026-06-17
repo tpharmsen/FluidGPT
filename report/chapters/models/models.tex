@@ -2,7 +2,7 @@
 
 \section{Overview of the Modeling Approaches}
 
-This chapter introduces two modeling approaches for spatiotemporal fluid dynamics prediction: a deterministic generative model and a flow-matching generative model. Both approaches share a common hierarchical Swin-based Transformer backbone with additional temporal information flow, but differ in their conditioning strategy and prediction formulation. The sharing of the backbone allows for a fair comparison of the two approaches while isolating the effects of the different generative modeling strategies. The deterministic model directly maps past velocity fields to future states, whereas the flow-matching model learns to conditionally flow a probability distribution.
+This chapter introduces two modeling approaches for spatiotemporal fluid dynamics prediction: a deterministic generative model and a flow-matching generative model. To facilitate generalisation and efficient learning of spatiotemporal dynamics, a custom backbone is designed to capture both spatial and temporal dependencies. Both approaches share a common hierarchical Swin-based Transformer backbone with additional temporal information flow, implemented into a U-net style architecture to enable efficient multi-scale feature extraction and reconstruction. The differences in the two approaches lie in the conditioning strategy and generative modelling formulation. This similarity in models allows for a fair comparison of the two approaches while isolating the effects of the different generative modeling strategies. The deterministic model directly maps past velocity fields to future states, whereas the flow-matching model learns to conditionally flow a probability distribution.
 
 \subsection{Original Swin Backbone}
 
@@ -11,7 +11,7 @@ The shared backbone is based on the original Swin Transformer \citet{Liu2021Swin
 \subsection{Space-Then-Time Attention Backbone}
 
 To incorporate temporal structure, we employ a custom space-then-time attention block. As temporal interactions, spacings and lengths are typically different than spatial interactions, it makes sense to factorize the attention mechanism into two seperate stages. Additionally, using a seperate attention stage for the temporal dimension allows for possibly more efficient and effective modeling of temporal dependencies, which is highly relevnant for large-scale foundation training tasks. This is motivated by the paper >>>>>>>>>>>>>>BCAT, which concludes that a space-then-time mechanism is more efficient while negligibly affecting predictive performance.
-In this formulation, self-attention is first applied across spatial dimensions using the spatial windows of the original swin transformer block and subsequently in straight line across the temporal dimension. The corresponding attention masking strategy is illustrated in Figure~\ref{fig:BlockExplainer}. In practice, multiple Space-Then-Time attention blocks are used sequentially for smoother and more robust information spread.
+In this formulation, self-attention is first applied across spatial dimensions using the spatial windows of the original swin transformer block and subsequently in straight line across the temporal dimension. The corresponding attention masking strategy is illustrated in Figure~\ref{fig:BlockExplainer}. In practice, multiple Space-Then-Time attention blocks are used sequentially for smoother and more robust information spread. 
 
 include evidence as temporal bcat model thingy.
 
@@ -106,9 +106,10 @@ Rather than scaled dot-product attention, we use cosine attention with a learnab
     A_{ij}^{(h)} = \tau^{(h)} \cdot \frac{\mathbf{q}_i^{(h)}}{\|\mathbf{q}_i^{(h)}\|} \cdot \frac{\mathbf{k}_j^{(h)}}{\|\mathbf{k}_j^{(h)}\|},
 \end{equation}
 
-where $h$ indexes the attention head, and $\tau^{(h)} = \exp\!\left(\min\!\left(\lambda^{(h)},\, \ln 100\right)\right)$ is a learned, clamped temperature parameter initialised to $\tau^{(h)} = 10$. The clamping ensures $\tau^{(h)} \leq 100$, preventing attention collapse to a hard argmax.
+where $h$ indexes the attention head, and $\tau^{(h)} = \exp\!\left(\min\!\left(\lambda^{(h)},\, \ln 100\right)\right)$ is a learned, clamped temperature parameter initialised to $\tau^{(h)} = 10$. The clamping ensures $\tau^{(h)} \leq 100$, preventing attention collapse to a hard argmax. The choice of this attention mechanism is motivated by improvements in training stability and convergence speed for deep networks, as well as better generalisation performance on downstream tasks.
+>>>>>>>>>>>>> link for cosine attention paper.
 
-\paragraph{Continuous relative position bias (CPB).}
+\paragraph{Continuous relative position bias.}
 Rather than a discrete relative position bias table, we follow \citet{Liu2021SwinV2} and use a small MLP to generate biases from normalised, log-scaled relative coordinate offsets. For a pair of tokens at positions $(i, j)$ within the window, the 2D relative offset $\Delta\mathbf{r}_{ij} \in \mathbb{R}^2$ is first normalised by the window size and then mapped through a log-linear compression:
 
 \begin{equation}
@@ -190,11 +191,11 @@ Depending on the configuration, an optional causal mask may be applied. In the \
 and enforces strict separation between the conditioning and prediction windows. 
 
 \paragraph{Temporal block residual structure.}
-The temporal block reshapes the representation to $\mathbb{R}^{(B \cdot N) \times T \times d}$, applies attention and a feed-forward MLP with pre-norm and residual connections, then reshapes back to $\mathbb{R}^{B \times T \times N \times d}$.
+The temporal block reshapes the representation to $\mathbb{R}^{(B \cdot N) \times T \times d}$, applies attention and a feed-forward MLP with pre-norm and residual connections, then reshapes back to $\mathbb{R}^{B \times T \times N \times d}$. Functionally this is the same as the spatial block structure, but with attention and MLP applied along the full temporal dimension instead of spatial windows.
 
 \subsection{Hierarchical Patch Merging and Expansion}
 
-\paragraph{Patch merging (encoder).}
+\paragraph{Patch merging.}
 At each encoder depth transition, four spatially adjacent tokens are concatenated and linearly projected to halve the token count while doubling the embedding dimension:
 
 \begin{equation}
@@ -204,7 +205,7 @@ At each encoder depth transition, four spatially adjacent tokens are concatenate
 
 This reduces the token map from $(\hat{H}, \hat{W})$ to $(\hat{H}/2, \hat{W}/2)$ and increases the embedding dimension from $d$ to $2d$.
 
-\paragraph{Patch expansion (decoder).}
+\paragraph{Patch expansion.}
 The reverse operation first doubles the channel dimension with a linear layer, then rearranges channels back into spatial positions:
 
 \begin{equation}
@@ -215,13 +216,31 @@ The reverse operation first doubles the channel dimension with a linear layer, t
 followed by a pixel-shuffle-style rearrangement that maps the $(2d)$-dimensional channel vector at each token back to a $(d)$-dimensional vector at each of four spatially neighbouring locations, recovering the original resolution.
 
 \paragraph{Skip connections.}
-Encoder features at each resolution level are passed to the corresponding decoder level via skip connections processed by a ConvNeXt-style block $f_{\text{skip}}$:
+Encoder features at each resolution level are passed to the corresponding decoder level via skip connections. Before fusion, the encoder representation is processed by a ConvNeXt-style block $f_{\text{skip}}$:
 
 \begin{equation}
-    \mathbf{x}_{\text{dec}} \leftarrow \mathbf{x}_{\text{dec}} + f_{\text{skip}}(\mathbf{x}_{\text{enc}}),
+    \mathbf{x}_{\text{dec}} \leftarrow \mathbf{x}_{\text{enc}} + f_{\text{skip}}(\mathbf{x}_{\text{enc}}).
 \end{equation}
 
-where $f_{\text{skip}}$ applies depthwise spatial convolutions over the patch grid to allow channel mixing and local spatial smoothing before addition.
+The ConvNeXt block \citep{Liu2022ConvNeXt} applies a depthwise spatial convolution, layer normalisation, and a two-layer channel-wise MLP with GELU activation, all wrapped in a residual connection:
+
+\begin{equation}
+    f_{\text{skip}}(\mathbf{x})
+    =
+    \mathbf{x}
+    +
+    \Gamma \odot
+    W_2\,\sigma\!\left(
+        \operatorname{LN}\!\left(
+            \operatorname{DWConv}_{k\times k}(\mathbf{x})
+        \right)
+        W_1
+    \right),
+\end{equation}
+
+where $\operatorname{DWConv}_{k\times k}$ denotes a depthwise convolution with kernel size $k$ applied independently per channel, $\operatorname{LN}$ denotes layer normalisation, $W_1 \in \mathbb{R}^{d \times d_h}$ and $W_2 \in \mathbb{R}^{d_h \times d}$ are learnable pointwise projections with expansion ratio $r = d_h/d = 4$, $\sigma$ is the GELU activation, and $\Gamma \in \mathbb{R}^{d}$ is a learnable per-channel scaling vector. As this skip connection includes spatial convolutions and a residual itself, it allows for a more flexible fusion of encoder and decoder features while maintaining stable gradient flow.
+
+Aside from the U-net inspired skip connections, the architecture also includes residual connections around each full sequence of space-then-time attention blocks. As the length-wise skip connections realise gradient flowthrough from encoder to decoder, these residual connections allow for gradient flow through the depth of the network. This dual axis information flow promotes complex modelling of spatiotemporal dependencies while maintaining stable training dynamics and preserves information quality across the whole network.
 
 \subsection{Flow-Time Conditioning (Flow-Matching Model Only)}
 

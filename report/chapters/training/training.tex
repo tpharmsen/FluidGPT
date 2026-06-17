@@ -24,7 +24,7 @@ At each epoch the model is saved and the validation error is computed. The model
 
 \section{Hardware Platform and Parallelism}
 
-All large-scale experiments were conducted on the revolutionary NVIDIA DGX B200 unified AI platform, which provides a high-bandwidth GPU interconnect, large per-device memory capacity, and high aggregate compute throughput. Using Docker, training and evaluation was executed within containerized environments to ensure consistent software dependencies across experimental runs.
+All large-scale experiments were conducted on the revolutionary NVIDIA DGX B200 unified AI platform, which provides a high-bandwidth GPU interconnect, large per-device memory capacity, and high aggregate compute throughput. Using Docker, training and evaluation was executed within customized containerized environments to ensure consistent software dependencies across experimental runs, maximizing reproducibility and optimized device utilization.
 
 Training was distributed across 8 GPUs using data parallelism, resulting in an effective batch size equal to eight times the per-device batch size of 176, yielding an effective batch size of 1408. This level of parallelism was essential both to stabilize the optimization dynamics and to maintain adequate throughput given the high-dimensional spatiotemporal data and large model capacity.
 

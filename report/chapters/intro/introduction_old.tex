@@ -1,0 +1,66 @@
+\chapter{Introduction}
+
+- show domain fields for surrogates
+- explain generalisation principle in foundation models and relate to gpt models?
+
+- explain convolutional models
+- explain neural pde learning
+- explain foundation models
+- explain deterministic vs probabilistic,
+- explain background on benchmark datasets (pixel/voxel-based/graph based) (time-progressive, steady-state) (object flow, etc)
+- research questions
+
+Computational Fluid Dynamics (CFD) is the indispensable tool for designing and optimizing systems across virtually every engineering discipline; from generating large-scale aerospace simulations and modelling the cooling process of electronics to personalised aorta bloodflow modelling and wind speed prediction for wind farm operations. \citet{Nielsen2024FrontierCFD} \citet{Akgul2024LiquidCoolingPlate} \citet{Perinajova2024} \citet{SuarezVazquez2025}
+
+However, high-fidelity CFD simulations of complex, turbulent, or multi-physics systems remain computationally expensive, often requiring days or weeks of processing time. Recent years have shown that computational cost can be greatly reduced with the use of AI surrogate models. These models learn the underlying PDE behaviour directly from simulation data, promising to reduce prediction time from hours to milliseconds. \citet{Zhang2022surrogateCFD} More specifically, research has shifted focus onto models that capture multiple different physics systems in a single architecture \citet{mccabe2023mpp} \citet{herde2024poseidon} \citet{liu2024prose} \citet{polymathicAI2024}. These foundation models tend to have a better representation of the learned operators due to generalisation of the wide range of parameters. Especially with the probabilistic nature of non-linear sensitive physics systems, models might benefit from learning multiple related systems. Our goal is to design a model that generalises across multiple Navier-Stokes systems, and to find the benefit from using a probabilistic predictor compared to a deterministic predictor.
+
+*** ADD OUR CONTRIBUTIONS***
+
+\chapter{Related Work}
+
+In this section, we place our work within the broader literature on neural surrogates for PDEs, especially Navier–Stokes, and we highlight both deterministic and probabilistic approaches to this modeling task.
+
+\section{Convolutional Fluid dynamics models}
+Early neural-network approaches to fluid simulation often used convolutional architectures operating on grid-based velocity/pressure fields to predict next-step increments or to emulate low-dimensional flow maps. For instance, \textit{Deep Fluids} \citet{kim2018deepfluids} uses a convolutional generative model over velocity fields, enforcing divergence-free velocity via architectural constraints, and evolves in latent space to accelerate simulation by orders of magnitude.
+
+More generally, convolutional U-Net style architectures or hybrid CNN with attention or residual blocks have been used to directly predict flow updates or corrections, sometimes augmented with physics-based regularization. \citet{ronneberger2015u} \citet{chen2020u} \citet{suter2022surrogate} \citet{prihatno20202d}
+
+On the other side, physics-informed neural networks (PINNs) and physics-constrained deep surrogates attempt to encode the governing PDE residuals directly into the loss, thereby reducing reliance on large amounts of simulation data. Zhu et al. \citet{zhu2019physics} propose a physics-constrained deep learning framework for high-dimensional PDEs, incorporating the residual of the differential operator into the loss function. Similarly, Sun et al. \citet{sun2020surrogate} explore physics-constrained surrogates for fluid flows without fully relying on simulation data. Geometry-aware extensions, such as GAPINN \citet{haghighat2022gapinn}, allow handling non-trivial geometries by encoding latent representations of boundary shapes combined with spatial inputs.
+
+While these methods have shown promise, they often struggle to scale to turbulent flows, to large Reynolds numbers, or to long temporal rollouts, due to accumulated error in auto-regressive modelling, lack of generalization, or numerical instability.
+
+\section{Neural PDE operator learning}
+More recently, neural operator architectures like the Fourier Neural Operator, DeepONet and Graph Neural Operator have emerged to learn mappings between continuous function spaces rather than discrete pointwise mappings. These models can generalize across input parameter variations like boundary conditions, forcing fields, and discretizations of the geometry space, and have been applied successfully to a wide variety of PDEs \citet{li2020fourier, lu2021deeponet, li2020graph}. Many surrogate models in scientific machine learning adopt operator learning for scalability and generalization.
+
+\section{PDE Foundation Models}
+%include https://arxiv.org/pdf/2404.12355
+
+The notion of a foundation model for PDEs builds on the analogy to large-scale pretraining in language or vision: the model is pretrained on a diverse collection of PDE systems and then fine-tuned and evaluated or directly evaluated on downstream tasks. Due to the need for this level of generalisation and also due to their efficiency, transformers have become a typical backbone architecture for foundation models. \citet{vaswani2017attention} For instance, MPP, POSEIDON, PROSE-FD, and DeepONet aim to capture multi-physics systems in a unified neural architecture \citet{mccabe2023mpp} \citet{herde2024poseidon} \citet{liu2024prose} \citet{lu2021deeponet}. The Multi-Physics Processor (MPP) introduces an axial attention method for its unified architecture to learn a heterogeneous domain space. POSEIDON uses a Swin-based architecture to predict future system states of compressible and incompressible flow problems. PROSE-FD attempts to fuse its input data with an encoding of the underlying PDE equation. Lastly, DPOT uses auto-regressive denoising operator learning to achieve wide generalisation.\citet{polymathicAI2024}. Another example is P3D \citet{yang2025p3d}, which introduces a hybrid CNN–Transformer backbone to train deterministic and probabilistic surrogates over multiple PDEs in 3D, enabling scaling to high-resolution turbulent flows and demonstrating stable autoregressive rollout performance. 
+
+These PDE foundation models indicate an important trend: moving from single-case surrogate training to broadly pre-trained models with generalization across parameter domains. Yet, most such works still focus on short-horizon accuracy or per-step error rather than explicit long-term consistency and also PDE-specific statistical fidelity.
+
+\section{Probabilistic Modeling of Fluid Flows}
+A critical challenge for long-sequence prediction in chaotic or turbulent systems is that deterministic rollouts will diverge due to error accumulation. Probabilistic or stochastic surrogate models attempt to capture not just the mean trajectory, but the distribution of plausible futures.
+
+One of the earlier works is the \textit{Probabilistic Neural Network for Fluid Flow Surrogate Modeling} by Maulik et al. \citet{maulik2020probabilistic}, which treats the target variables as conditionally Gaussian and predicts both mean and variance to yield confidence intervals on predictions. This probabilistic surrogate was evaluated on canonical fluid dynamical regression tasks. In turbulence modeling, \textit{Uncertainty-Aware Surrogate Models for Airfoil Flow Simulations} \citet{zheng2023uncertainty} proposes the use of denoising diffusion probabilistic models to approximate the full posterior distribution over velocity fields, demonstrating that DDPMs can generate diverse, physically plausible samples with uncertainty estimates. They also compare flow matching in this context against diffusion models and find that flow matching yields better results than the more classical diffusion models.
+
+More generally, Gao et al. \citet{gao2024bayesian} frame Bayesian conditional diffusion models for spatiotemporal turbulence, yielding a probabilistic generation framework for turbulence fields. Mücke and Sanderse \citet{mucke2025physicsaware} propose physics-aware generative models for turbulent fluid flows based on stochastic interpolants, embedding energy consistency and divergence constraints within generative modeling to preserve physical invariants over long rollouts.
+
+In multi-fidelity settings, Geneva and Zabaras \citet{geneva2020multi} use a conditional invertible neural network (normalizing flows) plus recurrent LSTM connections to generate high-fidelity turbulent fields conditioned on inexpensive low-fidelity inputs, allowing fast sampling of stochastic corrections. Finally, in the broader PDE domain, Vadeboncoeur et al. \citet{vadeboncoeur2022probabilistic} introduce a physics-driven latent variable model that simultaneously models forward and inverse maps, with uncertainty quantification via variational inference and PDE residual regularization.
+
+Once again a trend is suggested: moving from deterministic surrogate modeling to uncertainty-aware modeling to full generative probabilistic modeling over solution fields.
+
+\section{Gaps, Challenges, and Our Positioning}
+From this survey, several gaps remain, which our work directly addresses:
+
+\begin{itemize}
+	\item \textbf{Long-Term Stability and Physical Consistency:} Many existing studies report per-step or short-horizon error metrics but do not extensively validate long rollouts in turbulent regimes. Accumulation of error and divergence from physical invariants (e.g. energy, enstrophy, divergence-free constraint) remain major obstacles.
+	\item \textbf{Unified Modeling Across Parameter Regimes:} While foundation model approaches exist, they rarely confront the full diversity within a single system (e.g. compressible vs. incompressible Navier–Stokes, varying Mach/Reynolds regimes, geometric constraints).
+	\item \textbf{Architectural Trade-offs:} Larger transformer-based PDE models are powerful but heavy; lighter architectures show promise but require careful design to maintain generalization.
+\end{itemize}
+
+\section{Foundational model goal}
+ 
+The creation of an effective AI surrogate model presents a critical challenge: achieving generalization across the vast parameter space of PDEs. Traditional models are often trained and locked to a single set of simulation parameters for multiple PDE systems. Our work tackles this limitation by including a wide domain of simulation parameters for a single PDE system; Navier Stokes. The primary goal is to design a single, unified AI architecture capable of accurately predicting future states across a wide variety of Navier-Stokes systems, including compressible and incompressible flows, diverse geometric constraints, and varying simulation settings from multi-source large-scale pretraining data.
+
+
