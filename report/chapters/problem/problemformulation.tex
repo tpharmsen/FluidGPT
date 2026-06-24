@@ -1,20 +1,8 @@
 \chapter{Problem Formulation}
 
-- Explain PDE -> Navier Stokes and characteristics
-- Explain energy and enstrophy spectra
-- explain domain space of navier stokes equation sets and coverage
-- Define deterministic flow prediction
-- define probability -> flowmatching learning objective
-- research questions
-
-
-
-
-This chapter formally defines the research problem, establishing the specific physical PDE system, the constraints imposed by large-scale pretraining data, and the mathematical framework for the two proposed AI surrogate models.
+This chapter formally defines the research problem, establishing the specific physical PDE system, the constraints imposed by large-scale pretraining data, and the mathematical framework for the two proposed AI surrogate models. We further detail the key challenges that motivate the dual deterministic-probabilistic modelling approach, before concluding with the research questions guiding this work.
 
 \section{Navier-Stokes System}
-
-
 
 The Navier–Stokes equations describe the dynamics of fluid flow through a set of coupled, nonlinear partial differential equations that enforce conservation of both mass and momentum. In this work, we focus on the two-dimensional, isothermal case, governed by the following equations:
 
@@ -24,23 +12,24 @@ The Navier–Stokes equations describe the dynamics of fluid flow through a set 
 B_i(\mathbf{u}, p)|_{\partial \Omega} = g_i, \quad \mathbf{u}(0) = A, \quad x \in \Omega=[0,1]^2.
 \end{gather}
 
-
 Here, $\rho$ denotes density, $\mathbf{u}$ the velocity vector field, $p$ the pressure, $\boldsymbol{\tau}$ the viscous stress tensor, and $\mathbf{f}$ an external forcing term. The first equation expresses conservation of mass (continuity), while the second represents momentum conservation. Boundary and initial conditions are specified by $B_i$ and $A$, respectively.
-In the special case of incompressible flow, the simplification $\frac{d\rho}{dt} = 0$ is applied, which reduces the complexity of the operator’s input–output mapping. This enforces no stretching and compressing of the fluid, also referred to as divergence-free flow.
+
+In the special case of incompressible flow, the simplification $\frac{d\rho}{dt} = 0$ is applied, which reduces the complexity of the operator's input–output mapping. This enforces no stretching and compressing of the fluid, also referred to as divergence-free flow.
 
 \vspace{1em}
 
-\subsection{Characteristics of the Navier–Stokes System.}\label{sec:energyspectra}
-The Navier–Stokes system shows complex dynamical behavior characterized by creation, advection, and dissipation of vortical structures, often referred to as eddies. Large eddies break down into smaller eddies in a cascading process, transferring energy across lowering scales until it dissipates at the smallest (viscous) level. This process is chaotic and highly sensitive to initial conditions, leading to stochastic-like macroscopic behavior even though the governing equations are deterministic. Capturing this behavior accurately is a core challenge for surrogate models, especially those that must generalize across varying flow regimes and boundary conditions. 
+\subsection{Characteristics of the Navier–Stokes System}\label{sec:energyspectra}
+
+The Navier–Stokes system shows complex dynamical behavior characterized by creation, advection, and dissipation of vortical structures, often referred to as eddies. Large eddies break down into smaller eddies in a cascading process, transferring energy across lowering scales until it dissipates at the smallest (viscous) level. This process is chaotic and highly sensitive to initial conditions, leading to stochastic-like macroscopic behavior even though the governing equations are deterministic. Capturing this behavior accurately is a core challenge for surrogate models, especially those that must generalize across varying flow regimes and boundary conditions.
 
 \vspace{1em}
 
 \textbf{Energy and Enstrophy Spectra.}
 To quantify the cascade process of energy and vorticity across scales, the flow field is often analyzed in Fourier space. The energy spectrum $E(k)$ characterizes the distribution of kinetic energy among different wavenumbers $k$, describing how much energy is contained in eddies of their respective scale. It is defined as
 \begin{equation}
-	E(k) = \frac{1}{2} \int_{|\mathbf{k}| = k} |\hat{\mathbf{u}}(\mathbf{k})|^2 , d\mathbf{k},
+	E(k) = \frac{1}{2} \int_{|\mathbf{k}| = k} |\hat{\mathbf{u}}(\mathbf{k})|^2 \, d\mathbf{k},
 \end{equation}
-where $\hat{\mathbf{u}}(\mathbf{k})$ denotes the Fourier transform of the velocity field. In turbulence modelling, when energy is transferred from the larger eddies to the smaller eddies, then a \textit{direct energy cascade} is inferred, for which an schematic example can be viewed in Figure \ref{fig:energyspectrumscheme}. Alternatively, when energy flows in opposite direction, the flow is referred to as a \textit{inverse energy cascade.} For turbulent divergence-free navier-stokes specific flows, the typical Kolmogorov scaling law is defined by $E(k) \sim k^{-5/3}$ within the inertial subrange. \citet{Kolmogorov1941}. 
+where $\hat{\mathbf{u}}(\mathbf{k})$ denotes the Fourier transform of the velocity field. In turbulence modelling, when energy is transferred from the larger eddies to the smaller eddies, then a \textit{direct energy cascade} is inferred, for which a schematic example can be viewed in Figure \ref{fig:energyspectrumscheme}. Alternatively, when energy flows in the opposite direction, the flow is referred to as an \textit{inverse energy cascade}. For turbulent divergence-free Navier-Stokes flows, the typical Kolmogorov scaling law is defined by $E(k) \sim k^{-5/3}$ within the inertial subrange \citep{Kolmogorov1941}.
 
 \begin{figure}[H]
 	\centering
@@ -49,14 +38,27 @@ where $\hat{\mathbf{u}}(\mathbf{k})$ denotes the Fourier transform of the veloci
 	\label{fig:energyspectrumscheme}
 \end{figure}
 
-
 Similarly, the enstrophy spectrum $Z(k)$ describes the spectral distribution of vorticity magnitude, reflecting the rotational activity of the flow across scales. It is defined as
 \begin{equation}
-	Z(k) = \frac{1}{2} \int_{|\mathbf{k}| = k} |\hat{\boldsymbol{\omega}}(\mathbf{k})|^2 , d\mathbf{k},
+	Z(k) = \frac{1}{2} \int_{|\mathbf{k}| = k} |\hat{\boldsymbol{\omega}}(\mathbf{k})|^2 \, d\mathbf{k},
 \end{equation}
-where $\boldsymbol{\omega} = \nabla \times \mathbf{u}$ is the vorticity field. For turbulent divergence-free flows, the typical Kolmogorov scaling law is defined by $E(k) \sim k^{-3}$ within the inertial subrange. \citet{Kolmogorov1941}
+where $\boldsymbol{\omega} = \nabla \times \mathbf{u}$ is the vorticity field. For turbulent divergence-free flows, the typical Kolmogorov scaling law is defined by $Z(k) \sim k^{-3}$ within the inertial subrange \citep{Kolmogorov1941}.
 
+\section{Pre-training Datasets and Preliminary Domain Coverage}\label{se:datasetconditions}
 
+To enable the model to generalise across the full range of Navier–Stokes regimes, a diverse ensemble of 2-dimensional pre-training datasets is needed. The Navier–Stokes equation exhibits a broad spectrum of behaviour depending on flow type (laminar or turbulent), compressibility, boundary conditions, and external forcing. Capturing these variations requires data originating from multiple numerical solvers, simulation conditions, and initialisation schemes. For our datasets we seek uniform grid simulated data.
+
+We aim to select datasets with coverage of the following type:
+\begin{enumerate}
+	\item Compressible and incompressible simulations
+	\item Laminar and turbulent flow regimes
+	\item Different boundary conditions
+	\item With and without forcing terms
+	\item Distinct initialisation methods
+	\item Parameter variations in viscosity, pressure, and density
+\end{enumerate}
+
+Collectively, the coverage ensures that the pre-training process exposes the model to a broad spectrum of physical behaviours. A detailed description of each dataset, including its generation method, resolution, and specific parameters, will be provided in the methodology section.
 
 \section{Machine Learning Objective}
 
@@ -78,13 +80,13 @@ with appropriate initial conditions and boundary conditions. The vector $\mathbf
 
 In the context of a discrete-time, data-driven surrogate model, the spatial domain $\Omega$ is discretized into a grid, $\mathbf{x} \in \Omega_h$ with resolution $128^2$. The system state at a time step $t_i$ is represented by a high-dimensional tensor $\mathbf{U}_i \in \mathbb{R}^{N_x \times N_y \times 2}$, where $N_x, N_y$ are the number of grid points in the spatial dimensions, and $2$ represents the input flow variables ($u_x$ and $u_y$).
 
-Given an input sequence of $T_0 > 1$ historical flow states:
+Given an input sequence of $\Delta T > 1$ historical flow states:
 \begin{equation*}
-\mathbf{S}_{\text{in}} = \{ \mathbf{U}_0, \mathbf{U}_1, \ldots, \mathbf{U}_{T_0-1} \},
+\mathbf{S}_{\text{in}} = \{ \mathbf{U}_{T_0-\Delta T}, \mathbf{U}_{T_0-\Delta T+1}, \ldots, \mathbf{U}_{T_0-1} \},
 \end{equation*}
-the core prediction problem is to model the evolution operator $\mathcal{P}_{\mathbf{c}}$ such that the model $\mathcal{M}$ accurately predicts the subsequent $T$ future states:
+the core prediction problem is to model the evolution operator $\mathcal{P}_{\mathbf{c}}$ such that the model $\mathcal{M}$ accurately predicts the subsequent $\Delta T$ future states:
 \begin{equation*}
-\mathbf{S}_{\text{out}} = \{ \mathbf{U}_{T_0}, \mathbf{U}_{T_0+1}, \ldots, \mathbf{U}_{T_0+T-1} \}.
+\mathbf{S}_{\text{out}} = \{ \mathbf{U}_{T_0}, \mathbf{U}_{T_0+1}, \ldots, \mathbf{U}_{T_0+\Delta T-1} \}.
 \end{equation*}
 The model $\mathcal{M}$ is a function of the input sequence $\mathbf{S}_{\text{in}}$ and the system parameter vector $\mathbf{c}$.
 \begin{equation*}
@@ -93,7 +95,7 @@ The model $\mathcal{M}$ is a function of the input sequence $\mathbf{S}_{\text{i
 
 \section{Dual Modelling Approach}
 
-This problem is tackled using two distinct modeling approaches, which define the specific mathematical targets of the prediction. Both models now condition their output on a sequence of the $k$ most recent past states, $\mathbf{S}_{\text{hist}} = \{ \mathbf{U}_{i-k+1}, \ldots, \mathbf{U}_i \}$, and are trained to predict a bundle of $\Delta T$ future states, $\mathbf{S}_{\text{pred}} = \{ \mathbf{U}_{i+1}, \ldots, \mathbf{U}_{i+\Delta T} \}$.
+This problem is tackled using two distinct modeling approaches, which define the specific mathematical targets of the prediction. Both models now condition their output on a sequence of the $k$ most recent past states, $\mathbf{S}_{\text{in}}$, and are trained to predict a bundle of $\Delta T$ future states, $\mathbf{S}_{\text{pred}}$.
 
 \subsection{1. Deterministic Prediction}
 This approach models the conditional expectation of a short-sequence bundle of five future states, $\mathbb{E}[\mathbf{S}_{\text{out}} | \mathbf{S}_{\text{in}}]$. It utilizes a function $f_{\theta}$ that maps the historical sequence to the predicted future sequence:
@@ -111,15 +113,14 @@ The learning objective for the model parameters $\theta$ is the minimization of 
 \mathcal{L}_{\text{AR}}(\theta) = \mathbb{E}_{(\mathbf{S}_{\text{in}}, \mathbf{S}_{\text{out}}) \sim \mathcal{D}} \left[ \| \mathbf{S}_{\text{out}} - f_{\theta}(\mathbf{S}_{\text{in}}) \|_2^2 \right].
 \end{equation*}
 
-
 \subsection{2. Probabilistic Prediction (Flow Matching)}
-Given the possible turbulent nature of the system, the evolution over a long horizon $T$ is better described by the transition of a probability distribution $p(\mathbf{U}_{T_0+T} | \mathbf{S}_{\text{in}})$ rather than a deterministic one. % This model uses the full input history $\mathbf{S}_{\text{in}}$ (where $T_0$ is the total history length) to model the distribution of the final state $\mathbf{U}_{T_0+T}$.
+Given the possible turbulent nature of the system, the evolution over a long horizon $T$ is better described by the transition of a probability distribution $p(\mathbf{U}_{T_0+T} | \mathbf{S}_{\text{in}})$ rather than a deterministic one.
 
 The goal is to train a model $\mathcal{M}_{\phi}$ with parameters $\phi$ that effectively models this conditional probability distribution:
 \begin{equation*}
 \mathcal{M}_{\phi}(\mathbf{S}_{\text{in}}) \approx p( \mathbf{S}_{\text{out}} | \mathbf{S}_{\text{in}}).
 \end{equation*}
-\textbf{Flow Matching} achieves this by learning the velocity field $\mathbf{v}_{\phi}(\mathbf{z}, \tau)$ that transforms a simple prior distribution (like Gaussian noise) into the complex target distribution $p$ via a continuous-time ordinary differential equation (ODE) trajectory: $\frac{d\mathbf{z}}{d\tau} = \mathbf{v}_{\phi}(\mathbf{z}, \tau)$, where $\tau \in [0, 1]$ is an artificial time. By conditioning on the previous system states $\mathbf{S}_{\text{in}}$, the model can better identify the appropriate statistical flow regime, allowing it to efficiently sample from the manifold of physically plausible solutions and ensuring long-term temporal stability and statistical fidelity. Note that the velocity field and artificial time in this context are different definitions than the velocity field and time of the physical Navier-Stokes system. 
+\textbf{Flow Matching} achieves this by learning the velocity field $\mathbf{v}_{\phi}(\mathbf{z}, \tau)$ that transforms a simple prior distribution (like Gaussian noise) into the complex target distribution $p$ via a continuous-time ordinary differential equation (ODE) trajectory: $\frac{d\mathbf{z}}{d\tau} = \mathbf{v}_{\phi}(\mathbf{z}, \tau)$, where $\tau \in [0, 1]$ is an artificial time. By conditioning on the previous system states $\mathbf{S}_{\text{in}}$, the model can better identify the appropriate statistical flow regime, allowing it to efficiently sample from the manifold of physically plausible solutions and ensuring long-term temporal stability and statistical fidelity. Note that the velocity field and artificial time in this context are different definitions than the velocity field and time of the physical Navier-Stokes system.
 
 Denote the loss term for the Flow Matching model as $\mathcal{L}_{\text{FM}}$. Following the conditional formulation, this objective measures how well the learned velocity field $\mathbf{v}_{\phi}(\mathbf{z}, \tau)$ approximates the target transport field $\tilde{\mathbf{v}}(\mathbf{z}, \tau)$, which defines the transformation between the source and target distributions along the artificial time dimension $\tau \in [0, 1]$. The training loss is defined as the mean-squared deviation between the predicted and target velocities:
 \begin{equation*}
@@ -134,36 +135,44 @@ Denote the loss term for the Flow Matching model as $\mathcal{L}_{\text{FM}}$. F
 	\right].
 \end{equation*}
 
-\section{Pre-training Datasets and Preliminary Domain Coverage}\label{se:datasetconditions}
+\section{Challenges}\label{sec:challenges}
 
-To enable the model to generalise across the full range of Navier–Stokes regimes, a diverse ensemble of 2-dimensional pre-training datasets is needed. The Navier–Stokes equation exhibits a broad spectrum of behaviour depending on flow type (laminar or turbulent), compressibility, boundary conditions, and external forcing. Capturing these variations requires data originating from multiple numerical solvers, simulation conditions, and initialisation schemes. For our datasets we seek uniform grid simulated data.
+Building a foundation surrogate model for Navier-Stokes dynamics that is accurate, stable, and broadly applicable across heterogeneous flow regimes presents several fundamental challenges. These challenges, several of which were introduced briefly in the problem statement of Chapter~\ref{ch:introduction}, are elaborated here in the context of the formal modelling framework established above. They jointly motivate the dual deterministic-probabilistic approach and the evaluation strategy adopted in this work.
 
-%In total, nine datasets were selected from four sources: PDEGym (Poseidon), Amiraset (J. Jakob et al.), and two from PDEBench. Together, these cover a wide domain space with coverage of the following type:
-We aim to select datasets with coverage of the following type:
-\begin{enumerate}
-	\item Compressible and incompressible simulations
-	
-	\item Laminar and turbulent flow regimes
-	
-	\item Different boundary conditions
-	
-	\item With and without forcing terms
-	
-	\item Distinct initialisation methods
-	
-	\item Parameter variations in viscosity, pressure, and density
-\end{enumerate}
+\subsection{Heterogeneity of the Flow Regime Space}
 
-Collectively, the coverage ensures that the pre-training process exposes the model to a broad spectrum of physical behaviours. A detailed description of each dataset, including its generation method, resolution, and specific parameters, will be provided in the methodology section.
+As formalised in Section~\ref{se:datasetconditions}, the system parameter vector $\mathbf{c} \in \mathcal{C}$ spans a wide and structurally diverse space: laminar versus turbulent regimes, compressible versus incompressible dynamics, forced versus unforced systems, and a range of boundary conditions and initialisation schemes. Each of these axes imposes qualitatively different constraints on the solution manifold of $\mathcal{P}_{\mathbf{c}}$. For instance, incompressible flows are constrained to the divergence-free subspace of velocity fields, whereas compressible flows permit local density variation and admit shock-like discontinuities absent from the incompressible regime. Forcing terms $\mathbf{f}$ introduce sustained energy injection that can drive a system toward a statistically stationary turbulent state, while unforced systems instead exhibit monotonic decay of kinetic energy over time.
+
+A single neural operator $\mathcal{M}$ trained naively across this combined space risks learning an averaged representation that fails to capture regime-specific structure, particularly when the relative sampling frequency of each regime in the combined training corpus $\mathcal{D}$ is imbalanced. This raises an architectural and data-curation challenge: the model must be expressive and conditioned enough to disambiguate between regimes from the historical input $\mathbf{S}_{\text{hist}}$ alone, without explicit access to the ground-truth parameter vector $\mathbf{c}$ at inference time.
+
+\subsection{Sensitivity to Initial Conditions and the Limits of Deterministic Prediction}
+
+\subsection{Sensitivity to Initial Conditions and the Limits of Deterministic Prediction}
+
+As discussed in Section~\ref{sec:energyspectra}, the Navier-Stokes system exhibits highly chaotic dynamics within turbulent regimes. Despite being governed by deterministic equations, the underlying energy cascade rapidly amplifies infinitesimal perturbations across spatial and temporal scales, redistributing them through the creation, advection, and dissipation of vortical structures. Consequently, nearly identical historical states $\mathbf{S}_{\text{in}}$ can diverge into vastly different future trajectories $\mathbf{S}_{\text{out}}$ over a sufficiently long horizon $T$, with individual eddies decaying, merging, or shedding along distinct, individually plausible paths.
+
+This divergence exposes a major failure mode in the deterministic formulation $f_\theta$ introduced in Section 3.4.1, which inherently targets the conditional expectation $\mathbb{E}[\mathbf{S}_{\text{out}} \mid \mathbf{S}_{\text{in}}]$. When the true conditional distribution $p(\mathbf{S}_{\text{out}} \mid \mathbf{S}_{\text{in}})$ admits several such plausible vortex-decay paths, the deterministic model responds by averaging across all of them pointwise in physical space. Because the position, phase, and strength of a decaying eddy generally differ from one plausible path to the next, this average does not correspond to any single coherent vortex structure; it instead washes out the sharp, high-frequency features of the flow, yielding an over-smoothed, low-energy state that represents a statistical blend rather than a physically realisable trajectory, and ultimately fails to satisfy the governing conservation laws at any individual time step.
+
+To circumvent this averaging artefact, a predictive model must instead possess a natural, built-in capacity to represent the full space of plausible vortex evolutions, and to sample a single coherent realisation from it, rather than collapsing them into one blended estimate. This requirement motivates the probabilistic flow-matching framework detailed in Section 3.4.2, which directly models the full conditional distribution $p(\mathbf{S}_{\text{out}} \mid \mathbf{S}_{\text{in}})$ rather than its mean. Each sample drawn from this distribution can follow one self-consistent vortex-decay path to completion, preserving the sharp gradients and kinetic energy of an individually realisable flow field, while the spread of the distribution itself naturally reflects how tightly or loosely the historical state $\mathbf{S}_{\text{in}}$ constrains the underlying decay process: where the dynamics are nearly deterministic, the learned distribution can collapse to a narrow, sharply peaked density around a single dominant path, and where genuine multi-modality exists, whether due to strong turbulence or a subtle bifurcation in an otherwise weakly perturbed flow, it can instead spread mass across several distinct outcomes. The model is therefore not forced to make an arbitrary singular choice in either regime, but instead inherits the same underlying flexibility, expressed only to the degree that the data demands it.
+
+\subsection{Long-Horizon Autoregressive Stability}
+
+Both modelling approaches rely on autoregressive rollout to extend predictions beyond the directly trained horizon $\Delta T$: the predicted sequence $\hat{\mathbf{S}}_{\text{out}}$ is fed back as the new historical input $\mathbf{S}_{\text{hist}}$ for the next prediction step. This introduces a well-documented failure mode in data-driven PDE surrogates, namely the compounding of small per-step errors over many rollout iterations. Because the model is trained under teacher forcing on ground-truth trajectories from $\mathcal{D}$, but evaluated at inference time on its own previously generated (and therefore imperfect) outputs, a distributional shift between training and inference conditions emerges. In systems with the sensitivity properties described above, this shift can be amplified rather than damped, leading to rapid divergence, unphysical artefacts, or loss of high-wavenumber spectral content over long rollouts. Mitigating this requires both architectural inductive biases that promote stability, such as the multi-scale, factorised attention structure of the shared backbone, and training procedures that better expose the model to its own distribution of inference-time errors.
+
+\subsection{Physical Consistency Beyond Pointwise Accuracy}
+
+Pointwise error metrics, such as the mean-squared error underlying $\mathcal{L}_{\text{AR}}$, do not necessarily capture whether a prediction is physically plausible. A prediction can achieve low pointwise error while still violating expected statistical properties of turbulent flow, for instance by failing to reproduce the Kolmogorov scaling laws of the energy and enstrophy spectra introduced in Section~\ref{sec:energyspectra}, or by exhibiting unphysical energy injection or excessive numerical dissipation across the inertial subrange. This is a particular risk for autoregressive rollouts, where high-wavenumber content is often the first to degrade. Evaluating surrogate models therefore requires spectral diagnostics in addition to pointwise accuracy metrics, in order to assess whether predictions remain consistent with the underlying physics of the energy cascade, rather than merely close to the ground truth in an aggregate sense.
+
+\subsection{Multi-Source Data Heterogeneity and Normalisation}
+
+Beyond the physical heterogeneity discussed above, the nine datasets selected for pretraining (Section~\ref{se:datasetconditions}) originate from distinct numerical solvers, each with its own discretisation scheme, native resolution, temporal sampling rate, and units. Unifying this data into the common tensor representation $\mathbf{U}_i \in \mathbb{R}^{N_x \times N_y \times 2}$ at a shared resolution of $128^2$ requires consistent resampling, normalisation, and temporal alignment strategies. Inconsistent normalisation across datasets with markedly different characteristic velocity or energy scales risks biasing the training loss toward higher-magnitude datasets, while overly aggressive normalisation risks erasing physically meaningful scale information, such as the effective Reynolds number, that the model would otherwise need to infer from the input sequence alone.
 
 \section{Research Questions}
 
-This work focuses on building a foundation model that is both rollout-stable and physically consistent for a wide domain space of Navier–Stokes flows, relying solely on velocity-field inputs. To tackle this, we take a dual approach, leveraging deterministic and probabilistic modeling techniques. The following research questions highlight the objectives of our study.
+This work focuses on building a foundation model that is both rollout-stable and physically consistent for a wide domain space of Navier–Stokes flows, relying solely on velocity-field inputs. To tackle this, we take a dual approach, leveraging deterministic and probabilistic modeling techniques. The following research questions highlight the objectives of our study, each directly motivated by the challenges outlined in Section~\ref{sec:challenges}.
 
 \begin{enumerate}
-	
 	\item \textbf{Can probabilistic flow matching models outperform deterministic baselines in predicting subsequent system states of Navier-Stokes dynamics, when trained on a heterogeneous multi-source dataset spanning a wide variety of physical parameters and flow regimes?}
 	\item \textbf{How does autoregressive rollout error accumulate over time for probabilistic versus deterministic models, and does the probabilistic formulation confer greater long-horizon stability across datasets of varying temporal length?}
-	\item \textbf{Do the predicted system states satisfy physical characteristics as measured by spectral analysis, and do probabilistic models produce spectrally more consistent predictions than deterministic models across flow regimes}
+	\item \textbf{Do the predicted system states satisfy physical characteristics as measured by spectral analysis, and do probabilistic models produce spectrally more consistent predictions than deterministic models across flow regimes?}
 \end{enumerate}
-
