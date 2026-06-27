@@ -1,22 +1,14 @@
 \chapter{Results}
 
-- join meeting wednesday and resubmit form 4 with new dates
- - redefine research questions
- - describe models
- - regenerate figures
- - write story about results figure 
- 	- ss
- 	- ms
- 	- physics
- - describe datasets in detail
+\section{Conceptualization of results}
 
-for each following point compare the AR vs FM:
-- show per-dataset single next timeblock error
-- show per-dataset rollout error with t on x-axis
-- show energy and enstrophy spectra graph for single trajectory
--> then followup with log error plot for spectra
+To start of the results chapter with a visual understanding of the underlying predictions, we provide a single example of a trajectory prediction for each of the four surrogate foundation models on the validation pdebench-comp dataset. As this is the worst performing dataset for all models, it is a good example to show the visual differences in prediction quality between the models. The first row of Figure \ref{fig:preds} shows the ground-truth trajectory, while the second to fifth row shows the predicted trajectory for each of the four surrogate foundation models. The rest of the results chapter will focus on bulk statistics of the prediction quality of each model on each validation dataset.
 
-REGENERATE FIGURES FIRST -> define story -> REGEN FIG FINAL
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\textwidth]{figs/fluidtrajpreds/preds_pdebench-comp_22164.png}
+	\caption{Ground-truth and predicted trajectory for the validation pdebench-comp dataset. The first row shows the ground-truth trajectory, while the second to fifthrow shows the predicted trajectory for each of the four surrogate foundation models. }
+\end{figure}
 
 \section{Single-step prediction}
 
@@ -27,12 +19,7 @@ REGENERATE FIGURES FIRST -> define story -> REGEN FIG FINAL
 	\label{fig:ssbox}
 \end{figure}
 
-
-- explain the probabilistic models perform better than deterministic models on almost all datasets
-- higher dimensional datasets with more turbulence or compressibility instead of incompressibility condition have higher error. 
-- probablistic model does not perform better on pdegym sines dataset, possibly due to wrong frequency initalization of prior distribution flowmatching
-- also we can see that increasing depth and amount of parameters on probabilistic models yield a greater improvement in score compared to increasing depth and amount of parameter for deterministic models.
-
+For every validation dataset, the next-timeblock prediction error is computed for each model and visualised in Figure \ref{fig:ssbox} in the form of a boxplot. The average per-sample relative absolute error is calculated for the full predicted timeblock
 Figure \ref{fig:ssbox} reports the per-sample relative per-sample error across all nine datasets, 
 revealing several consistent trends in model performance.
 

@@ -1,5 +1,18 @@
 \chapter{Training and Validation}
 
+\section{Challenges}
+
+\subsection{Universal training framework}
+
+As the training and validation of the foundation models is dependent on available compute resources, and the models needs to be trained in a similar way for fair comparison, a universal training framework was developed to support different datasets, models, and hardware platforms. The framework needs to support parallel training on multiple GPUs, and needs to be able to run on different hardware platforms, including local workstations and high-performance computing clusters. The framework also needs to support containerization and SLURM for easy deployment and management of training jobs.
+
+\subsection{Compute throughput and storage space}
+
+As the dataset size is large, and the models are complex, training requires significant compute power. The training framework needs to be able to efficiently utilize available compute resources, including multiple GPUs and distributed computing environments. The framework also needs to support mixed precision training to reduce memory usage and improve training speed. Also, the framework needs to support efficient data loading and storage management.
+
+\subsection{Validation metrics}
+
+To compare the performance of different models, a set of relevant validation metrics needs to be defined. The metrics need to be able to capture the accuracy of raw predictions and for the probabilistic models, the quality of the predicted distribution. The metrics need to be able to capture the accuracy of short-term predictions and long-term rollouts, as well as the spectral fidelity of the predicted flow fields. 
 \section{Training Procedure}
 
 \subsection{Training Framework and System Abstraction}

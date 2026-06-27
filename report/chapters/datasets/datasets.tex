@@ -1,6 +1,18 @@
 
 \chapter{Datasets}
 \label{ch:datasets}
+
+\section{Challenges}
+- wideness of dataset
+- dataset formatting and preprocessing
+
+\subsection{Wide variation in flow regimes}
+
+As a foundational model is only as good as the data it is trained on, the selection of training datasets is a critical step in the development of a generalised fluid-dynamics model. The datasets must collectively span a wide range of flow regimes, boundary conditions, and initialisation procedures to ensure that the model can learn to generalise across different fluid-dynamics scenarios. This requires careful consideration of the physical and computational characteristics of each dataset, as well as their compatibility with the model architecture and training pipeline.
+
+\subsection{Compatibility of datasets}
+
+After the selection of loose datasets, the datasets must be preprocessed to ensure compatibility with the model architecture and training pipeline. This includes enforcing a common spatial and temporal resolution, as well as converting the datasets to a unified file format that supports efficient random-access loading during training. The preprocessing pipeline must also be designed to preserve the unique characteristics of each dataset while ensuring that they can be effectively used for training the foundation model.
  
 % =========================================================================
 \section{Dataset Selection}
