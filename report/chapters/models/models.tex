@@ -4,19 +4,19 @@
 
 \subsection{Generalisation}
 
-As the goal of this work is to develop a foundation model for fluid dynamics, the ability to generalise across different flow regimes is a critical requirement. This requires the model to learn representations that are not specific to any single dataset or flow condition, but rather capture the underlying physics of fluid dynamics in a way that can be applied to a wide range of scenarios. 
+As the goal of this work is to develop a foundation model for fluid dynamics, the ability to generalise across different flow regimes is a critical requirement. This requires the model to learn representations that are not specific to any single dataset or flow condition, but rather capture the underlying physics of fluid dynamics in a way that can be applied to a wide range of scenarios. The underlying backbone achitecture must be natively designed to capture the spatiotemporal structure of fluid dynamics, and the generative modelling strategy must be able to handle the inherent stochasticity and sensitivity of turbulent flows.
 
 \subsection{Temporal Stability}
 
-As auto-regressive models are prone to compounding errors, ensuring temporal stability is crucial for maintaining the accuracy of predictions over extended time horizons. 
-
-\subsection{Native probabilistic turbulent modelling}
-
-As the deterministic models tend to average out diverging vortex decay structures, the probabilistic nature of turbulent flows is not captured by deterministic models. This is especially relevant for turbulent flows, where the underlying dynamics are inherently stochastic and sensitive to initial conditions. A probabilistic model can natively capture the distribution of possible future states, providing a more accurate representation of the sensitivity in the system. 
+As auto-regressive models are prone to compounding errors with each new rollout iteration, ensuring temporal stability is crucial for maintaining the accuracy of predictions over extended time horizons. Ideally the model should hav a built-in mechanism to mitigate error accumulation, such as using a longer range of input states to condition the model on a longer history of the systems evolution, or using a probabilistic formulation that can capture the distribution of possible future states. A models ability to capture a probabilistic view of the future system states is especially important for highly-turbulent sensitive systems.
 
 \subsection{Efficiency}
 
-As the fusion training datasets consists of a large amount of data, the model must be able to efficiently process and learn from this data. This requires the model to be designed with computational efficiency in mind, both in terms of memory usage and processing speed. Especially for foundation models, the ability to efficiently scale to larger datasets and more complex architectures is critical for achieving state-of-the-art performance.
+sample efficiency
+computational efficiency
+
+
+As the fusion of training datasets consists of a large amount of data, the model must be able to efficiently process and learn from this data. This requires the model to be designed with computational efficiency in mind, in terms of memory usage and processing speed. Especially for foundation models, the ability to efficiently scale to larger datasets and more complex architectures is critical for achieving state-of-the-art performance, as dataset size and model size are strongly correlated with performance in deep learning. 
 
 
 \section{Overview of the Modeling Approaches}
