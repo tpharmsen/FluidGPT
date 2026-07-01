@@ -2,13 +2,14 @@
 
 \section{Challenges}
 
-\subsection{Universal training framework}
+\subsection{Software}
 
-As the training and validation of the foundation models is dependent on available compute resources, and the models needs to be trained in a similar way for fair comparison, a universal training framework was developed to support different datasets, models, and hardware platforms. The framework needs to support parallel training on multiple GPUs, and needs to be able to run on different hardware platforms, including local workstations and high-performance computing clusters. The framework also needs to support containerization and SLURM for easy deployment and management of training jobs.
+As the training and validation of the foundation models is practically dependent on available compute resources, a modular framework needs to be developed to support preprocessing, training and validation of different datasets and models on various hardware platforms. This framework needs to supply consistent training behavior for all models to validate comparability between models. Furthermore, it needs to support parallel training on multiple GPUs, and needs to be able to run on different hardware platforms, including local workstations and high-performance computing clusters. Both SLURM-managed and dockerized container-based clusters need to be supported. 
 
-\subsection{Compute throughput and storage space}
+\subsection{Hardware}
 
-As the dataset size is large, and the models are complex, training requires significant compute power. The training framework needs to be able to efficiently utilize available compute resources, including multiple GPUs and distributed computing environments. The framework also needs to support mixed precision training to reduce memory usage and improve training speed. Also, the framework needs to support efficient data loading and storage management.
+As the dataset size is large, and the models are complex, the task requires significant compute power. Specifically, the training phase of the models needs to be performed on a high-throughput multi-gpu compute cluster to ensure convergence of models within a reasonable amount of time/days. Also, the framework needs to have high interconnect bandwidth between GPUs and SSD memory to support quick data fetching, due to the inability to store the entire dataset in GPU memory. The hardware itself also needs to support mixed precision training to reduce memory usage and further improve training speed. 
+Aside from high-throughput, the hardware needs to support high memory capacity to accommodate the large model sizes and batch sizes. Finally, SSD memory should be high enough to store the entire dataset, as well as the model checkpoints and logs, which is not trivial given the large size of the datasets.
 
 \subsection{Validation metrics}
 
@@ -37,34 +38,32 @@ At each epoch the model is saved and the validation error is computed. The model
 
 \section{Hardware Platform and Parallelism}
 
-All large-scale experiments were conducted on the revolutionary NVIDIA DGX B200 unified AI platform, which provides a high-bandwidth GPU interconnect, large per-device memory capacity, and high aggregate compute throughput. Using Docker, training and evaluation was executed within customized containerized environments to ensure consistent software dependencies across experimental runs, maximizing reproducibility and optimized device utilization.
+All large-scale experiments were conducted on a brand new \textbf{NVIDIA DGX B200} unified AI platform, which provides a high-bandwidth GPU interconnect, large per-device memory capacity, and high aggregate compute throughput. To give the reader a sense of the amount of compute power, the NVIDIA DGX B200 is equipped with 8 NVIDIA Blackwell GPUs, yielding a possible throughput of 72 PetaFLOPS during training and 144 PetaFLOPS during inference. Note that one PetaFLOPS equals one quadrillion Floating Point Operations Per Second. The power of this platform lies especially in the high-bandwidth interconnect between GPUs, which allows for efficient data parallelism and model parallelism across multiple devices without incurring significant communication overhead. Using customized Dockerfiles, training and evaluation was executed within customized containerized environments to ensure consistent software dependencies across experimental runs, maximizing reproducibility and optimized device utilization. 
+https://www.nvidia.com/en-us/data-center/dgx-b200/
+
 
 Training was distributed across 8 GPUs using data parallelism, resulting in an effective batch size equal to eight times the per-device batch size of 176, yielding an effective batch size of 1408. This level of parallelism was essential both to stabilize the optimization dynamics and to maintain adequate throughput given the high-dimensional spatiotemporal data and large model capacity.
 
 \section{Training hyperparameters}
 
-All hyperparameters related to optimization, learning rate scheduling, and distributed training settings are detailed in the Table \ref{tab:fluidgpt_hparams}. Most of the hyperparameters were shared between the deterministic and probabilistic models to ensure a fair comparison. The differences in Learning rate step-down milestones is motivated by the different training durations and convergence dynamics of the two model classes. The flow-matching models were trained for a longer duration at pre-decay learning rates to allow sufficient time for learning the more complex conditional distribution, while the deterministic AR models converged more quickly and thus benefited from earlier decay. The different weight decay parameter reflects the different regularization needs of the two model classes, with the flow-matching models requiring a much smaller weight decay to avoid underfitting as the state space of the target distribution is much larger than that of the deterministic model.
+All hyperparameters related to optimization, learning rate scheduling, and distributed training settings are detailed in the Table \ref{tab:fluidgpt_hparams}. Most of the hyperparameters were shared between the deterministic and probabilistic models to ensure a fair comparison. The differences in Learning rate step-down milestones is motivated by the differing convergence dynamics of the two model classes. The flow-matching models were trained for a longer duration at pre-decay learning rates to allow sufficient time for learning the more complex conditional distribution, while the deterministic AR models converged more quickly and thus benefited from earlier decay. The different weight decay parameter reflects the different regularization needs of the two model classes, with the flow-matching models requiring a much smaller weight decay to avoid underfitting as the state space of the target distribution is much larger than that of the deterministic model.
 Trivially, the data split seed was kept constant across all experiments to ensure that the same training and validation splits were used for both model classes, further enhancing the comparability of results.
 
 \input{chapters/training/train_hparams.tex}
 
 \section{Validation}
 
-For each dataset, 20\% of the available trajectories were reserved as a held-out validation split and were not used during training. All validation metrics were computed exclusively on this split. Validation was designed to assess three complementary aspects of model quality: short-term predictive accuracy, long-horizon temporal stability, and spectral fidelity to the underlying physics.
+For each dataset, 20\% of the available trajectories were reserved as a held-out validation split and were not used during training. All validation metrics were computed exclusively on this split. Validation was designed to assess three different aspects of predictive quality short-term predictive accuracy, long-horizon temporal stability, and spectral fidelity to the underlying physics.
 
 \subsection{Error Metrics}
 
-The primary pointwise error metrics are the per-sample relative root mean square error (RRMSE) and the per-sample relative absolute error (RAE), defined as
-
-\begin{equation}
-	\text{RRMSE} = \frac{1}{N} \sum_{i=1}^{N} \sqrt{\frac{\left( y_i - \hat{y}_i \right)^2}{y_i^2}},
-\end{equation}
+The primary pointwise error metrics is defined as the per-sample relative absolute error, defined as
 
 \begin{equation}
 	\text{RAE} = \frac{1}{N}\sum_{i=1}^{N} \frac{ \left| y_i - \hat{y}_i \right|}{\left| y_i \right|},
 \end{equation}
 
-where $y_i$ is the ground-truth value, $\hat{y}_i$ is the corresponding prediction, and $N$ is the total number of samples. These scale-invariant metrics allow meaningful comparison across datasets and model configurations. All validation was performed in \texttt{float32} precision to prioritize accurate error measurement over computational efficiency.
+where $y_i$ is the ground-truth value, $\hat{y}_i$ is the corresponding prediction, and $N$ is the total number of samples. Naturally $i$ sums over all spatial and temporal dimensions of the predicted timeblock. These scale-invariant metrics allow meaningful comparison across datasets and model configurations. All validation was performed in \texttt{float32} precision to prioritize accurate error measurement over computational efficiency.
 
 \subsection{Model- and Dataset-Specific Validation}
 

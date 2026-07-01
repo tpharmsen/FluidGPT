@@ -19,24 +19,20 @@ To start of the results chapter with a visual understanding of the underlying pr
 	\label{fig:ssbox}
 \end{figure}
 
-For every validation dataset, the next-timeblock prediction error is computed for each model and visualised in Figure \ref{fig:ssbox} in the form of a boxplot. The average per-sample relative absolute error is calculated for the full predicted timeblock
-Figure \ref{fig:ssbox} reports the per-sample relative per-sample error across all nine datasets, 
-revealing several consistent trends in model performance.
+For every validation dataset, the next-timeblock prediction error is computed for each model and visualised in Figure \ref{fig:ssbox} in the form of a boxplot. The average per-sample relative absolute error is calculated for the full predicted timeblock.
 
-\textbf{Probabilistic vs.\ deterministic models.} The flowmatching model FM-d2 outperforms the deterministic counterparts on nearly all datasets. This is expected given the 
-inherent stochasticity of turbulent fluid dynamics: a deterministic model is constrained 
-to produce a single point estimate of the subsequent system state, whereas a probabilistic 
-model learns a distribution over plausible futures and can better capture the multi-modal 
+\textbf{Probabilistic vs.\ deterministic models.} The flowmatching model \texttt{FM-d2} outperforms the deterministic counterparts on nearly all datasets. The deterministic models are constrained 
+to produce a single point estimate of the subsequent system states, whereas a probabilistic 
+model learns a distribution over plausible futures and can better capture the sensitive or multi-modal 
 nature of the solution space. By conditioning on a learned prior and flowing towards the 
 target distribution, the flow matching models are better equipped to represent uncertainty 
-in the predicted state block. %The larger error bars of the probabilitic models on the compressible dataset (pdebench-comp) indicate a larger uncertainty within the diverging state-space of the navier-stokes time progression. 
+in the predicted state block. 
 
 \textbf{Effect of dataset complexity.} Error magnitudes are notably higher on 
 higher-dimensional datasets characterised by strong turbulence or compressible flow 
-conditions, compared to datasets satisfying the incompressibility assumption. This aligns 
-with the increased complexity of the underlying dynamics: compressible and highly turbulent 
+conditions, compared to datasets satisfying the incompressibility assumption. The compressible and highly turbulent 
 regimes exhibit sharper gradients and finer-scale structure that are more challenging to 
-predict across multiple time steps simultaneously.
+predict across multiple time steps simultaneously. 
 
 \textbf{Exception: PDEGym sines dataset.} The probabilistic models do not demonstrate 
 a clear advantage on the PDEGym sines dataset. We attribute this to a mismatch between 
@@ -44,7 +40,7 @@ the dominant frequencies present in the data and the frequency initialisation of
 distribution used in the flow matching procedure. Due to a bigger mismatch in frequencies and the inability of the model to create shard interfaces in the fluid, the transport problem becomes a more difficult task, yielding a less inaccurate output of the model.
 
 \textbf{Scaling behaviour.} A further distinction between the two model families emerges 
-when comparing shallow and deep variants within each. Changing model depth and parameter 
+when comparing the \texttt{d2} and \texttt{d3} variants within each. Changing model depth and parameter 
 count yields a more pronounced reduction in error for the probabilistic models than for 
 the deterministic ones. This suggests that the additional capacity is more effectively 
 utilised when the model has the expressive power to refine a distributional estimate, 
