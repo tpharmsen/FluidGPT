@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025/Debian) (preloaded format=pdflatex 2026.5.21)  2 JUL 2026 17:02
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025/Debian) (preloaded format=pdflatex 2026.5.21)  5 JUL 2026 21:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1131,20 +1131,20 @@ Package microtype Info: Loading generic protrusion settings for font family
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texlive/texmf-di
 st/fonts/enc/dvips/base/8r.enc}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-su
 per-t1.enc}]
-(./main.toc
-Underfull \vbox (badness 3557) has occurred while \output is active []
-
- [2
+(./main.toc [2
 
 ]
-[3])
+Underfull \vbox (badness 1867) has occurred while \output is active []
+
+ [3])
 \tf@toc=\write5
 \openout5 = `main.toc'.
 
- [4] (./chapters/intro/introduction.tex
+
+[4] (./chapters/intro/introduction.tex
 Chapter 1.
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 1655) has occurred while \output is active []
 
  [5
 
@@ -1167,31 +1167,188 @@ LaTeX Warning: Reference `ch:training' on page 7 undefined on input line 44.
 
 LaTeX Warning: Reference `ch:results' on page 7 undefined on input line 44.
 
-) (./chapters/problem/problemformulation.tex [7]
+
+LaTeX Warning: Reference `ch:conclusion' on page 7 undefined on input line 44.
+
+) (./chapters/relatedwork/relatedwork.tex [7]
 Chapter 2.
+
+Package natbib Warning: Citation `ronneberger2015unet' on page 8 undefined on i
+nput line 8.
+
+
+Package natbib Warning: Citation `li2021fno' on page 8 undefined on input line 
+8.
+
+
+Package natbib Warning: Citation `lu2021deeponet' on page 8 undefined on input 
+line 8.
+
+
+Package natbib Warning: Citation `jin2022mionet' on page 8 undefined on input l
+ine 8.
+
+
+Package natbib Warning: Citation `sanchezgonzalez2020learning' on page 8 undefi
+ned on input line 8.
+
+
+Package natbib Warning: Citation `pfaff2021meshgraphnets' on page 8 undefined o
+n input line 8.
+
+
+Package natbib Warning: Citation `raissi2019pinn' on page 8 undefined on input 
+line 8.
+
+
+Package natbib Warning: Citation `krishnapriyan2021failuremodes' on page 8 unde
+fined on input line 8.
+
+
+Package natbib Warning: Citation `dosovitskiy2020vit' on page 8 undefined on in
+put line 12.
+
+
+Package natbib Warning: Citation `liu2021swin' on page 8 undefined on input lin
+e 12.
+
+
+Package natbib Warning: Citation `mccabe2024mpp' on page 8 undefined on input l
+ine 12.
+
+
+Package natbib Warning: Citation `hao2024dpot' on page 8 undefined on input lin
+e 12.
+
+
+Package natbib Warning: Citation `zhang2024matey' on page 8 undefined on input 
+line 12.
+
+
+Package natbib Warning: Citation `liu2024prosefd' on page 8 undefined on input 
+line 12.
+
+
+Package natbib Warning: Citation `liu2024prosepde' on page 8 undefined on input
+ line 12.
+
+
+Package natbib Warning: Citation `herde2024poseidon' on page 8 undefined on inp
+ut line 12.
+
+
+Package natbib Warning: Citation `cao2024vicon' on page 8 undefined on input li
+ne 12.
+
+
+Package natbib Warning: Citation `liu2025bcat' on page 8 undefined on input lin
+e 12.
+
 [8
 
 ]
 
-Package natbib Warning: Citation `Kolmogorov1941' on page 9 undefined on input 
-line 32.
+Package natbib Warning: Citation `gyrokinetic2024' on page 9 undefined on input
+ line 18.
 
-<figs/turbulence_scales2.png, id=506, 810.3876pt x 487.5816pt>
+
+Package natbib Warning: Citation `nguyen2023climax' on page 9 undefined on inpu
+t line 18.
+
+
+Package natbib Warning: Citation `bodnar2024aurora' on page 9 undefined on inpu
+t line 18.
+
+
+Package natbib Warning: Citation `erwin2025' on page 9 undefined on input line 
+18.
+
+
+Package natbib Warning: Citation `takamoto2022pdebench' on page 9 undefined on 
+input line 24.
+
+
+Package natbib Warning: Citation `gupta2022pdearena' on page 9 undefined on inp
+ut line 24.
+
+
+Package natbib Warning: Citation `herde2024poseidon' on page 9 undefined on inp
+ut line 24.
+
+
+Package natbib Warning: Citation `luo2023cfdbench' on page 9 undefined on input
+ line 24.
+
+
+Package natbib Warning: Citation `tali2024flowbench' on page 9 undefined on inp
+ut line 24.
+
+
+Package natbib Warning: Citation `hassan2023bubbleml' on page 9 undefined on in
+put line 24.
+
+
+Package natbib Warning: Citation `chung2023blastnet' on page 9 undefined on inp
+ut line 24.
+
+
+Package natbib Warning: Citation `ohana2024thewell' on page 9 undefined on inpu
+t line 24.
+
+[9]
+
+Package natbib Warning: Citation `lipman2022flowmatching' on page 10 undefined 
+on input line 32.
+
+
+Package natbib Warning: Citation `lipman2024flowmatchingguide' on page 10 undef
+ined on input line 32.
+
+
+Package natbib Warning: Citation `liu2022rectifiedflow' on page 10 undefined on
+ input line 32.
+
+
+Package natbib Warning: Citation `tenbrinke2025stflow' on page 10 undefined on 
+input line 32.
+
+
+Package natbib Warning: Citation `esser2024sd3' on page 10 undefined on input l
+ine 32.
+
+
+Package natbib Warning: Citation `vyas2023audiobox' on page 10 undefined on inp
+ut line 32.
+
+
+Package natbib Warning: Citation `huguet2024proteinfm' on page 10 undefined on 
+input line 32.
+
+) (./chapters/problem/problemformulation.tex [10]
+Chapter 3.
+[11
+
+]
+
+Package natbib Warning: Citation `Kolmogorov1941' on page 12 undefined on input
+ line 32.
+
+<figs/turbulence_scales2.png, id=555, 810.3876pt x 487.5816pt>
 File: figs/turbulence_scales2.png Graphic file (type png)
 <use figs/turbulence_scales2.png>
 Package pdftex.def Info: figs/turbulence_scales2.png  used on input line 36.
 (pdftex.def)             Requested size: 317.9892pt x 191.32411pt.
 
-Package natbib Warning: Citation `Kolmogorov1941' on page 9 undefined on input 
-line 45.
+Package natbib Warning: Citation `Kolmogorov1941' on page 12 undefined on input
+ line 45.
 
-[9 <./figs/Turbulence_scales2.png>] [10]
+[12 <./figs/Turbulence_scales2.png>] [13]
 
-LaTeX Warning: Reference `sec:challenges' on page 11 undefined on input line 14
+LaTeX Warning: Reference `sec:challenges' on page 14 undefined on input line 14
 0.
 
-) (./chapters/datasets/datasets.tex [11]
-Chapter 3.
+) (./chapters/datasets/datasets.tex [14]
+Chapter 4.
 (./chapters/datasets/datasets_specs.tex
 Underfull \hbox (badness 1354) in paragraph at lines 12--12
 []|\T1/ptm/b/n/9 (+20) Original Data Res-o-lu-
@@ -1230,14 +1387,14 @@ Underfull \hbox (badness 4084) in paragraph at lines 48--48
 )
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [12
+ [15
 
 ]
 
-Package natbib Warning: Citation `Jakob2021FluidFlowDataset' on page 13 undefin
+Package natbib Warning: Citation `Jakob2021FluidFlowDataset' on page 16 undefin
 ed on input line 30.
 
-<figs/fluidtrajpreds/target_amira_102.png, id=551, 1300.86pt x 289.08pt>
+<figs/fluidtrajpreds/target_amira_102.png, id=600, 1300.86pt x 289.08pt>
 File: figs/fluidtrajpreds/target_amira_102.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_amira_102.png>
 Package pdftex.def Info: figs/fluidtrajpreds/target_amira_102.png  used on inpu
@@ -1246,12 +1403,12 @@ t line 36.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [13]
+ [16]
 
-Package natbib Warning: Citation `takamoto2022pdebench' on page 14 undefined on
+Package natbib Warning: Citation `takamoto2022pdebench' on page 17 undefined on
  input line 44.
 
-<figs/fluidtrajpreds/target_pdebench-comp_22164.png, id=566, 1300.86pt x 289.08
+<figs/fluidtrajpreds/target_pdebench-comp_22164.png, id=614, 1300.86pt x 289.08
 pt>
 File: figs/fluidtrajpreds/target_pdebench-comp_22164.png Graphic file (type png
 )
@@ -1259,7 +1416,7 @@ File: figs/fluidtrajpreds/target_pdebench-comp_22164.png Graphic file (type png
 Package pdftex.def Info: figs/fluidtrajpreds/target_pdebench-comp_22164.png  us
 ed on input line 72.
 (pdftex.def)             Requested size: 317.9892pt x 70.66422pt.
-<figs/fluidtrajpreds/target_pdebench-comp_2083.png, id=569, 1300.86pt x 289.08p
+<figs/fluidtrajpreds/target_pdebench-comp_2083.png, id=617, 1300.86pt x 289.08p
 t>
 File: figs/fluidtrajpreds/target_pdebench-comp_2083.png Graphic file (type png)
 
@@ -1267,8 +1424,8 @@ File: figs/fluidtrajpreds/target_pdebench-comp_2083.png Graphic file (type png)
 Package pdftex.def Info: figs/fluidtrajpreds/target_pdebench-comp_2083.png  use
 d on input line 79.
 (pdftex.def)             Requested size: 317.9892pt x 70.66422pt.
-[14 <./figs/fluidtrajpreds/target_amira_102.png>]
-<figs/fluidtrajpreds/target_pdebench-incomp_965.png, id=585, 1300.86pt x 289.08
+[17 <./figs/fluidtrajpreds/target_amira_102.png>]
+<figs/fluidtrajpreds/target_pdebench-incomp_965.png, id=634, 1300.86pt x 289.08
 pt>
 File: figs/fluidtrajpreds/target_pdebench-incomp_965.png Graphic file (type png
 )
@@ -1276,10 +1433,10 @@ File: figs/fluidtrajpreds/target_pdebench-incomp_965.png Graphic file (type png
 Package pdftex.def Info: figs/fluidtrajpreds/target_pdebench-incomp_965.png  us
 ed on input line 92.
 (pdftex.def)             Requested size: 317.9892pt x 70.66422pt.
- [15 <./figs/fluidtrajpreds/target_pdebench-comp_22164.png> <./figs/fluidtrajpr
+ [18 <./figs/fluidtrajpreds/target_pdebench-comp_22164.png> <./figs/fluidtrajpr
 eds/target_pdebench-comp_2083.png> <./figs/fluidtrajpreds/target_pdebench-incom
 p_965.png>]
-<figs/fluidtrajpreds/target_pdegym-gauss_14250.png, id=596, 1300.86pt x 289.08p
+<figs/fluidtrajpreds/target_pdegym-gauss_14250.png, id=645, 1300.86pt x 289.08p
 t>
 File: figs/fluidtrajpreds/target_pdegym-gauss_14250.png Graphic file (type png)
 
@@ -1287,118 +1444,114 @@ File: figs/fluidtrajpreds/target_pdegym-gauss_14250.png Graphic file (type png)
 Package pdftex.def Info: figs/fluidtrajpreds/target_pdegym-gauss_14250.png  use
 d on input line 121.
 (pdftex.def)             Requested size: 190.79109pt x 42.39412pt.
-<figs/fluidtrajpreds/target_pdegym-sines_5493.png, id=597, 1300.86pt x 289.08pt
+<figs/fluidtrajpreds/target_pdegym-sines_5493.png, id=646, 1300.86pt x 289.08pt
 >
 File: figs/fluidtrajpreds/target_pdegym-sines_5493.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_pdegym-sines_5493.png>
 Package pdftex.def Info: figs/fluidtrajpreds/target_pdegym-sines_5493.png  used
  on input line 128.
 (pdftex.def)             Requested size: 190.79109pt x 42.39412pt.
-<figs/fluidtrajpreds/target_pdegym-sl_9281.png, id=598, 1300.86pt x 289.08pt>
+<figs/fluidtrajpreds/target_pdegym-sl_9281.png, id=647, 1300.86pt x 289.08pt>
 File: figs/fluidtrajpreds/target_pdegym-sl_9281.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_pdegym-sl_9281.png>
 Package pdftex.def Info: figs/fluidtrajpreds/target_pdegym-sl_9281.png  used on
  input line 135.
 (pdftex.def)             Requested size: 190.79109pt x 42.39412pt.
-<figs/fluidtrajpreds/target_pdegym-svs_2725.png, id=599, 1300.86pt x 289.08pt>
+<figs/fluidtrajpreds/target_pdegym-svs_2725.png, id=648, 1300.86pt x 289.08pt>
 File: figs/fluidtrajpreds/target_pdegym-svs_2725.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_pdegym-svs_2725.png>
 Package pdftex.def Info: figs/fluidtrajpreds/target_pdegym-svs_2725.png  used o
 n input line 142.
 (pdftex.def)             Requested size: 190.79109pt x 42.39412pt.
-<figs/fluidtrajpreds/target_pdegym-bb_17830.png, id=600, 1300.86pt x 289.08pt>
+<figs/fluidtrajpreds/target_pdegym-bb_17830.png, id=649, 1300.86pt x 289.08pt>
 File: figs/fluidtrajpreds/target_pdegym-bb_17830.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_pdegym-bb_17830.png>
 Package pdftex.def Info: figs/fluidtrajpreds/target_pdegym-bb_17830.png  used o
 n input line 149.
 (pdftex.def)             Requested size: 190.79109pt x 42.39412pt.
-<figs/fluidtrajpreds/target_pdegym-pwc_19616.png, id=601, 1300.86pt x 289.08pt>
+<figs/fluidtrajpreds/target_pdegym-pwc_19616.png, id=650, 1300.86pt x 289.08pt>
 
 File: figs/fluidtrajpreds/target_pdegym-pwc_19616.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_pdegym-pwc_19616.png>
 Package pdftex.def Info: figs/fluidtrajpreds/target_pdegym-pwc_19616.png  used 
 on input line 156.
 (pdftex.def)             Requested size: 190.79109pt x 42.39412pt.
- [16 <./figs/fluidtrajpreds/target_pdegym-gauss_14250.png> <./figs/fluidtrajpre
+ [19 <./figs/fluidtrajpreds/target_pdegym-gauss_14250.png> <./figs/fluidtrajpre
 ds/target_pdegym-sines_5493.png> <./figs/fluidtrajpreds/target_pdegym-sl_9281.p
 ng> <./figs/fluidtrajpreds/target_pdegym-svs_2725.png> <./figs/fluidtrajpreds/t
 arget_pdegym-bb_17830.png> <./figs/fluidtrajpreds/target_pdegym-pwc_19616.png>]
- [17])
-(./chapters/models/models.tex [18]
-Chapter 4.
-[19
+ [20])
+(./chapters/models/models.tex [21]
+Chapter 5.
+[22
 
 ]
 
-Package natbib Warning: Citation `Liu2021SwinTA' on page 20 undefined on input 
+Package natbib Warning: Citation `Liu2021SwinTA' on page 23 undefined on input 
 line 23.
 
 Package standalone Info: generated file figs/BlockExplainerAll.pdf newer then s
 ource file figs/BlockExplainerAll.tex on input line 36.
-<figs/BlockExplainerAll.pdf, id=636, 949.52545pt x 312.80867pt>
+<figs/BlockExplainerAll.pdf, id=684, 949.52545pt x 312.80867pt>
 File: figs/BlockExplainerAll.pdf Graphic file (type pdf)
 <use figs/BlockExplainerAll.pdf>
 Package pdftex.def Info: figs/BlockExplainerAll.pdf  used on input line 36.
 (pdftex.def)             Requested size: 317.9892pt x 104.75932pt.
-[20 <./figs/BlockExplainerAll.pdf>] [21]
+[23 <./figs/BlockExplainerAll.pdf>] [24]
 
-Package natbib Warning: Citation `Liu2021SwinTA' on page 22 undefined on input 
+Package natbib Warning: Citation `Liu2021SwinTA' on page 25 undefined on input 
 line 114.
 
 
-Package natbib Warning: Citation `Liu2021SwinV2' on page 22 undefined on input 
+Package natbib Warning: Citation `Liu2021SwinV2' on page 25 undefined on input 
 line 127.
 
-[22]
+[25]
 Underfull \hbox (badness 1509) in paragraph at lines 208--209
  []\T1/ptm/b/n/10 (+20) Temporal block resid-ual struc-ture.[] \T1/ptm/m/n/10 (
 +20) The tem-po-ral block re-shapes the rep-re-sen-ta-tion to
  []
 
-[23]
+[26]
 
-Package natbib Warning: Citation `Liu2022ConvNeXt' on page 24 undefined on inpu
+Package natbib Warning: Citation `Liu2022ConvNeXt' on page 27 undefined on inpu
 t line 239.
 
-[24]
+[27]
 Package standalone Info: generated file figs/AR.pdf newer then source file figs
 /AR.tex on input line 295.
-<figs/AR.pdf, id=693, 1086.8505pt x 618.69044pt>
+<figs/AR.pdf, id=743, 1086.8505pt x 618.69044pt>
 File: figs/AR.pdf Graphic file (type pdf)
 <use figs/AR.pdf>
 Package pdftex.def Info: figs/AR.pdf  used on input line 295.
 (pdftex.def)             Requested size: 397.48499pt x 226.26855pt.
- [25 <./figs/AR.pdf>] (./chapters/models/AR_hparams.tex) [26]
+ [28 <./figs/AR.pdf>] (./chapters/models/AR_hparams.tex) [29]
 Package standalone Info: generated file figs/FM.pdf newer then source file figs
 /FM.tex on input line 332.
-<figs/FM.pdf, id=729, 1086.8505pt x 618.69044pt>
+<figs/FM.pdf, id=777, 1086.8505pt x 618.69044pt>
 File: figs/FM.pdf Graphic file (type pdf)
 <use figs/FM.pdf>
 Package pdftex.def Info: figs/FM.pdf  used on input line 332.
 (pdftex.def)             Requested size: 397.48499pt x 226.26855pt.
 
 
-LaTeX Warning: Reference `tab:fluidgpt_hparams_fm' on page 27 undefined on inpu
+LaTeX Warning: Reference `tab:fluidgpt_hparams_fm' on page 30 undefined on inpu
 t line 339.
 
 (./chapters/models/FM_hparams.tex)
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [27 <./figs/FM.pdf>]) (./chapters/training/training.tex [28]
-Chapter 5.
-[29
-
-]
-Underfull \vbox (badness 4048) has occurred while \output is active []
-
- [30]
-(./chapters/training/train_hparams.tex) [31] [32])
-(./chapters/results/results.tex [33]
+ [30 <./figs/FM.pdf>]) (./chapters/training/training.tex [31]
 Chapter 6.
+[32
 
-LaTeX Warning: Reference `fig:preds' on page 34 undefined on input line 5.
+] [33] (./chapters/training/train_hparams.tex) [34] [35])
+(./chapters/results/results.tex [36]
+Chapter 7.
 
-<figs/fluidtrajpreds/preds_pdebench-comp_22164.png, id=801, 1300.86pt x 1300.86
+LaTeX Warning: Reference `fig:preds' on page 37 undefined on input line 5.
+
+<figs/fluidtrajpreds/preds_pdebench-comp_22164.png, id=850, 1300.86pt x 1300.86
 pt>
 File: figs/fluidtrajpreds/preds_pdebench-comp_22164.png Graphic file (type png)
 
@@ -1406,39 +1559,39 @@ File: figs/fluidtrajpreds/preds_pdebench-comp_22164.png Graphic file (type png)
 Package pdftex.def Info: figs/fluidtrajpreds/preds_pdebench-comp_22164.png  use
 d on input line 9.
 (pdftex.def)             Requested size: 298.11374pt x 298.0998pt.
-<figs/results/ssbox_rae.png, id=802, 578.16pt x 433.62pt>
+<figs/results/ssbox_rae.png, id=851, 578.16pt x 433.62pt>
 File: figs/results/ssbox_rae.png Graphic file (type png)
 <use figs/results/ssbox_rae.png>
 Package pdftex.def Info: figs/results/ssbox_rae.png  used on input line 17.
 (pdftex.def)             Requested size: 317.9892pt x 238.49173pt.
-[34
+[37
 
- <./figs/fluidtrajpreds/preds_pdebench-comp_22164.png>] [35 <./figs/results/ssb
+ <./figs/fluidtrajpreds/preds_pdebench-comp_22164.png>] [38 <./figs/results/ssb
 ox_rae.png>]
-<figs/results/msgraph_all_rae.png, id=816, 1084.05pt x 867.24pt>
+<figs/results/msgraph_all_rae.png, id=866, 1084.05pt x 867.24pt>
 File: figs/results/msgraph_all_rae.png Graphic file (type png)
 <use figs/results/msgraph_all_rae.png>
 Package pdftex.def Info: figs/results/msgraph_all_rae.png  used on input line 5
 4.
 (pdftex.def)             Requested size: 317.9892pt x 254.39119pt.
- [36 <./figs/results/msgraph_all_rae.png>]
-<figs/results/spectra/spectrum_E.png, id=825, 1011.78pt x 289.08pt>
+ [39 <./figs/results/msgraph_all_rae.png>]
+<figs/results/spectra/spectrum_E.png, id=875, 1011.78pt x 289.08pt>
 File: figs/results/spectra/spectrum_E.png Graphic file (type png)
 <use figs/results/spectra/spectrum_E.png>
 Package pdftex.def Info: figs/results/spectra/spectrum_E.png  used on input lin
 e 115.
 (pdftex.def)             Requested size: 317.9892pt x 90.85336pt.
- [37 <./figs/results/spectra/spectrum_E.png>]) (./chapters/conclusion/conclusio
-n.tex [38]
-Chapter 7.
+ [40 <./figs/results/spectra/spectrum_E.png>]) (./chapters/conclusion/conclusio
+n.tex [41]
+Chapter 8.
 )
 No file main.bbl.
-(./appendices/appendices.tex [39
+(./appendices/appendices.tex [42
 
 ]
 Appendix A.
 (./appendices/fluidtrajpreds.tex
-<figs/fluidtrajpreds/preds_amira_102.png, id=847, 1300.86pt x 1300.86pt>
+<figs/fluidtrajpreds/preds_amira_102.png, id=895, 1300.86pt x 1300.86pt>
 File: figs/fluidtrajpreds/preds_amira_102.png Graphic file (type png)
 <use figs/fluidtrajpreds/preds_amira_102.png>
 Package pdftex.def Info: figs/fluidtrajpreds/preds_amira_102.png  used on input
@@ -1453,10 +1606,10 @@ d on input line 11.
 
 Underfull \vbox (badness 3838) has occurred while \output is active []
 
- [40
+ [43
 
  <./figs/fluidtrajpreds/preds_amira_102.png>]
-<figs/fluidtrajpreds/preds_pdebench-comp_2083.png, id=854, 1300.86pt x 1300.86p
+<figs/fluidtrajpreds/preds_pdebench-comp_2083.png, id=903, 1300.86pt x 1300.86p
 t>
 File: figs/fluidtrajpreds/preds_pdebench-comp_2083.png Graphic file (type png)
 <use figs/fluidtrajpreds/preds_pdebench-comp_2083.png>
@@ -1466,11 +1619,11 @@ Package pdftex.def Info: figs/fluidtrajpreds/preds_pdebench-comp_2083.png  used
 ))
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [41]
+ [44]
 
 Package natbib Warning: There were undefined citations.
 
-[42 <./figs/fluidtrajpreds/preds_pdebench-comp_2083.png>] (./main.aux)
+[45 <./figs/fluidtrajpreds/preds_pdebench-comp_2083.png>] (./main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
@@ -1479,20 +1632,17 @@ L3 programming layer <2026-01-19>
 
 LaTeX Warning: There were undefined references.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 1A6ACAF3C5629C1CACDB58B6D7594DDF;14067.
+(rerunfilecheck)             Checksum: 2D9B9421A68512EC1A2176BBEEC2804A;15490.
  ) 
 Here is how much of TeX's memory you used:
- 34332 strings out of 467533
- 675854 string characters out of 5422138
- 1123792 words of memory out of 5000000
- 62082 multiletter control sequences out of 15000+600000
- 687093 words of font info for 292 fonts, out of 8000000 for 9000
+ 34395 strings out of 467533
+ 676699 string characters out of 5422138
+ 1122834 words of memory out of 5000000
+ 62096 multiletter control sequences out of 15000+600000
+ 688848 words of font info for 315 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 98i,12n,117p,1721b,643s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 98i,12n,117p,2794b,643s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texli
@@ -1515,10 +1665,10 @@ c/amsfonts/symbols/msbm10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sft
 t1000.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr
 /share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/
 texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (42 pages, 13885758 bytes).
+Output written on main.pdf (45 pages, 13898992 bytes).
 PDF statistics:
- 1009 PDF objects out of 1200 (max. 8388607)
- 839 compressed objects within 9 object streams
- 219 named destinations out of 1000 (max. 500000)
- 59785 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 1060 PDF objects out of 1200 (max. 8388607)
+ 887 compressed objects within 9 object streams
+ 229 named destinations out of 1000 (max. 500000)
+ 59841 words of extra memory for PDF output out of 61914 (max. 10000000)
 
