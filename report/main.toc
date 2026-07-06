@@ -31,10 +31,16 @@
 \contentsline {paragraph}{PDEBench-2DCNS}{17}{section*.5}%
 \contentsline {paragraph}{PDEBench-2DINS}{18}{section*.7}%
 \contentsline {subsection}{\numberline {4.2.3}PDEGym}{18}{subsection.4.2.3}%
+\contentsline {paragraph}{Gaussian Random Fields}{19}{section*.9}%
+\contentsline {paragraph}{Sine Waves}{19}{section*.11}%
+\contentsline {paragraph}{Shear Layers}{19}{section*.13}%
+\contentsline {paragraph}{Sine Vortex Sheets}{19}{section*.15}%
+\contentsline {paragraph}{Brownian Bridges}{20}{section*.17}%
+\contentsline {paragraph}{Piecewise-Constant Vorticity}{20}{section*.19}%
 \contentsline {section}{\numberline {4.3}Preprocessing}{20}{section.4.3}%
 \contentsline {subsection}{\numberline {4.3.1}Spatial Interpolation}{20}{subsection.4.3.1}%
-\contentsline {subsection}{\numberline {4.3.2}Temporal Subsampling}{20}{subsection.4.3.2}%
-\contentsline {subsection}{\numberline {4.3.3}File-Format Conversion and Storage}{20}{subsection.4.3.3}%
+\contentsline {subsection}{\numberline {4.3.2}Temporal Subsampling}{21}{subsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.3.3}File-Format Conversion and Storage}{21}{subsection.4.3.3}%
 \contentsline {chapter}{\numberline {5}Models}{22}{chapter.5}%
 \contentsline {section}{\numberline {5.1}Challenges}{22}{section.5.1}%
 \contentsline {subsection}{\numberline {5.1.1}Generalisation}{22}{subsection.5.1.1}%
@@ -51,20 +57,20 @@
 \contentsline {subsection}{\numberline {5.3.2}Patch Embedding}{24}{subsection.5.3.2}%
 \contentsline {subsection}{\numberline {5.3.3}Spatiotemporal Positional Encoding}{24}{subsection.5.3.3}%
 \contentsline {subsection}{\numberline {5.3.4}Windowed Cosine Attention with Continuous Relative Position Bias}{25}{subsection.5.3.4}%
-\contentsline {paragraph}{Window partitioning.}{25}{section*.11}%
-\contentsline {paragraph}{Query, key, value projection.}{25}{section*.12}%
-\contentsline {paragraph}{Cosine attention.}{25}{section*.13}%
-\contentsline {paragraph}{Continuous relative position bias.}{25}{section*.14}%
-\contentsline {paragraph}{Attention output.}{26}{section*.15}%
-\contentsline {paragraph}{Spatial Swin block residual structure.}{26}{section*.16}%
+\contentsline {paragraph}{Window partitioning.}{25}{section*.22}%
+\contentsline {paragraph}{Query, key, value projection.}{25}{section*.23}%
+\contentsline {paragraph}{Cosine attention.}{25}{section*.24}%
+\contentsline {paragraph}{Continuous relative position bias.}{25}{section*.25}%
+\contentsline {paragraph}{Attention output.}{26}{section*.26}%
+\contentsline {paragraph}{Spatial Swin block residual structure.}{26}{section*.27}%
 \contentsline {subsection}{\numberline {5.3.5}Temporal Self-Attention}{26}{subsection.5.3.5}%
-\contentsline {paragraph}{Temporal relative position bias.}{26}{section*.17}%
-\contentsline {paragraph}{Attention masking.}{26}{section*.18}%
-\contentsline {paragraph}{Temporal block residual structure.}{27}{section*.19}%
+\contentsline {paragraph}{Temporal relative position bias.}{26}{section*.28}%
+\contentsline {paragraph}{Attention masking.}{26}{section*.29}%
+\contentsline {paragraph}{Temporal block residual structure.}{27}{section*.30}%
 \contentsline {subsection}{\numberline {5.3.6}Hierarchical Patch Merging and Expansion}{27}{subsection.5.3.6}%
-\contentsline {paragraph}{Patch merging.}{27}{section*.20}%
-\contentsline {paragraph}{Patch expansion.}{27}{section*.21}%
-\contentsline {paragraph}{Skip connections.}{27}{section*.22}%
+\contentsline {paragraph}{Patch merging.}{27}{section*.31}%
+\contentsline {paragraph}{Patch expansion.}{27}{section*.32}%
+\contentsline {paragraph}{Skip connections.}{27}{section*.33}%
 \contentsline {subsection}{\numberline {5.3.7}Flow-Time Conditioning (Flow-Matching Model Only)}{27}{subsection.5.3.7}%
 \contentsline {section}{\numberline {5.4}Deterministic Models}{28}{section.5.4}%
 \contentsline {subsection}{\numberline {5.4.1}Prediction}{28}{subsection.5.4.1}%
@@ -92,16 +98,16 @@
 \contentsline {section}{\numberline {6.5}Validation}{34}{section.6.5}%
 \contentsline {subsection}{\numberline {6.5.1}Error Metrics}{34}{subsection.6.5.1}%
 \contentsline {subsection}{\numberline {6.5.2}Model- and Dataset-Specific Validation}{34}{subsection.6.5.2}%
-\contentsline {paragraph}{Deterministic Model.}{34}{section*.28}%
-\contentsline {paragraph}{Flow-Matching Model.}{35}{section*.29}%
-\contentsline {subsubsection}{Single-Step Validation}{35}{section*.30}%
-\contentsline {subsubsection}{Rollout Validation}{35}{section*.31}%
-\contentsline {subsubsection}{Spectral Diagnostics}{35}{section*.32}%
+\contentsline {paragraph}{Deterministic Model.}{34}{section*.39}%
+\contentsline {paragraph}{Flow-Matching Model.}{35}{section*.40}%
+\contentsline {subsubsection}{Single-Step Validation}{35}{section*.41}%
+\contentsline {subsubsection}{Rollout Validation}{35}{section*.42}%
+\contentsline {subsubsection}{Spectral Diagnostics}{35}{section*.43}%
 \contentsline {chapter}{\numberline {7}Results}{37}{chapter.7}%
 \contentsline {section}{\numberline {7.1}Conceptualization of results}{37}{section.7.1}%
 \contentsline {section}{\numberline {7.2}Single-step prediction}{38}{section.7.2}%
 \contentsline {section}{\numberline {7.3}Rollout prediction}{39}{section.7.3}%
 \contentsline {section}{\numberline {7.4}Spectrum analysis}{40}{section.7.4}%
 \contentsline {chapter}{\numberline {8}Conclusion}{42}{chapter.8}%
-\contentsline {chapter}{\numberline {A}Appendix}{43}{appendix.A}%
-\contentsline {section}{\numberline {A.1}Trajectory-specific prediction visualizations}{43}{section.A.1}%
+\contentsline {chapter}{\numberline {A}Appendix}{46}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Trajectory-specific prediction visualizations}{46}{section.A.1}%

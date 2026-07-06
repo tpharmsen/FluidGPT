@@ -90,7 +90,7 @@ This dataset contains $1100$ trajectories tracking two-dimensional incompressibl
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{figs/fluidtrajpreds/target_pdebench-incomp_965.png}
-	\caption{Ground truth radial velocity component visualisations of the \textit{pdebench-incomp} dataset for preprocessed trajectory 965. For each trajectory, 100 timesteps exist.}
+	\caption{Ground truth radial velocity component visualisations of the \textit{pdebench-incomp} dataset for preprocessed trajectory 965.}
 	\label{fig:pdebench-incomp}
 \end{figure}
  
@@ -98,68 +98,71 @@ This dataset contains $1100$ trajectories tracking two-dimensional incompressibl
 \subsection{PDEGym}
 \label{ss:pdegym}
  
-To systematically evaluate the foundation model's capability to generalize across distinct structural topologies, six datasets from the PDEGym collection, originally created for the Poseidon foundation model benchmark, are incorporated. All simulations were generated via the AZEBAN spectral hyperviscosity solver, a high-order pseudo-spectral framework for incompressible fluid variants that enforces exact periodic boundary conditions on a uniform space-time grid. The datasets are specifically generated for the training of the POSEIDON foundation model. >>>>>>>>>>link
+To systematically evaluate the foundation model's capability to generalize across distinct structural topologies, six datasets from the PDEGym collection, originally created for the Poseidon foundation model benchmark, are incorporated. All simulations were generated via the AZEBAN spectral hyperviscosity solver, a high-order pseudo-spectral framework for incompressible fluid variants that enforces exact periodic boundary conditions on a uniform space-time grid. The datasets are specifically generated for the training of the Poseidon foundation model \cite{herde2024poseidon} and stored in \texttt{.nc} format.
 
-Each of the six datasets contains approximately $20000$ trajectories of two-dimensional incompressible Navier-Stokes flow resolved at a spatial resolution of $128^2$ with $21$ temporal snapshots. The kinematic viscosity is held constant at $\nu = 4 \times 10^{-4}$ across all configurations. These datasets do not focus on variability of physical parameters, but rather on the diversity of initial conditions and the resulting flow structures. The datasets are designed to challenge the model's ability to capture a wide range of typical flow structures.
+Each of these six datasets contains approximately $20000$ trajectories of two-dimensional incompressible Navier-Stokes flow resolved at a spatial resolution of $128^2$ with $21$ temporal snapshots. The kinematic viscosity is held constant at $\nu = 4 \times 10^{-4}$ across all configurations. These datasets do not focus on variability of physical parameters, but rather on the diversity of initial conditions and the resulting flow structures. The datasets are designed to challenge the model's ability to capture a wide range of typical flow structures.
+The six datasets differ exclusively in their initialisation schemes, which are described below.
 
-The six datasets differ exclusively in their initialisation schemes, which is described below.
-\begin{enumerate}\label{no:schemes}
-    \item \textbf{Gaussian Random Fields:} Initialized via a standard homogeneous and isotropic Gaussian random field with a predefined power-law energy spectrum, producing variation across vortices that mimic classic isotropic decaying turbulence. This datasaet will be referred to as \textit{pdegym-gauss}.
-    \item \textbf{Sine Waves:} Initialized using a clean combination of low-order deterministic sinusoidal wave modes, resulting in highly structured regular vortex arrays that gradually destabilise. This dataset will be referred to as \textit{pdegym-sines}.
-    \item \textbf{Shear Layers:} Initialized with parallel fluid streams moving at different velocities, forming a localized velocity gradient that quickly rolls up into discrete vortices via the Kelvin-Helmholtz instability mechanism. This dataset will be referred to as \textit{pdegym-sl}.
-    \item \textbf{Sine Vortex Sheets:} Initialized with an alternating array of concentrated vortex sheets, seeding high-frequency shear dynamics and local dissipation patterns. This dataset will be referred to as \textit{pdegym-svs}.
-    \item \textbf{Brownian Bridges:} Initialized using a constrained stochastic process that enforces rough, non-differentiable initial profiles, providing a benchmark for the model's robustness against high-frequency spatial noise and non-smooth fields. This dataset will be referred to as \textit{pdegym-bb}.
-    \item \textbf{Piecewise-Constant Vorticity:} Initialized with discrete patches of uniform vorticity bounded by sharp discontinuities. This configuration exercises the model's ability to propagate sharp boundaries and capture coherent vortex mergers without numerical diffusion. This dataset will be referred to as \textit{pdegym-pwc}.
-\end{enumerate}
-
-The raw data, originally stored in the \texttt{.nc} format, are converted directly to the unified \texttt{.hdf5} standard pipeline. Representative initialisations and their subsequent states are detailed in Figure~\ref{fig:all}.
+\paragraph{Gaussian Random Fields}
+This dataset is initialized via a standard homogeneous and isotropic Gaussian random field with a predefined power-law energy spectrum, producing variation across vortices that mimic classic isotropic decaying turbulence. This dataset, that will be referred to as \textit{pdegym-gauss}. A sample trajectory is visualised in Figure~\ref{fig:a}.
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figs/fluidtrajpreds/target_pdegym-gauss_14250.png}
-        \caption{Gaussian random field initialisation fluid sample}
-        \label{fig:a}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figs/fluidtrajpreds/target_pdegym-sines_5493.png}
-        \caption{Sine waves initialisation fluid sample}
-        \label{fig:b}
-    \end{subfigure}
-    \vskip 0.3cm
-    \begin{subfigure}{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figs/fluidtrajpreds/target_pdegym-sl_9281.png}
-        \caption{Shear layer initialisation fluid sample}
-        \label{fig:c}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figs/fluidtrajpreds/target_pdegym-svs_2725.png}
-        \caption{Vortex sheet initialisation fluid sample}
-        \label{fig:d}
-    \end{subfigure}
-    \vskip 0.3cm
-    \begin{subfigure}{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figs/fluidtrajpreds/target_pdegym-bb_17830.png}
-        \caption{Brownian bridge initialisation fluid sample}
-        \label{fig:e}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figs/fluidtrajpreds/target_pdegym-pwc_19616.png}
-        \caption{Piecewise vorticity initialisation fluid sample}
-        \label{fig:f}
-    \end{subfigure}
-    \caption{Comparative ground-truth snapshots across the six distinct initialization regimes provided within the preprocessed PDEGym suite}
-    \label{fig:all}
+    \includegraphics[width=0.6\textwidth]{figs/fluidtrajpreds/target_pdegym-gauss_14250.png}
+    \caption{Gaussian random field initialisation fluid sample}
+    \label{fig:a}
 \end{figure}
+
+\paragraph{Sine Waves}
+This dataset is initialized using a clean combination of low-order deterministic sinusoidal wave modes, resulting in highly structured regular vortex arrays that gradually destabilise. This dataset will be referred to as \textit{pdegym-sines}. A sample trajectory is visualised in Figure~\ref{fig:b}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figs/fluidtrajpreds/target_pdegym-sines_5493.png}
+    \caption{Sine waves initialisation fluid sample}
+    \label{fig:b}
+\end{figure}
+
+\paragraph{Shear Layers}
+This dataset is initialized with parallel fluid streams moving at different velocities, forming a localized velocity gradient that quickly rolls up into discrete vortices via the Kelvin-Helmholtz instability mechanism. This dataset will be referred to as \textit{pdegym-sl}. A sample trajectory is visualised in Figure~\ref{fig:c}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figs/fluidtrajpreds/target_pdegym-sl_9281.png}
+    \caption{Shear layer initialisation fluid sample}
+    \label{fig:c}
+\end{figure}
+
+\paragraph{Sine Vortex Sheets}
+This dataset is initialized with an alternating array of concentrated vortex sheets, seeding high-frequency shear dynamics and local dissipation patterns. This dataset will be referred to as \textit{pdegym-svs}. A sample trajectory is visualised in Figure~\ref{fig:d}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figs/fluidtrajpreds/target_pdegym-svs_2725.png}
+    \caption{Vortex sheet initialisation fluid sample}
+    \label{fig:d}
+\end{figure}
+
+\paragraph{Brownian Bridges}
+This dataset is initialized using a constrained stochastic process that enforces rough, non-differentiable initial profiles, providing a benchmark for the model's robustness against high-frequency spatial noise and non-smooth fields. This dataset will be referred to as \textit{pdegym-bb}. A sample trajectory is visualised in Figure~\ref{fig:e}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figs/fluidtrajpreds/target_pdegym-bb_17830.png}
+    \caption{Brownian bridge initialisation fluid sample}
+    \label{fig:e}
+\end{figure}
+
+\paragraph{Piecewise-Constant Vorticity}
+This dataset is initialized with discrete patches of uniform vorticity bounded by sharp discontinuities. This configuration exercises the model's ability to propagate sharp boundaries and capture coherent vortex mergers without numerical diffusion. This dataset will be referred to as \textit{pdegym-pwc}. A sample trajectory is visualised in Figure~\ref{fig:f}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figs/fluidtrajpreds/target_pdegym-pwc_19616.png}
+    \caption{Piecewise-constant vorticity initialisation fluid sample}
+    \label{fig:f}
+\end{figure}
+
 
 
 % ============================================================

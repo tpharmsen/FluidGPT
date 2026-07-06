@@ -1,0 +1,340 @@
+\begin{thebibliography}{40}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Liu et~al.(2021{\natexlab{a}})Liu, Lin, Cao, Hu, Wei, Zhang, Lin, and
+  Guo]{liu2021swin}
+Ze~Liu, Yutong Lin, Yue Cao, Han Hu, Yixuan Wei, Zheng Zhang, Stephen Lin, and
+  Baining Guo.
+\newblock Swin transformer: Hierarchical vision transformer using shifted
+  windows.
+\newblock In \emph{Proceedings of the IEEE/CVF International Conference on
+  Computer Vision}, pages 10012--10022, 2021{\natexlab{a}}.
+
+\bibitem[Lipman et~al.(2022)Lipman, Chen, Ben-Hamu, Nickel, and
+  Le]{lipman2022flowmatching}
+Yaron Lipman, Ricky~T.Q. Chen, Heli Ben-Hamu, Maximilian Nickel, and Matt Le.
+\newblock Flow matching for generative modeling.
+\newblock \emph{arXiv preprint arXiv:2210.02747}, 2022.
+
+\bibitem[Ronneberger et~al.(2015)Ronneberger, Fischer, and
+  Brox]{ronneberger2015unet}
+Olaf Ronneberger, Philipp Fischer, and Thomas Brox.
+\newblock U-net: Convolutional networks for biomedical image segmentation.
+\newblock In \emph{International Conference on Medical Image Computing and
+  Computer-Assisted Intervention}, pages 234--241. Springer, 2015.
+
+\bibitem[Li et~al.(2021)Li, Kovachki, Azizzadenesheli, Liu, Bhattacharya,
+  Stuart, and Anandkumar]{li2021fno}
+Zongyi Li, Nikola Kovachki, Kamyar Azizzadenesheli, Burigede Liu, Kaushik
+  Bhattacharya, Andrew Stuart, and Anima Anandkumar.
+\newblock Fourier neural operator for parametric partial differential
+  equations.
+\newblock In \emph{International Conference on Learning Representations}, 2021.
+\newblock URL \url{https://arxiv.org/abs/2010.08895}.
+
+\bibitem[Lu et~al.(2021)Lu, Jin, Pang, Zhang, and Karniadakis]{lu2021deeponet}
+Lu~Lu, Pengzhan Jin, Guofei Pang, Zhiping Zhang, and George~E. Karniadakis.
+\newblock Learning nonlinear operators via deeponet based on the universal
+  approximation theorem of operators.
+\newblock \emph{Nature Machine Intelligence}, 2021.
+
+\bibitem[Jin et~al.(2022)Jin, Meng, and Lu]{jin2022mionet}
+Pengzhan Jin, Shuai Meng, and Lu~Lu.
+\newblock Mionet: Learning multiple-input operators via tensor product.
+\newblock \emph{SIAM Journal on Scientific Computing}, 44\penalty0
+  (6):\penalty0 A3490--A3514, 2022.
+
+\bibitem[Sanchez-Gonzalez et~al.(2020)Sanchez-Gonzalez, Godwin, Pfaff, Ying,
+  Leskovec, and Battaglia]{sanchezgonzalez2020learning}
+Alvaro Sanchez-Gonzalez, Jonathan Godwin, Tobias Pfaff, Rex Ying, Jure
+  Leskovec, and Peter~W. Battaglia.
+\newblock Learning to simulate complex physics with graph networks.
+\newblock In \emph{International Conference on Machine Learning}, pages
+  8459--8468. PMLR, 2020.
+
+\bibitem[Pfaff et~al.(2021)Pfaff, Fortunato, Sanchez-Gonzalez, and
+  Battaglia]{pfaff2021meshgraphnets}
+Tobias Pfaff, Meire Fortunato, Alvaro Sanchez-Gonzalez, and Peter~W. Battaglia.
+\newblock Learning mesh-based simulation with graph networks.
+\newblock In \emph{International Conference on Learning Representations}, 2021.
+\newblock URL \url{https://arxiv.org/abs/2010.03409}.
+
+\bibitem[Raissi et~al.(2019)Raissi, Perdikaris, and
+  Karniadakis]{raissi2019pinn}
+Maziar Raissi, Paris Perdikaris, and George~E. Karniadakis.
+\newblock Physics-informed neural networks: A deep learning framework for
+  solving forward and inverse problems involving nonlinear partial differential
+  equations.
+\newblock \emph{Journal of Computational Physics}, 378:\penalty0 686--707,
+  2019.
+
+\bibitem[Krishnapriyan et~al.(2021)Krishnapriyan, Gholami, Zhe, Kirby, and
+  Mahoney]{krishnapriyan2021failuremodes}
+Aditi~S. Krishnapriyan, Amir Gholami, Shandian Zhe, Robert~M. Kirby, and
+  Michael~W. Mahoney.
+\newblock Characterizing possible failure modes in physics-informed neural
+  networks.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2021.
+\newblock URL \url{https://arxiv.org/abs/2109.01050}.
+
+\bibitem[Dosovitskiy et~al.(2020)Dosovitskiy, Beyer, Kolesnikov, Weissenborn,
+  Zhai, Unterthiner, Dehghani, Minderer, Heigold, Gelly, Uszkoreit, and
+  Houlsby]{dosovitskiy2020vit}
+Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov, Dirk Weissenborn,
+  Xiaohua Zhai, Thomas Unterthiner, Mostafa Dehghani, Matthias Minderer, Georg
+  Heigold, Sylvain Gelly, Jakob Uszkoreit, and Neil Houlsby.
+\newblock An image is worth 16x16 words: Transformers for image recognition at
+  scale.
+\newblock \emph{arXiv preprint arXiv:2010.11929}, 2020.
+
+\bibitem[McCabe et~al.(2024)McCabe, R{\'e}galdo-Saint~Blancard, Parker, Ohana,
+  Cranmer, Bietti, Eickenberg, Golkar, Krawezik, Lanusse, Pettee, Tesileanu,
+  Cho, and Ho]{mccabe2024mpp}
+Michael McCabe, Bruno R{\'e}galdo-Saint~Blancard, Liam~Holden Parker, Ruben
+  Ohana, Miles Cranmer, Alberto Bietti, Michael Eickenberg, Siavash Golkar,
+  Geraud Krawezik, Francois Lanusse, Mariel Pettee, Tiberiu Tesileanu,
+  Kyunghyun Cho, and Shirley Ho.
+\newblock Multiple physics pretraining for physical surrogate models.
+\newblock 37:\penalty0 119301--119335, 2024.
+\newblock URL \url{https://arxiv.org/abs/2310.02994}.
+
+\bibitem[Hao et~al.(2024)Hao, Su, Liu, Berner, Ying, Su, Anandkumar, Song, and
+  Zhu]{hao2024dpot}
+Zhongkai Hao, Chang Su, Songming Liu, Julius Berner, Chengyang Ying, Hang Su,
+  Anima Anandkumar, Jian Song, and Jun Zhu.
+\newblock Dpot: Auto-regressive denoising operator transformer for large-scale
+  pde pre-training.
+\newblock \emph{arXiv preprint arXiv:2403.03542}, 2024.
+\newblock URL \url{https://arxiv.org/abs/2403.03542}.
+
+\bibitem[Zhang et~al.(2024)Zhang, Laiu, Norman, Stefanski, and
+  Gounley]{zhang2024matey}
+Pei Zhang, M.~Paul Laiu, Matthew Norman, Doug Stefanski, and John Gounley.
+\newblock {MATEY}: multiscale adaptive foundation models for spatiotemporal
+  physical systems.
+\newblock \emph{arXiv preprint arXiv:2412.20601}, 2024.
+
+\bibitem[Liu et~al.(2024{\natexlab{a}})Liu, Sun, He, Pinney, Zhang, and
+  Schaeffer]{liu2024prosefd}
+Yuxuan Liu, Jingmin Sun, Xinjie He, Griffin Pinney, Zecheng Zhang, and Hayden
+  Schaeffer.
+\newblock {PROSE-FD}: A multimodal pde foundation model for learning multiple
+  operators for forecasting fluid dynamics.
+\newblock \emph{arXiv preprint arXiv:2409.09811}, 2024{\natexlab{a}}.
+
+\bibitem[Liu et~al.(2024{\natexlab{b}})Liu, Zhang, and
+  Schaeffer]{liu2024prosepde}
+Yuxuan Liu, Zecheng Zhang, and Hayden Schaeffer.
+\newblock {PROSE}: Predicting multiple operators and symbolic expressions using
+  multimodal transformers.
+\newblock \emph{Neural Networks}, 180:\penalty0 106707, 2024{\natexlab{b}}.
+
+\bibitem[Herde et~al.(2024)Herde, Raoni{\'c}, Rohner, K{\"a}ppeli, Molinaro,
+  de~B{\'e}zenac, and Mishra]{herde2024poseidon}
+Maximilian Herde, Bogdan Raoni{\'c}, Tobias Rohner, Roger K{\"a}ppeli, Roberto
+  Molinaro, Emmanuel de~B{\'e}zenac, and Siddhartha Mishra.
+\newblock Poseidon: Efficient foundation models for pdes.
+\newblock \emph{arXiv preprint arXiv:2405.19101}, 2024.
+\newblock URL \url{https://arxiv.org/abs/2405.19101}.
+
+\bibitem[Cao et~al.(2024)Cao, Liu, Yang, Yu, Schaeffer, and
+  Osher]{cao2024vicon}
+Yadi Cao, Yuxuan Liu, Liu Yang, Rose Yu, Hayden Schaeffer, and Stanley Osher.
+\newblock {VICON}: Vision in-context operator networks for multi-physics fluid
+  dynamics prediction.
+\newblock \emph{arXiv preprint arXiv:2411.16063}, 2024.
+
+\bibitem[Liu et~al.(2025)Liu, Sun, and Schaeffer]{liu2025bcat}
+Yuxuan Liu, Jingmin Sun, and Hayden Schaeffer.
+\newblock {BCAT}: A block causal transformer for pde foundation models for
+  fluid dynamics.
+\newblock \emph{arXiv preprint arXiv:2501.18972}, 2025.
+
+\bibitem[Galletti et~al.(2025)Galletti, Paischer, Setinek, Hornsby, Zanisi,
+  Carey, Pamela, and Brandstetter]{gyrokinetic2024}
+Gianluca Galletti, Fabian Paischer, Paul Setinek, William Hornsby, Lorenzo
+  Zanisi, Naomi Carey, Stanislas Pamela, and Johannes Brandstetter.
+\newblock 5d neural surrogates for nonlinear gyrokinetic simulations of plasma
+  turbulence.
+\newblock \emph{arXiv preprint arXiv:2502.07469}, 2025.
+
+\bibitem[Nguyen et~al.(2023)Nguyen, Brandstetter, Kapoor, Gupta, and
+  Grover]{nguyen2023climax}
+Tung Nguyen, Johannes Brandstetter, Ashish Kapoor, Jayesh~K. Gupta, and Aditya
+  Grover.
+\newblock {ClimaX}: A foundation model for weather and climate.
+\newblock 2023.
+\newblock URL \url{https://arxiv.org/abs/2301.10343}.
+
+\bibitem[Bodnar et~al.(2024)Bodnar, Bruinsma, Lucic, Stanley, Brandstetter,
+  Garvan, Riechert, Weyn, Dong, Vaughan, Gupta, Thambiratnam, Archibald,
+  Heider, Welling, Turner, and Perdikaris]{bodnar2024aurora}
+Cristian Bodnar, Wessel~P. Bruinsma, Ana Lucic, Megan Stanley, Johannes
+  Brandstetter, Patrick Garvan, Maik Riechert, Jonathan~A. Weyn, Haiyu Dong,
+  Anna Vaughan, Jayesh~K. Gupta, Kit Thambiratnam, Alex Archibald, Elizabeth
+  Heider, Max Welling, Richard~E. Turner, and Paris Perdikaris.
+\newblock Aurora: A foundation model of the atmosphere.
+\newblock \emph{arXiv preprint arXiv:2405.13063}, 2024.
+
+\bibitem[Zhdanov et~al.(2025)Zhdanov, Welling, and van~de Meent]{erwin2025}
+Maksim Zhdanov, Max Welling, and Jan-Willem van~de Meent.
+\newblock Erwin: A tree-based hierarchical transformer for large-scale physical
+  systems.
+\newblock In \emph{International Conference on Machine Learning}, 2025.
+\newblock URL \url{https://arxiv.org/abs/2502.17019}.
+
+\bibitem[Takamoto et~al.(2022)Takamoto, Praditia, Leiteritz, MacKinlay,
+  Alesiani, Pfl{\"u}ger, and Niepert]{takamoto2022pdebench}
+Makoto Takamoto, Timothy Praditia, Raphael Leiteritz, Dan MacKinlay, Francesco
+  Alesiani, Dirk Pfl{\"u}ger, and Mathias Niepert.
+\newblock Pdebench: An extensive benchmark for scientific machine learning.
+\newblock \emph{CoRR}, abs/2210.07182, 2022.
+\newblock \doi{10.48550/arXiv.2210.07182}.
+\newblock URL \url{https://arxiv.org/abs/2210.07182}.
+
+\bibitem[Gupta and Brandstetter(2022)]{gupta2022pdearena}
+Jayesh~K. Gupta and Johannes Brandstetter.
+\newblock Towards multi-spatiotemporal-scale generalized pde modeling.
+\newblock \emph{arXiv preprint arXiv:2209.15616}, 2022.
+
+\bibitem[Luo et~al.(2023)Luo, Chen, and Zhang]{luo2023cfdbench}
+Yining Luo, Yingfa Chen, and Zhen Zhang.
+\newblock {CFDBench}: A large-scale benchmark for machine learning methods in
+  fluid dynamics.
+\newblock \emph{arXiv preprint arXiv:2310.05963}, 2023.
+
+\bibitem[Tali et~al.(2024)Tali, Rabeh, Yang, Shadkhah, Karki, Upadhyaya,
+  Dhakshinamoorthy, Saadati, Sarkar, Krishnamurthy, Hegde, Balu, and
+  Ganapathysubramanian]{tali2024flowbench}
+Ronak Tali, Ali Rabeh, Cheng-Hau Yang, Mehdi Shadkhah, Samundra Karki, Abhisek
+  Upadhyaya, Suriya Dhakshinamoorthy, Marjan Saadati, Soumik Sarkar, Adarsh
+  Krishnamurthy, Chinmay Hegde, Aditya Balu, and Baskar Ganapathysubramanian.
+\newblock {FlowBench}: A large scale benchmark for flow simulation over complex
+  geometries.
+\newblock \emph{arXiv preprint arXiv:2409.18032}, 2024.
+
+\bibitem[Hassan et~al.(2023)Hassan, Feeney, Dhruv, Kim, Suh, Ryu, Won, and
+  Chandramowlishwaran]{hassan2023bubbleml}
+Sheikh Md~Shakeel Hassan, Arthur Feeney, Akash Dhruv, Jihoon Kim, Youngjoon
+  Suh, Jaiyoung Ryu, Yoonjin Won, and Aparna Chandramowlishwaran.
+\newblock {BubbleML}: A multi-physics dataset and benchmarks for machine
+  learning.
+\newblock In \emph{Advances in Neural Information Processing Systems}, 2023.
+\newblock URL \url{https://arxiv.org/abs/2307.14623}.
+
+\bibitem[Chung et~al.(2023)Chung, Akoush, Sharma, Tamkin, Jung, Chen, Guo,
+  Brouzet, Talei, Savard, Poludnenko, and Ihme]{chung2023blastnet}
+Wai~Tong Chung, Bassem Akoush, Pushan Sharma, Alex Tamkin, Ki~Sung Jung,
+  Jacqueline Chen, Jack Guo, Davy Brouzet, Mohsen Talei, Bruno Savard, Alexei
+  Poludnenko, and Matthias Ihme.
+\newblock Turbulence in focus: Benchmarking scaling behavior of 3d volumetric
+  super-resolution with blastnet 2.0 data.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~36, 2023.
+\newblock URL \url{https://arxiv.org/abs/2309.13457}.
+
+\bibitem[Ohana et~al.(2024)Ohana, McCabe, Meyer, Morel, Agocs, Beneitez,
+  Berger, Burkhart, Burns, Dalziel, Fielding, Fortunato, Goldberg, Hirashima,
+  Jiang, Kerswell, Maddu, Miller, Mukhopadhyay, Nixon, Shen, Watteaux,
+  R{\'e}galdo-Saint~Blancard, Rozet, Parker, Cranmer, and Ho]{ohana2024thewell}
+Ruben Ohana, Michael McCabe, Lucas Meyer, Rudy Morel, Fruzsina~J. Agocs, Miguel
+  Beneitez, Marsha Berger, Blakesley Burkhart, Keaton Burns, Stuart~B. Dalziel,
+  Drummond~B. Fielding, Daniel Fortunato, Jared~A. Goldberg, Keiya Hirashima,
+  Yan-Fei Jiang, Rich~R. Kerswell, Suryanarayana Maddu, Jonah Miller, Payel
+  Mukhopadhyay, Stefan~S. Nixon, Jeff Shen, Romain Watteaux, Bruno
+  R{\'e}galdo-Saint~Blancard, Fran{\c{c}}ois Rozet, Liam~H. Parker, Miles
+  Cranmer, and Shirley Ho.
+\newblock The well: a large-scale collection of diverse physics simulations for
+  machine learning.
+\newblock 37:\penalty0 44989--45037, 2024.
+
+\bibitem[Lipman et~al.(2024)Lipman, Havasi, Holderrieth, Shaul, Le, Karrer,
+  Chen, Lopez-Paz, Ben-Hamu, and Gat]{lipman2024flowmatchingguide}
+Yaron Lipman, Marton Havasi, Peter Holderrieth, Neta Shaul, Matt Le, Brian
+  Karrer, Ricky~T.Q. Chen, David Lopez-Paz, Heli Ben-Hamu, and Itai Gat.
+\newblock Flow matching guide and code.
+\newblock \emph{arXiv preprint arXiv:2412.06264}, 2024.
+
+\bibitem[Liu et~al.(2022{\natexlab{a}})Liu, Gong, and
+  Liu]{liu2022rectifiedflow}
+Xingchao Liu, Chengyue Gong, and Qiang Liu.
+\newblock Flow straight and fast: Learning to generate and transfer data with
+  rectified flow.
+\newblock \emph{arXiv preprint arXiv:2209.03003}, 2022{\natexlab{a}}.
+
+\bibitem[ten Brinke et~al.(2025)ten Brinke, Minartz, and
+  Menkovski]{tenbrinke2025stflow}
+Kiet~Bennema ten Brinke, Koen Minartz, and Vlado Menkovski.
+\newblock {STFlow}: Data-coupled flow matching for geometric trajectory
+  simulation.
+\newblock \emph{arXiv preprint arXiv:2505.18647}, 2025.
+
+\bibitem[Esser et~al.(2024)Esser, Kulal, Blattmann, Entezari, M{\"u}ller,
+  Saini, Levi, Lorenz, Sauer, Boesel, Podell, Dockhorn, English, Lacey,
+  Goodwin, Marek, and Rombach]{esser2024sd3}
+Patrick Esser, Sumith Kulal, Andreas Blattmann, Rahim Entezari, Jonas
+  M{\"u}ller, Harry Saini, Yam Levi, Dominik Lorenz, Axel Sauer, Frederic
+  Boesel, Dustin Podell, Tim Dockhorn, Zion English, Kyle Lacey, Alex Goodwin,
+  Yannik Marek, and Robin Rombach.
+\newblock Scaling rectified flow transformers for high-resolution image
+  synthesis.
+\newblock In \emph{International Conference on Machine Learning}, 2024.
+\newblock URL \url{https://arxiv.org/abs/2403.03206}.
+
+\bibitem[Vyas et~al.(2023)Vyas, Shi, Le, Tjandra, Wu, Guo, Zhang, Zhang,
+  Adkins, Ngan, Wang, Cruz, Akula, Akinyemi, Ellis, Moritz, Yungster,
+  Rakotoarison, Tan, Summers, Wood, Lane, Williamson, and
+  Hsu]{vyas2023audiobox}
+Apoorv Vyas, Bowen Shi, Matthew Le, Andros Tjandra, Yi-Chiao Wu, Baishan Guo,
+  Jiemin Zhang, Xinyue Zhang, Robert Adkins, William Ngan, Jeff Wang, Ivan
+  Cruz, Bapi Akula, Akinniyi Akinyemi, Brian Ellis, Rashel Moritz, Yael
+  Yungster, Alice Rakotoarison, Liang Tan, Chris Summers, Carleigh Wood, Joshua
+  Lane, Mary Williamson, and Wei-Ning Hsu.
+\newblock Audiobox: Unified audio generation with natural language prompts.
+\newblock \emph{arXiv preprint arXiv:2312.15821}, 2023.
+
+\bibitem[Huguet et~al.(2024)Huguet, Vuckovic, Fatras, Thibodeau-Laufer, Lemos,
+  Islam, Liu, Rector-Brooks, Akhound-Sadegh, Bronstein, Tong, and
+  Bose]{huguet2024proteinfm}
+Guillaume Huguet, James Vuckovic, Kilian Fatras, Eric Thibodeau-Laufer, Pablo
+  Lemos, Riashat Islam, Cheng-Hao Liu, Jarrid Rector-Brooks, Tara
+  Akhound-Sadegh, Michael Bronstein, Alexander Tong, and Avishek~Joey Bose.
+\newblock Sequence-augmented {SE(3)}-flow matching for conditional protein
+  backbone generation.
+\newblock \emph{arXiv preprint arXiv:2405.20313}, 2024.
+
+\bibitem[Kolmogorov(1941)]{Kolmogorov1941}
+N.~Kolmogorov, A.\.
+\newblock The local structure of turbulence in incompressible viscous fluid for
+  very large reynolds’ numbers.
+\newblock \emph{Doklady Akademii Nauk SSSR}, 30\penalty0 (4):\penalty0
+  301--305, 1941.
+
+\bibitem[Jakob et~al.(2021)Jakob, Gross, and
+  G{\"u}nther]{Jakob2021FluidFlowDataset}
+Janis Jakob, Markus Gross, and Thomas G{\"u}nther.
+\newblock A fluid flow data set for machine learning and its application to
+  neural flow map interpolation.
+\newblock \emph{IEEE Transactions on Visualization and Computer Graphics},
+  27\penalty0 (2):\penalty0 1279--1289, 2021.
+\newblock \doi{10.1109/TVCG.2020.3028947}.
+
+\bibitem[Liu et~al.(2021{\natexlab{b}})Liu, Hu, Lin, Yao, Xie, Wei, Ning, Cao,
+  Zhang, Dong, Wei, and Guo]{Liu2021SwinV2}
+Ze~Liu, Han Hu, Yutong Lin, Zhuliang Yao, Zhenda Xie, Yixuan Wei, Jia Ning, Yue
+  Cao, Zheng Zhang, Li~Dong, Furu Wei, and Baining Guo.
+\newblock Swin transformer v2: Scaling up capacity and resolution.
+\newblock \emph{arXiv preprint arXiv:2111.09883}, 2021{\natexlab{b}}.
+
+\bibitem[Liu et~al.(2022{\natexlab{b}})Liu, Mao, Wu, Feichtenhofer, Darrell,
+  and Xie]{Liu2022ConvNeXt}
+Zhuang Liu, Hanzi Mao, Chao-Yuan Wu, Christoph Feichtenhofer, Trevor Darrell,
+  and Saining Xie.
+\newblock A convnet for the 2020s.
+\newblock \emph{arXiv preprint arXiv:2201.03545}, 2022{\natexlab{b}}.
+
+\end{thebibliography}

@@ -20,27 +20,25 @@ This chapter introduces two modeling approaches for spatiotemporal fluid dynamic
 
 \subsection{Original Swin Backbone}
 
-The shared backbone is based on the original Swin Transformer \citet{Liu2021SwinTA}, which enables hierarchical feature extraction via shifted window self-attention. The shifted window mechanism allows for efficient local attention computation while maintaining the ability to capture long-range dependencies through hierarchical feature aggregation. The backbone consists of multiple stages, each containing several Swin Transformer blocks, with embedding merging layers between stages to reduce spatial resolution while increasing feature dimensionality and receptive field of applied attention mechanisms. The original Swin Transformer is designed for image classification tasks, but we adapt it for spatiotemporal fluid dynamics prediction by incorporating temporal information and modifying the attention mechanism to handle sequential data. Two challenges here are the extra temporal dimension and the need to return the processed data to the original spatial resolution instead of a classification output.
+The shared backbone is based on the original Swin Transformer \cite{liu2021swin}, which enables hierarchical feature extraction via shifted window self-attention. The shifted window mechanism allows for efficient local attention computation while maintaining the ability to capture long-range dependencies through hierarchical feature aggregation. The backbone consists of multiple stages, each containing several Swin Transformer blocks, with embedding merging layers between stages to reduce spatial resolution while increasing feature dimensionality and receptive field of applied attention mechanisms. The original Swin Transformer is designed for image classification tasks, but we adapt it for spatiotemporal fluid dynamics prediction by incorporating temporal information and modifying the attention mechanism to handle sequential data. Two challenges here are the extra temporal dimension and the need to return the processed data to the original spatial resolution instead of a classification output.
 
 \subsection{Space-Then-Time Attention Backbone}
 
-To incorporate temporal structure, we employ a custom space-then-time attention block. As temporal interactions, spacings and lengths are typically different than spatial interactions, it makes sense to factorize the attention mechanism into two seperate stages. Additionally, using a seperate attention stage for the temporal dimension allows for possibly more efficient and effective modeling of temporal dependencies, which is highly relevnant for large-scale foundation training tasks. This is motivated by the paper >>>>>>>>>>>>>>BCAT, which concludes that a space-then-time mechanism is more efficient while negligibly affecting predictive performance.
-In this formulation, self-attention is first applied across spatial dimensions using the spatial windows of the original swin transformer block and subsequently in straight line across the temporal dimension. The corresponding attention masking strategy is illustrated in Figure~\ref{fig:BlockExplainer}. In practice, multiple Space-Then-Time attention blocks are used sequentially for smoother and more robust information spread. 
-
-include evidence as temporal bcat model thingy.
+To incorporate temporal structure, we employ a custom space-then-time attention block. As temporal interactions, spacings and lengths are typically different than spatial interactions, it makes sense to factorize the attention mechanism into two seperate stages. Additionally, using a seperate attention stage for the temporal dimension allows for possibly more efficient and effective modeling of temporal dependencies, which is highly relevant for large-scale foundation training tasks. This is motivated by the block causal transformer BCAT, which concludes that a space-then-time attention mechanism is more efficient while negligibly affecting predictive performance compared to a spatiotemporal attention approach. \cite{liu2025bcat}
+In practise, self-attention is first applied across spatial dimensions using the spatial windows of the original swin transformer block and subsequently in a perpendicular straight line across the temporal dimension. The corresponding attention masking strategy is illustrated in Figure~\ref{fig:BlockExplainer}. Multiple space-then-time attention blocks are used sequentially for smoother and more robust information spread. 
 
 \begin{figure}[h]
 	\centering
 	\makebox[\textwidth][c]{
 		\includestandalone[width=0.8\textwidth]{figs/BlockExplainerAll}
 	}
-	\caption{Illustration of the space-then-time attention masking pattern used in the backbone architecture. The left and middle figure show the two subsequent steps of the spatial attention mask and the right figure shows the temporal attention mask.}
+	\caption{Illustration of the space-then-time attention masking pattern used in the backbone architecture. The left and middle figure show the two subsequent steps of the spatial attention mask, where the middle figure shows the shifted attention window, and the right figure shows the temporal attention mask. Indirectly, every token can attend to every other token in the input sequence, negligibly affecting predictive performance while being more efficient than a memory-intensive spatiotemporal attention approach.}
 	\label{fig:BlockExplainer}
 \end{figure}
 
 \subsection{UNet-style Multi-scale Architecture}
 
-The Swin Transformer backbone is embedded within a UNet-style encoder-decoder structure with skip connections. This design enables multi-scale feature extraction while preserving fine-grained spatial information, enhancing the models ability to capture complex spatial and temporal relationships. Additionally, the output dimensions of the model are the same size as the input, which is not the case with the classification output of the traditional Swin Transformer. Skip connections are implemented using ConvNeXt-style blocks, which facilitate stable gradient propagation and information flow across resolution scales and encoder-decoder pathways. Additionally the ConvNeXt blocks allow for extra information aggregation from nearby spatial locations. Each level of the Unet focusses on a different spatial scale of information spread, with the deepest layer programmed for an spatial all-to-all attention mask. 
+The Swin Transformer backbone is embedded within a UNet-style encoder-decoder structure with skip connections \cite{ronneberger2015unet}. This design enables multi-scale feature extraction while preserving fine-grained spatial information, enhancing the models ability to capture complex spatial and temporal relationships. Additionally, the output dimensions of the model are the same size as the input, which is not the case with the classification output of the traditional Swin Transformer. Skip connections are implemented using ConvNeXt-style blocks \cite{Liu2022ConvNeXt}, which facilitate stable gradient propagation and information flow across resolution scales and encoder-decoder pathways. Additionally the ConvNeXt blocks allow for extra information aggregation from nearby spatial locations. Each level of the Unet focusses on a different spatial scale of information spread, with the deepest layer programmed for an spatial all-to-all attention mask.  
 
 
 \subsection{Patch Embedding and Reconstruction}
@@ -53,9 +51,7 @@ At the output stage, the latent embeddings are projected back to the original ve
 
 As depth increases in the encoder, groups of four neighbouring patches/embeddings are merged into a single embedding with double size embedding dimension with a single dense connected layer. This operation progressively reduces spatial resolution while increasing receptive field size when used in combination with window attention mechanisms. This form of compression throughout the depth of the model also realises a form of regularization and generalisation. In the decoder, the reverse operation is applied to recover full spatial resolution.
 
-% =========================================================
 \section{Mathematical Formulation}
-% =========================================================
 
 This section provides the formal mathematical description of the core components shared by both models. We introduce notation, then derive the patch embedding, positional encoding, windowed cosine attention with continuous relative position bias, temporal attention, and the hierarchical patch merging/expansion operations.
 
@@ -97,7 +93,7 @@ A separate learned temporal embedding $\mathbf{e}^{\text{time}}_t \in \mathbb{R}
 
 where $i(n)$ and $j(n)$ denote the row and column indices of patch $n$ in the spatial grid.
 
-\subsection{Windowed Cosine Attention with Continuous Relative Position Bias}
+\subsection{Windowed Cosine Normalized Attention with Continuous Relative Position Bias}
 
 \paragraph{Window partitioning.}
 The spatial token map at a given level is reshaped to $(\hat{H}, \hat{W})$ and partitioned into non-overlapping windows of size $w \times w$. For a shifted-window block, the map is first cyclically shifted by $(\lfloor w/2 \rfloor, \lfloor w/2 \rfloor)$ pixels before partitioning, and the shift is reversed afterwards. Each window contains $M = w^2$ tokens and is processed independently, yielding an effective batch of $\frac{\hat{H}\hat{W}}{w^2}$ windows per sample per time step.
@@ -111,20 +107,19 @@ For tokens $\mathbf{X} \in \mathbb{R}^{M \times d}$ within a window, queries, ke
     \mathbf{V} = \mathbf{X} W^V,
 \end{equation}
 
-where $W^Q, W^K, W^V \in \mathbb{R}^{d \times d}$. Separate additive biases $\mathbf{b}^q$ and $\mathbf{b}^v$ are used for queries and values; no bias is applied to keys, following \citet{Liu2021SwinTA}.
+where $W^Q, W^K, W^V \in \mathbb{R}^{d \times d}$. Separate additive biases $\mathbf{b}^q$ and $\mathbf{b}^v$ are used for queries and values. No bias is applied to keys, following the improved Swin Transformer \cite{liu2021swin}.
 
-\paragraph{Cosine attention.}
+\paragraph{Cosine normalized attention.}
 Rather than scaled dot-product attention, we use cosine attention with a learnable per-head scaling factor:
 
 \begin{equation}
     A_{ij}^{(h)} = \tau^{(h)} \cdot \frac{\mathbf{q}_i^{(h)}}{\|\mathbf{q}_i^{(h)}\|} \cdot \frac{\mathbf{k}_j^{(h)}}{\|\mathbf{k}_j^{(h)}\|},
 \end{equation}
 
-where $h$ indexes the attention head, and $\tau^{(h)} = \exp\!\left(\min\!\left(\lambda^{(h)},\, \ln 100\right)\right)$ is a learned, clamped temperature parameter initialised to $\tau^{(h)} = 10$. The clamping ensures $\tau^{(h)} \leq 100$, preventing attention collapse to a hard argmax. The choice of this attention mechanism is motivated by improvements in training stability and convergence speed for deep networks, as well as better generalisation performance on downstream tasks.
->>>>>>>>>>>>> link for cosine attention paper.
+where $h$ indexes the attention head, and $\tau^{(h)} = \exp\!\left(\min\!\left(\lambda^{(h)},\, \ln 100\right)\right)$ is a learned, clamped temperature parameter initialised to $\tau^{(h)} = 10$. The clamping ensures $\tau^{(h)} \leq 100$, preventing attention collapse to a hard argmax. The choice of this attention mechanism is motivated by improvements in training stability and convergence speed for deep networks, as well as better generalisation performance shown in the improved second version of the Swin Transformer. \cite{Liu2021SwinV2}  \cite{LuoCosineNormalization2017}
 
 \paragraph{Continuous relative position bias.}
-Rather than a discrete relative position bias table, we follow \citet{Liu2021SwinV2} and use a small MLP to generate biases from normalised, log-scaled relative coordinate offsets. For a pair of tokens at positions $(i, j)$ within the window, the 2D relative offset $\Delta\mathbf{r}_{ij} \in \mathbb{R}^2$ is first normalised by the window size and then mapped through a log-linear compression:
+Rather than a discrete relative position bias table, we follow the style of the improved Swin Transformer and use a small MLP to generate biases from normalised, log-scaled relative coordinate offsets. For a pair of tokens at positions $(i, j)$ within the window, the 2D relative offset $\Delta\mathbf{r}_{ij} \in \mathbb{R}^2$ is first normalised by the window size and then mapped through a log-linear compression:
 
 \begin{equation}
     \tilde{\Delta r} = \operatorname{sign}(\Delta r) \cdot \frac{\log_2(|\Delta r| + 1)}{\log_2 8},
@@ -174,7 +169,7 @@ where $\operatorname{WA}(\cdot)$ denotes the windowed attention operation descri
 
 \subsection{Temporal Self-Attention}
 
-After each spatial attention stage, a dedicated temporal attention block operates independently on the time dimension for each spatial token. Given the sequence of embeddings at a fixed spatial location $n$, arranged as $\mathbf{X}_n \in \mathbb{R}^{T \times d}$, temporal attention is computed with the same cosine formulation and a per-head learnable temperature $\tau_{\text{temp}}^{(h)}$:
+After each spatial attention stage, a dedicated temporal attention block operates independently on the time dimension for each spatial token. Given the sequence of embeddings at a fixed spatial location $n$, arranged as $\mathbf{X}_n \in \mathbb{R}^{T \times d}$, temporal attention is computed with the same cosine formulation \cite{LuoCosineNormalization2017} and a per-head learnable temperature $\tau_{\text{temp}}^{(h)}$:
 
 \begin{equation}
     A^{(h)}_{\text{temp},st} = \tau^{(h)}_{\text{temp}} \cdot \frac{\mathbf{q}_s^{(h)}}{\|\mathbf{q}_s^{(h)}\|} \cdot \frac{\mathbf{k}_t^{(h)}}{\|\mathbf{k}_t^{(h)}\|}.
@@ -196,7 +191,7 @@ and the bias for head $h$ is a directly learnable lookup:
 where $\mathbf{B}_{\text{temp}} \in \mathbb{R}^{(2T-1) \times H_{\text{heads}}}$ is a registered buffer populated from the log-compressed offsets at initialisation and not updated during training.
 
 \paragraph{Attention masking.}
-Depending on the configuration, an optional causal mask may be applied. In the \emph{custom} masking scheme, tokens in the conditioning window $[0, T_c)$ are prevented from attending to or being attended to by predicted tokens $[T_c, T)$. The mask is defined as
+Depending on the configuration, an optional causal mask may be applied. In the \emph{custom} masking scheme, tokens in the conditioning window $[0, T_c)$ are prevented from being attended to by predicted tokens $[T_c, T)$ to preserve conditioning information throughout the network. The mask is defined as
 
 \begin{equation}
     \mathbf{M}^{\text{custom}}_{st} = \begin{cases} -\infty & \text{if } s < T_c \text{ or } t < T_c,\\ 0 & \text{otherwise,} \end{cases}

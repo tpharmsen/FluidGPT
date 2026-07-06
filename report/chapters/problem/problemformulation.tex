@@ -1,4 +1,4 @@
-\chapter{Problem Formulation}
+\chapter{Problem Formulation}\label{ch:problem}
 
 This chapter formally defines the research problem, establishing the specific physical PDE system, the constraints imposed by large-scale pretraining data, and the mathematical framework for the two proposed AI surrogate models. We further detail the key challenges that motivate the dual deterministic-probabilistic modelling approach, before concluding with the research questions guiding this work.
 
@@ -20,7 +20,7 @@ In the special case of incompressible flow, the simplification $\frac{d\rho}{dt}
 
 \subsection{Characteristics of the Navier–Stokes System}\label{sec:energyspectra}
 
-The Navier–Stokes system shows complex dynamical behavior characterized by creation, advection, and dissipation of vortical structures, often referred to as eddies. Large eddies break down into smaller eddies in a cascading process, transferring energy across lowering scales until it dissipates at the smallest (viscous) level. This process is chaotic and highly sensitive to initial conditions, leading to stochastic-like macroscopic behavior even though the governing equations are deterministic. Capturing this behavior accurately is a core challenge for surrogate models, especially those that must generalize across varying flow regimes and boundary conditions.
+The Navier–Stokes system shows complex dynamical behavior characterized by creation, advection, and dissipation of vortical structures, often referred to as eddies. Large eddies break down into smaller eddies in a cascading process, transferring energy across lowering scales until it dissipates at the smallest viscous level. This process is chaotic and highly sensitive to initial conditions, leading to stochastic-like macroscopic behavior even though the governing equations are deterministic. Capturing this behavior accurately is a core challenge for surrogate models, especially those that must generalize across varying flow regimes and boundary conditions.
 
 \vspace{1em}
 
@@ -137,7 +137,7 @@ Denote the loss term for the Flow Matching model as $\mathcal{L}_{\text{FM}}$. F
 
 \section{Research Questions}
 
-This work focuses on building a foundation model that is both rollout-stable and physically consistent for a wide domain space of Navier–Stokes flows, relying solely on velocity-field inputs. To tackle this, we take a dual approach, leveraging deterministic and probabilistic modeling techniques. The following research questions highlight the objectives of our study, each directly motivated by the challenges outlined in Section~\ref{sec:challenges}.
+This work focuses on building a foundation model that is both rollout-stable and physically consistent for a wide domain space of Navier–Stokes flows, relying solely on velocity-field inputs. To tackle this, we take a dual approach, leveraging deterministic and probabilistic modeling techniques. The following research questions highlight the objectives of our study, each directly motivated by the challenges further outlined in each subsequent section of this chapter.
 
 \begin{enumerate}
 	\item \textbf{Can probabilistic flow matching models outperform deterministic baselines in predicting subsequent system states of Navier-Stokes dynamics, when trained on a heterogeneous multi-source dataset spanning a wide variety of physical parameters and flow regimes?}
