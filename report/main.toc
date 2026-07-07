@@ -1,113 +1,113 @@
-\contentsline {chapter}{\numberline {1}Introduction}{5}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Motivation}{5}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Problem Statement}{5}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Approach}{6}{section.1.3}%
-\contentsline {section}{\numberline {1.4}Contributions}{6}{section.1.4}%
-\contentsline {section}{\numberline {1.5}Report Structure}{7}{section.1.5}%
-\contentsline {chapter}{\numberline {2}Related Work}{8}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Surrogate models and neural operators}{8}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Foundation models for Fluid Dynamics}{8}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Foundation models beyond Fluid Dynamics}{9}{section.2.3}%
-\contentsline {section}{\numberline {2.4}Datasets}{9}{section.2.4}%
-\contentsline {section}{\numberline {2.5}Bifurcative/sensitive systems}{10}{section.2.5}%
-\contentsline {section}{\numberline {2.6}Flow matching and generative modelling}{10}{section.2.6}%
-\contentsline {chapter}{\numberline {3}Problem Formulation}{11}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Navier-Stokes System}{11}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Characteristics of the Navier–Stokes System}{11}{subsection.3.1.1}%
-\contentsline {section}{\numberline {3.2}Pre-training Datasets and Preliminary Domain Coverage}{12}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Machine Learning Objective}{13}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Prediction Task}{13}{subsection.3.3.1}%
-\contentsline {section}{\numberline {3.4}Dual Modelling Approach}{13}{section.3.4}%
-\contentsline {subsection}{\numberline {3.4.1}1. Deterministic Prediction}{13}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {3.4.2}2. Probabilistic Prediction (Flow Matching)}{14}{subsection.3.4.2}%
-\contentsline {section}{\numberline {3.5}Research Questions}{14}{section.3.5}%
-\contentsline {chapter}{\numberline {4}Datasets}{15}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Challenges}{15}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}Wide variation in flow regimes}{15}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {4.1.2}Compatibility of datasets}{15}{subsection.4.1.2}%
-\contentsline {section}{\numberline {4.2}Dataset Selection}{15}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Amira}{16}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}PDEBench}{17}{subsection.4.2.2}%
-\contentsline {paragraph}{PDEBench-2DCNS}{17}{section*.5}%
-\contentsline {paragraph}{PDEBench-2DINS}{18}{section*.7}%
-\contentsline {subsection}{\numberline {4.2.3}PDEGym}{18}{subsection.4.2.3}%
-\contentsline {paragraph}{Gaussian Random Fields}{19}{section*.9}%
-\contentsline {paragraph}{Sine Waves}{19}{section*.11}%
-\contentsline {paragraph}{Shear Layers}{19}{section*.13}%
-\contentsline {paragraph}{Sine Vortex Sheets}{19}{section*.15}%
-\contentsline {paragraph}{Brownian Bridges}{20}{section*.17}%
-\contentsline {paragraph}{Piecewise-Constant Vorticity}{20}{section*.19}%
-\contentsline {section}{\numberline {4.3}Preprocessing}{20}{section.4.3}%
-\contentsline {subsection}{\numberline {4.3.1}Spatial Interpolation}{20}{subsection.4.3.1}%
-\contentsline {subsection}{\numberline {4.3.2}Temporal Subsampling}{21}{subsection.4.3.2}%
-\contentsline {subsection}{\numberline {4.3.3}File-Format Conversion and Storage}{21}{subsection.4.3.3}%
-\contentsline {chapter}{\numberline {5}Models}{22}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Challenges}{22}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Generalisation}{22}{subsection.5.1.1}%
-\contentsline {subsection}{\numberline {5.1.2}Temporal Stability}{22}{subsection.5.1.2}%
-\contentsline {subsection}{\numberline {5.1.3}Efficiency}{22}{subsection.5.1.3}%
-\contentsline {section}{\numberline {5.2}Overview of the Modeling Approaches}{22}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}Original Swin Backbone}{23}{subsection.5.2.1}%
-\contentsline {subsection}{\numberline {5.2.2}Space-Then-Time Attention Backbone}{23}{subsection.5.2.2}%
-\contentsline {subsection}{\numberline {5.2.3}UNet-style Multi-scale Architecture}{23}{subsection.5.2.3}%
-\contentsline {subsection}{\numberline {5.2.4}Patch Embedding and Reconstruction}{24}{subsection.5.2.4}%
-\contentsline {subsection}{\numberline {5.2.5}Hierarchical Patch Merging and Expansion}{24}{subsection.5.2.5}%
-\contentsline {section}{\numberline {5.3}Mathematical Formulation}{24}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}Notation}{24}{subsection.5.3.1}%
-\contentsline {subsection}{\numberline {5.3.2}Patch Embedding}{24}{subsection.5.3.2}%
-\contentsline {subsection}{\numberline {5.3.3}Spatiotemporal Positional Encoding}{24}{subsection.5.3.3}%
-\contentsline {subsection}{\numberline {5.3.4}Windowed Cosine Attention with Continuous Relative Position Bias}{25}{subsection.5.3.4}%
-\contentsline {paragraph}{Window partitioning.}{25}{section*.22}%
-\contentsline {paragraph}{Query, key, value projection.}{25}{section*.23}%
-\contentsline {paragraph}{Cosine attention.}{25}{section*.24}%
-\contentsline {paragraph}{Continuous relative position bias.}{25}{section*.25}%
-\contentsline {paragraph}{Attention output.}{26}{section*.26}%
-\contentsline {paragraph}{Spatial Swin block residual structure.}{26}{section*.27}%
-\contentsline {subsection}{\numberline {5.3.5}Temporal Self-Attention}{26}{subsection.5.3.5}%
-\contentsline {paragraph}{Temporal relative position bias.}{26}{section*.28}%
-\contentsline {paragraph}{Attention masking.}{26}{section*.29}%
-\contentsline {paragraph}{Temporal block residual structure.}{27}{section*.30}%
-\contentsline {subsection}{\numberline {5.3.6}Hierarchical Patch Merging and Expansion}{27}{subsection.5.3.6}%
-\contentsline {paragraph}{Patch merging.}{27}{section*.31}%
-\contentsline {paragraph}{Patch expansion.}{27}{section*.32}%
-\contentsline {paragraph}{Skip connections.}{27}{section*.33}%
-\contentsline {subsection}{\numberline {5.3.7}Flow-Time Conditioning (Flow-Matching Model Only)}{27}{subsection.5.3.7}%
-\contentsline {section}{\numberline {5.4}Deterministic Models}{28}{section.5.4}%
-\contentsline {subsection}{\numberline {5.4.1}Prediction}{28}{subsection.5.4.1}%
-\contentsline {subsection}{\numberline {5.4.2}Architecture Overview}{28}{subsection.5.4.2}%
-\contentsline {subsection}{\numberline {5.4.3}Hyperparameter Configurations}{29}{subsection.5.4.3}%
-\contentsline {section}{\numberline {5.5}Flow-Matching Models}{29}{section.5.5}%
-\contentsline {subsection}{\numberline {5.5.1}Prediction}{29}{subsection.5.5.1}%
-\contentsline {subsection}{\numberline {5.5.2}Flow-Time Conditioning}{29}{subsection.5.5.2}%
-\contentsline {subsection}{\numberline {5.5.3}Prior Distribution Construction}{29}{subsection.5.5.3}%
-\contentsline {subsection}{\numberline {5.5.4}Sampling and Integration}{30}{subsection.5.5.4}%
-\contentsline {subsection}{\numberline {5.5.5}Architecture Overview}{30}{subsection.5.5.5}%
-\contentsline {subsection}{\numberline {5.5.6}Hyperparameter Configurations}{30}{subsection.5.5.6}%
-\contentsline {section}{\numberline {5.6}Model Scaling and Architectural Variants}{31}{section.5.6}%
-\contentsline {chapter}{\numberline {6}Training and Validation}{32}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Challenges}{32}{section.6.1}%
-\contentsline {subsection}{\numberline {6.1.1}Software}{32}{subsection.6.1.1}%
-\contentsline {subsection}{\numberline {6.1.2}Hardware}{32}{subsection.6.1.2}%
-\contentsline {subsection}{\numberline {6.1.3}Validation metrics}{32}{subsection.6.1.3}%
-\contentsline {section}{\numberline {6.2}Training Procedure}{32}{section.6.2}%
-\contentsline {subsection}{\numberline {6.2.1}Training Framework and System Abstraction}{32}{subsection.6.2.1}%
-\contentsline {subsection}{\numberline {6.2.2}Model Training}{33}{subsection.6.2.2}%
-\contentsline {subsection}{\numberline {6.2.3}Optimization and Learning Rate Scheduling}{33}{subsection.6.2.3}%
-\contentsline {section}{\numberline {6.3}Hardware Platform and Parallelism}{33}{section.6.3}%
-\contentsline {section}{\numberline {6.4}Training hyperparameters}{34}{section.6.4}%
-\contentsline {section}{\numberline {6.5}Validation}{34}{section.6.5}%
-\contentsline {subsection}{\numberline {6.5.1}Error Metrics}{34}{subsection.6.5.1}%
-\contentsline {subsection}{\numberline {6.5.2}Model- and Dataset-Specific Validation}{34}{subsection.6.5.2}%
-\contentsline {paragraph}{Deterministic Model.}{34}{section*.39}%
-\contentsline {paragraph}{Flow-Matching Model.}{35}{section*.40}%
-\contentsline {subsubsection}{Single-Step Validation}{35}{section*.41}%
-\contentsline {subsubsection}{Rollout Validation}{35}{section*.42}%
-\contentsline {subsubsection}{Spectral Diagnostics}{35}{section*.43}%
-\contentsline {chapter}{\numberline {7}Results}{37}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Conceptualization of results}{37}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Single-step prediction}{38}{section.7.2}%
-\contentsline {section}{\numberline {7.3}Rollout prediction}{39}{section.7.3}%
-\contentsline {section}{\numberline {7.4}Spectrum analysis}{40}{section.7.4}%
-\contentsline {chapter}{\numberline {8}Conclusion}{42}{chapter.8}%
-\contentsline {chapter}{\numberline {A}Appendix}{46}{appendix.A}%
-\contentsline {section}{\numberline {A.1}Trajectory-specific prediction visualizations}{46}{section.A.1}%
+\contentsline {chapter}{\numberline {1}Introduction}{3}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Motivation}{3}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Problem Statement}{3}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Approach}{4}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Contributions}{4}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Report Structure}{5}{section.1.5}%
+\contentsline {chapter}{\numberline {2}Related Work}{6}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Surrogate models and neural operators}{6}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Foundation models for Fluid Dynamics}{6}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Foundation models beyond Fluid Dynamics}{7}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Datasets}{7}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Bifurcative/sensitive systems}{8}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Flow matching and generative modelling}{8}{section.2.6}%
+\contentsline {chapter}{\numberline {3}Problem Formulation}{9}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Navier-Stokes System}{9}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Characteristics of the Navier–Stokes System}{9}{subsection.3.1.1}%
+\contentsline {section}{\numberline {3.2}Pre-training Datasets and Preliminary Domain Coverage}{10}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Machine Learning Objective}{11}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Prediction Task}{11}{subsection.3.3.1}%
+\contentsline {section}{\numberline {3.4}Dual Modelling Approach}{11}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}1. Deterministic Prediction}{11}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}2. Probabilistic Prediction (Flow Matching)}{12}{subsection.3.4.2}%
+\contentsline {section}{\numberline {3.5}Research Questions}{12}{section.3.5}%
+\contentsline {chapter}{\numberline {4}Datasets}{13}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Challenges}{13}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Wide variation in flow regimes}{13}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Compatibility of datasets}{13}{subsection.4.1.2}%
+\contentsline {section}{\numberline {4.2}Dataset Selection}{13}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Amira}{14}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}PDEBench}{15}{subsection.4.2.2}%
+\contentsline {paragraph}{PDEBench-2DCNS}{15}{section*.5}%
+\contentsline {paragraph}{PDEBench-2DINS}{16}{section*.7}%
+\contentsline {subsection}{\numberline {4.2.3}PDEGym}{16}{subsection.4.2.3}%
+\contentsline {paragraph}{Gaussian Random Fields}{17}{section*.9}%
+\contentsline {paragraph}{Sine Waves}{17}{section*.11}%
+\contentsline {paragraph}{Shear Layers}{17}{section*.13}%
+\contentsline {paragraph}{Sine Vortex Sheets}{17}{section*.15}%
+\contentsline {paragraph}{Brownian Bridges}{18}{section*.17}%
+\contentsline {paragraph}{Piecewise-Constant Vorticity}{18}{section*.19}%
+\contentsline {section}{\numberline {4.3}Preprocessing}{18}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Spatial Interpolation}{19}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Temporal Subsampling}{19}{subsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.3.3}File-Format Conversion and Storage}{19}{subsection.4.3.3}%
+\contentsline {chapter}{\numberline {5}Models}{20}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Challenges}{20}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Generalisation}{20}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Temporal Stability}{20}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Efficiency}{20}{subsection.5.1.3}%
+\contentsline {section}{\numberline {5.2}Overview of the Modeling Approaches}{20}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Original Swin Backbone}{21}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Space-Then-Time Attention Backbone}{21}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}UNet-style Multi-scale Architecture}{21}{subsection.5.2.3}%
+\contentsline {subsection}{\numberline {5.2.4}Patch Embedding and Reconstruction}{22}{subsection.5.2.4}%
+\contentsline {subsection}{\numberline {5.2.5}Hierarchical Patch Merging and Expansion}{22}{subsection.5.2.5}%
+\contentsline {section}{\numberline {5.3}Mathematical Formulation}{22}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Notation}{22}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Patch Embedding}{22}{subsection.5.3.2}%
+\contentsline {subsection}{\numberline {5.3.3}Spatiotemporal Positional Encoding}{23}{subsection.5.3.3}%
+\contentsline {subsection}{\numberline {5.3.4}Windowed Cosine Normalized Attention with Continuous Relative Position Bias}{23}{subsection.5.3.4}%
+\contentsline {paragraph}{Window partitioning.}{23}{section*.22}%
+\contentsline {paragraph}{Query, key, value projection.}{23}{section*.23}%
+\contentsline {paragraph}{Cosine normalized attention.}{23}{section*.24}%
+\contentsline {paragraph}{Continuous relative position bias.}{23}{section*.25}%
+\contentsline {paragraph}{Attention output.}{24}{section*.26}%
+\contentsline {paragraph}{Spatial Swin block residual structure.}{24}{section*.27}%
+\contentsline {subsection}{\numberline {5.3.5}Temporal Self-Attention}{24}{subsection.5.3.5}%
+\contentsline {paragraph}{Temporal relative position bias.}{24}{section*.28}%
+\contentsline {paragraph}{Attention masking.}{25}{section*.29}%
+\contentsline {paragraph}{Temporal block residual structure.}{25}{section*.30}%
+\contentsline {subsection}{\numberline {5.3.6}Hierarchical Patch Merging and Expansion}{25}{subsection.5.3.6}%
+\contentsline {paragraph}{Patch merging.}{25}{section*.31}%
+\contentsline {paragraph}{Patch expansion.}{25}{section*.32}%
+\contentsline {paragraph}{Skip connections.}{25}{section*.33}%
+\contentsline {subsection}{\numberline {5.3.7}Flow-Time Conditioning (Flow-Matching Model Only)}{26}{subsection.5.3.7}%
+\contentsline {section}{\numberline {5.4}Deterministic Models}{26}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}Prediction}{26}{subsection.5.4.1}%
+\contentsline {subsection}{\numberline {5.4.2}Architecture Overview}{26}{subsection.5.4.2}%
+\contentsline {subsection}{\numberline {5.4.3}Hyperparameter Configurations}{26}{subsection.5.4.3}%
+\contentsline {section}{\numberline {5.5}Flow-Matching Models}{27}{section.5.5}%
+\contentsline {subsection}{\numberline {5.5.1}Prediction}{27}{subsection.5.5.1}%
+\contentsline {subsection}{\numberline {5.5.2}Flow-Time Conditioning}{28}{subsection.5.5.2}%
+\contentsline {subsection}{\numberline {5.5.3}Prior Distribution Construction}{28}{subsection.5.5.3}%
+\contentsline {subsection}{\numberline {5.5.4}Sampling and Integration}{28}{subsection.5.5.4}%
+\contentsline {subsection}{\numberline {5.5.5}Architecture Overview}{28}{subsection.5.5.5}%
+\contentsline {subsection}{\numberline {5.5.6}Hyperparameter Configurations}{29}{subsection.5.5.6}%
+\contentsline {section}{\numberline {5.6}Model Scaling and Architectural Variants}{29}{section.5.6}%
+\contentsline {chapter}{\numberline {6}Training and Validation}{30}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Challenges}{30}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Software}{30}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}Hardware}{30}{subsection.6.1.2}%
+\contentsline {subsection}{\numberline {6.1.3}Validation metrics}{30}{subsection.6.1.3}%
+\contentsline {section}{\numberline {6.2}Training Procedure}{30}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Training Framework and System Abstraction}{30}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {6.2.2}Model Training}{31}{subsection.6.2.2}%
+\contentsline {subsection}{\numberline {6.2.3}Optimization and Learning Rate Scheduling}{31}{subsection.6.2.3}%
+\contentsline {section}{\numberline {6.3}Hardware Platform and Parallelism}{31}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Training hyperparameters}{32}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Validation}{32}{section.6.5}%
+\contentsline {subsection}{\numberline {6.5.1}Error Metrics}{32}{subsection.6.5.1}%
+\contentsline {subsection}{\numberline {6.5.2}Model- and Dataset-Specific Validation}{32}{subsection.6.5.2}%
+\contentsline {paragraph}{Deterministic Model.}{32}{section*.39}%
+\contentsline {paragraph}{Flow-Matching Model.}{33}{section*.40}%
+\contentsline {subsubsection}{Single-Step Validation}{33}{section*.41}%
+\contentsline {subsubsection}{Rollout Validation}{33}{section*.42}%
+\contentsline {subsubsection}{Spectral Diagnostics}{33}{section*.43}%
+\contentsline {chapter}{\numberline {7}Results}{35}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Conceptualization of results}{35}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Single-step prediction}{36}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Rollout prediction}{37}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Spectrum analysis}{38}{section.7.4}%
+\contentsline {chapter}{\numberline {8}Conclusion}{40}{chapter.8}%
+\contentsline {chapter}{\numberline {A}Appendix}{44}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Trajectory-specific prediction visualizations in radial velocity components}{44}{section.A.1}%
