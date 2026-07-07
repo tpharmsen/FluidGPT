@@ -1,7 +1,8 @@
 
 \chapter{Datasets}
 \label{ch:datasets}
-This chapter starts with a discussion of the challenges associated with assembling a heterogeneous multi-source dataset for pretraining a foundation model for fluid dynamics. The selection criteria for the datasets are then described, followed by a detailed description of each of the nine datasets used in this work. Finally, more pratical aspects of the preprocessing pipeline are discussed, including spatial interpolation, temporal subsampling, and file-format conversion and storage for preprocessing of the datasets.
+
+This chapter describes the datasets used to pretrain the foundation model for fluid dynamics. We first discuss the challenges of assembling a heterogeneous, multi-source dataset spanning diverse flow regimes while ensuring compatibility across differing resolutions and formats. We then detail the selection criteria and the nine datasets used in this work, covering a broad range of flow physics, boundary conditions, and initialisation schemes. Finally, we describe the preprocessing pipeline developed to unify these datasets into a consistent spatial and temporal format suitable for efficient training.
 
 \section{Challenges}
 

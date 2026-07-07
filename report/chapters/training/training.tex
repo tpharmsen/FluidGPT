@@ -1,5 +1,7 @@
 \chapter{Training and Validation}\label{ch:training}
 
+This chapter details the training framework, hardware infrastructure, and validation methodology used to develop and evaluate the foundation models introduced in Chapter~\ref{ch:models} that were trained on the unified collection of data described in Chapter~\ref{ch:datasets}. We describe the modular, multi-platform training system built to ensure reproducibility and fair comparison across model variants, along with the optimization strategy and compute resources used to train them at scale. We then present the validation protocol, encompassing pointwise error metrics, autoregressive rollout stability, and spectral diagnostics, designed to assess both predictive accuracy and physical fidelity of the resulting models.
+
 \section{Challenges}
 
 \subsection{Software}
@@ -19,7 +21,7 @@ To compare the performance of different models, a set of relevant validation met
 
 \subsection{Training Framework and System Abstraction}
 
-To support large-scale experimentation across heterogeneous compute environments, a custom training framework was developed to operate seamlessly on both local workstations and high-performance computing (HPC) systems. The framework specifically targets SLURM-managed and container-based clusters while retaining full compatibility with single-node and multi-GPU setups. This abstraction ensures that identical training and validation logic is reused across environments, promoting reproducibility and eliminating environment-specific code paths. The framework is implemented in Python and leverages PyTorch (Lightning) for model definition, training, and evaluation.
+To support large-scale experimentation across heterogeneous compute environments, a custom training framework was developed to operate seamlessly on both local workstations and high-performance computing (HPC) systems. The framework specifically targets SLURM-managed and container-based clusters while retaining full compatibility with single-node and multi-GPU setups. This abstraction ensures that identical training and validation logic is reused across environments, promoting reproducibility and eliminating environment-specific code paths. The framework is implemented in Python and leverages PyTorch Lightning for model definition, training, and evaluation.
 
 The framework is fully modular and configured through declarative configuration files, enabling model architectures, optimization hyperparameters, data handling routines, and distributed training settings to be adjusted without modifying core training code. This design was critical for systematically comparing multiple model variations under controlled and reproducible experimental conditions.
 
@@ -39,11 +41,9 @@ At each epoch the model is saved and the validation error is computed. The model
 
 \section{Hardware Platform and Parallelism}
 
-All large-scale experiments were conducted on a brand new \textbf{NVIDIA DGX B200} unified AI platform, which provides a high-bandwidth GPU interconnect, large per-device memory capacity, and high aggregate compute throughput. To give the reader a sense of the amount of compute power, the NVIDIA DGX B200 is equipped with 8 NVIDIA Blackwell GPUs, yielding a possible throughput of 72 PetaFLOPS during training and 144 PetaFLOPS during inference. Note that one PetaFLOPS equals one quadrillion Floating Point Operations Per Second. The power of this platform lies especially in the high-bandwidth interconnect between GPUs, which allows for efficient data parallelism and model parallelism across multiple devices without incurring significant communication overhead. Using customized Dockerfiles, training and evaluation was executed within customized containerized environments to ensure consistent software dependencies across experimental runs, maximizing reproducibility and optimized device utilization. 
-https://www.nvidia.com/en-us/data-center/dgx-b200/
+All large-scale experiments were conducted on a brand new \textbf{NVIDIA DGX B200} unified AI platform \cite{nvidia2024dgxb200}, which provides a high-bandwidth GPU interconnect, large per-device memory capacity, and high aggregate compute throughput. To give the reader a sense of the amount of compute power, the NVIDIA DGX B200 is equipped with 8 NVIDIA Blackwell GPUs, yielding a possible throughput of 72 PetaFLOPS during training and 144 PetaFLOPS during inference. Note that one PetaFLOPS equals one quadrillion Floating Point Operations Per Second. The power of this platform lies especially in the high-bandwidth interconnect between GPUs, which allows for efficient data parallelism and model parallelism across multiple devices without incurring significant communication overhead. Using customized Dockerfiles, training and evaluation was executed within customized containerized environments to ensure consistent software dependencies across experimental runs, maximizing reproducibility and optimized device utilization. 
 
-
-Training was distributed across 8 GPUs using data parallelism, resulting in an effective batch size equal to eight times the per-device batch size of 176, yielding an effective batch size of 1408. This level of parallelism was essential both to stabilize the optimization dynamics and to maintain adequate throughput given the high-dimensional spatiotemporal data and large model capacity.
+Training was distributed across 8 B200 GPUs using data parallelism, resulting in an effective batch size equal to eight times the per-device batch size of 176, yielding an effective batch size of 1408. This level of parallelism was essential both to stabilize the optimization dynamics and to maintain adequate throughput given the high-dimensional spatiotemporal data and large model capacity.
 
 \section{Training hyperparameters}
 
@@ -113,7 +113,7 @@ Scale-resolved spectral errors were defined as
 \end{equation}
 
 As each fluid trajectory has its own ground-truth reference spectra corresponding to the system state at that time $t$, it is not meaningful to show an average graph of the spectra across the dataset. Instead, we analyze the distribution of spectral errors across the dataset by calculating the ratio between the predicted and true spectra for each trajectory, and then average this ratio across all trajectories to obtain a distribution of spectral errors as a function of wavenumber. This approach allows us to assess whether the models are systematically over- or under-predicting energy and enstrophy at specific scales, which is critical for understanding their physical fidelity. Especially for handling turbulent flows, a single pointwise error metric is incapable of capturing whether the diverging predictions reproduce the underlying physics of the system. The spectral error ratio provides a scale-resolved view of model performance, revealing whether the models correctly capture the energy cascade and dissipation mechanisms that govern turbulent dynamics. 
->>>>> include that curve should be similar but not exactly
+\cite{kochkov2021machine}
 
 
 The results of this analysis are presented in Section~\ref{se:spectraresults}. The spectral error ratio values are visualized in log-log plots, which facilitate comparison to the characteristic power-law slopes of the kinetic energy and enstrophy spectra in turbulent flows. Deviations from the expected spectral slopes can indicate specific deficiencies in the model's ability to capture certain physical processes, such as energy cascade dynamics or small-scale dissipation.

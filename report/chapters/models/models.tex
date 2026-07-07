@@ -1,5 +1,7 @@
 \chapter{Models}\label{ch:models}
 
+This chapter presents the model architectures developed for spatiotemporal fluid dynamics prediction, motivated by the challenges of generalisation, temporal stability, and computational efficiency. We introduce a shared backbone combining a hierarchical Swin Transformer with a novel space-then-time attention mechanism within a UNet-style encoder-decoder structure, which underlies two generative modeling strategies: a deterministic model and a flow-matching model. This shared design allows for a controlled comparison between the two approaches, isolating the effects of deterministic versus probabilistic formulations while holding architectural capacity fixed.
+
 \section{Challenges}
 
 \subsection{Generalisation}
