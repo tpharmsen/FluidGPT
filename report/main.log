@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.22.0 (TeX Live 2025/Debian)  (format=lualatex 2026.6.4)  6 JUL 2026 23:20
+This is LuaHBTeX, Version 1.22.0 (TeX Live 2025/Debian)  (format=lualatex 2026.6.4)  7 JUL 2026 23:38
  restricted system commands enabled.
 **main
 (./main.tex
@@ -1179,29 +1179,34 @@ Package microtype Info: Loading generic protrusion settings for font family
  [1
 
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./main.toc)
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./main.toc
+Missing character: There is no – (U+2013) in font ptmr8t!
+Missing character: There is no – (U+2013) in font ptmr8t!
+[2
+
+
+Missing character: There is no – (U+2013) in font ptmr8t!
+] [3])
 \tf@toc=\write5
 
 \openout5 = main.toc
- [2
-
-] (./chapters/intro/introduction.tex
+ [4] (./chapters/intro/introduction.tex
 Chapter 1.
 
 Underfull \vbox (badness 1655) has occurred while \output is active []
 
- [3
+ [5
 
 ]
-[4]
+[6]
 
-LaTeX Warning: Reference `ch:conclusion' on page 5 undefined on input line 44.
+LaTeX Warning: Reference `ch:conclusion' on page 7 undefined on input line 44.
 
-) (./chapters/relatedwork/relatedwork.tex [5]
+) (./chapters/relatedwork/relatedwork.tex [7]
 Chapter 2.
-[6
+[8
 
-] [7]) (./chapters/problem/problemformulation.tex [8]
+] [9]) (./chapters/problem/problemformulation.tex [10]
 Chapter 3.
 Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
@@ -1214,7 +1219,7 @@ Missing character: There is no – (U+2013) in font ptmb8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
-[9
+[11
 
 
 Missing character: There is no – (U+2013) in font ptmr8t!
@@ -1222,7 +1227,7 @@ Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmb8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
 ]
-<figs/turbulence_scales2.png, id=533, 810.3876pt x 487.5816pt>
+<figs/turbulence_scales2.png, id=638, 810.3876pt x 487.5816pt>
 File: figs/turbulence_scales2.png Graphic file (type png)
 <use figs/turbulence_scales2.png>
 Package luatex.def Info: figs/turbulence_scales2.png  used on input line 36.
@@ -1234,14 +1239,14 @@ Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
-[10
+[12
 Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
-<./figs/Turbulence_scales2.png>] [11]
+<./figs/Turbulence_scales2.png>] [13]
 Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
-) (./chapters/datasets/datasets.tex [12
+) (./chapters/datasets/datasets.tex [14
 Missing character: There is no – (U+2013) in font ptmr8t!
 ]
 Chapter 4.
@@ -1278,167 +1283,185 @@ Underfull \hbox (badness 4096) in paragraph at lines 48--48
 )
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [13
+ [15
 
 ]
-<figs/fluidtrajpreds/target_amira_102.png, id=583, 1300.86pt x 289.08pt>
+<figs/fluidtrajpreds/target_amira_102.png, id=687, 1300.86pt x 289.08pt>
 File: figs/fluidtrajpreds/target_amira_102.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_amira_102.png>
 Package luatex.def Info: figs/fluidtrajpreds/target_amira_102.png  used on inpu
-t line 36.
+t line 37.
 (luatex.def)             Requested size: 317.9892pt x 70.66422pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [14]
-<figs/fluidtrajpreds/target_pdebench-comp_22164.png, id=600, 1300.86pt x 289.08
+ [16]
+<figs/fluidtrajpreds/target_pdebench-comp_22164.png, id=704, 1300.86pt x 289.08
 pt>
 File: figs/fluidtrajpreds/target_pdebench-comp_22164.png Graphic file (type png
 )
 <use figs/fluidtrajpreds/target_pdebench-comp_22164.png>
 Package luatex.def Info: figs/fluidtrajpreds/target_pdebench-comp_22164.png  us
-ed on input line 72.
+ed on input line 73.
 (luatex.def)             Requested size: 317.9892pt x 70.66422pt.
-<figs/fluidtrajpreds/target_pdebench-comp_2083.png, id=603, 1300.86pt x 289.08p
+<figs/fluidtrajpreds/target_pdebench-comp_2083.png, id=707, 1300.86pt x 289.08p
 t>
 File: figs/fluidtrajpreds/target_pdebench-comp_2083.png Graphic file (type png)
 
 <use figs/fluidtrajpreds/target_pdebench-comp_2083.png>
 Package luatex.def Info: figs/fluidtrajpreds/target_pdebench-comp_2083.png  use
-d on input line 79.
+d on input line 80.
 (luatex.def)             Requested size: 317.9892pt x 70.66422pt.
 
-[15<./figs/fluidtrajpreds/target_amira_102.png>]
-<figs/fluidtrajpreds/target_pdebench-incomp_965.png, id=620, 1300.86pt x 289.08
+[17<./figs/fluidtrajpreds/target_amira_102.png>]
+<figs/fluidtrajpreds/target_pdebench-incomp_965.png, id=724, 1300.86pt x 289.08
 pt>
 File: figs/fluidtrajpreds/target_pdebench-incomp_965.png Graphic file (type png
 )
 <use figs/fluidtrajpreds/target_pdebench-incomp_965.png>
 Package luatex.def Info: figs/fluidtrajpreds/target_pdebench-incomp_965.png  us
-ed on input line 92.
+ed on input line 93.
 (luatex.def)             Requested size: 317.9892pt x 70.66422pt.
- [16<./figs/fluidtrajpreds/target_pdebench-comp_22164.png><./figs/fluidtrajpreds
+ [18<./figs/fluidtrajpreds/target_pdebench-comp_22164.png><./figs/fluidtrajpreds
 /target_pdebench-comp_2083.png><./figs/fluidtrajpreds/target_pdebench-incomp_965
 .png>]
-<figs/fluidtrajpreds/target_pdegym-gauss_14250.png, id=633, 1300.86pt x 289.08p
+<figs/fluidtrajpreds/target_pdegym-gauss_14250.png, id=737, 1300.86pt x 289.08p
 t>
 File: figs/fluidtrajpreds/target_pdegym-gauss_14250.png Graphic file (type png)
 
 <use figs/fluidtrajpreds/target_pdegym-gauss_14250.png>
 Package luatex.def Info: figs/fluidtrajpreds/target_pdegym-gauss_14250.png  use
-d on input line 111.
+d on input line 112.
 (luatex.def)             Requested size: 238.49341pt x 52.99815pt.
-<figs/fluidtrajpreds/target_pdegym-sines_5493.png, id=635, 1300.86pt x 289.08pt
+<figs/fluidtrajpreds/target_pdegym-sines_5493.png, id=739, 1300.86pt x 289.08pt
 >
 File: figs/fluidtrajpreds/target_pdegym-sines_5493.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_pdegym-sines_5493.png>
 Package luatex.def Info: figs/fluidtrajpreds/target_pdegym-sines_5493.png  used
- on input line 121.
+ on input line 122.
 (luatex.def)             Requested size: 238.49341pt x 52.99815pt.
-<figs/fluidtrajpreds/target_pdegym-sl_9281.png, id=637, 1300.86pt x 289.08pt>
+<figs/fluidtrajpreds/target_pdegym-sl_9281.png, id=741, 1300.86pt x 289.08pt>
 File: figs/fluidtrajpreds/target_pdegym-sl_9281.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_pdegym-sl_9281.png>
 Package luatex.def Info: figs/fluidtrajpreds/target_pdegym-sl_9281.png  used on
- input line 131.
+ input line 132.
 (luatex.def)             Requested size: 238.49341pt x 52.99815pt.
-<figs/fluidtrajpreds/target_pdegym-svs_2725.png, id=639, 1300.86pt x 289.08pt>
+<figs/fluidtrajpreds/target_pdegym-svs_2725.png, id=743, 1300.86pt x 289.08pt>
 File: figs/fluidtrajpreds/target_pdegym-svs_2725.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_pdegym-svs_2725.png>
 Package luatex.def Info: figs/fluidtrajpreds/target_pdegym-svs_2725.png  used o
-n input line 141.
+n input line 142.
 (luatex.def)             Requested size: 238.49341pt x 52.99815pt.
 
 Underfull \vbox (badness 7451) has occurred while \output is active []
 
- [17<./figs/fluidtrajpreds/target_pdegym-gauss_14250.png><./figs/fluidtrajpreds/
+ [19<./figs/fluidtrajpreds/target_pdegym-gauss_14250.png><./figs/fluidtrajpreds/
 target_pdegym-sines_5493.png><./figs/fluidtrajpreds/target_pdegym-sl_9281.png>]
-<figs/fluidtrajpreds/target_pdegym-bb_17830.png, id=657, 1300.86pt x 289.08pt>
+<figs/fluidtrajpreds/target_pdegym-bb_17830.png, id=761, 1300.86pt x 289.08pt>
 File: figs/fluidtrajpreds/target_pdegym-bb_17830.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_pdegym-bb_17830.png>
 Package luatex.def Info: figs/fluidtrajpreds/target_pdegym-bb_17830.png  used o
-n input line 151.
+n input line 152.
 (luatex.def)             Requested size: 238.49341pt x 52.99815pt.
-<figs/fluidtrajpreds/target_pdegym-pwc_19616.png, id=659, 1300.86pt x 289.08pt>
+<figs/fluidtrajpreds/target_pdegym-pwc_19616.png, id=763, 1300.86pt x 289.08pt>
 
 File: figs/fluidtrajpreds/target_pdegym-pwc_19616.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_pdegym-pwc_19616.png>
 Package luatex.def Info: figs/fluidtrajpreds/target_pdegym-pwc_19616.png  used 
-on input line 161.
+on input line 162.
 (luatex.def)             Requested size: 238.49341pt x 52.99815pt.
 
 Underfull \vbox (badness 2409) has occurred while \output is active []
 
- [18<./figs/fluidtrajpreds/target_pdegym-svs_2725.png><./figs/fluidtrajpreds/tar
+ [20<./figs/fluidtrajpreds/target_pdegym-svs_2725.png><./figs/fluidtrajpreds/tar
 get_pdegym-bb_17830.png><./figs/fluidtrajpreds/target_pdegym-pwc_19616.png>])
-(./chapters/models/models.tex [19]
+(./chapters/models/models.tex [21]
 Chapter 5.
-[20
+
+Underfull \vbox (badness 1783) has occurred while \output is active []
+
+ [22
 
 ]
 Package standalone Info: generated file figs/BlockExplainerAll.pdf newer then s
-ource file figs/BlockExplainerAll.tex on input line 34.
-<figs/BlockExplainerAll.pdf, id=687, 949.52542pt x 312.80865pt>
+ource file figs/BlockExplainerAll.tex on input line 36.
+<figs/BlockExplainerAll.pdf, id=792, 949.52542pt x 312.80865pt>
 File: figs/BlockExplainerAll.pdf Graphic file (type pdf)
 <use figs/BlockExplainerAll.pdf>
-Package luatex.def Info: figs/BlockExplainerAll.pdf  used on input line 34.
+Package luatex.def Info: figs/BlockExplainerAll.pdf  used on input line 36.
 (luatex.def)             Requested size: 317.9892pt x 104.75932pt.
- [21<./figs/BlockExplainerAll.pdf>] [22]
 
-Package natbib Warning: Citation `LuoCosineNormalization2017' on page 23 undefi
-ned on input line 119.
+[23<./figs/BlockExplainerAll.pdf>] [24]
 
-[23]
+Package natbib Warning: Citation `LuoCosineNormalization2017' on page 25 undefi
+ned on input line 121.
 
-Package natbib Warning: Citation `LuoCosineNormalization2017' on page 24 undefi
-ned on input line 172.
+[25]
 
-[24]
-Underfull \hbox (badness 1515) in paragraph at lines 203--204
+Package natbib Warning: Citation `LuoCosineNormalization2017' on page 26 undefi
+ned on input line 174.
+
+[26]
+Underfull \hbox (badness 1515) in paragraph at lines 205--206
 []\T1/ptm/b/n/10 Tem-po-ral block resid-ual struc-ture.[] \T1/ptm/m/n/10 The tem
 -po-ral block re-shapes the rep-re-sen-ta-tion to
  []
 
-[25]
+[27]
 runsystem(lualatex -interaction=batchmode -shell-escape -jobname "figs/AR" figs/
 AR)...(Command execution disabled via shell_escape='p').
-<figs/AR.pdf, id=757, 1086.85046pt x 618.69041pt>
+<figs/AR.pdf, id=862, 1086.85046pt x 618.69041pt>
 File: figs/AR.pdf Graphic file (type pdf)
 <use figs/AR.pdf>
-Package luatex.def Info: figs/AR.pdf  used on input line 290.
+Package luatex.def Info: figs/AR.pdf  used on input line 292.
 (luatex.def)             Requested size: 397.48499pt x 226.26854pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-(./chapters/models/AR_hparams.tex)
-Underfull \vbox (badness 2205) has occurred while \output is active []
-
- [26]
-[27<./figs/AR.pdf>]
+(./chapters/models/AR_hparams.tex) [28] [29<./figs/AR.pdf>]
 Package standalone Info: generated file figs/FM.pdf newer then source file figs
-/FM.tex on input line 327.
-<figs/FM.pdf, id=792, 1086.85046pt x 618.69041pt>
+/FM.tex on input line 329.
+<figs/FM.pdf, id=897, 1086.85046pt x 618.69041pt>
 File: figs/FM.pdf Graphic file (type pdf)
 <use figs/FM.pdf>
-Package luatex.def Info: figs/FM.pdf  used on input line 327.
+Package luatex.def Info: figs/FM.pdf  used on input line 329.
 (luatex.def)             Requested size: 397.48499pt x 226.26854pt.
 
 
-LaTeX Warning: Reference `tab:fluidgpt_hparams_fm' on page 28 undefined on inpu
-t line 334.
+LaTeX Warning: Reference `tab:fluidgpt_hparams_fm' on page 30 undefined on inpu
+t line 336.
 
-[28<./figs/FM.pdf>] (./chapters/models/FM_hparams.tex))
-(./chapters/training/training.tex [29]
+[30<./figs/FM.pdf>] (./chapters/models/FM_hparams.tex))
+(./chapters/training/training.tex [31]
 Chapter 6.
-[30
+[32
 
-] [31] (./chapters/training/train_hparams.tex) [32] [33])
-(./chapters/results/results.tex [34]
+]
+
+Package natbib Warning: Citation `nvidia2024dgxb200' on page 33 undefined on in
+put line 44.
+
+[33] (./chapters/training/train_hparams.tex) [34]
+
+Package natbib Warning: Citation `kochkov2021machine' on page 35 undefined on i
+nput line 98.
+
+[35]
+
+LaTeX Warning: Reference `eq:spectral_ratio' on page 36 undefined on input line
+ 149.
+
+
+LaTeX Warning: Reference `eq:generalized_weighted_spectral_error' on page 36 un
+defined on input line 149.
+
+) (./chapters/results/results.tex [36]
 Chapter 7.
 
-LaTeX Warning: Reference `fig:preds' on page 35 undefined on input line 5.
+LaTeX Warning: Reference `fig:preds' on page 37 undefined on input line 5.
 
-<figs/fluidtrajpreds/preds_pdebench-comp_22164.png, id=873, 1300.86pt x 1300.86
+<figs/fluidtrajpreds/preds_pdebench-comp_22164.png, id=984, 1300.86pt x 1300.86
 pt>
 File: figs/fluidtrajpreds/preds_pdebench-comp_22164.png Graphic file (type png)
 
@@ -1446,1027 +1469,49 @@ File: figs/fluidtrajpreds/preds_pdebench-comp_22164.png Graphic file (type png)
 Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-comp_22164.png  use
 d on input line 9.
 (luatex.def)             Requested size: 298.11374pt x 298.0998pt.
-<figs/results/ssbox_rae.png, id=874, 578.16pt x 433.62pt>
+<figs/results/ssbox_rae.png, id=985, 578.16pt x 433.62pt>
 File: figs/results/ssbox_rae.png Graphic file (type png)
 <use figs/results/ssbox_rae.png>
 Package luatex.def Info: figs/results/ssbox_rae.png  used on input line 17.
 (luatex.def)             Requested size: 317.9892pt x 238.49173pt.
-[35
+[37
 
-<./figs/fluidtrajpreds/preds_pdebench-comp_22164.png>] [36<./figs/results/ssbox_
+<./figs/fluidtrajpreds/preds_pdebench-comp_22164.png>] [38<./figs/results/ssbox_
 rae.png>]
-<figs/results/msgraph_all_rae.png, id=889, 1084.05pt x 867.24pt>
+<figs/results/msgraph_all_rae.png, id=1000, 1084.05pt x 867.24pt>
 File: figs/results/msgraph_all_rae.png Graphic file (type png)
 <use figs/results/msgraph_all_rae.png>
 Package luatex.def Info: figs/results/msgraph_all_rae.png  used on input line 5
 4.
 (luatex.def)             Requested size: 317.9892pt x 254.39119pt.
- [37<./figs/results/msgraph_all_rae.png>]
-<figs/results/spectra/spectrum_E.png, id=899, 1011.78pt x 289.08pt>
+ [39<./figs/results/msgraph_all_rae.png>]
+<figs/results/spectra/spectrum_E.png, id=1010, 1011.78pt x 289.08pt>
 File: figs/results/spectra/spectrum_E.png Graphic file (type png)
 <use figs/results/spectra/spectrum_E.png>
 Package luatex.def Info: figs/results/spectra/spectrum_E.png  used on input lin
 e 115.
 (luatex.def)             Requested size: 317.9892pt x 90.85336pt.
- [38<./figs/results/spectra/spectrum_E.png>]) (./chapters/conclusion/conclusion
-.tex [39]
+ [40<./figs/results/spectra/spectrum_E.png>]) (./chapters/conclusion/conclusion
+.tex [41]
 Chapter 8.
-) (./main.bbl [40
+) (./main.bbl [42
 
-] [41
+] [43
 
-] [42]
+] [44]
 Missing character: There is no ’ (U+2019) in font ptmr8t!
 Missing character: There is no ’ (U+2019) in font ptmr8t!
-) (./appendices/appendices.tex [43
+) (./appendices/appendices.tex [45
 Missing character: There is no ’ (U+2019) in font ptmr8t!
 ]
 Appendix A.
-(./appendices/fluidtrajpreds.tex
-<figs/fluidtrajpreds/preds_amira_102.png, id=956, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_amira_102.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_amira_102.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_amira_102.png  used on input
- line 5.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-<figs/fluidtrajpreds/preds_amira_1253.png, id=957, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_amira_1253.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_amira_1253.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_amira_1253.png  used on inpu
-t line 12.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
- [44
-
-<./figs/fluidtrajpreds/preds_amira_102.png>]
-<figs/fluidtrajpreds/preds_amira_2525.png, id=966, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_amira_2525.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_amira_2525.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_amira_2525.png  used on inpu
-t line 19.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [45<./figs/fluidtrajpreds/preds_amira_1253.png>]
-<figs/fluidtrajpreds/preds_amira_3110.png, id=973, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_amira_3110.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_amira_3110.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_amira_3110.png  used on inpu
-t line 26.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [46<./figs/fluidtrajpreds/preds_amira_2525.png>]
-<figs/fluidtrajpreds/preds_amira_3714.png, id=980, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_amira_3714.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_amira_3714.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_amira_3714.png  used on inpu
-t line 33.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [47<./figs/fluidtrajpreds/preds_amira_3110.png>]
-<figs/fluidtrajpreds/preds_amira_459.png, id=987, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_amira_459.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_amira_459.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_amira_459.png  used on input
- line 40.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [48<./figs/fluidtrajpreds/preds_amira_3714.png>]
-<figs/fluidtrajpreds/preds_amira_502.png, id=994, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_amira_502.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_amira_502.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_amira_502.png  used on input
- line 47.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [49<./figs/fluidtrajpreds/preds_amira_459.png>]
-<figs/fluidtrajpreds/preds_amira_5890.png, id=1001, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_amira_5890.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_amira_5890.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_amira_5890.png  used on inpu
-t line 54.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [50<./figs/fluidtrajpreds/preds_amira_502.png>]
-<figs/fluidtrajpreds/preds_amira_673.png, id=1008, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_amira_673.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_amira_673.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_amira_673.png  used on input
- line 61.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [51<./figs/fluidtrajpreds/preds_amira_5890.png>]
-<figs/fluidtrajpreds/preds_amira_77.png, id=1016, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_amira_77.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_amira_77.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_amira_77.png  used on input 
-line 68.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [52<./figs/fluidtrajpreds/preds_amira_673.png>]
-<figs/fluidtrajpreds/preds_pdebench-comp_18505.png, id=1023, 1300.86pt x 1300.8
-6pt>
-File: figs/fluidtrajpreds/preds_pdebench-comp_18505.png Graphic file (type png)
-
-<use figs/fluidtrajpreds/preds_pdebench-comp_18505.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-comp_18505.png  use
-d on input line 75.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [53<./figs/fluidtrajpreds/preds_amira_77.png>]
-<figs/fluidtrajpreds/preds_pdebench-comp_2083.png, id=1030, 1300.86pt x 1300.86
-pt>
-File: figs/fluidtrajpreds/preds_pdebench-comp_2083.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdebench-comp_2083.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-comp_2083.png  used
- on input line 82.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [54<./figs/fluidtrajpreds/preds_pdebench-comp_18505.png>]
-File: figs/fluidtrajpreds/preds_pdebench-comp_22164.png Graphic file (type png)
-
-<use figs/fluidtrajpreds/preds_pdebench-comp_22164.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-comp_22164.png  use
-d on input line 89.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [55<./figs/fluidtrajpreds/preds_pdebench-comp_2083.png>]
-<figs/fluidtrajpreds/preds_pdebench-comp_22541.png, id=1043, 1300.86pt x 1300.8
-6pt>
-File: figs/fluidtrajpreds/preds_pdebench-comp_22541.png Graphic file (type png)
-
-<use figs/fluidtrajpreds/preds_pdebench-comp_22541.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-comp_22541.png  use
-d on input line 96.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [56]
-<figs/fluidtrajpreds/preds_pdebench-comp_25046.png, id=1049, 1300.86pt x 1300.8
-6pt>
-File: figs/fluidtrajpreds/preds_pdebench-comp_25046.png Graphic file (type png)
-
-<use figs/fluidtrajpreds/preds_pdebench-comp_25046.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-comp_25046.png  use
-d on input line 103.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [57<./figs/fluidtrajpreds/preds_pdebench-comp_22541.png>]
-<figs/fluidtrajpreds/preds_pdebench-comp_27682.png, id=1056, 1300.86pt x 1300.8
-6pt>
-File: figs/fluidtrajpreds/preds_pdebench-comp_27682.png Graphic file (type png)
-
-<use figs/fluidtrajpreds/preds_pdebench-comp_27682.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-comp_27682.png  use
-d on input line 110.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [58<./figs/fluidtrajpreds/preds_pdebench-comp_25046.png>]
-<figs/fluidtrajpreds/preds_pdebench-comp_29856.png, id=1063, 1300.86pt x 1300.8
-6pt>
-File: figs/fluidtrajpreds/preds_pdebench-comp_29856.png Graphic file (type png)
-
-<use figs/fluidtrajpreds/preds_pdebench-comp_29856.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-comp_29856.png  use
-d on input line 117.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [59<./figs/fluidtrajpreds/preds_pdebench-comp_27682.png>]
-<figs/fluidtrajpreds/preds_pdebench-comp_38883.png, id=1070, 1300.86pt x 1300.8
-6pt>
-File: figs/fluidtrajpreds/preds_pdebench-comp_38883.png Graphic file (type png)
-
-<use figs/fluidtrajpreds/preds_pdebench-comp_38883.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-comp_38883.png  use
-d on input line 124.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [60<./figs/fluidtrajpreds/preds_pdebench-comp_29856.png>]
-<figs/fluidtrajpreds/preds_pdebench-comp_39574.png, id=1077, 1300.86pt x 1300.8
-6pt>
-File: figs/fluidtrajpreds/preds_pdebench-comp_39574.png Graphic file (type png)
-
-<use figs/fluidtrajpreds/preds_pdebench-comp_39574.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-comp_39574.png  use
-d on input line 131.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [61<./figs/fluidtrajpreds/preds_pdebench-comp_38883.png>]
-<figs/fluidtrajpreds/preds_pdebench-comp_7373.png, id=1085, 1300.86pt x 1300.86
-pt>
-File: figs/fluidtrajpreds/preds_pdebench-comp_7373.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdebench-comp_7373.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-comp_7373.png  used
- on input line 138.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [62<./figs/fluidtrajpreds/preds_pdebench-comp_39574.png>]
-<figs/fluidtrajpreds/preds_pdebench-incomp_1009.png, id=1092, 1300.86pt x 1300.
-86pt>
-File: figs/fluidtrajpreds/preds_pdebench-incomp_1009.png Graphic file (type png
 )
-<use figs/fluidtrajpreds/preds_pdebench-incomp_1009.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-incomp_1009.png  us
-ed on input line 145.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [63<./figs/fluidtrajpreds/preds_pdebench-comp_7373.png>]
-<figs/fluidtrajpreds/preds_pdebench-incomp_396.png, id=1099, 1300.86pt x 1300.8
-6pt>
-File: figs/fluidtrajpreds/preds_pdebench-incomp_396.png Graphic file (type png)
-
-<use figs/fluidtrajpreds/preds_pdebench-incomp_396.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-incomp_396.png  use
-d on input line 152.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [64<./figs/fluidtrajpreds/preds_pdebench-incomp_1009.png>]
-<figs/fluidtrajpreds/preds_pdebench-incomp_44.png, id=1106, 1300.86pt x 1300.86
-pt>
-File: figs/fluidtrajpreds/preds_pdebench-incomp_44.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdebench-incomp_44.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-incomp_44.png  used
- on input line 159.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [65<./figs/fluidtrajpreds/preds_pdebench-incomp_396.png>]
-<figs/fluidtrajpreds/preds_pdebench-incomp_601.png, id=1114, 1300.86pt x 1300.8
-6pt>
-File: figs/fluidtrajpreds/preds_pdebench-incomp_601.png Graphic file (type png)
-
-<use figs/fluidtrajpreds/preds_pdebench-incomp_601.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-incomp_601.png  use
-d on input line 166.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [66<./figs/fluidtrajpreds/preds_pdebench-incomp_44.png>]
-<figs/fluidtrajpreds/preds_pdebench-incomp_641.png, id=1121, 1300.86pt x 1300.8
-6pt>
-File: figs/fluidtrajpreds/preds_pdebench-incomp_641.png Graphic file (type png)
-
-<use figs/fluidtrajpreds/preds_pdebench-incomp_641.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-incomp_641.png  use
-d on input line 173.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [67<./figs/fluidtrajpreds/preds_pdebench-incomp_601.png>]
-<figs/fluidtrajpreds/preds_pdebench-incomp_653.png, id=1128, 1300.86pt x 1300.8
-6pt>
-File: figs/fluidtrajpreds/preds_pdebench-incomp_653.png Graphic file (type png)
-
-<use figs/fluidtrajpreds/preds_pdebench-incomp_653.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-incomp_653.png  use
-d on input line 180.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [68<./figs/fluidtrajpreds/preds_pdebench-incomp_641.png>]
-<figs/fluidtrajpreds/preds_pdebench-incomp_845.png, id=1135, 1300.86pt x 1300.8
-6pt>
-File: figs/fluidtrajpreds/preds_pdebench-incomp_845.png Graphic file (type png)
-
-<use figs/fluidtrajpreds/preds_pdebench-incomp_845.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-incomp_845.png  use
-d on input line 187.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [69<./figs/fluidtrajpreds/preds_pdebench-incomp_653.png>]
-<figs/fluidtrajpreds/preds_pdebench-incomp_851.png, id=1142, 1300.86pt x 1300.8
-6pt>
-File: figs/fluidtrajpreds/preds_pdebench-incomp_851.png Graphic file (type png)
-
-<use figs/fluidtrajpreds/preds_pdebench-incomp_851.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-incomp_851.png  use
-d on input line 194.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [70<./figs/fluidtrajpreds/preds_pdebench-incomp_845.png>]
-<figs/fluidtrajpreds/preds_pdebench-incomp_965.png, id=1149, 1300.86pt x 1300.8
-6pt>
-File: figs/fluidtrajpreds/preds_pdebench-incomp_965.png Graphic file (type png)
-
-<use figs/fluidtrajpreds/preds_pdebench-incomp_965.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-incomp_965.png  use
-d on input line 201.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [71<./figs/fluidtrajpreds/preds_pdebench-incomp_851.png>]
-<figs/fluidtrajpreds/preds_pdebench-incomp_990.png, id=1157, 1300.86pt x 1300.8
-6pt>
-File: figs/fluidtrajpreds/preds_pdebench-incomp_990.png Graphic file (type png)
-
-<use figs/fluidtrajpreds/preds_pdebench-incomp_990.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdebench-incomp_990.png  use
-d on input line 208.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [72<./figs/fluidtrajpreds/preds_pdebench-incomp_965.png>]
-<figs/fluidtrajpreds/preds_pdegym-bb_14250.png, id=1164, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-bb_14250.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-bb_14250.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-bb_14250.png  used on
- input line 215.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [73<./figs/fluidtrajpreds/preds_pdebench-incomp_990.png>]
-<figs/fluidtrajpreds/preds_pdegym-bb_14982.png, id=1171, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-bb_14982.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-bb_14982.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-bb_14982.png  used on
- input line 222.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [74<./figs/fluidtrajpreds/preds_pdegym-bb_14250.png>]
-<figs/fluidtrajpreds/preds_pdegym-bb_1569.png, id=1178, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_pdegym-bb_1569.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-bb_1569.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-bb_1569.png  used on 
-input line 229.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [75<./figs/fluidtrajpreds/preds_pdegym-bb_14982.png>]
-<figs/fluidtrajpreds/preds_pdegym-bb_17830.png, id=1185, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-bb_17830.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-bb_17830.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-bb_17830.png  used on
- input line 236.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [76<./figs/fluidtrajpreds/preds_pdegym-bb_1569.png>]
-<figs/fluidtrajpreds/preds_pdegym-bb_19616.png, id=1192, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-bb_19616.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-bb_19616.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-bb_19616.png  used on
- input line 243.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [77<./figs/fluidtrajpreds/preds_pdegym-bb_17830.png>]
-<figs/fluidtrajpreds/preds_pdegym-bb_2725.png, id=1199, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_pdegym-bb_2725.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-bb_2725.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-bb_2725.png  used on 
-input line 250.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [78<./figs/fluidtrajpreds/preds_pdegym-bb_19616.png>]
-<figs/fluidtrajpreds/preds_pdegym-bb_5493.png, id=1206, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_pdegym-bb_5493.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-bb_5493.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-bb_5493.png  used on 
-input line 257.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [79<./figs/fluidtrajpreds/preds_pdegym-bb_2725.png>]
-<figs/fluidtrajpreds/preds_pdegym-bb_6101.png, id=1213, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_pdegym-bb_6101.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-bb_6101.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-bb_6101.png  used on 
-input line 264.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [80<./figs/fluidtrajpreds/preds_pdegym-bb_5493.png>]
-<figs/fluidtrajpreds/preds_pdegym-bb_7480.png, id=1220, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_pdegym-bb_7480.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-bb_7480.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-bb_7480.png  used on 
-input line 271.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [81<./figs/fluidtrajpreds/preds_pdegym-bb_6101.png>]
-<figs/fluidtrajpreds/preds_pdegym-bb_9881.png, id=1228, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_pdegym-bb_9881.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-bb_9881.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-bb_9881.png  used on 
-input line 278.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [82<./figs/fluidtrajpreds/preds_pdegym-bb_7480.png>]
-<figs/fluidtrajpreds/preds_pdegym-gauss_14250.png, id=1235, 1300.86pt x 1300.86
-pt>
-File: figs/fluidtrajpreds/preds_pdegym-gauss_14250.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-gauss_14250.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-gauss_14250.png  used
- on input line 285.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [83<./figs/fluidtrajpreds/preds_pdegym-bb_9881.png>]
-<figs/fluidtrajpreds/preds_pdegym-gauss_14982.png, id=1242, 1300.86pt x 1300.86
-pt>
-File: figs/fluidtrajpreds/preds_pdegym-gauss_14982.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-gauss_14982.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-gauss_14982.png  used
- on input line 292.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [84<./figs/fluidtrajpreds/preds_pdegym-gauss_14250.png>]
-<figs/fluidtrajpreds/preds_pdegym-gauss_1569.png, id=1249, 1300.86pt x 1300.86p
-t>
-File: figs/fluidtrajpreds/preds_pdegym-gauss_1569.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-gauss_1569.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-gauss_1569.png  used 
-on input line 299.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [85<./figs/fluidtrajpreds/preds_pdegym-gauss_14982.png>]
-<figs/fluidtrajpreds/preds_pdegym-gauss_17830.png, id=1256, 1300.86pt x 1300.86
-pt>
-File: figs/fluidtrajpreds/preds_pdegym-gauss_17830.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-gauss_17830.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-gauss_17830.png  used
- on input line 306.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [86<./figs/fluidtrajpreds/preds_pdegym-gauss_1569.png>]
-<figs/fluidtrajpreds/preds_pdegym-gauss_19616.png, id=1263, 1300.86pt x 1300.86
-pt>
-File: figs/fluidtrajpreds/preds_pdegym-gauss_19616.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-gauss_19616.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-gauss_19616.png  used
- on input line 313.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [87<./figs/fluidtrajpreds/preds_pdegym-gauss_17830.png>]
-<figs/fluidtrajpreds/preds_pdegym-gauss_2725.png, id=1270, 1300.86pt x 1300.86p
-t>
-File: figs/fluidtrajpreds/preds_pdegym-gauss_2725.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-gauss_2725.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-gauss_2725.png  used 
-on input line 320.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [88<./figs/fluidtrajpreds/preds_pdegym-gauss_19616.png>]
-<figs/fluidtrajpreds/preds_pdegym-gauss_5493.png, id=1277, 1300.86pt x 1300.86p
-t>
-File: figs/fluidtrajpreds/preds_pdegym-gauss_5493.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-gauss_5493.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-gauss_5493.png  used 
-on input line 327.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [89<./figs/fluidtrajpreds/preds_pdegym-gauss_2725.png>]
-<figs/fluidtrajpreds/preds_pdegym-gauss_6101.png, id=1284, 1300.86pt x 1300.86p
-t>
-File: figs/fluidtrajpreds/preds_pdegym-gauss_6101.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-gauss_6101.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-gauss_6101.png  used 
-on input line 334.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [90<./figs/fluidtrajpreds/preds_pdegym-gauss_5493.png>]
-<figs/fluidtrajpreds/preds_pdegym-gauss_7480.png, id=1292, 1300.86pt x 1300.86p
-t>
-File: figs/fluidtrajpreds/preds_pdegym-gauss_7480.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-gauss_7480.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-gauss_7480.png  used 
-on input line 341.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [91<./figs/fluidtrajpreds/preds_pdegym-gauss_6101.png>]
-<figs/fluidtrajpreds/preds_pdegym-gauss_9881.png, id=1300, 1300.86pt x 1300.86p
-t>
-File: figs/fluidtrajpreds/preds_pdegym-gauss_9881.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-gauss_9881.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-gauss_9881.png  used 
-on input line 348.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [92<./figs/fluidtrajpreds/preds_pdegym-gauss_7480.png>]
-<figs/fluidtrajpreds/preds_pdegym-pwc_14250.png, id=1307, 1300.86pt x 1300.86pt
->
-File: figs/fluidtrajpreds/preds_pdegym-pwc_14250.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-pwc_14250.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-pwc_14250.png  used o
-n input line 355.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [93<./figs/fluidtrajpreds/preds_pdegym-gauss_9881.png>]
-<figs/fluidtrajpreds/preds_pdegym-pwc_14982.png, id=1314, 1300.86pt x 1300.86pt
->
-File: figs/fluidtrajpreds/preds_pdegym-pwc_14982.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-pwc_14982.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-pwc_14982.png  used o
-n input line 362.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [94<./figs/fluidtrajpreds/preds_pdegym-pwc_14250.png>]
-<figs/fluidtrajpreds/preds_pdegym-pwc_1569.png, id=1321, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-pwc_1569.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-pwc_1569.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-pwc_1569.png  used on
- input line 369.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [95<./figs/fluidtrajpreds/preds_pdegym-pwc_14982.png>]
-<figs/fluidtrajpreds/preds_pdegym-pwc_17830.png, id=1328, 1300.86pt x 1300.86pt
->
-File: figs/fluidtrajpreds/preds_pdegym-pwc_17830.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-pwc_17830.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-pwc_17830.png  used o
-n input line 376.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [96<./figs/fluidtrajpreds/preds_pdegym-pwc_1569.png>]
-<figs/fluidtrajpreds/preds_pdegym-pwc_19616.png, id=1335, 1300.86pt x 1300.86pt
->
-File: figs/fluidtrajpreds/preds_pdegym-pwc_19616.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-pwc_19616.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-pwc_19616.png  used o
-n input line 383.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [97<./figs/fluidtrajpreds/preds_pdegym-pwc_17830.png>]
-<figs/fluidtrajpreds/preds_pdegym-pwc_2725.png, id=1342, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-pwc_2725.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-pwc_2725.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-pwc_2725.png  used on
- input line 390.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [98<./figs/fluidtrajpreds/preds_pdegym-pwc_19616.png>]
-<figs/fluidtrajpreds/preds_pdegym-pwc_5493.png, id=1349, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-pwc_5493.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-pwc_5493.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-pwc_5493.png  used on
- input line 397.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [99<./figs/fluidtrajpreds/preds_pdegym-pwc_2725.png>]
-<figs/fluidtrajpreds/preds_pdegym-pwc_6101.png, id=1356, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-pwc_6101.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-pwc_6101.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-pwc_6101.png  used on
- input line 404.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [100<./figs/fluidtrajpreds/preds_pdegym-pwc_5493.png>]
-<figs/fluidtrajpreds/preds_pdegym-pwc_7480.png, id=1363, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-pwc_7480.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-pwc_7480.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-pwc_7480.png  used on
- input line 411.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [101<./figs/fluidtrajpreds/preds_pdegym-pwc_6101.png>]
-<figs/fluidtrajpreds/preds_pdegym-pwc_9881.png, id=1371, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-pwc_9881.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-pwc_9881.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-pwc_9881.png  used on
- input line 418.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [102<./figs/fluidtrajpreds/preds_pdegym-pwc_7480.png>]
-<figs/fluidtrajpreds/preds_pdegym-sines_14250.png, id=1378, 1300.86pt x 1300.86
-pt>
-File: figs/fluidtrajpreds/preds_pdegym-sines_14250.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sines_14250.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sines_14250.png  used
- on input line 425.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [103<./figs/fluidtrajpreds/preds_pdegym-pwc_9881.png>]
-<figs/fluidtrajpreds/preds_pdegym-sines_14982.png, id=1385, 1300.86pt x 1300.86
-pt>
-File: figs/fluidtrajpreds/preds_pdegym-sines_14982.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sines_14982.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sines_14982.png  used
- on input line 432.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [104<./figs/fluidtrajpreds/preds_pdegym-sines_14250.png>]
-<figs/fluidtrajpreds/preds_pdegym-sines_1569.png, id=1392, 1300.86pt x 1300.86p
-t>
-File: figs/fluidtrajpreds/preds_pdegym-sines_1569.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sines_1569.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sines_1569.png  used 
-on input line 439.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [105<./figs/fluidtrajpreds/preds_pdegym-sines_14982.png>]
-<figs/fluidtrajpreds/preds_pdegym-sines_17830.png, id=1399, 1300.86pt x 1300.86
-pt>
-File: figs/fluidtrajpreds/preds_pdegym-sines_17830.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sines_17830.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sines_17830.png  used
- on input line 446.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [106<./figs/fluidtrajpreds/preds_pdegym-sines_1569.png>]
-<figs/fluidtrajpreds/preds_pdegym-sines_19616.png, id=1406, 1300.86pt x 1300.86
-pt>
-File: figs/fluidtrajpreds/preds_pdegym-sines_19616.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sines_19616.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sines_19616.png  used
- on input line 453.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [107<./figs/fluidtrajpreds/preds_pdegym-sines_17830.png>]
-<figs/fluidtrajpreds/preds_pdegym-sines_2725.png, id=1413, 1300.86pt x 1300.86p
-t>
-File: figs/fluidtrajpreds/preds_pdegym-sines_2725.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sines_2725.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sines_2725.png  used 
-on input line 460.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [108<./figs/fluidtrajpreds/preds_pdegym-sines_19616.png>]
-<figs/fluidtrajpreds/preds_pdegym-sines_5493.png, id=1420, 1300.86pt x 1300.86p
-t>
-File: figs/fluidtrajpreds/preds_pdegym-sines_5493.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sines_5493.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sines_5493.png  used 
-on input line 467.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [109<./figs/fluidtrajpreds/preds_pdegym-sines_2725.png>]
-<figs/fluidtrajpreds/preds_pdegym-sines_6101.png, id=1427, 1300.86pt x 1300.86p
-t>
-File: figs/fluidtrajpreds/preds_pdegym-sines_6101.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sines_6101.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sines_6101.png  used 
-on input line 474.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [110<./figs/fluidtrajpreds/preds_pdegym-sines_5493.png>]
-<figs/fluidtrajpreds/preds_pdegym-sines_7480.png, id=1434, 1300.86pt x 1300.86p
-t>
-File: figs/fluidtrajpreds/preds_pdegym-sines_7480.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sines_7480.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sines_7480.png  used 
-on input line 481.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [111<./figs/fluidtrajpreds/preds_pdegym-sines_6101.png>]
-<figs/fluidtrajpreds/preds_pdegym-sines_9881.png, id=1442, 1300.86pt x 1300.86p
-t>
-File: figs/fluidtrajpreds/preds_pdegym-sines_9881.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sines_9881.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sines_9881.png  used 
-on input line 488.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [112<./figs/fluidtrajpreds/preds_pdegym-sines_7480.png>]
-<figs/fluidtrajpreds/preds_pdegym-sl_11217.png, id=1449, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-sl_11217.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sl_11217.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sl_11217.png  used on
- input line 495.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [113<./figs/fluidtrajpreds/preds_pdegym-sines_9881.png>]
-<figs/fluidtrajpreds/preds_pdegym-sl_13259.png, id=1456, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-sl_13259.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sl_13259.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sl_13259.png  used on
- input line 502.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [114<./figs/fluidtrajpreds/preds_pdegym-sl_11217.png>]
-<figs/fluidtrajpreds/preds_pdegym-sl_17856.png, id=1463, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-sl_17856.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sl_17856.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sl_17856.png  used on
- input line 509.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [115<./figs/fluidtrajpreds/preds_pdegym-sl_13259.png>]
-<figs/fluidtrajpreds/preds_pdegym-sl_18739.png, id=1471, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-sl_18739.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sl_18739.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sl_18739.png  used on
- input line 516.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [116<./figs/fluidtrajpreds/preds_pdegym-sl_17856.png>]
-<figs/fluidtrajpreds/preds_pdegym-sl_24762.png, id=1478, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-sl_24762.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sl_24762.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sl_24762.png  used on
- input line 523.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [117<./figs/fluidtrajpreds/preds_pdegym-sl_18739.png>]
-<figs/fluidtrajpreds/preds_pdegym-sl_28982.png, id=1485, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-sl_28982.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sl_28982.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sl_28982.png  used on
- input line 530.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [118<./figs/fluidtrajpreds/preds_pdegym-sl_24762.png>]
-<figs/fluidtrajpreds/preds_pdegym-sl_4805.png, id=1492, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_pdegym-sl_4805.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sl_4805.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sl_4805.png  used on 
-input line 537.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [119<./figs/fluidtrajpreds/preds_pdegym-sl_28982.png>]
-<figs/fluidtrajpreds/preds_pdegym-sl_6456.png, id=1499, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_pdegym-sl_6456.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sl_6456.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sl_6456.png  used on 
-input line 544.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [120<./figs/fluidtrajpreds/preds_pdegym-sl_4805.png>]
-<figs/fluidtrajpreds/preds_pdegym-sl_9281.png, id=1506, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_pdegym-sl_9281.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sl_9281.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sl_9281.png  used on 
-input line 551.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [121<./figs/fluidtrajpreds/preds_pdegym-sl_6456.png>]
-<figs/fluidtrajpreds/preds_pdegym-sl_9738.png, id=1514, 1300.86pt x 1300.86pt>
-File: figs/fluidtrajpreds/preds_pdegym-sl_9738.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-sl_9738.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-sl_9738.png  used on 
-input line 558.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [122<./figs/fluidtrajpreds/preds_pdegym-sl_9281.png>]
-<figs/fluidtrajpreds/preds_pdegym-svs_14250.png, id=1521, 1300.86pt x 1300.86pt
->
-File: figs/fluidtrajpreds/preds_pdegym-svs_14250.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-svs_14250.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-svs_14250.png  used o
-n input line 565.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [123<./figs/fluidtrajpreds/preds_pdegym-sl_9738.png>]
-<figs/fluidtrajpreds/preds_pdegym-svs_14982.png, id=1528, 1300.86pt x 1300.86pt
->
-File: figs/fluidtrajpreds/preds_pdegym-svs_14982.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-svs_14982.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-svs_14982.png  used o
-n input line 572.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [124<./figs/fluidtrajpreds/preds_pdegym-svs_14250.png>]
-<figs/fluidtrajpreds/preds_pdegym-svs_1569.png, id=1535, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-svs_1569.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-svs_1569.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-svs_1569.png  used on
- input line 579.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [125<./figs/fluidtrajpreds/preds_pdegym-svs_14982.png>]
-<figs/fluidtrajpreds/preds_pdegym-svs_17830.png, id=1542, 1300.86pt x 1300.86pt
->
-File: figs/fluidtrajpreds/preds_pdegym-svs_17830.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-svs_17830.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-svs_17830.png  used o
-n input line 586.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [126<./figs/fluidtrajpreds/preds_pdegym-svs_1569.png>]
-<figs/fluidtrajpreds/preds_pdegym-svs_19616.png, id=1549, 1300.86pt x 1300.86pt
->
-File: figs/fluidtrajpreds/preds_pdegym-svs_19616.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-svs_19616.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-svs_19616.png  used o
-n input line 593.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [127<./figs/fluidtrajpreds/preds_pdegym-svs_17830.png>]
-<figs/fluidtrajpreds/preds_pdegym-svs_2725.png, id=1556, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-svs_2725.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-svs_2725.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-svs_2725.png  used on
- input line 600.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [128<./figs/fluidtrajpreds/preds_pdegym-svs_19616.png>]
-<figs/fluidtrajpreds/preds_pdegym-svs_5493.png, id=1563, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-svs_5493.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-svs_5493.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-svs_5493.png  used on
- input line 607.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [129<./figs/fluidtrajpreds/preds_pdegym-svs_2725.png>]
-<figs/fluidtrajpreds/preds_pdegym-svs_6101.png, id=1570, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-svs_6101.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-svs_6101.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-svs_6101.png  used on
- input line 614.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [130<./figs/fluidtrajpreds/preds_pdegym-svs_5493.png>]
-<figs/fluidtrajpreds/preds_pdegym-svs_7480.png, id=1577, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-svs_7480.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-svs_7480.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-svs_7480.png  used on
- input line 621.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [131<./figs/fluidtrajpreds/preds_pdegym-svs_6101.png>]
-<figs/fluidtrajpreds/preds_pdegym-svs_9881.png, id=1585, 1300.86pt x 1300.86pt>
-
-File: figs/fluidtrajpreds/preds_pdegym-svs_9881.png Graphic file (type png)
-<use figs/fluidtrajpreds/preds_pdegym-svs_9881.png>
-Package luatex.def Info: figs/fluidtrajpreds/preds_pdegym-svs_9881.png  used on
- input line 628.
-(luatex.def)             Requested size: 397.48499pt x 397.48624pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [132<./figs/fluidtrajpreds/preds_pdegym-svs_7480.png>]))
 
 Package natbib Warning: There were undefined citations.
 
-[133<./figs/fluidtrajpreds/preds_pdegym-svs_9881.png>] (./main.aux)
+[46
+
+] (./main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
@@ -2478,26 +1523,20 @@ LaTeX Warning: There were undefined references.
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
-
-Package rerunfilecheck Warning: File `main.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: 8AE246150E3414BD4A984AFB3C145836;15176
-(rerunfilecheck)             After:  6E07AA75D97DE9685456FA5EFFFF7A47;15710.
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: 1286A75FBA1196D0A496554A7E3E3EE4;15261.
 )
 
 Here is how much of LuaTeX's memory you used:
- 35760 strings out of 476076
+ 34688 strings out of 476076
  125236,1373583 words of node,token memory allocated
- 9429 words of node memory still in use:
-   32 hlist, 2 vlist, 14 rule, 1 local_par, 4 glue, 1213 kern, 1 penalty, 1 marg
-in_kern, 3 glyph, 570 attribute, 64 glue_spec, 570 attribute_list, 2 write, 24 p
-df_literal, 5 pdf_action, 24 pdf_colorstack nodes
-   avail lists: 1:1,2:475,3:356,4:153,5:352,6:96,7:11752,8:86,9:781,10:32,11:104
-9
- 56434 multiletter control sequences out of 65536+600000
+ 9809 words of node memory still in use:
+   32 hlist, 2 vlist, 14 rule, 1 local_par, 4 glue, 1259 kern, 1 penalty, 1 marg
+in_kern, 3 glyph, 606 attribute, 64 glue_spec, 606 attribute_list, 2 write, 24 p
+df_literal, 6 pdf_action, 24 pdf_colorstack nodes
+   avail lists: 1:1,2:475,3:394,4:159,5:352,6:110,7:11752,8:65,9:781,10:32,11:10
+52
+ 55813 multiletter control sequences out of 65536+600000
  87 fonts using 5762471 bytes
  98i,12n,115p,2782b,669s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texmf/fon
@@ -2520,10 +1559,10 @@ nts/type1/public/lm/lmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
 /amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/time
 s/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></u
 sr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (133 pages, 215405099 bytes).
+Output written on main.pdf (46 pages, 10062767 bytes).
 
-PDF statistics: 1688 PDF objects out of 1728 (max. 8388607)
- 1265 compressed objects within 13 object streams
- 450 named destinations out of 1000 (max. 131072)
- 944 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 1152 PDF objects out of 1200 (max. 8388607)
+ 997 compressed objects within 10 object streams
+ 275 named destinations out of 1000 (max. 131072)
+ 952 words of extra memory for PDF output out of 10000 (max. 100000000)
 

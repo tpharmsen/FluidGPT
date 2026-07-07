@@ -92,29 +92,60 @@ To evaluate long-term temporal behavior, all models were deployed in an autoregr
 
 \subsubsection{Spectral Diagnostics}
 
-In addition to pointwise metrics, validation included physics-informed spectral diagnostics to assess whether the models correctly reproduce the scale distribution of energy and enstrophy. For each predicted and ground-truth state, the log-scaled kinetic energy spectrum $E(k)$ and enstrophy spectrum $Z(k)$ were computed by Fourier-transforming the velocity field and aggregating spectral contributions over isotropic shells in wavenumber space, as described in Section \ref{sec:energyspectra}.
+In addition to pointwise metrics, validation included physics-informed spectral diagnostics to assess whether the models correctly reproduce the scale distribution of energy and enstrophy. For each predicted and ground-truth state, the log-scaled kinetic energy spectrum $E_n(k)$ and enstrophy spectrum $Z_n(k)$ are computed by Fourier-transforming the velocity field and aggregating spectral contributions over isotropic shells in wavenumber space, as described in Section \ref{sec:energyspectra}. 
 
-Scale-resolved spectral errors were defined as
-
-\begin{equation}
-	\bar{R}_E(k)
-	=
-	\frac{1}{N}
-	\sum_{i=1}^{N}
-	\frac{E_{\mathrm{pred}}^{(i)}(k)}
-		{E_{\mathrm{true}}^{(i)}(k)},
-	\qquad
-	\bar{R}_Z(k)
-	=
-	\frac{1}{N}
-	\sum_{i=1}^{N}
-	\frac{Z_{\mathrm{pred}}^{(i)}(k)}
-		{Z_{\mathrm{true}}^{(i)}(k)}.
-\end{equation}
-
-As each fluid trajectory has its own ground-truth reference spectra corresponding to the system state at that time $t$, it is not meaningful to show an average graph of the spectra across the dataset. Instead, we analyze the distribution of spectral errors across the dataset by calculating the ratio between the predicted and true spectra for each trajectory, and then average this ratio across all trajectories to obtain a distribution of spectral errors as a function of wavenumber. This approach allows us to assess whether the models are systematically over- or under-predicting energy and enstrophy at specific scales, which is critical for understanding their physical fidelity. Especially for handling turbulent flows, a single pointwise error metric is incapable of capturing whether the diverging predictions reproduce the underlying physics of the system. The spectral error ratio provides a scale-resolved view of model performance, revealing whether the models correctly capture the energy cascade and dissipation mechanisms that govern turbulent dynamics. 
+As each fluid trajectory has its own ground-truth reference spectra corresponding to the system state at that time $t$, it is not meaningful to show an average graph of the spectra across the whole dataset. Instead, we analyze the distribution of spectral errors across the dataset by calculating the ratio between the predicted and true spectra for each trajectory, and then average a weighted version of this ratio across all trajectories to obtain a distribution of spectral errors as a function of wavenumber. This approach allows us to assess whether the models are correctly capturing energy and enstrophy at specific scales, which is critical for understanding their physical fidelity. Especially for handling turbulent flows, a single pointwise error metric is incapable of capturing whether the diverging predictions reproduce the underlying physics of the system. The spectral error ratio provides a scale-resolved view of model performance, revealing whether the models correctly capture the energy cascade and dissipation mechanisms that govern turbulent dynamics. 
 \cite{kochkov2021machine}
 
+A custom spectral metric was implemented, which is formally defined hereunder. Let $N$ denote the flow trajectories, 
+$M$ denote the predictions, and 
+$k$ denote the wavenumber. Trivially, the distinction between $N$ and $M$ is to account for compatibility for the probabilistic flow-matching approach, as the same trajectory has multiple predictions. The predicted and reference energy spectra are denoted by
+\(E^{\mathrm{pred}}_{n,m}(k)\) and \(E^{\mathrm{ref}}_n(k)\), respectively.
 
-The results of this analysis are presented in Section~\ref{se:spectraresults}. The spectral error ratio values are visualized in log-log plots, which facilitate comparison to the characteristic power-law slopes of the kinetic energy and enstrophy spectra in turbulent flows. Deviations from the expected spectral slopes can indicate specific deficiencies in the model's ability to capture certain physical processes, such as energy cascade dynamics or small-scale dissipation.
+The ratio between the predicted and reference energy spectra is defined as
+
+\begin{equation}\label{eq:spectral_ratio}
+R_{n,m}(k)
+=
+\frac{E^{\mathrm{pred}}_{n,m}(k)}
+{E^{\mathrm{ref}}_n(k)} .
+\end{equation}
+
+To account for the contribution of each wavenumber to the total spectral energy,
+a weighting factor is introduced:
+
+\begin{equation}\label{eq:weighting}
+w_n(k)
+=
+\frac{E^{\mathrm{ref}}_n(k)}
+{\sum_{j=1}^{N}E^{\mathrm{ref}}_j(k)} .
+\end{equation}
+
+The idea behind this weighting is to give more importance to wavenumbers that contribute significantly to the total spectral energy. The weighted absolute spectral ratio error is defined as
+
+\begin{equation}\label{eq:weighted_spectral_error}
+\epsilon_{n,m}(k)
+=
+w_n(k)
+\left|
+R_{n,m}(k)-1
+\right|.
+\end{equation}
+
+Finally, the generalized weighted spectral error over all trajectories and predictions is
+
+\begin{equation}\label{eq:generalized_weighted_spectral_error}
+\bar{\epsilon}(k)
+=
+\sum_{n=1}^{N}
+\bar{\epsilon}_{n}(k)
+=
+\frac{1}{M}
+\sum_{n=1}^{N}
+\sum_{m=1}^{M}
+\epsilon_{n,m}(k).
+\end{equation}
+
+For the case of enstrophy spectra, the same procedure is applied, replacing \(E\) with \(Z\) in Equation~\ref{eq:spectral_ratio} to \ref{eq:generalized_weighted_spectral_error}. The resulting weighted spectral error distributions for both energy and enstrophy are visualized in Chapter~\ref{ch:results} to assess the physical fidelity of the models across scales.
+
 
