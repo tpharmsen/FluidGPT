@@ -575,7 +575,7 @@ if __name__ == "__main__":
 
             fig.suptitle(f"Ground truth radial velocity components\nfor trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
             fig.supylabel(rf"$\sqrt{{x^2+y^2}}$", rotation=90)
-            plt.tight_layout()
+            plt.tight_layout(w_pad=0.1, h_pad=0.1)
             plt.savefig(f'scripts/temp/target_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png', dpi=600)
             del fig, axes, ax
 
@@ -597,7 +597,7 @@ if __name__ == "__main__":
 
                 axes[row, col].set_title(f"t={t}", fontsize=12)
                 if col == 0:
-                    axes[row, col].set_ylabel("Ground truth", fontsize=12, rotation=0, labelpad=20)
+                    axes[row, col].set_ylabel("GT", fontsize=12, rotation=0, labelpad=20)
 
             
             for row in range(1, 5):
@@ -629,7 +629,7 @@ if __name__ == "__main__":
 
             fig.suptitle(f"Radial velocity components of model predictions\nfor trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
             fig.supylabel(rf"$\sqrt{{x^2+y^2}}$", rotation=90)
-            plt.tight_layout()
+            plt.tight_layout(w_pad=0.1, h_pad=0.1)
             plt.savefig(f'scripts/temp/preds_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png', dpi=600)
 
             # ------------------------------------------------------------------
@@ -652,7 +652,7 @@ if __name__ == "__main__":
                 frame = trajtrue_denorm[t]  # (C, H, W)
                 vort = compute_vorticity(frame)
                 vmax = np.abs(vort).max()
-                im = ax[col].imshow(vort, cmap="RdBu_r", origin="lower", vmin=-vmax, vmax=vmax)
+                im = ax[col].imshow(vort, cmap="viridis", origin="lower")
                 ax[col].set_xticks([])
                 ax[col].set_yticks([])
 
@@ -662,7 +662,7 @@ if __name__ == "__main__":
 
             fig.suptitle(f"Ground truth vorticity\nfor trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
             fig.supylabel(r"$\omega = \partial_x v_y - \partial_y v_x$", rotation=90)
-            plt.tight_layout()
+            plt.tight_layout(w_pad=0.1, h_pad=0.1)
             plt.savefig(f'scripts/temp/vort_target_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png', dpi=600)
             del fig, axes, ax
 
@@ -675,13 +675,13 @@ if __name__ == "__main__":
                 frame = trajtrue_denorm[t]  # (C, H, W)
                 vort = compute_vorticity(frame)
                 vmax = np.abs(vort).max()
-                im = axes[row, col].imshow(vort, cmap="RdBu_r", origin="lower", vmin=-vmax, vmax=vmax)
+                im = axes[row, col].imshow(vort, cmap="viridis", origin="lower")
                 axes[row, col].set_xticks([])
                 axes[row, col].set_yticks([])
 
                 axes[row, col].set_title(f"t={t}", fontsize=12)
                 if col == 0:
-                    axes[row, col].set_ylabel("Ground truth", fontsize=12, rotation=0, labelpad=20)
+                    axes[row, col].set_ylabel("GT", fontsize=12, rotation=0, labelpad=20)
 
             for row in range(1, 5):
                 traj_denorm = results[row - 1][3].squeeze()  # (T, C, H, W)
@@ -689,7 +689,7 @@ if __name__ == "__main__":
                     frame = traj_denorm[t]  # (C, H, W)
                     vort = compute_vorticity(frame)
                     vmax_row = np.abs(vort).max()
-                    im = axes[row, col].imshow(vort, cmap="RdBu_r", origin="lower", vmin=-vmax_row, vmax=vmax_row)
+                    im = axes[row, col].imshow(vort, cmap="viridis", origin="lower")
                     axes[row, col].set_xticks([])
                     axes[row, col].set_yticks([])
                     if col == 0:
@@ -707,7 +707,7 @@ if __name__ == "__main__":
 
             fig.suptitle(f"Vorticity of model predictions\nfor trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
             fig.supylabel(r"$\omega$", rotation=90)
-            plt.tight_layout()
+            plt.tight_layout(w_pad=0.1, h_pad=0.1)
             plt.savefig(f'scripts/temp/vort_preds_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png', dpi=600)
             raise NotImplementedError("Temporary stop for debugging.")
         print(f"Done with dataset {dsplit_idx}")
