@@ -27,6 +27,35 @@ import json
 import argparse
 import warnings
 
+from matplotlib import rcParams
+
+rcParams.update({
+    'font.size': 14,
+    'figure.figsize': (8, 6),
+    'axes.titlesize': 20,
+    'axes.labelsize': 14,
+    'lines.linewidth': 2,
+    'lines.markersize': 8,
+    'legend.fontsize': 12,
+    'xtick.labelsize': 12,
+    'ytick.labelsize': 12,
+    'axes.grid': True,
+    'grid.alpha': 0.3,
+    'grid.linestyle': '--',
+
+    # --- Lines & markers ---
+    "lines.linewidth": 1.5,
+    "lines.markersize": 6,
+    "lines.markeredgewidth": 1,
+    'lines.markerfacecolor': 'none',
+
+    # Remove top/right spines globally
+    'axes.spines.top': False,
+    'axes.spines.right': False,
+
+    "legend.frameon": True,
+})
+
 sys.path.append('src/')
 
 from dataloaders import *
@@ -528,7 +557,7 @@ if __name__ == "__main__":
 
             trajtrue_denorm = results[0][2].squeeze()
 
-            fig, axes = plt.subplots(1, len(timesteps), figsize=(3 * len(timesteps), 4))
+            fig, axes = plt.subplots(1, len(timesteps), figsize=(2 * len(timesteps), 3))
             ax = axes.flatten()
             for col, t in enumerate(timesteps):
                 frame = trajtrue_denorm[t]  # (C, H, W)
@@ -552,7 +581,7 @@ if __name__ == "__main__":
 
             timesteps = [5, 6, 7, (T - 5) // 3 + 5, 2 * (T - 5) // 3 + 5, T - 1]
 
-            fig, axes = plt.subplots(5, len(timesteps), figsize=(3 * len(timesteps), 18))
+            fig, axes = plt.subplots(5, len(timesteps), figsize=(2 * len(timesteps), 12))
             #fig.suptitle(f"Radial velocity components for trajectory {traj_idx} from dataset {DATASET_NAME}", fontsize=16)
             row = 0
               # (T, C, H, W)
@@ -602,4 +631,5 @@ if __name__ == "__main__":
             fig.supylabel(f"$\sqrt{{x^2+y^2}}$", rotation=90)
             plt.tight_layout()
             plt.savefig(f'scripts/temp/preds_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png')
+            raise NotImplementedError("Temporary stop for debugging.")
         print(f"Done with dataset {dsplit_idx}")
