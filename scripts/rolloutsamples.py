@@ -709,6 +709,6 @@ if __name__ == "__main__":
             fig.supylabel(r"$\omega$", rotation=90)
             plt.tight_layout(w_pad=0.2, h_pad=0.2)
             plt.savefig(f'scripts/temp/vort_preds_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png', dpi=600)
-            raise NotImplementedError("Temporary stop for debugging.")
+            #raise NotImplementedError("Temporary stop for debugging.")
         print(f"Done with dataset {dsplit_idx}")
 S
