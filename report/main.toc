@@ -133,4 +133,3 @@
 \contentsline {paragraph}{Comparability of models.}{49}{section*.68}%
 \contentsline {section}{\numberline {9.4}Future Work}{49}{section.9.4}%
 \contentsline {chapter}{\numberline {A}Appendix}{54}{appendix.A}%
-\contentsline {section}{\numberline {A.1}Trajectory-specific prediction visualizations in radial velocity components}{55}{section.A.1}%
