@@ -146,6 +146,8 @@ Finally, the generalized weighted spectral error over all trajectories and predi
 \epsilon_{n,m}(k).
 \end{equation}
 
-For the case of enstrophy spectra, the same procedure is applied, replacing \(E\) with \(Z\) in Equation~\ref{eq:spectral_ratio} to \ref{eq:generalized_weighted_spectral_error}. The resulting weighted spectral error distributions for both energy and enstrophy are visualized in Chapter~\ref{ch:results} to assess the physical fidelity of the models across scales.
+For the case of enstrophy spectra, the same procedure is applied, replacing \(E\) with \(Z\) in Equation~\ref{eq:spectral_ratio} to \ref{eq:generalized_weighted_spectral_error}. The resulting weighted spectral error distributions for both energy and enstrophy are visualized in Chapter~\ref{ch:results} to assess the physical fidelity of the models across scales. 
+
+Note that the calculation of the Energy and Enstrophy spectra requires the incompressibility condition, or information regarding pressure and density. As the models only predict x- and y- components of the flow field, the compressible dataset \texttt{pdebench-comp} is therefore not included in the spectral fidelity analysis of the results.
 
 

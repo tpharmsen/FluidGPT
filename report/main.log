@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.22.0 (TeX Live 2025/Debian)  (format=lualatex 2026.6.4)  8 JUL 2026 00:31
+This is LuaHBTeX, Version 1.22.0 (TeX Live 2025/Debian)  (format=lualatex 2026.6.4)  8 JUL 2026 02:43
  restricted system commands enabled.
 **main
 (./main.tex
@@ -1179,34 +1179,187 @@ Package microtype Info: Loading generic protrusion settings for font family
  [1
 
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./main.toc
-Missing character: There is no – (U+2013) in font ptmr8t!
-Missing character: There is no – (U+2013) in font ptmr8t!
-[2
-
-
-Missing character: There is no – (U+2013) in font ptmr8t!
-] [3])
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./main.toc)
 \tf@toc=\write5
 
 \openout5 = main.toc
- [4] (./chapters/intro/introduction.tex
+ [2
+
+] (./chapters/intro/introduction.tex
 Chapter 1.
 
 Underfull \vbox (badness 1655) has occurred while \output is active []
 
- [5
+ [3
 
 ]
-[6]
 
-LaTeX Warning: Reference `ch:conclusion' on page 7 undefined on input line 44.
+Package natbib Warning: Citation `liu2021swin' on page 4 undefined on input lin
+e 22.
 
-) (./chapters/relatedwork/relatedwork.tex [7]
+
+Package natbib Warning: Citation `lipman2022flowmatching' on page 4 undefined o
+n input line 24.
+
+[4]
+
+LaTeX Warning: Reference `ch:conclusion' on page 5 undefined on input line 44.
+
+) (./chapters/relatedwork/relatedwork.tex [5]
 Chapter 2.
-[8
 
-] [9]) (./chapters/problem/problemformulation.tex [10]
+Package natbib Warning: Citation `ronneberger2015unet' on page 6 undefined on i
+nput line 8.
+
+
+Package natbib Warning: Citation `li2021fno' on page 6 undefined on input line 
+8.
+
+
+Package natbib Warning: Citation `lu2021deeponet' on page 6 undefined on input 
+line 8.
+
+
+Package natbib Warning: Citation `jin2022mionet' on page 6 undefined on input l
+ine 8.
+
+
+Package natbib Warning: Citation `sanchezgonzalez2020learning' on page 6 undefi
+ned on input line 8.
+
+
+Package natbib Warning: Citation `pfaff2021meshgraphnets' on page 6 undefined o
+n input line 8.
+
+
+Package natbib Warning: Citation `raissi2019pinn' on page 6 undefined on input 
+line 8.
+
+
+Package natbib Warning: Citation `krishnapriyan2021failuremodes' on page 6 unde
+fined on input line 8.
+
+
+Package natbib Warning: Citation `dosovitskiy2020vit' on page 6 undefined on in
+put line 12.
+
+
+Package natbib Warning: Citation `liu2021swin' on page 6 undefined on input lin
+e 12.
+
+
+Package natbib Warning: Citation `mccabe2024mpp' on page 6 undefined on input l
+ine 12.
+
+
+Package natbib Warning: Citation `hao2024dpot' on page 6 undefined on input lin
+e 12.
+
+
+Package natbib Warning: Citation `zhang2024matey' on page 6 undefined on input 
+line 12.
+
+
+Package natbib Warning: Citation `liu2024prosefd' on page 6 undefined on input 
+line 12.
+
+
+Package natbib Warning: Citation `liu2024prosepde' on page 6 undefined on input
+ line 12.
+
+
+Package natbib Warning: Citation `herde2024poseidon' on page 6 undefined on inp
+ut line 12.
+
+
+Package natbib Warning: Citation `cao2024vicon' on page 6 undefined on input li
+ne 12.
+
+
+Package natbib Warning: Citation `liu2025bcat' on page 6 undefined on input lin
+e 12.
+
+[6
+
+]
+
+Package natbib Warning: Citation `gyrokinetic2024' on page 7 undefined on input
+ line 18.
+
+
+Package natbib Warning: Citation `nguyen2023climax' on page 7 undefined on inpu
+t line 18.
+
+
+Package natbib Warning: Citation `bodnar2024aurora' on page 7 undefined on inpu
+t line 18.
+
+
+Package natbib Warning: Citation `erwin2025' on page 7 undefined on input line 
+18.
+
+
+Package natbib Warning: Citation `takamoto2022pdebench' on page 7 undefined on 
+input line 24.
+
+
+Package natbib Warning: Citation `gupta2022pdearena' on page 7 undefined on inp
+ut line 24.
+
+
+Package natbib Warning: Citation `herde2024poseidon' on page 7 undefined on inp
+ut line 24.
+
+
+Package natbib Warning: Citation `luo2023cfdbench' on page 7 undefined on input
+ line 24.
+
+
+Package natbib Warning: Citation `tali2024flowbench' on page 7 undefined on inp
+ut line 24.
+
+
+Package natbib Warning: Citation `hassan2023bubbleml' on page 7 undefined on in
+put line 24.
+
+
+Package natbib Warning: Citation `chung2023blastnet' on page 7 undefined on inp
+ut line 24.
+
+
+Package natbib Warning: Citation `ohana2024thewell' on page 7 undefined on inpu
+t line 24.
+
+[7]
+
+Package natbib Warning: Citation `lipman2022flowmatching' on page 8 undefined o
+n input line 32.
+
+
+Package natbib Warning: Citation `lipman2024flowmatchingguide' on page 8 undefi
+ned on input line 32.
+
+
+Package natbib Warning: Citation `liu2022rectifiedflow' on page 8 undefined on 
+input line 32.
+
+
+Package natbib Warning: Citation `tenbrinke2025stflow' on page 8 undefined on i
+nput line 32.
+
+
+Package natbib Warning: Citation `esser2024sd3' on page 8 undefined on input li
+ne 32.
+
+
+Package natbib Warning: Citation `vyas2023audiobox' on page 8 undefined on inpu
+t line 32.
+
+
+Package natbib Warning: Citation `huguet2024proteinfm' on page 8 undefined on i
+nput line 32.
+
+) (./chapters/problem/problemformulation.tex [8]
 Chapter 3.
 Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
@@ -1219,7 +1372,7 @@ Missing character: There is no – (U+2013) in font ptmb8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
-[11
+[9
 
 
 Missing character: There is no – (U+2013) in font ptmr8t!
@@ -1227,11 +1380,18 @@ Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmb8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
 ]
-<figs/turbulence_scales2.png, id=638, 810.3876pt x 487.5816pt>
+
+Package natbib Warning: Citation `Kolmogorov1941' on page 10 undefined on input
+ line 32.
+
+<figs/turbulence_scales2.png, id=449, 810.3876pt x 487.5816pt>
 File: figs/turbulence_scales2.png Graphic file (type png)
 <use figs/turbulence_scales2.png>
 Package luatex.def Info: figs/turbulence_scales2.png  used on input line 36.
 (luatex.def)             Requested size: 317.9892pt x 191.32411pt.
+
+Package natbib Warning: Citation `Kolmogorov1941' on page 10 undefined on input
+ line 45.
 
 Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
@@ -1239,14 +1399,14 @@ Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
-[12
+[10
 Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
-<./figs/Turbulence_scales2.png>] [13]
+<./figs/Turbulence_scales2.png>] [11]
 Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
 Missing character: There is no – (U+2013) in font ptmr8t!
-) (./chapters/datasets/datasets.tex [14
+) (./chapters/datasets/datasets.tex [12
 Missing character: There is no – (U+2013) in font ptmr8t!
 ]
 Chapter 4.
@@ -1283,10 +1443,14 @@ Underfull \hbox (badness 4096) in paragraph at lines 48--48
 )
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [15
+ [13
 
 ]
-<figs/fluidtrajpreds/target_amira_102.png, id=687, 1300.86pt x 289.08pt>
+
+Package natbib Warning: Citation `Jakob2021FluidFlowDataset' on page 14 undefin
+ed on input line 31.
+
+<figs/fluidtrajpreds/target_amira_102.png, id=495, 1300.86pt x 289.08pt>
 File: figs/fluidtrajpreds/target_amira_102.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_amira_102.png>
 Package luatex.def Info: figs/fluidtrajpreds/target_amira_102.png  used on inpu
@@ -1295,8 +1459,12 @@ t line 37.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [16]
-<figs/fluidtrajpreds/target_pdebench-comp_22164.png, id=704, 1300.86pt x 289.08
+ [14]
+
+Package natbib Warning: Citation `takamoto2022pdebench' on page 15 undefined on
+ input line 45.
+
+<figs/fluidtrajpreds/target_pdebench-comp_22164.png, id=510, 1300.86pt x 289.08
 pt>
 File: figs/fluidtrajpreds/target_pdebench-comp_22164.png Graphic file (type png
 )
@@ -1304,7 +1472,7 @@ File: figs/fluidtrajpreds/target_pdebench-comp_22164.png Graphic file (type png
 Package luatex.def Info: figs/fluidtrajpreds/target_pdebench-comp_22164.png  us
 ed on input line 73.
 (luatex.def)             Requested size: 397.48499pt x 88.33026pt.
-<figs/fluidtrajpreds/target_pdebench-comp_2083.png, id=707, 1300.86pt x 289.08p
+<figs/fluidtrajpreds/target_pdebench-comp_2083.png, id=513, 1300.86pt x 289.08p
 t>
 File: figs/fluidtrajpreds/target_pdebench-comp_2083.png Graphic file (type png)
 
@@ -1312,9 +1480,8 @@ File: figs/fluidtrajpreds/target_pdebench-comp_2083.png Graphic file (type png)
 Package luatex.def Info: figs/fluidtrajpreds/target_pdebench-comp_2083.png  use
 d on input line 80.
 (luatex.def)             Requested size: 397.48499pt x 88.33026pt.
-
-[17<./figs/fluidtrajpreds/target_amira_102.png>]
-<figs/fluidtrajpreds/target_pdebench-incomp_965.png, id=724, 1300.86pt x 289.08
+[15<./figs/fluidtrajpreds/target_amira_102.png>]
+<figs/fluidtrajpreds/target_pdebench-incomp_965.png, id=531, 1300.86pt x 289.08
 pt>
 File: figs/fluidtrajpreds/target_pdebench-incomp_965.png Graphic file (type png
 )
@@ -1323,12 +1490,17 @@ Package luatex.def Info: figs/fluidtrajpreds/target_pdebench-incomp_965.png  us
 ed on input line 93.
 (luatex.def)             Requested size: 397.48499pt x 88.33026pt.
 
+
+Package natbib Warning: Citation `herde2024poseidon' on page 16 undefined on in
+put line 102.
+
+
 Underfull \vbox (badness 3826) has occurred while \output is active []
 
- [18<./figs/fluidtrajpreds/target_pdebench-comp_22164.png><./figs/fluidtrajpreds
+ [16<./figs/fluidtrajpreds/target_pdebench-comp_22164.png><./figs/fluidtrajpreds
 /target_pdebench-comp_2083.png><./figs/fluidtrajpreds/target_pdebench-incomp_965
 .png>]
-<figs/fluidtrajpreds/target_pdegym-gauss_14250.png, id=737, 1300.86pt x 289.08p
+<figs/fluidtrajpreds/target_pdegym-gauss_14250.png, id=543, 1300.86pt x 289.08p
 t>
 File: figs/fluidtrajpreds/target_pdegym-gauss_14250.png Graphic file (type png)
 
@@ -1336,14 +1508,14 @@ File: figs/fluidtrajpreds/target_pdegym-gauss_14250.png Graphic file (type png)
 Package luatex.def Info: figs/fluidtrajpreds/target_pdegym-gauss_14250.png  use
 d on input line 112.
 (luatex.def)             Requested size: 397.48499pt x 88.33026pt.
-<figs/fluidtrajpreds/target_pdegym-sines_5493.png, id=739, 1300.86pt x 289.08pt
+<figs/fluidtrajpreds/target_pdegym-sines_5493.png, id=545, 1300.86pt x 289.08pt
 >
 File: figs/fluidtrajpreds/target_pdegym-sines_5493.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_pdegym-sines_5493.png>
 Package luatex.def Info: figs/fluidtrajpreds/target_pdegym-sines_5493.png  used
  on input line 122.
 (luatex.def)             Requested size: 397.48499pt x 88.33026pt.
-<figs/fluidtrajpreds/target_pdegym-sl_9281.png, id=741, 1300.86pt x 289.08pt>
+<figs/fluidtrajpreds/target_pdegym-sl_9281.png, id=547, 1300.86pt x 289.08pt>
 File: figs/fluidtrajpreds/target_pdegym-sl_9281.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_pdegym-sl_9281.png>
 Package luatex.def Info: figs/fluidtrajpreds/target_pdegym-sl_9281.png  used on
@@ -1352,66 +1524,93 @@ Package luatex.def Info: figs/fluidtrajpreds/target_pdegym-sl_9281.png  used on
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [19<./figs/fluidtrajpreds/target_pdegym-gauss_14250.png><./figs/fluidtrajpreds/
+ [17<./figs/fluidtrajpreds/target_pdegym-gauss_14250.png><./figs/fluidtrajpreds/
 target_pdegym-sines_5493.png>]
-<figs/fluidtrajpreds/target_pdegym-svs_2725.png, id=756, 1300.86pt x 289.08pt>
+<figs/fluidtrajpreds/target_pdegym-svs_2725.png, id=562, 1300.86pt x 289.08pt>
 File: figs/fluidtrajpreds/target_pdegym-svs_2725.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_pdegym-svs_2725.png>
 Package luatex.def Info: figs/fluidtrajpreds/target_pdegym-svs_2725.png  used o
 n input line 142.
 (luatex.def)             Requested size: 397.48499pt x 88.33026pt.
-<figs/fluidtrajpreds/target_pdegym-bb_17830.png, id=758, 1300.86pt x 289.08pt>
+<figs/fluidtrajpreds/target_pdegym-bb_17830.png, id=564, 1300.86pt x 289.08pt>
 File: figs/fluidtrajpreds/target_pdegym-bb_17830.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_pdegym-bb_17830.png>
 Package luatex.def Info: figs/fluidtrajpreds/target_pdegym-bb_17830.png  used o
 n input line 152.
 (luatex.def)             Requested size: 397.48499pt x 88.33026pt.
-<figs/fluidtrajpreds/target_pdegym-pwc_19616.png, id=760, 1300.86pt x 289.08pt>
+<figs/fluidtrajpreds/target_pdegym-pwc_19616.png, id=566, 1300.86pt x 289.08pt>
 
 File: figs/fluidtrajpreds/target_pdegym-pwc_19616.png Graphic file (type png)
 <use figs/fluidtrajpreds/target_pdegym-pwc_19616.png>
 Package luatex.def Info: figs/fluidtrajpreds/target_pdegym-pwc_19616.png  used 
 on input line 162.
 (luatex.def)             Requested size: 397.48499pt x 88.33026pt.
- [20<./figs/fluidtrajpreds/target_pdegym-sl_9281.png><./figs/fluidtrajpreds/targ
+ [18<./figs/fluidtrajpreds/target_pdegym-sl_9281.png><./figs/fluidtrajpreds/targ
 et_pdegym-svs_2725.png><./figs/fluidtrajpreds/target_pdegym-bb_17830.png><./figs
-/fluidtrajpreds/target_pdegym-pwc_19616.png>] [21])
-(./chapters/models/models.tex [22]
+/fluidtrajpreds/target_pdegym-pwc_19616.png>] [19])
+(./chapters/models/models.tex [20]
 Chapter 5.
 
 Underfull \vbox (badness 1783) has occurred while \output is active []
 
- [23
+ [21
 
 ]
+
+Package natbib Warning: Citation `liu2021swin' on page 22 undefined on input li
+ne 25.
+
+
+Package natbib Warning: Citation `liu2025bcat' on page 22 undefined on input li
+ne 29.
+
 Package standalone Info: generated file figs/BlockExplainerAll.pdf newer then s
 ource file figs/BlockExplainerAll.tex on input line 36.
-<figs/BlockExplainerAll.pdf, id=796, 949.52542pt x 312.80865pt>
+<figs/BlockExplainerAll.pdf, id=599, 949.52542pt x 312.80865pt>
 File: figs/BlockExplainerAll.pdf Graphic file (type pdf)
 <use figs/BlockExplainerAll.pdf>
 Package luatex.def Info: figs/BlockExplainerAll.pdf  used on input line 36.
 (luatex.def)             Requested size: 317.9892pt x 104.75932pt.
 
-[24<./figs/BlockExplainerAll.pdf>] [25]
+Package natbib Warning: Citation `ronneberger2015unet' on page 22 undefined on 
+input line 43.
 
-Package natbib Warning: Citation `LuoCosineNormalization2017' on page 26 undefi
+
+Package natbib Warning: Citation `Liu2022ConvNeXt' on page 22 undefined on inpu
+t line 43.
+
+[22<./figs/BlockExplainerAll.pdf>] [23]
+
+Package natbib Warning: Citation `liu2021swin' on page 24 undefined on input li
+ne 112.
+
+
+Package natbib Warning: Citation `Liu2021SwinV2' on page 24 undefined on input 
+line 121.
+
+
+Package natbib Warning: Citation `LuoCosineNormalization2017' on page 24 undefi
 ned on input line 121.
 
-[26]
+[24]
 
-Package natbib Warning: Citation `LuoCosineNormalization2017' on page 27 undefi
+Package natbib Warning: Citation `LuoCosineNormalization2017' on page 25 undefi
 ned on input line 174.
 
-[27]
+[25]
 Underfull \hbox (badness 1515) in paragraph at lines 205--206
 []\T1/ptm/b/n/10 Tem-po-ral block resid-ual struc-ture.[] \T1/ptm/m/n/10 The tem
 -po-ral block re-shapes the rep-re-sen-ta-tion to
  []
 
-[28]
+
+Package natbib Warning: Citation `Liu2022ConvNeXt' on page 26 undefined on inpu
+t line 236.
+
+[26]
 runsystem(lualatex -interaction=batchmode -shell-escape -jobname "figs/AR" figs/
 AR)...(Command execution disabled via shell_escape='p').
-<figs/AR.pdf, id=866, 1086.85046pt x 618.69041pt>
+<figs/AR.pdf, id=660, 1086.85046pt x 618.69041pt>
 File: figs/AR.pdf Graphic file (type pdf)
 <use figs/AR.pdf>
 Package luatex.def Info: figs/AR.pdf  used on input line 292.
@@ -1420,40 +1619,43 @@ Package luatex.def Info: figs/AR.pdf  used on input line 292.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-(./chapters/models/AR_hparams.tex) [29] [30<./figs/AR.pdf>]
+(./chapters/models/AR_hparams.tex) [27] [28<./figs/AR.pdf>]
 Package standalone Info: generated file figs/FM.pdf newer then source file figs
 /FM.tex on input line 329.
-<figs/FM.pdf, id=901, 1086.85046pt x 618.69041pt>
+<figs/FM.pdf, id=694, 1086.85046pt x 618.69041pt>
 File: figs/FM.pdf Graphic file (type pdf)
 <use figs/FM.pdf>
 Package luatex.def Info: figs/FM.pdf  used on input line 329.
 (luatex.def)             Requested size: 397.48499pt x 226.26854pt.
 
 
-LaTeX Warning: Reference `tab:fluidgpt_hparams_fm' on page 31 undefined on inpu
+LaTeX Warning: Reference `tab:fluidgpt_hparams_fm' on page 29 undefined on inpu
 t line 336.
 
-[31<./figs/FM.pdf>] (./chapters/models/FM_hparams.tex))
-(./chapters/training/training.tex [32]
+[29<./figs/FM.pdf>] (./chapters/models/FM_hparams.tex))
+(./chapters/training/training.tex [30]
 Chapter 6.
-[33
+[31
 
 ]
 
-Package natbib Warning: Citation `nvidia2024dgxb200' on page 34 undefined on in
+Package natbib Warning: Citation `nvidia2024dgxb200' on page 32 undefined on in
 put line 44.
 
-[34] (./chapters/training/train_hparams.tex) [35]
+[32] (./chapters/training/train_hparams.tex) [33]
 
-Package natbib Warning: Citation `kochkov2021machine' on page 36 undefined on i
+Package natbib Warning: Citation `kochkov2021machine' on page 34 undefined on i
 nput line 98.
 
-[36]) (./chapters/results/results.tex [37]
+[34]) (./chapters/results/results.tex [35]
 Chapter 7.
 
-LaTeX Warning: Reference `fig:preds' on page 38 undefined on input line 5.
+LaTeX Warning: Reference `fig:preds' on page 36 undefined on input line 5.
 
-<figs/fluidtrajpreds/preds_pdebench-comp_22164.png, id=990, 1300.86pt x 1300.86
+
+LaTeX Warning: Reference `app:viz' on page 36 undefined on input line 5.
+
+<figs/fluidtrajpreds/preds_pdebench-comp_22164.png, id=783, 1300.86pt x 1300.86
 pt>
 File: figs/fluidtrajpreds/preds_pdebench-comp_22164.png Graphic file (type png)
 
@@ -1464,10 +1666,10 @@ d on input line 9.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [38
+ [36
 
 ]
-<figs/results/ssbox_rae.png, id=995, 578.16pt x 433.62pt>
+<figs/results/ssbox_rae.png, id=788, 578.16pt x 433.62pt>
 File: figs/results/ssbox_rae.png Graphic file (type png)
 <use figs/results/ssbox_rae.png>
 Package luatex.def Info: figs/results/ssbox_rae.png  used on input line 17.
@@ -1475,71 +1677,72 @@ Package luatex.def Info: figs/results/ssbox_rae.png  used on input line 17.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [39<./figs/fluidtrajpreds/preds_pdebench-comp_22164.png>] [40<./figs/results/ss
+ [37<./figs/fluidtrajpreds/preds_pdebench-comp_22164.png>] [38<./figs/results/ss
 box_rae.png>]
-<figs/results/msgraph_all_rae.png, id=1010, 1084.05pt x 867.24pt>
+<figs/results/msgraph_all_rae.png, id=806, 1084.05pt x 867.24pt>
 File: figs/results/msgraph_all_rae.png Graphic file (type png)
 <use figs/results/msgraph_all_rae.png>
 Package luatex.def Info: figs/results/msgraph_all_rae.png  used on input line 5
 4.
 (luatex.def)             Requested size: 397.48499pt x 317.98898pt.
- [41<./figs/results/msgraph_all_rae.png>]
+ [39<./figs/results/msgraph_all_rae.png>]
 
-LaTeX Warning: Reference `fig:energyspectrum' on page 42 undefined on input lin
-e 111.
+LaTeX Warning: Reference `fig:energyspectrum' on page 40 undefined on input lin
+e 106.
 
-<figs/results/spectra/spectrum_E_amira.png, id=1019, 578.16pt x 433.62pt>
+
+LaTeX Warning: Reference `app:spectr' on page 40 undefined on input line 106.
+
+<figs/results/spectra/spectrum_E_amira.png, id=818, 578.16pt x 433.62pt>
 File: figs/results/spectra/spectrum_E_amira.png Graphic file (type png)
 <use figs/results/spectra/spectrum_E_amira.png>
 Package luatex.def Info: figs/results/spectra/spectrum_E_amira.png  used on inp
-ut line 115.
+ut line 110.
 (luatex.def)             Requested size: 317.9892pt x 238.49173pt.
-Missing character: There is no ϵ (U+03F5) in font cmmi10!
-Missing character: There is no ϵ (U+03F5) in font cmmi10!
-<figs/results/spectra/spectrum_E_pdegym-sines.png, id=1020, 578.16pt x 433.62pt
->
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [40]
+<figs/results/spectra/spectrum_E_pdegym-sines.png, id=827, 578.16pt x 433.62pt>
+
 File: figs/results/spectra/spectrum_E_pdegym-sines.png Graphic file (type png)
 <use figs/results/spectra/spectrum_E_pdegym-sines.png>
 Package luatex.def Info: figs/results/spectra/spectrum_E_pdegym-sines.png  used
- on input line 121.
+ on input line 117.
 (luatex.def)             Requested size: 317.9892pt x 238.49173pt.
-Missing character: There is no ϵ (U+03F5) in font cmmi10!
-Missing character: There is no ϵ (U+03F5) in font cmmi10!
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [42]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [43<./figs/results/spectra/spectrum_E_amira.png>]
-<figs/results/spectra/spectrum_E_pdegym-bb.png, id=1032, 578.16pt x 433.62pt>
+<figs/results/spectra/spectrum_E_pdegym-bb.png, id=828, 578.16pt x 433.62pt>
 File: figs/results/spectra/spectrum_E_pdegym-bb.png Graphic file (type png)
 <use figs/results/spectra/spectrum_E_pdegym-bb.png>
 Package luatex.def Info: figs/results/spectra/spectrum_E_pdegym-bb.png  used on
- input line 128.
+ input line 124.
 (luatex.def)             Requested size: 317.9892pt x 238.49173pt.
-
-Missing character: There is no ϵ (U+03F5) in font cmmi10!
-Missing character: There is no ϵ (U+03F5) in font cmmi10!
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [44<./figs/results/spectra/spectrum_E_pdegym-sines.png>]
+ [41<./figs/results/spectra/spectrum_E_amira.png><./figs/results/spectra/spectru
+m_E_pdegym-sines.png>]
 
-LaTeX Warning: Reference `fig:energyspectrum' on page 45 undefined on input lin
-e 135.
+LaTeX Warning: Reference `fig:enstrophyspectrum_amira' on page 42 undefined on 
+input line 135.
 
-[45<./figs/results/spectra/spectrum_E_pdegym-bb.png>])
-(./chapters/conclusion/conclusion.tex [46]
+<figs/results/spectra/spectrum_Z_amira.png, id=838, 578.16pt x 433.62pt>
+File: figs/results/spectra/spectrum_Z_amira.png Graphic file (type png)
+<use figs/results/spectra/spectrum_Z_amira.png>
+Package luatex.def Info: figs/results/spectra/spectrum_Z_amira.png  used on inp
+ut line 139.
+(luatex.def)             Requested size: 317.9892pt x 238.49173pt.
+[42<./figs/results/spectra/spectrum_E_pdegym-bb.png>])
+(./chapters/conclusion/conclusion.tex [43<./figs/results/spectra/spectrum_Z_amir
+a.png>]
 Chapter 8.
-) (./main.bbl [47
+) (./main.bbl [44
 
-] [48
+] [45
 
-] [49]
+] [46]
 Missing character: There is no ’ (U+2019) in font ptmr8t!
 Missing character: There is no ’ (U+2019) in font ptmr8t!
-) (./appendices/appendices.tex [50
+) (./appendices/appendices.tex [47
 Missing character: There is no ’ (U+2019) in font ptmr8t!
 ]
 Appendix A.
@@ -1547,9 +1750,14 @@ Appendix A.
 
 Package natbib Warning: There were undefined citations.
 
-[51
+[48
 
-] (./main.aux)
+] (./main.aux
+
+Package natbib Warning: Citation(s) may have changed.
+(natbib)                Rerun to get citations correct.
+
+)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
@@ -1558,22 +1766,31 @@ L3 programming layer <2026-01-19>
 
 LaTeX Warning: There were undefined references.
 
-Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 1286A75FBA1196D0A496554A7E3E3EE4;15261.
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+
+Package rerunfilecheck Warning: File `main.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `main.out':
+(rerunfilecheck)             Before: 48C5B36026A25C424E7649BA0922AA25;15082
+(rerunfilecheck)             After:  1286A75FBA1196D0A496554A7E3E3EE4;15261.
 )
 
 Here is how much of LuaTeX's memory you used:
- 34718 strings out of 476076
- 125236,1373583 words of node,token memory allocated
- 9983 words of node memory still in use:
-   32 hlist, 2 vlist, 14 rule, 1 local_par, 4 glue, 1285 kern, 1 penalty, 1 marg
-in_kern, 3 glyph, 617 attribute, 64 glue_spec, 617 attribute_list, 2 write, 24 p
-df_literal, 6 pdf_action, 24 pdf_colorstack nodes
-   avail lists: 1:1,2:475,3:394,4:159,5:352,6:110,7:11752,8:65,9:781,10:32,11:10
-52
- 55830 multiletter control sequences out of 65536+600000
+ 34739 strings out of 476076
+ 125236,1144653 words of node,token memory allocated
+ 9579 words of node memory still in use:
+   32 hlist, 2 vlist, 14 rule, 1 local_par, 4 glue, 1215 kern, 1 penalty, 1 marg
+in_kern, 3 glyph, 605 attribute, 64 glue_spec, 605 attribute_list, 2 write, 24 p
+df_literal, 5 pdf_action, 24 pdf_colorstack nodes
+   avail lists: 1:1,2:475,3:354,4:153,5:352,6:95,7:11752,8:65,9:777,10:32,11:105
+2
+ 55838 multiletter control sequences out of 65536+600000
  87 fonts using 5762471 bytes
- 98i,12n,115p,2782b,669s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 98i,12n,115p,2790b,669s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texmf/fon
 ts/enc/dvips/lm/lm-ec.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsf
 onts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
@@ -1594,10 +1811,10 @@ nts/type1/public/lm/lmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
 /amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/time
 s/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></u
 sr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (51 pages, 13478342 bytes).
+Output written on main.pdf (48 pages, 14341119 bytes).
 
-PDF statistics: 1180 PDF objects out of 1200 (max. 8388607)
- 1015 compressed objects within 11 object streams
- 282 named destinations out of 1000 (max. 131072)
- 952 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 1022 PDF objects out of 1200 (max. 8388607)
+ 860 compressed objects within 9 object streams
+ 292 named destinations out of 1000 (max. 131072)
+ 936 words of extra memory for PDF output out of 10000 (max. 100000000)
 
