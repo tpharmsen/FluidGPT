@@ -573,10 +573,10 @@ if __name__ == "__main__":
                 if col == 0:
                     ax[col].set_ylabel(r"$\sqrt{x^2+y^2}$", fontsize=12, rotation=90, labelpad=20)
 
-            fig.suptitle(f"Ground truth radial velocity components for trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=22)
+            fig.suptitle(f"Ground truth radial velocity components for trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
             #fig.supylabel(f"$\sqrt{{x^2+y^2}}$", rotation=90)
             plt.tight_layout()
-            plt.savefig(f'scripts/temp/target_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png')
+            plt.savefig(f'scripts/temp/target_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png', dpi=600)
             del fig, axes, ax
 
             timesteps = [5, 6, 7, (T - 5) // 3 + 5, 2 * (T - 5) // 3 + 5, T - 1]
@@ -627,9 +627,10 @@ if __name__ == "__main__":
                         bbox=dict(facecolor="white", alpha=0.4, edgecolor="none")
                     )
 
-            fig.suptitle(f"Radial velocity components of model predictions for trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=22)
+            fig.suptitle(f"Radial velocity components of model predictions for trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
             fig.supylabel(f"$\sqrt{{x^2+y^2}}$", rotation=90)
             plt.tight_layout()
-            plt.savefig(f'scripts/temp/preds_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png')
+            plt.savefig(f'scripts/temp/preds_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png', dpi=600)
             raise NotImplementedError("Temporary stop for debugging.")
         print(f"Done with dataset {dsplit_idx}")
+S
