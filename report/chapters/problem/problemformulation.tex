@@ -81,49 +81,49 @@ with appropriate initial conditions and boundary conditions. The vector $\mathbf
 In the context of a discrete-time, data-driven surrogate model, the spatial domain $\Omega$ is discretized into a grid, $\mathbf{x} \in \Omega_h$ with resolution $128^2$. The system state at a time step $t_i$ is represented by a high-dimensional tensor $\mathbf{U}_i \in \mathbb{R}^{N_x \times N_y \times 2}$, where $N_x, N_y$ are the number of grid points in the spatial dimensions, and $2$ represents the input flow variables ($u_x$ and $u_y$).
 
 Given an input sequence of $\Delta T > 1$ historical flow states:
-\begin{equation*}
+\begin{equation}
 \mathbf{S}_{\text{in}} = \{ \mathbf{U}_{T_0-\Delta T}, \mathbf{U}_{T_0-\Delta T+1}, \ldots, \mathbf{U}_{T_0-1} \},
-\end{equation*}
+\end{equation}
 the core prediction problem is to model the evolution operator $\mathcal{P}_{\mathbf{c}}$ such that the model $\mathcal{M}$ accurately predicts the subsequent $\Delta T$ future states:
-\begin{equation*}
+\begin{equation}
 \mathbf{S}_{\text{out}} = \{ \mathbf{U}_{T_0}, \mathbf{U}_{T_0+1}, \ldots, \mathbf{U}_{T_0+\Delta T-1} \}.
-\end{equation*}
+\end{equation}
 The model $\mathcal{M}$ is a function of the input sequence $\mathbf{S}_{\text{in}}$ and the system parameter vector $\mathbf{c}$.
-\begin{equation*}
+\begin{equation}
 \mathcal{M}(\mathbf{S}_{\text{in}}) \approx \mathcal{P}_{\mathbf{c}}(\mathbf{S}_{\text{in}})
-\end{equation*}
+\end{equation}
 
 \section{Dual Modelling Approach}
 
 This problem is tackled using two distinct modeling approaches, which define the specific mathematical targets of the prediction. Both models now condition their output on a sequence of the $k$ most recent past states, $\mathbf{S}_{\text{in}}$, and are trained to predict a bundle of $\Delta T$ future states, $\mathbf{S}_{\text{pred}}$.
 
-\subsection{1. Deterministic Prediction}
+\subsection{Deterministic Prediction}
 This approach models the conditional expectation of a short-sequence bundle of five future states, $\mathbb{E}[\mathbf{S}_{\text{out}} | \mathbf{S}_{\text{in}}]$. It utilizes a function $f_{\theta}$ that maps the historical sequence to the predicted future sequence:
-\begin{equation*}
+\begin{equation}
 f_{\theta}: \mathbf{S}_{\text{in}} \mapsto \mathbf{S}_{\text{out}}
-\end{equation*}
+\end{equation}
 The predicted sequence of states is:
-\begin{equation*}
+\begin{equation}
 \hat{\mathbf{S}}_{\text{out}} = f_{\theta}(\mathbf{S}_{\text{in}}).
-\end{equation*}
+\end{equation}
 For long rollouts, the prediction system is auto-regressive: the predicted sequence $\hat{\mathbf{S}}_{\text{out}}$ is sequentially reused as the new input $\mathbf{S}_{\text{hist}}$ to predict the next $\Delta T$ steps.
 
 The learning objective for the model parameters $\theta$ is the minimization of a mean-squared error (MSE) loss $\mathcal{L}_{\text{AR}}$, measuring the error over the entire predicted sequence bundle:
-\begin{equation*}
+\begin{equation}
 \mathcal{L}_{\text{AR}}(\theta) = \mathbb{E}_{(\mathbf{S}_{\text{in}}, \mathbf{S}_{\text{out}}) \sim \mathcal{D}} \left[ \| \mathbf{S}_{\text{out}} - f_{\theta}(\mathbf{S}_{\text{in}}) \|_2^2 \right].
-\end{equation*}
+\end{equation}
 
-\subsection{2. Probabilistic Prediction (Flow Matching)}
+\subsection{Probabilistic Prediction (Flow Matching)}
 Given the possible turbulent nature of the system, the evolution over a long horizon $T$ is better described by the transition of a probability distribution $p(\mathbf{U}_{T_0+T} | \mathbf{S}_{\text{in}})$ rather than a deterministic one.
 
 The goal is to train a model $\mathcal{M}_{\phi}$ with parameters $\phi$ that effectively models this conditional probability distribution:
-\begin{equation*}
+\begin{equation}
 \mathcal{M}_{\phi}(\mathbf{S}_{\text{in}}) \approx p( \mathbf{S}_{\text{out}} | \mathbf{S}_{\text{in}}).
-\end{equation*}
+\end{equation}
 \textbf{Flow Matching} achieves this by learning the velocity field $\mathbf{v}_{\phi}(\mathbf{z}, \tau)$ that transforms a simple prior distribution (like Gaussian noise) into the complex target distribution $p$ via a continuous-time ordinary differential equation (ODE) trajectory: $\frac{d\mathbf{z}}{d\tau} = \mathbf{v}_{\phi}(\mathbf{z}, \tau)$, where $\tau \in [0, 1]$ is an artificial time. By conditioning on the previous system states $\mathbf{S}_{\text{in}}$, the model can better identify the appropriate statistical flow regime, allowing it to efficiently sample from the manifold of physically plausible solutions and ensuring long-term temporal stability and statistical fidelity. Note that the velocity field and artificial time in this context are different definitions than the velocity field and time of the physical Navier-Stokes system.
 
 Denote the loss term for the Flow Matching model as $\mathcal{L}_{\text{FM}}$. Following the conditional formulation, this objective measures how well the learned velocity field $\mathbf{v}_{\phi}(\mathbf{z}, \tau)$ approximates the target transport field $\tilde{\mathbf{v}}(\mathbf{z}, \tau)$, which defines the transformation between the source and target distributions along the artificial time dimension $\tau \in [0, 1]$. The training loss is defined as the mean-squared deviation between the predicted and target velocities:
-\begin{equation*}
+\begin{equation}
 	\mathcal{L}_{\text{FM}}(\phi) = 
 	\mathbb{E}_{\tau,\,(\mathbf{z}, \tilde{\mathbf{v}}) \sim \mathcal{D}} 
 	\left[
@@ -131,9 +131,9 @@ Denote the loss term for the Flow Matching model as $\mathcal{L}_{\text{FM}}$. F
 	\mathbf{v}_{\phi}(\mathbf{z}, \tau \mid \mathbf{S}_{\text{in}}) 
 	- 
 	\tilde{\mathbf{v}}(\mathbf{z}, \tau)
-	\big\|_2^2
+	\big\|^2
 	\right].
-\end{equation*}
+\end{equation}
 
 \section{Research Questions}
 
