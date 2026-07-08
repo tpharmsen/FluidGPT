@@ -1,6 +1,6 @@
 \chapter{Models}\label{ch:models}
 
-This chapter presents the model architectures developed for spatiotemporal fluid dynamics prediction, motivated by the challenges of generalisation, temporal stability, and computational efficiency. We introduce a shared backbone combining a hierarchical Swin Transformer with a novel space-then-time attention mechanism within a UNet-style encoder-decoder structure, which underlies two generative modeling strategies: a deterministic model and a flow-matching model. This shared design allows for a controlled comparison between the two approaches, isolating the effects of deterministic versus probabilistic formulations while holding architectural capacity fixed.
+This chapter presents the model architectures developed for spatiotemporal fluid dynamics prediction, motivated by the challenges of generalisation, temporal stability, and computational efficiency. We introduce a shared backbone combining a hierarchical Swin Transformer with a novel space-then-time attention mechanism within a UNet-style encoder-decoder structure. This architecture is used for both the deterministic model and a flow-matching model. This shared design allows for a controlled comparison between the two approaches, isolating the effects of deterministic versus probabilistic formulations while holding architectural capacity fixed.
 
 \section{Challenges}
 
@@ -27,6 +27,7 @@ The shared backbone is based on the original Swin Transformer \cite{liu2021swin}
 \subsection{Space-Then-Time Attention Backbone}
 
 To incorporate temporal structure, we employ a custom space-then-time attention block. As temporal interactions, spacings and lengths are typically different than spatial interactions, it makes sense to factorize the attention mechanism into two seperate stages. Additionally, using a seperate attention stage for the temporal dimension allows for possibly more efficient and effective modeling of temporal dependencies, which is highly relevant for large-scale foundation training tasks. This is motivated by the block causal transformer BCAT, which concludes that a space-then-time attention mechanism is more efficient while negligibly affecting predictive performance compared to a spatiotemporal attention approach. \cite{liu2025bcat}
+
 In practise, self-attention is first applied across spatial dimensions using the spatial windows of the original swin transformer block and subsequently in a perpendicular straight line across the temporal dimension. The corresponding attention masking strategy is illustrated in Figure~\ref{fig:BlockExplainer}. Multiple space-then-time attention blocks are used sequentially for smoother and more robust information spread. 
 
 \begin{figure}[h]

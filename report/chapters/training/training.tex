@@ -1,6 +1,6 @@
 \chapter{Training and Validation}\label{ch:training}
 
-This chapter details the training framework, hardware infrastructure, and validation methodology used to develop and evaluate the foundation models introduced in Chapter~\ref{ch:models} that were trained on the unified collection of data described in Chapter~\ref{ch:datasets}. We describe the modular, multi-platform training system built to ensure reproducibility and fair comparison across model variants, along with the optimization strategy and compute resources used to train them at scale. We then present the validation protocol, encompassing pointwise error metrics, autoregressive rollout stability, and spectral diagnostics, designed to assess both predictive accuracy and physical fidelity of the resulting models.
+This chapter details the training framework, hardware infrastructure, and validation methodology used to develop and evaluate the foundation models introduced in Chapter~\ref{ch:models} that were trained on the unified collection of data described in Chapter~\ref{ch:datasets}. We describe the modular, multi-platform training system built to ensure reproducibility and fair comparison across model variants, along with the optimization strategy and compute resources used to train them at scale. We then present the validation protocol, encompassing pointwise error metrics, auto-regressive rollout stability, and spectral diagnostics, designed to assess both predictive accuracy and physical fidelity of the resulting models.
 
 \section{Challenges}
 
@@ -56,9 +56,9 @@ Trivially, the data split seed was kept constant across all experiments to ensur
 
 For each dataset, 20\% of the available trajectories were reserved as a held-out validation split and were not used during training. All validation metrics were computed exclusively on this split. Validation was designed to assess three different aspects of predictive quality short-term predictive accuracy, long-horizon temporal stability, and spectral fidelity to the underlying physics.
 
-\subsection{Error Metrics}
+\subsection{Error Metric}
 
-The primary pointwise error metrics is defined as the per-sample relative absolute error, defined as
+The primary pointwise error metric is defined as the per-sample relative absolute error, defined as
 
 \begin{equation}
 	\text{RAE} = \frac{1}{N}\sum_{i=1}^{N} \frac{ \left| y_i - \hat{y}_i \right|}{\left| y_i \right|},
@@ -80,15 +80,15 @@ As the flow-matching model predicts \emph{state increments} rather than absolute
 	x(1) = x(0) + \int_{0}^{1} v_\theta\bigl(x(t_f), t_f\bigr) \, \mathrm{d}{t_f}.
 \end{equation}
 
-For validation, this integral is approximated using a simple Euler scheme with 20 discrete flow-time steps. The prior distribution used at inference time is identical to that used during training. After a sample has been mapped to a physical state through the integration process, it can be fed back as conditioning input for a new prediction. This conditioning combined with a new sample of the prior distribution is then passed to the model in order to enable autoregressive rollouts. Note that the flow-matching model's autoregressive rollout is inherently stochastic due to the sampling of the prior at each step, resulting in a distribution of predicted trajectories rather than a single deterministic trajectory. 
+For validation, this integral is approximated using a simple Euler scheme with 20 discrete flow-time steps. The prior distribution used at inference time is identical to that used during training. After a sample has been mapped to a physical state through the integration process, it can be fed back as conditioning input for a new prediction. This conditioning combined with a new sample of the prior distribution is then passed to the model in order to enable auto-regressive rollouts. Note that the flow-matching model's auto-regressive rollout is inherently stochastic due to the sampling of the prior at each step, resulting in a distribution of predicted trajectories rather than a single deterministic trajectory. 
 
 \subsubsection{Single-Step Validation}
 
-As an initial evaluation, all models were assessed in a single next-timeblock prediction setting. Given a ground-truth input sequence of 5 timesteps, each model predicts the immediately following temporal block without feeding back its own predictions. This isolates single-step transition accuracy and eliminates error accumulation effects that arise in autoregressive rollouts. The reported metric is the average per-sample error over the next 5 predicted timesteps, aggregated across all input-output pairs in the validation dataset. Note that the models natively predict a timeblock of multiple timesteps at once, instead of a single timestep.
+As an initial evaluation, all models were assessed in a single next-timeblock prediction setting. Given a ground-truth input sequence of five timesteps, each model predicts the immediately following temporal block without feeding back its own predictions. This isolates single-step transition accuracy and eliminates error accumulation effects that arise in auto-regressive rollouts. The reported metric is the average per-sample error over the next five predicted timesteps, aggregated across all input-output pairs in the validation dataset. Note that the models natively predict a timeblock of multiple timesteps at once, instead of a single timestep.
 
 \subsubsection{Rollout Validation}
 
-To evaluate long-term temporal behavior, all models were deployed in an autoregressive rollout configuration. Starting from the first 5 ground-truth physical states of each validation trajectory, model predictions were recursively fed back as inputs to generate the full future trajectory. Prediction errors were computed at each timestep throughout the rollout horizon, enabling analysis of error accumulation and long-term stability. Note that the first timestep containing the non-natural initialization conditions of the fluid trajectory is also included and thus this evaluation step assesses the model's ability to handle out-of-distribution flow states, which is a critical aspect of model robustness.
+To evaluate long-term temporal behavior, all models were deployed in an auto-regressive rollout configuration. Starting from the first five ground-truth physical states of each validation trajectory, model predictions were recursively fed back as inputs to generate the full future trajectory. Prediction errors were computed at each timestep throughout the rollout horizon, enabling analysis of error accumulation and long-term stability. Note that the first timestep containing the non-natural initialization conditions of the fluid trajectory is also included and thus this evaluation step assesses the model's ability to handle out-of-distribution flow states, which is a critical aspect of model robustness.
 
 \subsubsection{Spectral Diagnostics}
 
@@ -151,3 +151,16 @@ For the case of enstrophy spectra, the same procedure is applied, replacing \(E\
 Note that the calculation of the Energy and Enstrophy spectra requires the incompressibility condition, or information regarding pressure and density. As the models only predict x- and y- components of the flow field, the compressible dataset \texttt{pdebench-comp} is therefore not included in the spectral fidelity analysis of the results.
 
 
+\subsubsection{Radial Velocity and Vorticity Visualization}
+
+In addition to the pointwise and spectral metrics described above, the two-component velocity field is reduced to two scalar diagnostic fields that are more readily interpretable when rendered as single-channel images.
+
+The radial velocity $u_r(\mathbf{x}, t)$ is defined as the local speed of the flow, i.e.\ the magnitude of the velocity vector at each spatial location:
+\begin{equation}\label{eq:radial_velocity}
+	u_r(\mathbf{x}, t) = \|\mathbf{u}(\mathbf{x}, t)\|_2 = \sqrt{u_x(\mathbf{x}, t)^2 + u_y(\mathbf{x}, t)^2}.
+\end{equation}
+This collapses the directional information of $\mathbf{u}$ into a single non-negative scalar field, allowing predicted and reference flow intensity to be compared directly through a common colour scale.
+
+The vorticity field, already introduced in Section~\ref{sec:energyspectra} as $\boldsymbol{\omega}(\mathbf{x}, t) = \nabla \times \mathbf{u}(\mathbf{x}, t)$, is scalar-valued in the two-dimensional case and is therefore visualised directly without requiring a similar reduction.
+
+For each validation dataset, 10 representative trajectories are visualised for both the radial velocity and the vorticity field, comparing ground-truth and predicted states across all four surrogate models. These visualisations are reported in Appendix~\ref{app:vizradial} and Appendix~\ref{app:vizvort}, respectively, and are used throughout Chapter~\ref{ch:results} to qualitatively contextualise the quantitative error and spectral metrics.
