@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex main"] 1783549977.89479 "main.aux" "main.bbl" "main" 1783550414.31476 0
+["bibtex main"] 1783549977.89479 "main.aux" "main.bbl" "main" 1783551014.14528 0
   "./references.bib" 1783539384.21881 24671 0bc0ba6a1dd27228d68926e202e1c9a7 ""
   "/usr/share/texlive/texmf-dist/bibtex/bst/natbib/unsrtnat.bst" 1233624470 24550 a41a6405f4de768c43e871d9fbce2bc8 ""
-  "main.aux" 1783550413.79113 98571 ffe9708db15d83624fa73a2c8c6de801 "lualatex"
+  "main.aux" 1783551013.63618 98571 ffe9708db15d83624fa73a2c8c6de801 "lualatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["lualatex"] 1783549978.0029 "main.tex" "main.pdf" "main" 1783550414.31507 0
+["lualatex"] 1783550547.04102 "main.tex" "main.pdf" "main" 1783551014.14564 0
   "/home/tpharmsen/.texlive2025/texmf-var/luatex-cache/generic/fonts/otl/lmroman10-regular.luc" 1780591303.62815 127309 4c98d2f049c54f1fa860da8f2be1c9ce ""
   "/home/tpharmsen/.texlive2025/texmf-var/luatex-cache/generic/names/luaotfload-names.luc.gz" 1780591303.53515 477939 b3eba6c010a33a2cf17ab92180474879 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmb8r.tfm" 1136768653 4524 6bce29db5bc272ba5f332261583fee9c ""
@@ -333,7 +333,7 @@
   "chapters/models/AR_hparams.tex" 1782568347.58845 1105 324fa82f35e6b901d70273c37c2ea84d ""
   "chapters/models/FM_hparams.tex" 1783548013.80675 1302 addff96cbc2653e84dea442a3a74963d ""
   "chapters/models/models.tex" 1783547808.60743 30781 dec08a8f2c9b6539a4e87da2358bc6a0 ""
-  "chapters/problem/problemformulation.tex" 1783546900.38133 13476 a634654c82bea804c59325d434bb1843 ""
+  "chapters/problem/problemformulation.tex" 1783550537.86776 13473 70ee5fc32d66c03fd95e52b1b309ed41 ""
   "chapters/relatedwork/relatedwork.tex" 1783547646.68299 12336 ea066e11dde976cf2292ec5ec7e8b8de ""
   "chapters/results/results.tex" 1783548010.3089 15920 1416550e0933bc38c24c5b016c02e71c ""
   "chapters/training/train_hparams.tex" 1782568347.58947 994 01f0320b233b822a7584efb9851a2609 ""
@@ -550,11 +550,11 @@
   "figs/results/spectra/spectrum_Z_pdegym-sl.png" 1783539384.14445 961545 899e210e72bb687a4a4df772d73fafca ""
   "figs/results/spectra/spectrum_Z_pdegym-svs.png" 1783539384.14865 993869 87bc571ab6f42d01f39077fe73599910 ""
   "figs/results/ssbox_rae.png" 1783539384.15167 653290 b9b8a96fcc918a8fe1ec7dfb4cf11221 ""
-  "main.aux" 1783550413.79113 98571 ffe9708db15d83624fa73a2c8c6de801 "lualatex"
+  "main.aux" 1783551013.63618 98571 ffe9708db15d83624fa73a2c8c6de801 "lualatex"
   "main.bbl" 1783549977.98517 18006 c5b24e4b3d073d0bd05affe5f802a700 "bibtex main"
-  "main.out" 1783550413.79476 17226 9aa2dfd05e5d56a7a35e79c02a3ac93e "lualatex"
+  "main.out" 1783551013.64018 17226 9aa2dfd05e5d56a7a35e79c02a3ac93e "lualatex"
   "main.tex" 1783548016.57596 5377 3915e8182afbc6cefcad60b85ef01595 ""
-  "main.toc" 1783550413.79476 11631 5c6d5984acf1f6cdf740c8cf82880c62 "lualatex"
+  "main.toc" 1783551013.64118 11631 5c6d5984acf1f6cdf740c8cf82880c62 "lualatex"
   "neurips_2025.sty" 1782568347.93721 12876 c26276eed0224591e67104ce84f7886f ""
   (generated)
   "main.aux"
