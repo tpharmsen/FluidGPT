@@ -149,18 +149,3 @@ Finally, the generalized weighted spectral error over all trajectories and predi
 For the case of enstrophy spectra, the same procedure is applied, replacing \(E\) with \(Z\) in Equation~\ref{eq:spectral_ratio} to \ref{eq:generalized_weighted_spectral_error}. The resulting weighted spectral error distributions for both energy and enstrophy are visualized in Chapter~\ref{ch:results} to assess the physical fidelity of the models across scales. 
 
 Note that the calculation of the Energy and Enstrophy spectra requires the incompressibility condition, or information regarding pressure and density. As the models only predict x- and y- components of the flow field, the compressible dataset \texttt{pdebench-comp} is therefore not included in the spectral fidelity analysis of the results.
-
-
-\subsubsection{Radial Velocity and Vorticity Visualization}
-
-In addition to the pointwise and spectral metrics described above, the two-component velocity field is reduced to two scalar diagnostic fields that are more readily interpretable when rendered as single-channel images.
-
-The radial velocity $u_r(\mathbf{x}, t)$ is defined as the local speed of the flow, i.e.\ the magnitude of the velocity vector at each spatial location:
-\begin{equation}\label{eq:radial_velocity}
-	u_r(\mathbf{x}, t) = \|\mathbf{u}(\mathbf{x}, t)\|_2 = \sqrt{u_x(\mathbf{x}, t)^2 + u_y(\mathbf{x}, t)^2}.
-\end{equation}
-This collapses the directional information of $\mathbf{u}$ into a single non-negative scalar field, allowing predicted and reference flow intensity to be compared directly through a common colour scale.
-
-The vorticity field, already introduced in Section~\ref{sec:energyspectra} as $\boldsymbol{\omega}(\mathbf{x}, t) = \nabla \times \mathbf{u}(\mathbf{x}, t)$, is scalar-valued in the two-dimensional case and is therefore visualised directly without requiring a similar reduction.
-
-For each validation dataset, 10 representative trajectories are visualised for both the radial velocity and the vorticity field, comparing ground-truth and predicted states across all four surrogate models. These visualisations are reported in Appendix~\ref{app:vizradial} and Appendix~\ref{app:vizvort}, respectively, and are used throughout Chapter~\ref{ch:results} to qualitatively contextualise the quantitative error and spectral metrics.

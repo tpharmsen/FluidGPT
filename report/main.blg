@@ -6,45 +6,48 @@ Database file #1: references.bib
 Warning--empty journal in mccabe2024mpp
 Warning--empty journal in nguyen2023climax
 Warning--empty journal in ohana2024thewell
-You've used 40 entries,
+Warning--empty journal in LuoCosineNormalization2017
+Warning--empty year in LuoCosineNormalization2017
+Warning--empty year in LuoCosineNormalization2017
+You've used 43 entries,
             2481 wiz_defined-function locations,
-            752 strings with 15701 characters,
-and the built_in function-call counts, 19683 in all, are:
-= -- 1192
-> -- 1978
-< -- 6
-+ -- 703
-- -- 620
-* -- 1871
-:= -- 3539
-add.period$ -- 136
-call.type$ -- 40
-change.case$ -- 80
-chr.to.int$ -- 37
-cite$ -- 43
-duplicate$ -- 800
-empty$ -- 1350
-format.name$ -- 662
-if$ -- 3887
+            769 strings with 16302 characters,
+and the built_in function-call counts, 20630 in all, are:
+= -- 1240
+> -- 2051
+< -- 7
++ -- 731
+- -- 642
+* -- 1945
+:= -- 3709
+add.period$ -- 147
+call.type$ -- 43
+change.case$ -- 86
+chr.to.int$ -- 40
+cite$ -- 49
+duplicate$ -- 850
+empty$ -- 1437
+format.name$ -- 687
+if$ -- 4097
 int.to.chr$ -- 4
-int.to.str$ -- 41
-missing$ -- 40
-newline$ -- 222
-num.names$ -- 120
-pop$ -- 372
+int.to.str$ -- 44
+missing$ -- 42
+newline$ -- 239
+num.names$ -- 129
+pop$ -- 401
 preamble$ -- 1
-purify$ -- 40
+purify$ -- 43
 quote$ -- 0
-skip$ -- 441
+skip$ -- 472
 stack$ -- 0
-substring$ -- 416
-swap$ -- 127
+substring$ -- 386
+swap$ -- 132
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 280
-warning$ -- 3
-while$ -- 102
+type$ -- 301
+warning$ -- 6
+while$ -- 99
 width$ -- 0
-write$ -- 526
-(There were 3 warnings)
+write$ -- 566
+(There were 6 warnings)

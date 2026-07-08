@@ -297,7 +297,7 @@ The deterministic model uses the shared backbone described in the previous secti
 
 \subsection{Hyperparameter Configurations}
 
-Two deterministic model variants are evaluated. One uses finer patch sizes with lower embedding dimensionality and greater depth, while the other uses larger patch sizes with increased embedding dimensionality and depth. This design allows exploration of the trade-off between local resolution and global context modeling. The amount of space-then-time attention blocks per layer is also varied as a hyperparameter to control computational cost and define less difference in representational capacity between the d2 and d3-models for comparability. The two variants are denoted as \texttt{AR-d2} and \texttt{AR-d3}, referring to their respective patch fusions per depth and corresponding parameter configurations. The specific hyperparameter settings for each variant are detailed in Table~\ref{tab:fluidgpt_hparams_det}. More information on the architectural \texttt{d2} and \texttt{d3} variants is provided in Section~\ref{sec:model_variants}.
+Two deterministic model variants are evaluated. One uses finer patch sizes with lower embedding dimensionality and greater depth, while the other uses larger patch sizes with increased embedding dimensionality and depth. This design allows exploration of the trade-off between local resolution and global context modeling. The amount of space-then-time attention blocks per layer is also varied as a hyperparameter to control computational cost and define less difference in representational capacity between the \texttt{d2} and \texttt{d3}-models for comparability. The two variants are denoted as \texttt{AR-d2} and \texttt{AR-d3}, referring to their respective patch fusions per depth and corresponding parameter configurations. The specific hyperparameter settings for each variant are detailed in Table~\ref{tab:fluidgpt_hparams_det}. More information on the architectural \texttt{d2} and \texttt{d3} variants is provided in Section~\ref{sec:model_variants}.
 
 \input{chapters/models/AR_hparams.tex}
 
@@ -334,7 +334,7 @@ The flow-matching model shares the same backbone architecture as the determinist
 
 \subsection{Hyperparameter Configurations}
 
-As with the deterministic model, two variants are evaluated for flow matching. These variants differ in patch size, embedding dimension, depth, and number of attention blocks per layer. The two variants are denoted as \texttt{FM-d2} and \texttt{FM-d3}, referring to their respective patch fusions per depth and corresponding parameter configurations. The specific hyperparameter settings for each variant are detailed in Table~\ref{tab:fluidgpt_hparams_fm}.
+As with the deterministic model, two variants are evaluated for flow matching. These variants differ in patch size, embedding dimension, depth, and number of attention blocks per layer. The two variants are denoted as \texttt{FM-d2} and \texttt{FM-d3}, referring to their respective patch fusions per depth and corresponding parameter configurations. The specific hyperparameter settings for each variant are detailed in Table~\ref{tab:fluidgpt_hparams_prob}.
 
 \input{chapters/models/FM_hparams.tex}
 

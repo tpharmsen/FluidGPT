@@ -1,4 +1,4 @@
-\begin{thebibliography}{40}
+\begin{thebibliography}{43}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -45,8 +45,7 @@ Lu~Lu, Pengzhan Jin, Guofei Pang, Zhiping Zhang, and George~E. Karniadakis.
 \bibitem[Jin et~al.(2022)Jin, Meng, and Lu]{jin2022mionet}
 Pengzhan Jin, Shuai Meng, and Lu~Lu.
 \newblock Mionet: Learning multiple-input operators via tensor product.
-\newblock \emph{SIAM Journal on Scientific Computing}, 44\penalty0
-  (6):\penalty0 A3490--A3514, 2022.
+\newblock \emph{SIAM Journal on Scientific Computing}, 44\penalty0 (6), 2022.
 
 \bibitem[Sanchez-Gonzalez et~al.(2020)Sanchez-Gonzalez, Godwin, Pfaff, Ying,
   Leskovec, and Battaglia]{sanchezgonzalez2020learning}
@@ -323,6 +322,13 @@ Janis Jakob, Markus Gross, and Thomas G{\"u}nther.
   27\penalty0 (2):\penalty0 1279--1289, 2021.
 \newblock \doi{10.1109/TVCG.2020.3028947}.
 
+\bibitem[Liu et~al.(2022{\natexlab{b}})Liu, Mao, Wu, Feichtenhofer, Darrell,
+  and Xie]{Liu2022ConvNeXt}
+Zhuang Liu, Hanzi Mao, Chao-Yuan Wu, Christoph Feichtenhofer, Trevor Darrell,
+  and Saining Xie.
+\newblock A convnet for the 2020s.
+\newblock \emph{arXiv preprint arXiv:2201.03545}, 2022{\natexlab{b}}.
+
 \bibitem[Liu et~al.(2021{\natexlab{b}})Liu, Hu, Lin, Yao, Xie, Wei, Ning, Cao,
   Zhang, Dong, Wei, and Guo]{Liu2021SwinV2}
 Ze~Liu, Han Hu, Yutong Lin, Zhuliang Yao, Zhenda Xie, Yixuan Wei, Jia Ning, Yue
@@ -330,11 +336,25 @@ Ze~Liu, Han Hu, Yutong Lin, Zhuliang Yao, Zhenda Xie, Yixuan Wei, Jia Ning, Yue
 \newblock Swin transformer v2: Scaling up capacity and resolution.
 \newblock \emph{arXiv preprint arXiv:2111.09883}, 2021{\natexlab{b}}.
 
-\bibitem[Liu et~al.(2022{\natexlab{b}})Liu, Mao, Wu, Feichtenhofer, Darrell,
-  and Xie]{Liu2022ConvNeXt}
-Zhuang Liu, Hanzi Mao, Chao-Yuan Wu, Christoph Feichtenhofer, Trevor Darrell,
-  and Saining Xie.
-\newblock A convnet for the 2020s.
-\newblock \emph{arXiv preprint arXiv:2201.03545}, 2022{\natexlab{b}}.
+\bibitem[Luo et~al.()Luo, Zhan, Wang, and Yang]{LuoCosineNormalization2017}
+Chunjie Luo, Jianfeng Zhan, Lei Wang, and Qiang Yang.
+\newblock Cosine normalization: Using cosine similarity instead of dot product
+  in neural networks.
+\newblock abs/1702.05870.
+\newblock \doi{10.48550/arXiv.1702.05870}.
+
+\bibitem[{NVIDIA Corporation}(2025)]{nvidia2024dgxb200}
+{NVIDIA Corporation}.
+\newblock {NVIDIA DGX B200}.
+\newblock \url{https://www.nvidia.com/en-us/data-center/dgx-b200/}, 2025.
+
+\bibitem[Kochkov et~al.(2021)Kochkov, Smith, Alieva, Wang, Brenner, and
+  Hoyer]{kochkov2021machine}
+Dmitrii Kochkov, Jamie~A. Smith, Ayya Alieva, Qing Wang, Michael~P. Brenner,
+  and Stephan Hoyer.
+\newblock Machine learning-accelerated computational fluid dynamics.
+\newblock \emph{Proceedings of the National Academy of Sciences}, 118\penalty0
+  (21):\penalty0 e2101784118, 2021.
+\newblock \doi{10.1073/pnas.2101784118}.
 
 \end{thebibliography}
