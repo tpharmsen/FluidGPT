@@ -90,7 +90,7 @@ The model $\mathcal{M}$ is a function of the input sequence $\mathbf{S}_{\text{i
 
 \section{Dual Modelling Approach}
 
-This problem is tackled using two distinct modeling approaches, which define the specific mathematical targets of the prediction. Both models now condition their output on a sequence of the $k$ most recent past states, $\mathbf{S}_{\text{in}}$, and are trained to predict a bundle of $\Delta T$ future states, $\mathbf{S}_{\text{pred}}$.
+This problem is tackled using two distinct modeling approaches, which define the specific mathematical targets of the prediction. Both models now condition their output on a sequence of the $k$ most recent past states, $\mathbf{S}_{\text{in}}$, and are trained to predict a bundle of $\Delta T$ future states, $\mathbf{S}_{\text{out}}$.
 
 \subsection{Deterministic Prediction}
 This approach models the conditional expectation of a short-sequence bundle of five future states, $\mathbb{E}[\mathbf{S}_{\text{out}} | \mathbf{S}_{\text{in}}]$. It utilizes a function $f_{\theta}$ that maps the historical sequence to the predicted future sequence:
@@ -101,7 +101,7 @@ The predicted sequence of states is:
 \begin{equation}
 \hat{\mathbf{S}}_{\text{out}} = f_{\theta}(\mathbf{S}_{\text{in}}).
 \end{equation}
-For long rollouts, the prediction system is auto-regressive: the predicted sequence $\hat{\mathbf{S}}_{\text{out}}$ is sequentially reused as the new input $\mathbf{S}_{\text{hist}}$ to predict the next $\Delta T$ steps.
+For long rollouts, the prediction system is auto-regressive: the predicted sequence $\hat{\mathbf{S}}_{\text{out}}$ is sequentially reused as the new input $\mathbf{S}_{\text{in}}$ to predict the next $\Delta T$ steps.
 
 The learning objective for the model parameters $\theta$ is the minimization of a mean-squared error (MSE) loss $\mathcal{L}_{\text{AR}}$, measuring the error over the entire predicted sequence bundle:
 \begin{equation}
