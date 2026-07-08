@@ -50,8 +50,8 @@ rcParams.update({
     'lines.markerfacecolor': 'none',
 
     # Remove top/right spines globally
-    'axes.spines.top': False,
-    'axes.spines.right': False,
+    'axes.spines.top': True,
+    'axes.spines.right': True,
 
     "legend.frameon": True,
 })
@@ -573,8 +573,8 @@ if __name__ == "__main__":
                 if col == 0:
                     ax[col].set_ylabel(r"$\sqrt{x^2+y^2}$", fontsize=12, rotation=90, labelpad=20)
 
-            fig.suptitle(f"Ground truth radial velocity components for trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
-            #fig.supylabel(f"$\sqrt{{x^2+y^2}}$", rotation=90)
+            fig.suptitle(f"Ground truth radial velocity components\nfor trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
+            fig.supylabel(rf"$\sqrt{{x^2+y^2}}$", rotation=90)
             plt.tight_layout()
             plt.savefig(f'scripts/temp/target_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png', dpi=600)
             del fig, axes, ax
@@ -597,7 +597,7 @@ if __name__ == "__main__":
 
                 axes[row, col].set_title(f"t={t}", fontsize=12)
                 if col == 0:
-                    axes[row, col].set_ylabel("Target", fontsize=12, rotation=0, labelpad=20)
+                    axes[row, col].set_ylabel("Ground truth", fontsize=12, rotation=0, labelpad=20)
 
             
             for row in range(1, 5):
@@ -627,8 +627,8 @@ if __name__ == "__main__":
                         bbox=dict(facecolor="white", alpha=0.4, edgecolor="none")
                     )
 
-            fig.suptitle(f"Radial velocity components of model predictions for trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
-            fig.supylabel(f"$\sqrt{{x^2+y^2}}$", rotation=90)
+            fig.suptitle(f"Radial velocity components of model predictions\nfor trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
+            fig.supylabel(rf"$\sqrt{{x^2+y^2}}$", rotation=90)
             plt.tight_layout()
             plt.savefig(f'scripts/temp/preds_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png', dpi=600)
             raise NotImplementedError("Temporary stop for debugging.")
