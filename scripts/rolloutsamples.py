@@ -574,7 +574,7 @@ if __name__ == "__main__":
                     ax[col].set_ylabel(r"$\sqrt{x^2+y^2}$", fontsize=12, rotation=90, labelpad=20)
 
             fig.suptitle(f"Ground truth radial velocity components\nfor trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
-            fig.supylabel(rf"$\sqrt{{x^2+y^2}}$", rotation=90)
+            #fig.supylabel(rf"$\sqrt{{x^2+y^2}}$", rotation=90)
             plt.tight_layout(w_pad=0.1, h_pad=0.1)
             plt.savefig(f'scripts/temp/target_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png', dpi=600)
             del fig, axes, ax
@@ -629,7 +629,7 @@ if __name__ == "__main__":
 
             fig.suptitle(f"Radial velocity components of model predictions\nfor trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
             fig.supylabel(rf"$\sqrt{{x^2+y^2}}$", rotation=90)
-            plt.tight_layout(w_pad=0.1, h_pad=0.1)
+            plt.tight_layout(w_pad=0.15, h_pad=0.15)
             plt.savefig(f'scripts/temp/preds_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png', dpi=600)
 
             # ------------------------------------------------------------------
@@ -661,7 +661,7 @@ if __name__ == "__main__":
                     ax[col].set_ylabel(r"$\omega$", fontsize=12, rotation=90, labelpad=20)
 
             fig.suptitle(f"Ground truth vorticity\nfor trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
-            fig.supylabel(r"$\omega = \partial_x v_y - \partial_y v_x$", rotation=90)
+            #fig.supylabel(r"$\omega = \partial_x v_y - \partial_y v_x$", rotation=90)
             plt.tight_layout(w_pad=0.1, h_pad=0.1)
             plt.savefig(f'scripts/temp/vort_target_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png', dpi=600)
             del fig, axes, ax
@@ -707,7 +707,7 @@ if __name__ == "__main__":
 
             fig.suptitle(f"Vorticity of model predictions\nfor trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
             fig.supylabel(r"$\omega$", rotation=90)
-            plt.tight_layout(w_pad=0.1, h_pad=0.1)
+            plt.tight_layout(w_pad=0.15, h_pad=0.15)
             plt.savefig(f'scripts/temp/vort_preds_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png', dpi=600)
             raise NotImplementedError("Temporary stop for debugging.")
         print(f"Done with dataset {dsplit_idx}")
