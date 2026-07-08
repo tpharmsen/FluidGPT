@@ -121,15 +121,15 @@
 \contentsline {paragraph}{Temporal degradation and dissipation-range scale dampening.}{45}{section*.60}%
 \contentsline {paragraph}{Enstrophy spectrum.}{45}{section*.61}%
 \contentsline {chapter}{\numberline {8}Conclusion}{47}{chapter.8}%
-\contentsline {chapter}{\numberline {9}Conclusion}{48}{chapter.9}%
-\contentsline {section}{\numberline {9.1}Answering the Research Questions}{48}{section.9.1}%
-\contentsline {paragraph}{RQ1: Single-step prediction accuracy.}{48}{section*.63}%
-\contentsline {paragraph}{RQ2: Long-horizon rollout stability.}{48}{section*.64}%
-\contentsline {paragraph}{RQ3: Physical and spectral consistency.}{48}{section*.65}%
-\contentsline {section}{\numberline {9.2}Summary}{49}{section.9.2}%
-\contentsline {section}{\numberline {9.3}Limitations}{49}{section.9.3}%
-\contentsline {paragraph}{Prior specification.}{49}{section*.66}%
-\contentsline {paragraph}{Unobserved forcing.}{49}{section*.67}%
-\contentsline {paragraph}{Comparability of models.}{49}{section*.68}%
-\contentsline {section}{\numberline {9.4}Future Work}{49}{section.9.4}%
-\contentsline {chapter}{\numberline {A}Appendix}{54}{appendix.A}%
+\contentsline {section}{\numberline {8.1}Answering the Research Questions}{47}{section.8.1}%
+\contentsline {paragraph}{RQ1: Single-step prediction accuracy.}{47}{section*.63}%
+\contentsline {paragraph}{RQ2: Long-horizon rollout stability.}{47}{section*.64}%
+\contentsline {paragraph}{RQ3: Physical and spectral consistency.}{47}{section*.65}%
+\contentsline {section}{\numberline {8.2}Summary}{48}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Limitations}{48}{section.8.3}%
+\contentsline {paragraph}{Prior specification.}{48}{section*.66}%
+\contentsline {paragraph}{Unobserved forcing.}{48}{section*.67}%
+\contentsline {paragraph}{Comparability of models.}{48}{section*.68}%
+\contentsline {section}{\numberline {8.4}Future Work}{48}{section.8.4}%
+\contentsline {chapter}{\numberline {A}Appendix}{53}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Spectral Energy analysis specific to datasets}{53}{section.A.1}%

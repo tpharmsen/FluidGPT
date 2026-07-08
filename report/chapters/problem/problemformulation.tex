@@ -1,10 +1,10 @@
 \chapter{Problem Formulation}\label{ch:problem}
 
-This chapter formally defines the research problem, establishing the specific physical PDE system, the constraints imposed by large-scale pretraining data, and the mathematical framework for the two proposed AI surrogate models. We further detail the key challenges that motivate the dual deterministic-probabilistic modelling approach, before concluding with the research questions guiding this work.
+This chapter formally defines the research problem, establishing the specific physical PDE system, the constraints imposed by large-scale pretraining data, and the mathematical framework for the two proposed AI surrogate models approaches. The research questions guiding this work are outlined at the end of this chapter.
 
 \section{Navier-Stokes System}
 
-The Navier–Stokes equations describe the dynamics of fluid flow through a set of coupled, nonlinear partial differential equations that enforce conservation of both mass and momentum. In this work, we focus on the two-dimensional, isothermal case, governed by the following equations:
+The Navier-Stokes equations describe the dynamics of fluid flow through a set of coupled, non-linear partial differential equations that enforce conservation of both mass and momentum. In this work, we focus on the two-dimensional, isothermal case, governed by the following equations:
 
 \begin{gather}\label{eq:navierstokes}
 \partial_t \rho + \nabla \cdot (\rho \mathbf{u}) = 0, \\
@@ -14,15 +14,11 @@ B_i(\mathbf{u}, p)|_{\partial \Omega} = g_i, \quad \mathbf{u}(0) = A, \quad x \i
 
 Here, $\rho$ denotes density, $\mathbf{u}$ the velocity vector field, $p$ the pressure, $\boldsymbol{\tau}$ the viscous stress tensor, and $\mathbf{f}$ an external forcing term. The first equation expresses conservation of mass (continuity), while the second represents momentum conservation. Boundary and initial conditions are specified by $B_i$ and $A$, respectively.
 
-In the special case of incompressible flow, the simplification $\frac{d\rho}{dt} = 0$ is applied, which reduces the complexity of the operator's input–output mapping. This enforces no stretching and compressing of the fluid, also referred to as divergence-free flow.
+In the special case of incompressible flow, the simplification $\frac{d\rho}{dt} = 0$ is applied, which reduces the complexity of the operator's input-output mapping. This enforces no stretching and compressing of the fluid, also referred to as divergence-free flow.
 
-\vspace{1em}
+\subsection{Characteristics of the Navier-Stokes System}\label{sec:energyspectra}
 
-\subsection{Characteristics of the Navier–Stokes System}\label{sec:energyspectra}
-
-The Navier–Stokes system shows complex dynamical behavior characterized by creation, advection, and dissipation of vortical structures, often referred to as eddies. Large eddies break down into smaller eddies in a cascading process, transferring energy across lowering scales until it dissipates at the smallest viscous level. This process is chaotic and highly sensitive to initial conditions, leading to stochastic-like macroscopic behavior even though the governing equations are deterministic. Capturing this behavior accurately is a core challenge for surrogate models, especially those that must generalize across varying flow regimes and boundary conditions.
-
-\vspace{1em}
+The Navier-Stokes system shows complex dynamical behavior characterized by creation, advection, and dissipation of vortical structures, often referred to as eddies. Large eddies break down into smaller eddies in a cascading process, transferring energy across lowering scales until it dissipates at the smallest viscous level. This process is chaotic and highly sensitive to initial conditions, leading to stochastic-like macroscopic behavior even though the governing equations are deterministic. Capturing this behavior accurately is a core challenge for surrogate models, especially those that must generalize across varying flow regimes and boundary conditions.
 
 \textbf{Energy and Enstrophy Spectra.}
 To quantify the cascade process of energy and vorticity across scales, the flow field is often analyzed in Fourier space. The energy spectrum $E(k)$ characterizes the distribution of kinetic energy among different wavenumbers $k$, describing how much energy is contained in eddies of their respective scale. It is defined as
@@ -46,7 +42,7 @@ where $\boldsymbol{\omega} = \nabla \times \mathbf{u}$ is the vorticity field. F
 
 \section{Pre-training Datasets and Preliminary Domain Coverage}\label{se:datasetconditions}
 
-To enable the model to generalise across the full range of Navier–Stokes regimes, a diverse ensemble of 2-dimensional pre-training datasets is needed. The Navier–Stokes equation exhibits a broad spectrum of behaviour depending on flow type (laminar or turbulent), compressibility, boundary conditions, and external forcing. Capturing these variations requires data originating from multiple numerical solvers, simulation conditions, and initialisation schemes. For our datasets we seek uniform grid simulated data.
+To enable the model to generalise across the full range of Navier-Stokes regimes, a diverse ensemble of two-dimensional datasets is required. The Navier-Stokes equation exhibits a broad spectrum of behaviour depending on flow type (laminar or turbulent), compressibility, boundary conditions, and external forcing. Capturing these variations requires data originating from multiple numerical solvers, simulation conditions, and initialisation schemes. For our datasets we seek uniform grid simulated data.
 
 We aim to select datasets with coverage of the following type:
 \begin{enumerate}
@@ -58,8 +54,7 @@ We aim to select datasets with coverage of the following type:
 	\item Parameter variations in viscosity, pressure, and density
 \end{enumerate}
 
-Collectively, the coverage ensures that the pre-training process exposes the model to a broad spectrum of physical behaviours. A detailed description of each dataset, including its generation method, resolution, and specific parameters, will be provided in the methodology section.
-
+Collectively, the coverage ensures that the training process exposes the model to a broad spectrum of physical behaviours. A detailed description of each dataset, including its generation method, resolution, and specific parameters, will be provided in Chapter~\ref{ch:datasets}. 
 \section{Machine Learning Objective}
 
 The objective of this work is to construct a model $\mathcal{M}$ that predicts the future evolution of a continuous-time, partial differential equation (PDE) system, specifically the Navier-Stokes equations, across a wide and diverse parameter space.
@@ -137,10 +132,10 @@ Denote the loss term for the Flow Matching model as $\mathcal{L}_{\text{FM}}$. F
 
 \section{Research Questions}
 
-This work focuses on building a foundation model that is both rollout-stable and physically consistent for a wide domain space of Navier–Stokes flows, relying solely on velocity-field inputs. To tackle this, we take a dual approach, leveraging deterministic and probabilistic modeling techniques. The following research questions highlight the objectives of our study, each directly motivated by the challenges further outlined in each subsequent section of this chapter.
+This work focuses on building a foundation model that is both rollout-stable and physically consistent for a wide domain space of Navier-Stokes flows, relying solely on velocity-field inputs. To tackle this, we take a dual approach, leveraging deterministic and probabilistic modeling techniques. The following research questions highlight the objectives of our study, each directly motivated by the challenges further outlined in each subsequent section of this chapter.
 
 \begin{enumerate}
-	\item \textbf{Can probabilistic flow matching models outperform deterministic baselines in predicting subsequent system states of Navier-Stokes dynamics, when trained on a heterogeneous multi-source dataset spanning a wide variety of physical parameters and flow regimes?}
-	\item \textbf{How does autoregressive rollout error accumulate over time for probabilistic versus deterministic models, and does the probabilistic formulation confer greater long-horizon stability across datasets of varying temporal length?}
+	\item \textbf{Can probabilistic flow matching models outperform deterministic baselines in predicting single-step subsequent system states of Navier-Stokes dynamics, when trained on a heterogeneous multi-source dataset spanning a wide variety of physical parameters and flow regimes?}
+	\item \textbf{How does auto-regressive rollout error accumulate over time for probabilistic versus deterministic models, and does the probabilistic formulation confer greater long-horizon stability across datasets of varying temporal length?}
 	\item \textbf{Do the predicted system states satisfy physical characteristics as measured by spectral analysis, and do probabilistic models produce spectrally more consistent predictions than deterministic models across flow regimes?}
 \end{enumerate}

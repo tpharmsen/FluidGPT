@@ -1,7 +1,5 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025/Debian) (preloaded format=pdflatex 2026.5.21)  8 JUL 2026 18:38
-entering extended mode
- restricted \write18 enabled.
- %&-line parsing enabled.
+This is LuaHBTeX, Version 1.22.0 (TeX Live 2025/Debian)  (format=lualatex 2026.6.4)  8 JUL 2026 21:39
+ restricted system commands enabled.
 **
 
 ! Emergency stop.
@@ -9,13 +7,14 @@ entering extended mode
     
 End of file on the terminal!
 
- 
-Here is how much of TeX's memory you used:
- 3 strings out of 467533
- 107 string characters out of 5422138
- 433756 words of memory out of 5000000
- 29014 multiletter control sequences out of 15000+600000
- 627721 words of font info for 40 fonts, out of 8000000 for 9000
- 1141 hyphenation exceptions out of 8191
- 0i,0n,0p,1b,6s stack positions out of 10000i,1000n,20000p,200000b,200000s
+
+
+Here is how much of LuaTeX's memory you used:
+ 4 strings out of 476076
+ 100000,460012 words of node,token memory allocated 270 words of node memory still in use:
+   1 hlist, 39 glue_spec nodes
+   avail lists: 2:12,3:3,4:1,5:1
+ 22567 multiletter control sequences out of 65536+600000
+ 14 fonts using 591679 bytes
+ 0i,0n,0p,0b,6s stack positions out of 10000i,1000n,20000p,200000b,200000s
 !  ==> Fatal error occurred, no output PDF file produced!

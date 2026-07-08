@@ -9,7 +9,7 @@ This chapter describes the datasets used to pretrain the foundation model for fl
 
 \subsection{Wide variation in flow regimes}
 
-As a foundational model is only as good as the data it is trained on, the selection of training datasets is a critical step in the development of a generalised fluid-dynamics model. The datasets must collectively span a wide range of flow regimes, boundary conditions, and initialisation procedures to ensure that the model can learn to generalise across different fluid dynamics scenarios.
+As a foundational model is only as good as the data it is trained on, the selection of training datasets is a critical step in the development of a generalising fluid-dynamics model. The datasets must collectively span a wide range of flow regimes, boundary conditions, and initialisation procedures to ensure that the model can learn to generalise across different fluid dynamics scenarios.
 
 \subsection{Compatibility of datasets}
 
@@ -30,19 +30,19 @@ For each dataset, $80\%$ of the available trajectories were assigned to the trai
  
 This dataset comprises a large-scale ensemble of $8000$ unsteady, two-dimensional fluid flows generated using the open-source Gerris flow solver~\citep{Jakob2021FluidFlowDataset}. All simulations are performed on a regular $512^2$ grid under spatially periodic boundary conditions. The ensemble spans a wide dynamic range: Reynolds numbers vary from $1$ to $4096$ and kinematic viscosities range from $10^{-5}$ to $10^{-4}$, transitioning individual trajectories from smooth laminar flows to fully developed, decaying two-dimensional turbulence. 
 
-The simulations are initialised using a random distribution of localized vortices, which seed complex vortex interactions. The raw data, originally stored in the native \texttt{.am} format at a resolution of $512 \times 512 \times 1001$ time steps, occupy approximately $16~\text{TB}$. As part of the preprocessing pipeline described in Section~\ref{se:preprocessing}, these trajectories are sub-sampled temporally and converted to the \texttt{.hdf5} format. Due to the lack of an official name for this dataset in the literature, it is now referred to as the \textit{amira} dataset, referencing its source file extension. A sample trajectory demonstrating the decaying vortex dynamics is visualised in Figure~\ref{fig:amira}. The uniqueness of this dataset lies in its scale of training data, which is significantly larger than the other datasets, and its ability to expose the model to a wide range of Reynolds numbers and flow regimes. Also, the temporal trajectory length is significantly longer than the other datasets, which is beneficial for training and validating on long-term accuracy and stability of the model.
+The simulations are initialised using a random distribution of localized vortices, which seed complex vortex interactions. The raw data, originally stored in the native \texttt{.am} format at a resolution of $512 \times 512 \times 1001$ time steps, occupy approximately $16~\text{TB}$. As part of the preprocessing pipeline described in Section~\ref{se:preprocessing}, these trajectories are sub-sampled temporally and converted to the \texttt{.hdf5} format. Due to the lack of an official name for this dataset in the literature, it is now referred to as the \texttt{amira} dataset, referencing its source file extension. A sample trajectory demonstrating the decaying vortex dynamics is visualised in Figure~\ref{fig:amira}. The uniqueness of this dataset lies in its scale of training data, which is significantly larger than the other datasets, and its ability to expose the model to a wide range of Reynolds numbers and flow regimes. Also, the temporal trajectory length is significantly longer than the other datasets, which is beneficial for training and validating on long-term accuracy and stability of the model.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{figs/fluidtrajpreds/target_amira_102.png}
-	\caption{Ground truth radial velocity components visualisation for preprocessed trajectory 102 of the \textit{Amira} dataset. For each trajectory in this dataset, 201 timesteps exist.}
+	\caption{Ground truth radial velocity components visualisation for preprocessed trajectory 102 of the \texttt{amira} dataset. For each trajectory in this dataset, 201 timesteps exist.}
 	\label{fig:amira}
 \end{figure}
 
 \subsection{PDEBench}
 \label{ss:pdebench}
  
-Two datasets from the PDEBench benchmark suite~\citep{takamoto2022pdebench} are included into the training data to expose the model to complex compressible behaviour and include incompressible bounded-box forcing behavior.
+Two datasets from the \texttt{pdebench} benchmark suite~\citep{takamoto2022pdebench} are included into the training data to expose the model to complex compressible behaviour and include incompressible bounded-box forcing behavior.
  
 \paragraph{PDEBench-2DCNS}
 This dataset consists of $44000$ trajectories of two-dimensional compressible fluid simulations operating in a turbulence-dominant regime, governed by the compressible Navier-Stokes equations. The dynamic and bulk viscosities are varied independently over the range $[10^{-8},\,10^{-1}]$, and the flow speeds span Mach numbers from $0.1$ to $1.0$, effectively capturing both subsonic and transonic flow conditions. Simulations are executed with periodic boundary conditions on grids ranging from $128^2$ to $512^2$. This dataset is uniquely valuable for exposing the foundation model to compressibility shocks and dilatational velocity fields, which are absent in the other fluid subsets. Because only the velocity fields are exposed to the model, it must learn to reconstruct density fluctuations and pressure waves indirectly from velocity divergence and gradients. 
@@ -64,7 +64,7 @@ The dataset features two distinct initialization regimes designed to seed varied
     utilising $n = 4$ primary modes with amplitude scaling defined by $A_i = \bar{v}/|k|^d$, where $d=2$ for the two-dimensional domain, and the characteristic velocity scale is bounded by the local speed of sound ($\bar{v} = c_s M$, with $c_s = \sqrt{\Gamma p / \rho}$). To suppress unphysical, spurious acoustic shocks at $t=0$, the compressible component of the velocity field is mathematically removed via a Helmholtz decomposition in Fourier space, retaining strictly the divergence-free component for the initial state.
 \end{enumerate}
 
-The raw data is stored in \texttt{.hdf5} format across spatial dimensions from $128 \times 128 \times 21$ to $512 \times 512 \times 21$ spatio-temporal steps. All trajectories are downsampled to a uniform spatial resolution of $128^2$ during preprocessing, which is explained in Section~\ref{se:preprocessing}. This dataset is hereafter referred to as \textit{pdebench-comp}. Sample temporal evolutions from both initialisation conditions are presented in Figure~\ref{fig:comp} for easier conceptualization. The unique aspect of this dataset is that it provides possible learning of the compressible Navier-Stokes operator, which is not present in any of the other datasets. The model must learn to infer the underlying compressible dynamics from the velocity fields alone, which is a non-trivial task given the complex interactions between velocity, density, and pressure in compressible flows. Further, the unique method of boxed initialisation provides a different spectral profile than the other datasets, which is beneficial for generalisation across different flow regimes.
+The raw data is stored in \texttt{.hdf5} format across spatial dimensions from $128 \times 128 \times 21$ to $512 \times 512 \times 21$ spatio-temporal steps. All trajectories are downsampled to a uniform spatial resolution of $128^2$ during preprocessing, which is explained in Section~\ref{se:preprocessing}. This dataset is hereafter referred to as \texttt{pdebench-comp}. Sample temporal evolutions from both initialisation conditions are presented in Figure~\ref{fig:comp} for easier conceptualization. The unique aspect of this dataset is that it provides possible learning of the compressible Navier-Stokes operator, which is not present in any of the other datasets. The model must learn to infer the underlying compressible dynamics from the velocity fields alone, which is a non-trivial task given the complex interactions between velocity, density, and pressure in compressible flows. Further, the unique method of boxed initialisation provides a different spectral profile than the other datasets, which is beneficial for generalisation across different flow regimes.
 
 \begin{figure}[H]
     \centering
@@ -81,17 +81,17 @@ The raw data is stored in \texttt{.hdf5} format across spatial dimensions from $
         \caption{Turbulent field initialization, as defined in Equation~\ref{eq:turb_ic}}
         \label{fig:compb}
     \end{subfigure}
-    \caption{Ground truth radial velocity components visualisations of the \textit{pdebench-comp} dataset for preprocessed trajectories 22164 and 2083. For each trajectory, 21 timesteps exist across both initialization regimes.}
+    \caption{Ground truth radial velocity components visualisations of the \texttt{pdebench-comp} dataset for preprocessed trajectories 22164 and 2083. For each trajectory, 21 timesteps exist across both initialization regimes.}
     \label{fig:comp}
 \end{figure}
  
 \paragraph{PDEBench-2DINS}
-This dataset contains $1100$ trajectories tracking two-dimensional incompressible flows progressed with a continuous, deterministic external forcing function. The physical domain enforces static Dirichlet boundary conditions on a regular $512^2$ grid, including different boundary interactions to the full dataset compared to the other datasets. The initial state is generated from a smooth, low-frequency random field, which subsequently undergoes non-linear deformation driven by a fixed Taylor-Green-like or stochastic forcing term. Although the explicit algebraic structure of the external force is not included in the model inputs, exposing the neural architecture to these forced trajectories forces it to interpolate forcing behaviour if multiple subsequent system states are used as input. Also, unique boundary conditions ensure generalisation across different boundary conditions. The raw data ($1.1~\text{TB}$ in \texttt{.h5} format at $512 \times 512 \times 1000$ steps) are downsampled to the uniform training resolution and format as detailed in Section~\ref{se:preprocessing}. This subset is referred to as \textit{pdebench-incomp}, with a sample sequence depicted in Figure~\ref{fig:pdebench-incomp}. As the other datasets are unforced, this dataset provides a unique opportunity for the model to learn to infer the effects of external forcing on the flow dynamics, which is a critical aspect of many real-world fluid systems. The inclusion of Dirichlet boundary conditions also challenges the model to learn how to handle different boundary interactions, which is essential for generalisation across different boundary conditions. 
+This dataset contains $1100$ trajectories tracking two-dimensional incompressible flows progressed with a continuous, deterministic external forcing function. The physical domain enforces static Dirichlet boundary conditions on a regular $512^2$ grid, including different boundary interactions to the full dataset compared to the other datasets. The initial state is generated from a smooth, low-frequency random field, which subsequently undergoes non-linear deformation driven by a fixed Taylor-Green-like or stochastic forcing term. Although the explicit algebraic structure of the external force is not included in the model inputs, exposing the neural architecture to these forced trajectories forces it to interpolate forcing behaviour if multiple subsequent system states are used as input. Also, unique boundary conditions ensure generalisation across different boundary conditions. The raw data ($1.1~\text{TB}$ in \texttt{.h5} format at $512 \times 512 \times 1000$ steps) are downsampled to the uniform training resolution and format as detailed in Section~\ref{se:preprocessing}. This subset is referred to as \texttt{pdebench-incomp}, with a sample sequence depicted in Figure~\ref{fig:pdebench-incomp}. As the other datasets are unforced, this dataset provides a unique opportunity for the model to learn to infer the effects of external forcing on the flow dynamics, which is a critical aspect of many real-world fluid systems. The inclusion of Dirichlet boundary conditions also challenges the model to learn how to handle different boundary interactions, which is essential for generalisation across different boundary conditions. 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{figs/fluidtrajpreds/target_pdebench-incomp_965.png}
-	\caption{Ground truth radial velocity component visualisations of the \textit{pdebench-incomp} dataset for preprocessed trajectory 965.}
+	\caption{Ground truth radial velocity component visualisations of the \texttt{pdebench-incomp} dataset for preprocessed trajectory 965.}
 	\label{fig:pdebench-incomp}
 \end{figure}
  
@@ -99,13 +99,13 @@ This dataset contains $1100$ trajectories tracking two-dimensional incompressibl
 \subsection{PDEGym}
 \label{ss:pdegym}
  
-To systematically evaluate the foundation model's capability to generalize across distinct structural topologies, six datasets from the PDEGym collection, originally created for the Poseidon foundation model benchmark, are incorporated. All simulations were generated via the AZEBAN spectral hyperviscosity solver, a high-order pseudo-spectral framework for incompressible fluid variants that enforces exact periodic boundary conditions on a uniform space-time grid. The datasets are specifically generated for the training of the Poseidon foundation model \cite{herde2024poseidon} and stored in \texttt{.nc} format.
+To systematically evaluate the foundation model's capability to generalize across distinct structural topologies, six datasets from the \texttt{pdegym} collection, originally created for the Poseidon foundation model benchmark, are incorporated. All simulations were generated via the AZEBAN spectral hyperviscosity solver, a high-order pseudo-spectral framework for incompressible fluid variants that enforces exact periodic boundary conditions on a uniform space-time grid. The datasets are specifically generated for the training of the Poseidon foundation model \cite{herde2024poseidon} and stored in \texttt{.nc} format.
 
 Each of these six datasets contains approximately $20000$ trajectories of two-dimensional incompressible Navier-Stokes flow resolved at a spatial resolution of $128^2$ with $21$ temporal snapshots. The kinematic viscosity is held constant at $\nu = 4 \times 10^{-4}$ across all configurations. These datasets do not focus on variability of physical parameters, but rather on the diversity of initial conditions and the resulting flow structures. The datasets are designed to challenge the model's ability to capture a wide range of typical flow structures.
 The six datasets differ exclusively in their initialisation schemes, which are described below.
 
 \paragraph{Gaussian Random Fields}
-This dataset is initialized via a standard homogeneous and isotropic Gaussian random field with a predefined power-law energy spectrum, producing variation across vortices that mimic classic isotropic decaying turbulence. This dataset, that will be referred to as \textit{pdegym-gauss}. A sample trajectory is visualised in Figure~\ref{fig:a}.
+This dataset is initialized via a standard homogeneous and isotropic Gaussian random field with a predefined power-law energy spectrum, producing variation across vortices that mimic classic isotropic decaying turbulence. This dataset, that will be referred to as \texttt{pdegym-gauss}. A sample trajectory is visualised in Figure~\ref{fig:a}.
 
 \begin{figure}[H]
     \centering
@@ -115,7 +115,7 @@ This dataset is initialized via a standard homogeneous and isotropic Gaussian ra
 \end{figure}
 
 \paragraph{Sine Waves}
-This dataset is initialized using a clean combination of low-order deterministic sinusoidal wave modes, resulting in highly structured regular vortex arrays that gradually destabilise. This dataset will be referred to as \textit{pdegym-sines}. A sample trajectory is visualised in Figure~\ref{fig:b}.
+This dataset is initialized using a clean combination of low-order deterministic sinusoidal wave modes, resulting in highly structured regular vortex arrays that gradually destabilise. This dataset will be referred to as \texttt{pdegym-sines}. A sample trajectory is visualised in Figure~\ref{fig:b}.
 
 \begin{figure}[H]
     \centering
@@ -125,7 +125,7 @@ This dataset is initialized using a clean combination of low-order deterministic
 \end{figure}
 
 \paragraph{Shear Layers}
-This dataset is initialized with parallel fluid streams moving at different velocities, forming a localized velocity gradient that quickly rolls up into discrete vortices via the Kelvin-Helmholtz instability mechanism. This dataset will be referred to as \textit{pdegym-sl}. A sample trajectory is visualised in Figure~\ref{fig:c}.
+This dataset is initialized with parallel fluid streams moving at different velocities, forming a localized velocity gradient that quickly rolls up into discrete vortices via the Kelvin-Helmholtz instability mechanism. This dataset will be referred to as \texttt{pdegym-sl}. A sample trajectory is visualised in Figure~\ref{fig:c}.
 
 \begin{figure}[H]
     \centering
@@ -135,7 +135,7 @@ This dataset is initialized with parallel fluid streams moving at different velo
 \end{figure}
 
 \paragraph{Sine Vortex Sheets}
-This dataset is initialized with an alternating array of concentrated vortex sheets, seeding high-frequency shear dynamics and local dissipation patterns. This dataset will be referred to as \textit{pdegym-svs}. A sample trajectory is visualised in Figure~\ref{fig:d}.
+This dataset is initialized with an alternating array of concentrated vortex sheets, seeding high-frequency shear dynamics and local dissipation patterns. This dataset will be referred to as \texttt{pdegym-svs}. A sample trajectory is visualised in Figure~\ref{fig:d}.
 
 \begin{figure}[H]
     \centering
@@ -145,7 +145,7 @@ This dataset is initialized with an alternating array of concentrated vortex she
 \end{figure}
 
 \paragraph{Brownian Bridges}
-This dataset is initialized using a constrained stochastic process that enforces rough, non-differentiable initial profiles, providing a benchmark for the model's robustness against high-frequency spatial noise and non-smooth fields. This dataset will be referred to as \textit{pdegym-bb}. A sample trajectory is visualised in Figure~\ref{fig:e}.
+This dataset is initialized using a constrained stochastic process that enforces rough, non-differentiable initial profiles, providing a benchmark for the model's robustness against high-frequency spatial noise and non-smooth fields. This dataset will be referred to as \texttt{pdegym-bb}. A sample trajectory is visualised in Figure~\ref{fig:e}.
 
 \begin{figure}[H]
     \centering
@@ -155,7 +155,7 @@ This dataset is initialized using a constrained stochastic process that enforces
 \end{figure}
 
 \paragraph{Piecewise-Constant Vorticity}
-This dataset is initialized with discrete patches of uniform vorticity bounded by sharp discontinuities. This configuration exercises the model's ability to propagate sharp boundaries and capture coherent vortex mergers without numerical diffusion. This dataset will be referred to as \textit{pdegym-pwc}. A sample trajectory is visualised in Figure~\ref{fig:f}.
+This dataset is initialized with discrete patches of uniform vorticity bounded by sharp discontinuities. This configuration exercises the model's ability to propagate sharp boundaries and capture coherent vortex mergers without numerical diffusion. This dataset will be referred to as \texttt{pdegym-pwc}. A sample trajectory is visualised in Figure~\ref{fig:f}.
 
 \begin{figure}[H]
     \centering
@@ -164,13 +164,10 @@ This dataset is initialized with discrete patches of uniform vorticity bounded b
     \label{fig:f}
 \end{figure}
 
-
-
-% ============================================================
 \section{Preprocessing}
 \label{se:preprocessing}
  
-All datasets are preprocessed offline before training begins to produce a unified body of data at a common spatial resolution and temporal cadence. The preprocessing pipeline consists of three stages: spatial interpolation, temporal subsampling, and file-format conversion. Dedicated preprocessing scripts were written for each source dataset to execute these stages in a single pass, avoiding redundant computation during training. The preprocessed data is stored on disk in a format that supports efficient random-access loading during training, as described in Section~\ref{ss:fileformat}. As the preprocessed datasets are still too large to fit in GPU memory, the data loader fetches batches of trajectories from disk on-the-fly during training.
+All datasets are preprocessed before training begins to produce a unified body of data at a common spatial resolution and temporal cadence. The preprocessing pipeline consists of three stages: spatial interpolation, temporal subsampling, and file-format conversion. Dedicated preprocessing scripts were written for each source dataset to execute these stages in a single pass, avoiding redundant computation during training. The preprocessed data is stored on disk in a format that supports efficient random-access loading during training, as described in Section~\ref{ss:fileformat}. As the preprocessed datasets are still too large to fit in GPU memory, the data loader fetches batches of trajectories from disk on-the-fly during training.
 
 As for the training data, no data augmentation is applied during preprocessing. The focus of this work is on evaluating the model's ability to learn from the raw, unprocessed trajectories and to generalise across different flow regimes and initial conditions, rather than on artificially increasing the dataset size through transformations, which is commonly done in training foundation models. As such, the preprocessed datasets are intended to be as close as possible to the original raw data, with only the necessary adjustments for spatial and temporal alignment and efficient storage.
 
@@ -184,8 +181,7 @@ Source simulations are defined on the unit square $[0,1]^2$ at spatial resolutio
 \subsection{Temporal Subsampling}
 \label{ss:temporalsamp}
 
-The model assumes a fixed temporal stride of $\delta T = 0.05$ between consecutive states,
-corresponding to 20 snapshots per unit time length (excluding the endpoint), or 21 snapshots
+The model assumes a fixed temporal stride of $\delta T = 0.05$ between consecutive states, corresponding to 20 snapshots per unit time length (excluding the endpoint), or 21 snapshots 
 when the endpoint is included. This rate of 20 snapshots per unit interval represents the
 minimum sampling frequency across all datasets, and is therefore adopted as the common target
 cadence. For datasets whose simulations span exactly $[0, 1]$, this yields trajectories of
@@ -205,7 +201,7 @@ The source datasets are distributed in several formats: \texttt{.am}, \texttt{.h
 
 Alongside the per-trajectory files, a metadata file is written for each dataset, recording dataset-specific statistics used for normalization, as well as information enabling quick-access indexing. For datasets distributed in the proprietary \texttt{.am} format, no existing parsing library was available, so a custom binary parser was developed for preprocessing.
 
-During conversion, only the horizontal and vertical velocity components ($V_x$, $V_y$) are retained, while all other channels are discarded. This serves two purposes: minimizing storage footprint, and encouraging the model to infer missing information from the velocity fields alone. The choice is further motivated by the fact that the velocity components are the only physical channels common to all datasets, so retaining them ensures that the model is trained on a consistent set of input variables across the entire dataset.
+During conversion, only the horizontal and vertical velocity components ($v_x$, $v_y$) are retained, while all other channels are discarded. This serves two purposes: minimizing storage footprint, and encouraging the model to infer missing information from the velocity fields alone. The choice is further motivated by the fact that the velocity components are the only physical channels common to all datasets, so retaining them ensures that the model is trained on a consistent set of input variables across the entire dataset.
 
 
 
