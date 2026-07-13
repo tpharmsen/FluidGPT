@@ -13,6 +13,6 @@ flow_matching/
 notes.txt
 spike.pub
 spike
-.env\
+.env
 scripts/temp/
 report/main.pdf
