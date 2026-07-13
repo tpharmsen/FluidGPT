@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning to Simulate — Thesis Defense</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ============================================================
+   DESIGN TOKENS
+   Change these to re-theme the entire deck. The palette is
+   drawn from flow visualization: a dark "tank" background,
+   a cool teal for low-pressure / slow flow, a warm amber for
+   high-velocity / high-pressure. Same duality used everywhere.
+   ============================================================ */
+:root{
+  --bg:        #0a0e14;
+  --bg-elev:   #10161f;
+  --ink:       #edf2f5;
+  --ink-dim:   #8a97a8;
+  --ink-faint: #4c5766;
+  --grid:      #1b2430;
+  --cool:      #52d9c4;
+  --warm:      #ff9457;
+  --cool-dim:  rgba(82,217,196,0.28);
+  --warm-dim:  rgba(255,148,87,0.28);
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body:    'IBM Plex Sans', sans-serif;
+  --font-mono:    'IBM Plex Mono', monospace;
+
+  --ease-flow: cubic-bezier(.65,0,.35,1);
+  --stage-w: 1280px;
+  --stage-h: 720px;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+html,body{
+  width:100%; height:100%;
+  background:var(--bg);
+  overflow:hidden;
+  font-family:var(--font-body);
+  color:var(--ink);
+}
+
+::selection{ background:var(--cool-dim); color:var(--ink); }
+
+/* ambient flow-field canvas, fixed behind everything */
+#flow-canvas{
+  position:fixed; inset:0;
+  width:100%; height:100%;
+  opacity:.55;
+  pointer-events:none;
+}
+
+/* viewport wrapper that centers + scales the fixed-size stage */
+#viewport{
+  position:fixed; inset:0;
+  display:flex; align-items:center; justify-content:center;
+}
+
+#stage{
+  position:relative;
+  width:var(--stage-w); height:var(--stage-h);
+  flex-shrink:0;
+  transform-origin:center center;
+}
+
+/* ============================================================
+   SLIDE SYSTEM
+   Every slide is a <section class="slide"> inside #stage.
+   Only one carries .is-active at a time; JS toggles classes
+   and applies the enter/exit transform for the flow transition.
+   ============================================================ */
+.slide{
+  position:absolute; inset:0;
+  display:flex; flex-direction:column;
+  justify-content:center;
+  padding:88px 96px;
+  opacity:0;
+  pointer-events:none;
+  transform:translateX(28px) scale(.98);
+  transition:opacity .6s var(--ease-flow), transform .6s var(--ease-flow);
+  will-change:transform,opacity;
+}
+.slide.is-active{
+  opacity:1;
+  pointer-events:auto;
+  transform:translateX(0) scale(1);
+}
+.slide.is-prev{
+  transform:translateX(-28px) scale(.98);
+}
+
+.kicker{
+  font-family:var(--font-mono);
+  font-size:13px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--cool);
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:22px;
+}
+.kicker::before{
+  content:"";
+  width:22px; height:1px;
+  background:var(--cool);
+}
+
+h1{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:56px;
+  line-height:1.08;
+  letter-spacing:-.01em;
+  max-width:920px;
+}
+h2{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:38px;
+  line-height:1.15;
+  max-width:820px;
+  margin-bottom:28px;
+}
+.subtitle{
+  margin-top:22px;
+  font-size:18px;
+  color:var(--ink-dim);
+  font-weight:300;
+  max-width:560px;
+}
+
+/* --- reusable components ------------------------------------ */
+
+.bullets{ list-style:none; display:flex; flex-direction:column; gap:18px; max-width:680px; }
+.bullets li{
+  font-size:19px; font-weight:300; color:var(--ink);
+  padding-left:28px; position:relative; line-height:1.5;
+}
+.bullets li::before{
+  content:"";
+  position:absolute; left:0; top:9px;
+  width:9px; height:9px; border-radius:1px;
+  background:var(--warm);
+  transform:rotate(45deg);
+}
+.bullets li b{ font-weight:500; color:var(--ink); }
+.bullets li span.dim{ color:var(--ink-dim); }
+
+.two-col{ display:grid; grid-template-columns:1fr 1px 1fr; gap:56px; margin-top:8px; }
+.two-col .divider{ background:var(--grid); }
+.col h3{
+  font-family:var(--font-mono); font-size:13px; letter-spacing:.08em;
+  text-transform:uppercase; margin-bottom:18px;
+}
+.col.cold h3{ color:var(--cool); }
+.col.warm h3{ color:var(--warm); }
+.col p{ color:var(--ink-dim); font-size:16px; font-weight:300; line-height:1.6; margin-bottom:10px; }
+
+.stat-row{ display:flex; gap:80px; margin-top:12px; }
+.stat .num{
+  font-family:var(--font-display); font-weight:700;
+  font-size:88px; line-height:1;
+  background:linear-gradient(135deg, var(--ink), var(--ink-dim));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.stat.hot .num{ background:linear-gradient(135deg, var(--warm), #ffcba3); -webkit-background-clip:text; background-clip:text; }
+.stat.cool .num{ background:linear-gradient(135deg, var(--cool), #a6f2e4); -webkit-background-clip:text; background-clip:text; }
+.stat .label{ margin-top:10px; font-size:14px; color:var(--ink-dim); font-family:var(--font-mono); letter-spacing:.03em; }
+
+.equation-block{
+  margin-top:18px;
+  font-family:var(--font-mono);
+  font-size:26px;
+  color:var(--ink);
+  background:var(--bg-elev);
+  border:1px solid var(--grid);
+  border-left:2px solid var(--cool);
+  padding:26px 32px;
+  border-radius:2px;
+  max-width:760px;
+}
+.equation-block .term-warm{ color:var(--warm); }
+.equation-caption{ margin-top:14px; font-size:14px; color:var(--ink-dim); font-weight:300; max-width:640px; }
+
+.chip{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.05em;
+  color:var(--ink-dim); border:1px solid var(--grid);
+  padding:6px 12px; border-radius:20px; margin-right:8px;
+}
+
+/* section-divider slide */
+.slide.divider{ justify-content:center; align-items:flex-start; }
+.divider .idx{
+  font-family:var(--font-mono);
+  font-size:120px; font-weight:400;
+  color:var(--grid);
+  position:absolute; right:96px; top:50%;
+  transform:translateY(-50%);
+  line-height:1;
+}
+.divider h1{ font-size:64px; }
+.divider .bar{
+  width:64px; height:4px; background:var(--warm); margin-bottom:26px;
+}
+
+/* title slide */
+.slide.title-slide{ justify-content:center; }
+.title-slide .brand{
+  font-family:var(--font-mono); font-size:13px; color:var(--ink-faint);
+  letter-spacing:.1em; margin-top:56px;
+}
+
+/* closing slide */
+.slide.closing{ align-items:center; text-align:center; }
+.closing h1{ max-width:none; }
+
+/* ============================================================
+   NAV CHROME
+   ============================================================ */
+#chrome{
+  position:fixed; inset:0; pointer-events:none;
+  display:flex; flex-direction:column; justify-content:space-between;
+  padding:28px 40px;
+  font-family:var(--font-mono);
+}
+.top-row, .bottom-row{ display:flex; justify-content:space-between; align-items:center; pointer-events:none; }
+
+#counter{
+  font-size:12px; color:var(--ink-faint); letter-spacing:.08em;
+}
+#counter b{ color:var(--ink-dim); }
+
+#progress{
+  position:relative;
+  height:2px; background:var(--grid);
+  width:220px; border-radius:2px; overflow:hidden;
+}
+#progress-fill{
+  position:absolute; inset:0 auto 0 0; height:100%;
+  width:0%;
+  background:linear-gradient(90deg, var(--cool), var(--warm));
+  transition:width .5s var(--ease-flow);
+}
+
+.nav-btn{
+  pointer-events:auto;
+  width:38px; height:38px;
+  display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--grid);
+  background:rgba(16,22,31,.7);
+  backdrop-filter:blur(6px);
+  border-radius:50%;
+  color:var(--ink-dim);
+  cursor:pointer;
+  transition:border-color .2s, color .2s;
+}
+.nav-btn:hover{ border-color:var(--cool); color:var(--ink); }
+.nav-controls{ display:flex; gap:10px; pointer-events:auto; }
+
+#dots{ display:flex; gap:7px; pointer-events:auto; }
+.dot{
+  width:6px; height:6px; border-radius:50%;
+  background:var(--grid);
+  cursor:pointer;
+  transition:background .25s, transform .25s;
+}
+.dot.active{ background:var(--warm); transform:scale(1.5); }
+
+/* click zones for prev/next (invisible, cover left/right thirds) */
+.click-zone{ position:fixed; top:0; bottom:0; width:18%; z-index:2; cursor:pointer; }
+.click-zone.left{ left:0; }
+.click-zone.right{ right:0; }
+
+@media (prefers-reduced-motion: reduce){
+  .slide{ transition:opacity .25s linear; transform:none !important; }
+  #flow-canvas{ opacity:.25; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="flow-canvas"></canvas>
+
+<div class="click-zone left" id="zone-prev"></div>
+<div class="click-zone right" id="zone-next"></div>
+
+<div id="viewport">
+  <div id="stage">
+
+    <!-- ============ SLIDE 1 — TITLE ============ -->
+    <section class="slide title-slide">
+      <div class="kicker">MSc Thesis Defense</div>
+      <h1>Learning to Simulate:<br>Neural Surrogate Models<br>for Fluid Dynamics</h1>
+      <p class="subtitle">Replacing iterative CFD solvers with a learned mapping from boundary conditions to flow fields.</p>
+      <div class="brand">YOUR NAME · FACULTY OF MECHANICAL ENGINEERING · JULY 2026</div>
+    </section>
+
+    <!-- ============ SLIDE 2 — AGENDA ============ -->
+    <section class="slide">
+      <div class="kicker">Overview</div>
+      <h2>What we'll cover</h2>
+      <ul class="bullets">
+        <li><b>01 — The problem</b> <span class="dim">why classical CFD is a bottleneck</span></li>
+        <li><b>02 — Approach</b> <span class="dim">a learned surrogate for the solver</span></li>
+        <li><b>03 — Architecture</b> <span class="dim">encoder → latent field → decoder</span></li>
+        <li><b>04 — Results</b> <span class="dim">accuracy vs. speed trade-off</span></li>
+        <li><b>05 — Conclusion</b> <span class="dim">limitations and what's next</span></li>
+      </ul>
+    </section>
+
+    <!-- ============ SLIDE 3 — SECTION DIVIDER ============ -->
+    <section class="slide divider">
+      <div class="idx">01</div>
+      <div class="bar"></div>
+      <div class="kicker">Motivation</div>
+      <h1>The problem</h1>
+    </section>
+
+    <!-- ============ SLIDE 4 — CONTENT ============ -->
+    <section class="slide">
+      <div class="kicker">Motivation</div>
+      <h2>High-fidelity CFD is accurate — and expensive</h2>
+      <ul class="bullets">
+        <li>Fine meshes and small time steps are required for stable, accurate solutions</li>
+        <li>Each design iteration re-runs the full solver <span class="dim">— no reuse across similar geometries</span></li>
+        <li>This turns design exploration into the bottleneck, not the physics</li>
+      </ul>
+    </section>
+
+    <!-- ============ SLIDE 5 — BIG STAT ============ -->
+    <section class="slide">
+      <div class="kicker">Motivation</div>
+      <h2>The cost, in numbers</h2>
+      <div class="stat-row">
+        <div class="stat hot">
+          <div class="num">4.2h</div>
+          <div class="label">PER RANS SIMULATION</div>
+        </div>
+        <div class="stat cool">
+          <div class="num">&lt;1s</div>
+          <div class="label">TARGET SURROGATE INFERENCE</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SLIDE 6 — SECTION DIVIDER ============ -->
+    <section class="slide divider">
+      <div class="idx">02</div>
+      <div class="bar"></div>
+      <div class="kicker">Method</div>
+      <h1>The approach</h1>
+    </section>
+
+    <!-- ============ SLIDE 7 — TWO COLUMN ============ -->
+    <section class="slide">
+      <div class="kicker">Method</div>
+      <h2>Solver vs. surrogate</h2>
+      <div class="two-col">
+        <div class="col cold">
+          <h3>Classical CFD</h3>
+          <p>Discretizes Navier–Stokes on a mesh</p>
+          <p>Iterates to convergence, every run from scratch</p>
+          <p>Cost scales with mesh resolution</p>
+        </div>
+        <div class="divider"></div>
+        <div class="col warm">
+          <h3>Neural surrogate</h3>
+          <p>Learns the mapping from geometry + BCs to flow field</p>
+          <p>Single forward pass, no iteration at inference</p>
+          <p>Cost is fixed, independent of mesh resolution</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SLIDE 8 — ARCHITECTURE DIAGRAM (SVG) ============ -->
+    <section class="slide">
+      <div class="kicker">Architecture</div>
+      <h2>Encoder → latent field → decoder</h2>
+      <svg width="900" height="220" viewBox="0 0 900 220" fill="none">
+        <!-- input -->
+        <rect x="0" y="80" width="150" height="60" rx="4" stroke="#52d9c4" stroke-width="1.5"/>
+        <text x="75" y="115" fill="#edf2f5" font-family="IBM Plex Mono" font-size="13" text-anchor="middle">Mesh + BCs</text>
+        <!-- arrow -->
+        <line x1="150" y1="110" x2="220" y2="110" stroke="#4c5766" stroke-width="1.5"/>
+        <polygon points="220,105 232,110 220,115" fill="#4c5766"/>
+        <!-- encoder -->
+        <rect x="232" y="70" width="140" height="80" rx="4" stroke="#8a97a8" stroke-width="1.5"/>
+        <text x="302" y="115" fill="#edf2f5" font-family="IBM Plex Mono" font-size="13" text-anchor="middle">Encoder</text>
+        <!-- arrow -->
+        <line x1="372" y1="110" x2="442" y2="110" stroke="#4c5766" stroke-width="1.5"/>
+        <polygon points="442,105 454,110 442,115" fill="#4c5766"/>
+        <!-- latent -->
+        <rect x="454" y="55" width="130" height="110" rx="4" stroke="#ff9457" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <text x="519" y="115" fill="#edf2f5" font-family="IBM Plex Mono" font-size="13" text-anchor="middle">Latent</text>
+        <text x="519" y="132" fill="#8a97a8" font-family="IBM Plex Mono" font-size="11" text-anchor="middle">field</text>
+        <!-- arrow -->
+        <line x1="584" y1="110" x2="654" y2="110" stroke="#4c5766" stroke-width="1.5"/>
+        <polygon points="654,105 666,110 654,115" fill="#4c5766"/>
+        <!-- decoder -->
+        <rect x="666" y="70" width="140" height="80" rx="4" stroke="#8a97a8" stroke-width="1.5"/>
+        <text x="736" y="115" fill="#edf2f5" font-family="IBM Plex Mono" font-size="13" text-anchor="middle">Decoder</text>
+        <!-- arrow -->
+        <line x1="806" y1="110" x2="876" y2="110" stroke="#4c5766" stroke-width="1.5"/>
+        <polygon points="876,105 888,110 876,115" fill="#4c5766"/>
+        <!-- output label wraps, put below -->
+        <text x="842" y="180" fill="#52d9c4" font-family="IBM Plex Mono" font-size="12" text-anchor="middle">u, p field</text>
+      </svg>
+    </section>
+
+    <!-- ============ SLIDE 9 — EQUATION ============ -->
+    <section class="slide">
+      <div class="kicker">Governing physics</div>
+      <h2>Physics-informed training objective</h2>
+      <div class="equation-block">
+        &part;u/&part;t + (u&middot;&nabla;)u = &minus;(1/&rho;)&nabla;p + &nu;&nabla;&sup2;u
+      </div>
+      <div class="equation-caption">The loss combines a supervised data term against RANS ground truth with a <span style="color:var(--warm)">residual penalty</span> on this momentum equation, keeping predictions physically consistent between training samples.</div>
+    </section>
+
+    <!-- ============ SLIDE 10 — SECTION DIVIDER ============ -->
+    <section class="slide divider">
+      <div class="idx">03</div>
+      <div class="bar"></div>
+      <div class="kicker">Evaluation</div>
+      <h1>Results</h1>
+    </section>
+
+    <!-- ============ SLIDE 11 — CHART: SPEED (SVG bar) ============ -->
+    <section class="slide">
+      <div class="kicker">Results</div>
+      <h2>Inference time, log scale</h2>
+      <svg width="760" height="200" viewBox="0 0 760 200">
+        <line x1="140" y1="20" x2="140" y2="170" stroke="#1b2430" stroke-width="1"/>
+        <!-- CFD bar -->
+        <text x="130" y="55" fill="#8a97a8" font-family="IBM Plex Mono" font-size="13" text-anchor="end">CFD solver</text>
+        <rect x="140" y="38" width="580" height="34" fill="#1b2430"/>
+        <rect x="140" y="38" width="560" height="34" fill="#ff9457" opacity="0.85"/>
+        <text x="710" y="60" fill="#edf2f5" font-family="IBM Plex Mono" font-size="13" text-anchor="end">4.2 h</text>
+        <!-- Surrogate bar -->
+        <text x="130" y="135" fill="#8a97a8" font-family="IBM Plex Mono" font-size="13" text-anchor="end">Surrogate</text>
+        <rect x="140" y="118" width="580" height="34" fill="#1b2430"/>
+        <rect x="140" y="118" width="10" height="34" fill="#52d9c4"/>
+        <text x="710" y="140" fill="#edf2f5" font-family="IBM Plex Mono" font-size="13" text-anchor="end">0.4 s</text>
+      </svg>
+    </section>
+
+    <!-- ============ SLIDE 12 — CHART: CONVERGENCE (SVG line) ============ -->
+    <section class="slide">
+      <div class="kicker">Results</div>
+      <h2>Validation error over training</h2>
+      <svg width="760" height="220" viewBox="0 0 760 220">
+        <line x1="40" y1="10" x2="40" y2="190" stroke="#1b2430"/>
+        <line x1="40" y1="190" x2="740" y2="190" stroke="#1b2430"/>
+        <polyline fill="none" stroke="#52d9c4" stroke-width="2"
+          points="40,30 110,70 180,95 250,115 320,130 390,142 460,150 530,156 600,160 670,163 740,165"/>
+        <text x="740" y="20" fill="#ink-dim" font-family="IBM Plex Mono" font-size="11" text-anchor="end" fill-opacity="0.6">L2 error</text>
+        <text x="740" y="205" fill="#8a97a8" font-family="IBM Plex Mono" font-size="11" text-anchor="end">epochs →</text>
+      </svg>
+      <div class="stat-row" style="margin-top:6px;">
+        <div class="stat cool"><div class="num">3.1%</div><div class="label">MEAN RELATIVE L2 ERROR</div></div>
+      </div>
+    </section>
+
+    <!-- ============ SLIDE 13 — SECTION DIVIDER ============ -->
+    <section class="slide divider">
+      <div class="idx">04</div>
+      <div class="bar"></div>
+      <div class="kicker">Wrap-up</div>
+      <h1>Conclusion</h1>
+    </section>
+
+    <!-- ============ SLIDE 14 — TAKEAWAYS ============ -->
+    <section class="slide">
+      <div class="kicker">Conclusion</div>
+      <h2>Takeaways</h2>
+      <ul class="bullets">
+        <li><b>~4 orders of magnitude</b> <span class="dim">faster than the RANS solver, within acceptable error</span></li>
+        <li>Generalizes across geometry variations seen during training <span class="dim">— not yet out-of-distribution shapes</span></li>
+        <li>Next: extending to unsteady flows and adaptive mesh resolutions</li>
+      </ul>
+    </section>
+
+    <!-- ============ SLIDE 15 — CLOSING ============ -->
+    <section class="slide closing">
+      <div class="kicker" style="justify-content:center;">Thank you</div>
+      <h1>Questions?</h1>
+      <p class="subtitle" style="margin-left:auto;margin-right:auto;">your.name@university.edu</p>
+    </section>
+
+  </div>
+</div>
+
+<div id="chrome">
+  <div class="top-row">
+    <div id="counter"><b id="cur">01</b> / <span id="total">15</span></div>
+    <div id="progress"><div id="progress-fill"></div></div>
+  </div>
+  <div class="bottom-row">
+    <div id="dots"></div>
+    <div class="nav-controls">
+      <div class="nav-btn" id="btn-prev">&#8592;</div>
+      <div class="nav-btn" id="btn-next">&#8594;</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   1. STAGE SCALING — keeps the 1280x720 design fixed and scales
+      it to fit any viewport, like a real projector.
+   ============================================================ */
+const stage = document.getElementById('stage');
+function fitStage(){
+  const w = window.innerWidth, h = window.innerHeight;
+  const scale = Math.min(w / 1280, h / 720) * 0.94;
+  stage.style.transform = `scale(${scale})`;
+}
+window.addEventListener('resize', fitStage);
+fitStage();
+
+/* ============================================================
+   2. SLIDE NAVIGATION
+   ============================================================ */
+const slides = Array.from(document.querySelectorAll('.slide'));
+const total = slides.length;
+let current = 0;
+
+const dotsWrap = document.getElementById('dots');
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.addEventListener('click', () => goTo(i));
+  dotsWrap.appendChild(d);
+});
+const dots = Array.from(dotsWrap.children);
+
+function render(){
+  slides.forEach((s, i) => {
+    s.classList.toggle('is-active', i === current);
+    s.classList.toggle('is-prev', i < current);
+  });
+  dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  document.getElementById('cur').textContent = String(current + 1).padStart(2, '0');
+  document.getElementById('progress-fill').style.width = `${((current + 1) / total) * 100}%`;
+}
+function goTo(i){
+  current = Math.max(0, Math.min(total - 1, i));
+  render();
+}
+function next(){ if (current < total - 1) goTo(current + 1); }
+function prev(){ if (current > 0) goTo(current - 1); }
+
+document.getElementById('btn-next').addEventListener('click', next);
+document.getElementById('btn-prev').addEventListener('click', prev);
+document.getElementById('zone-next').addEventListener('click', next);
+document.getElementById('zone-prev').addEventListener('click', prev);
+
+window.addEventListener('keydown', (e) => {
+  if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(e.key)) { e.preventDefault(); next(); }
+  if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) { e.preventDefault(); prev(); }
+  if (e.key === 'Home') goTo(0);
+  if (e.key === 'End') goTo(total - 1);
+});
+
+// touch swipe
+let touchX = null;
+window.addEventListener('touchstart', e => touchX = e.touches[0].clientX);
+window.addEventListener('touchend', e => {
+  if (touchX === null) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (dx > 50) prev();
+  if (dx < -50) next();
+  touchX = null;
+});
+
+render();
+
+/* ============================================================
+   3. AMBIENT FLOW-FIELD BACKGROUND
+      Lightweight curl-noise particle field, evoking a
+      streamline / vorticity visualization. Purely decorative,
+      runs continuously at low opacity behind the slides.
+   ============================================================ */
+const canvas = document.getElementById('flow-canvas');
+const ctx = canvas.getContext('2d');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let W, H;
+function resizeCanvas(){
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  ctx.fillStyle = '#0a0e14';
+  ctx.fillRect(0, 0, W, H);
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function noiseAngle(x, y, t){
+  // cheap pseudo curl-noise from layered sines — no external deps
+  return (
+    Math.sin(x * 0.0035 + t * 0.06) +
+    Math.cos(y * 0.004 - t * 0.045) +
+    Math.sin((x + y) * 0.002 + t * 0.03)
+  ) * Math.PI;
+}
+
+const PARTICLE_COUNT = reduceMotion ? 0 : 130;
+const particles = [];
+for (let i = 0; i < PARTICLE_COUNT; i++){
+  particles.push({
+    x: Math.random() * W,
+    y: Math.random() * H,
+    life: Math.random() * 200
+  });
+}
+
+let t = 0;
+function tick(){
+  t += 1;
+  ctx.fillStyle = 'rgba(10,14,20,0.055)';
+  ctx.fillRect(0, 0, W, H);
+
+  for (const p of particles){
+    const angle = noiseAngle(p.x, p.y, t);
+    const speed = 1.1;
+    const nx = p.x + Math.cos(angle) * speed;
+    const ny = p.y + Math.sin(angle) * speed;
+
+    const speedNorm = Math.min(1, Math.hypot(nx - p.x, ny - p.y) / speed);
+    const cool = [82, 217, 196];
+    const warm = [255, 148, 87];
+    const c = cool.map((v, i) => Math.round(v + (warm[i] - v) * speedNorm * 0.4));
+
+    ctx.strokeStyle = `rgba(${c[0]},${c[1]},${c[2]},0.35)`;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+    ctx.lineTo(nx, ny);
+    ctx.stroke();
+
+    p.x = nx; p.y = ny; p.life -= 1;
+
+    if (p.life <= 0 || p.x < 0 || p.x > W || p.y < 0 || p.y > H){
+      p.x = Math.random() * W;
+      p.y = Math.random() * H;
+      p.life = 100 + Math.random() * 150;
+    }
+  }
+  if (!reduceMotion) requestAnimationFrame(tick);
+}
+tick();
+</script>
+</body>
+</html>
