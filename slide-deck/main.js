@@ -4,13 +4,18 @@ const slideFiles = [
   'slides/02-agenda.html',
   'slides/03-divider.html',
   'slides/04-content.html',
-  'slides/05-stats.html'
-  // Add remaining slides here
+  'slides/05-stats.html',
+  'slides/06-navierstokes.html',
+  'slides/07-researchquestions.html',
+  'slides/08-datasets.html',
+  'slides/09-models.html',
+  'slides/10-training.html',
+  'slides/11-results.html',
 ];
-
 async function loadSlides() {
   const stage = document.getElementById('stage');
   
+  // 1. Always load slides first so they are never invisible
   for (const file of slideFiles) {
     try {
       const response = await fetch(file);
@@ -21,7 +26,22 @@ async function loadSlides() {
     }
   }
   
+  // 2. Fire up presentation controls right away so keys/dots work immediately
   initPresentation();
+
+  // 3. Robustly check and apply MathJax without breaking the execution flow
+  function applyMath() {
+    if (window.MathJax && window.MathJax.startup && window.MathJax.typesetPromise) {
+      window.MathJax.startup.promise
+        .then(() => window.MathJax.typesetPromise([stage]))
+        .catch(err => console.error("MathJax processing error:", err));
+    } else {
+      // If MathJax script hasn't arrived over the network yet, check again in 100ms
+      setTimeout(applyMath, 100);
+    }
+  }
+
+  applyMath();
 }
 
 function initPresentation() {
