@@ -1,0 +1,477 @@
+
+\documentclass[border=8pt, multi, tikz]{standalone} 
+\usepackage{import}
+\subimport{layers/}{init.tex}
+\usetikzlibrary{positioning}
+\usetikzlibrary{3d} %for including external image 
+\usetikzlibrary{calc}
+%\usepackage{tikz-3dplot}
+
+% Set the viewing angles: {elevation}{azimuth}
+%\tdplotsetmaincoords{-30}{-10}  % elevation=60°, azimuth=120°
+
+\usetikzlibrary{external}
+\color{white}
+
+
+\def\InputColor{rgb:black,5;white,4}
+
+\def\BlockAColor{rgb:blue,7;white,2}
+\def\BlockBColor{rgb:teal,7;white,2}
+\def\BlockCColor{rgb:orange,7;white,2}
+\def\BlockDColor{rgb:purple,7;white,2}
+
+\def\BlockEColor{rgb:brown,6;black,1;white,2}
+\def\MergeColor{rgb:gray,5;white,4}
+\def\TimeInjectColor{rgb:black,12;white,2}
+
+\def\BlackColor{rgb:black,8;white,1}
+\def\SkipBlockColor{rgb:cyan,5;black,1;white,2}
+
+\def\Opacity{1}
+
+% for the global and local skip connections
+\def\skipshift{6}
+\def\skipshiftsmall{2}
+
+% patch visualization stuff
+\def\PatchHeight{3}
+\def\PatchWidth{3}
+\def\PatchDepth{3}
+\def\xShift{-2} 
+
+\newcommand{\midarrow}{\tikz \draw[-{Stealth[width=2mm]},line width =1mm,draw=\BlackColor] (-0.3,0) -- ++(0.3,0);}
+
+\begin{document}
+\begin{tikzpicture}%[tdplot_main_coords]
+\tikzstyle{connection}=[thick,every node/.style={sloped,allow upside down},draw=\BlackColor,opacity=0.8]
+
+\begin{scope}[shift={(0,0,0)}]
+\foreach \i in {0,...,7} {           % x
+    \foreach \j in {0,...,7} {       % y
+        \foreach \k in {0,...,4} {   % z
+            % Only draw blocks on the outer faces
+            %\ifnum\i=7\relax
+            %    \def\drawblock{1}
+            %\else\ifnum\j=7\relax
+            %    \def\drawblock{1}
+            %\else\ifnum\i=2\relax
+             %   \def\drawblock{1}
+            %\else\ifnum\k=3\relax
+            %    \def\drawblock{1}
+            %\else\ifnum\k=4\relax
+            %    \def\drawblock{1}
+            %\else
+            %    \def\drawblock{0}
+            
+            %\fi\fi\fi\fi\fi
+            \def\drawblock{1} % draw all blocks
+            \ifnum\drawblock=1
+                \pgfmathsetmacro{\x}{\i}
+                \pgfmathsetmacro{\y}{\j}
+                \pgfmathsetmacro{\z}{\k}
+
+                \pic[shift={(\x,\y,\z)}] at (0,0,0)
+                    {Box={
+                        name=in_\i_\j_\k,
+                        caption= ,
+                        fill=\InputColor,
+                        opacity=\Opacity,
+                        height=\PatchHeight,
+                        width=\PatchWidth,
+                        depth=\PatchDepth
+                    }};
+            \fi
+        }
+    }
+}
+
+
+\pic[shift={(0,1.5,4)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockAColor,
+        opacity=0.5,
+        height=18,
+        width=18,
+        depth=3
+        }
+    };
+\pic[shift={(4,1.5,4)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockAColor,
+        opacity=0.5,
+        height=18,
+        width=18,
+        depth=3
+        }
+    };
+\pic[shift={(0,5.5,4)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockAColor,
+        opacity=0.5,
+        height=18,
+        width=18,
+        depth=3
+        }
+    };
+\pic[shift={(4,5.5,4)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockAColor,
+        opacity=0.5,
+        height=18,
+        width=18,
+        depth=3
+        }
+    };
+
+\end{scope}
+
+\begin{scope}[shift={(10,0,0)}]
+
+\foreach \i in {0,...,7} {           % x
+    \foreach \j in {0,...,7} {       % y
+        \foreach \k in {0,...,4} {   % z
+            \def\drawblock{1}
+            \ifnum\drawblock=1
+                \pgfmathsetmacro{\x}{\i}
+                \pgfmathsetmacro{\y}{\j}
+                \pgfmathsetmacro{\z}{\k}
+
+                \pic[shift={(\x,\y,\z)}] at (0,0,0)
+                    {Box={
+                        name=in_\i_\j_\k,
+                        caption= ,
+                        fill=\InputColor,
+                        opacity=\Opacity,
+                        height=\PatchHeight,
+                        width=\PatchWidth,
+                        depth=\PatchDepth
+                    }};
+            \fi
+        }
+    }
+}
+
+
+\pic[shift={(0,0.5,4)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockBColor,
+        opacity=0.5,
+        height=8,
+        width=8,
+        depth=3
+        }
+    };
+\pic[shift={(0,3.5,4)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockBColor,
+        opacity=0.5,
+        height=18,
+        width=8,
+        depth=3
+        }
+    };
+\pic[shift={(0,6.5,4)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockBColor,
+        opacity=0.5,
+        height=8,
+        width=8,
+        depth=3
+        }
+    };
+\pic[shift={(2,0.5,4)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockBColor,
+        opacity=0.5,
+        height=8,
+        width=18,
+        depth=3
+        }
+    };
+\pic[shift={(2,3.5,4)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockBColor,
+        opacity=0.5,
+        height=18,
+        width=18,
+        depth=3
+        }
+    };
+\pic[shift={(2,6.5,4)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockBColor,
+        opacity=0.5,
+        height=8,
+        width=18,
+        depth=3
+        }
+    };
+\pic[shift={(6,0.5,4)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockBColor,
+        opacity=0.5,
+        height=8,
+        width=8,
+        depth=3
+        }
+    };
+\pic[shift={(6,3.5,4)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockBColor,
+        opacity=0.5,
+        height=18,
+        width=8,
+        depth=3
+        }
+    };
+\pic[shift={(6,6.5,4)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockBColor,
+        opacity=0.5,
+        height=8,
+        width=8,
+        depth=3
+        }
+    };
+
+\end{scope}
+
+\begin{scope}[shift={(20,0,0)}]
+
+\foreach \i in {0,...,7} {           % x
+    \foreach \j in {0,...,7} {       % y
+        \foreach \k in {0,...,4} {   % z
+            \def\drawblock{1}
+            \ifnum\drawblock=1
+                \pgfmathsetmacro{\x}{\i}
+                \pgfmathsetmacro{\y}{\j}
+                \pgfmathsetmacro{\z}{\k}
+
+                \pic[shift={(\x,\y,\z)}] at (0,0,0)
+                    {Box={
+                        name=in_\i_\j_\k,
+                        caption= ,
+                        fill=\InputColor,
+                        opacity=\Opacity,
+                        height=\PatchHeight,
+                        width=\PatchWidth,
+                        depth=\PatchDepth
+                    }};
+            \fi
+        }
+    }
+}
+
+\pic[shift={(6,6,-0.6)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockCColor,
+        opacity=0.5,
+        height=3,
+        width=3,
+        depth=23
+        }
+    };
+
+\pic[shift={(5,6,-0.6)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockCColor,
+        opacity=0.5,
+        height=3,
+        width=3,
+        depth=23
+        }
+    };
+
+\pic[shift={(4,6,-0.6)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockCColor,
+        opacity=0.5,
+        height=3,
+        width=3,
+        depth=23
+        }
+    };
+
+\pic[shift={(3,6,-0.6)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockCColor,
+        opacity=0.5,
+        height=3,
+        width=3,
+        depth=23
+        }
+    };
+
+\pic[shift={(2,6,-0.6)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockCColor,
+        opacity=0.5,
+        height=3,
+        width=3,
+        depth=23
+        }
+    };
+
+\pic[shift={(1,6,-0.6)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockCColor,
+        opacity=0.5,
+        height=3,
+        width=3,
+        depth=23
+        }
+    };
+
+\pic[shift={(0,6,-0.6)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockCColor,
+        opacity=0.5,
+        height=3,
+        width=3,
+        depth=23
+        }
+    };
+
+\pic[shift={(-1,6,-0.6)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockCColor,
+        opacity=0.5,
+        height=3,
+        width=3,
+        depth=23
+        }
+    };
+
+\pic[shift={(6,5,-0.6)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockCColor,
+        opacity=0.5,
+        height=3,
+        width=3,
+        depth=23
+        }
+    };
+
+\pic[shift={(6,4,-0.6)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockCColor,
+        opacity=0.5,
+        height=3,
+        width=3,
+        depth=23
+        }
+    };
+
+\pic[shift={(6,3,-0.6)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockCColor,
+        opacity=0.5,
+        height=3,
+        width=3,
+        depth=23
+        }
+    };
+
+\pic[shift={(6,2,-0.6)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockCColor,
+        opacity=0.5,
+        height=3,
+        width=3,
+        depth=23
+        }
+    };
+
+\pic[shift={(6,1,-0.6)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockCColor,
+        opacity=0.5,
+        height=3,
+        width=3,
+        depth=23
+        }
+    };
+
+\pic[shift={(6,0,-0.6)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockCColor,
+        opacity=0.5,
+        height=3,
+        width=3,
+        depth=23
+        }
+    };
+
+\pic[shift={(6,-1,-0.6)}] at (0,0,0) 
+    {Box={
+        name=out,
+        caption= ,
+        fill=\BlockCColor,
+        opacity=0.5,
+        height=3,
+        width=3,
+        depth=23
+        }
+    };
+
+\end{scope}
+
+
+
+\end{tikzpicture}
+\end{document}
