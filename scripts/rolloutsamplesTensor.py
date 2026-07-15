@@ -490,13 +490,13 @@ class ModelValidationPlot:
 import numpy as np
 from pathlib import Path
 
-CACHE_DIR = Path("temp/rollouts")
+CACHE_DIR = Path("scripts/temp/rollouts")
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
 def rollout_cache_path(dsplit_idx, traj_idx, label, model_type):
     safe_label = label.replace("/", "_").replace(" ", "_")
     safe_model = model_type.replace("/", "_").replace(" ", "_")
-    return CACHE_DIR / f"{dsplit_idx}__traj{traj_idx}__{safe_label}__{safe_model}.npz"
+    return CACHE_DIR / f"{dsplit_idx}__{traj_idx}__{safe_label}__.npz"
 
 def to_numpy(x):
     """Handle tensors, numpy arrays, and plain python scalars/lists uniformly."""
@@ -550,12 +550,14 @@ if __name__ == "__main__":
             for cfg in models_cfg:
                 print(f"\n{'='*50}\nLoading: {cfg['label']}\n{'='*50}")
 
-                cache_path = rollout_cache_path(dsplit_idx, traj_idx, cfg['label'], cfg['CM'])
-
+                
                 cb = load_yaml_as_dotdict(f"conf/base/{cfg['CB']}.yaml")
                 cd = load_yaml_as_dotdict(f"conf/data/{cfg['CD']}.yaml")
                 cm = load_yaml_as_dotdict(f"conf/model/{cfg['CM']}.yaml")
                 ct = load_yaml_as_dotdict(f"conf/training/{cfg['CT']}.yaml")
+
+                cache_path = rollout_cache_path(cd.datasets[dsplit_idx - 1]['name'], traj_idx, cfg['label'], cfg['CM'])
+
 
                 mv = ModelValidationPlot(
                     cb, cd, cm, ct,
@@ -565,6 +567,7 @@ if __name__ == "__main__":
                     fm_samples = cfg.get('fm_samples', 1),
                     dsplit     = dsplit_idx,
                 )
+                
 
                 traj_true_unnorm, traj_pred_unnorm, actual_traj_idx, rae_errors, rrmse_errors = mv.rollout_tensor(traj_idx)
 
