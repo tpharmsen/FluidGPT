@@ -487,6 +487,24 @@ class ModelValidationPlot:
         return unnorm_yhat, unnorm_y, trajs[traj], mean_rae_per_timestep, mean_rrmse_per_timestep
 
 
+import numpy as np
+from pathlib import Path
+
+CACHE_DIR = Path("temp/rollouts")
+CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+def rollout_cache_path(dsplit_idx, traj_idx, label, model_type):
+    safe_label = label.replace("/", "_").replace(" ", "_")
+    safe_model = model_type.replace("/", "_").replace(" ", "_")
+    return CACHE_DIR / f"{dsplit_idx}__traj{traj_idx}__{safe_label}__{safe_model}.npz"
+
+def to_numpy(x):
+    """Handle tensors, numpy arrays, and plain python scalars/lists uniformly."""
+    if hasattr(x, 'detach'):       # torch tensor
+        return x.detach().cpu().numpy()
+    return np.asarray(x)
+
+
 if __name__ == "__main__":
     traj_list =  [0,1,2,3,4,5,6,7,8,9]
     dataset_list = [1,2,3,4,5,6,7,8,9]
@@ -531,6 +549,9 @@ if __name__ == "__main__":
             results = []
             for cfg in models_cfg:
                 print(f"\n{'='*50}\nLoading: {cfg['label']}\n{'='*50}")
+
+                cache_path = rollout_cache_path(dsplit_idx, traj_idx, cfg['label'], cfg['CM'])
+
                 cb = load_yaml_as_dotdict(f"conf/base/{cfg['CB']}.yaml")
                 cd = load_yaml_as_dotdict(f"conf/data/{cfg['CD']}.yaml")
                 cm = load_yaml_as_dotdict(f"conf/model/{cfg['CM']}.yaml")
@@ -546,168 +567,33 @@ if __name__ == "__main__":
                 )
 
                 traj_true_unnorm, traj_pred_unnorm, actual_traj_idx, rae_errors, rrmse_errors = mv.rollout_tensor(traj_idx)
-                results.append((cfg['label'], actual_traj_idx, traj_pred_unnorm.cpu(), traj_true_unnorm.cpu(), rae_errors, rrmse_errors))
+
+                traj_pred_np = to_numpy(traj_pred_unnorm)
+                traj_true_np = to_numpy(traj_true_unnorm)
+                actual_traj_idx_np = to_numpy(actual_traj_idx)
+                rae_errors_np = to_numpy(rae_errors)
+                rrmse_errors_np = to_numpy(rrmse_errors)
+
+                # always overwrite, regardless of whether a file already exists there
+                np.savez_compressed(
+                    cache_path,
+                    label=cfg['label'],
+                    model_type=cfg['CM'],
+                    dsplit_idx=dsplit_idx,
+                    traj_idx=traj_idx,
+                    actual_traj_idx=actual_traj_idx_np,
+                    traj_pred=traj_pred_np,
+                    traj_true=traj_true_np,
+                    rae_errors=rae_errors_np,
+                    rrmse_errors=rrmse_errors_np,
+                    cfg=cfg,
+                )
+                print(f"Saved rollout to {cache_path}")
+
+                results.append((cfg['label'], actual_traj_idx_np, traj_pred_np, traj_true_np, rae_errors_np, rrmse_errors_np))
                 del mv
                 torch.cuda.empty_cache()
 
             print("\nAll models done, now plotting...")
 
-            T = traj_true_unnorm.shape[1]
-            timesteps = [0, 1, 2, (T) // 3, 2 * (T) // 3, T - 1]
-
-            trajtrue_denorm = results[0][2].squeeze()
-
-            fig, axes = plt.subplots(1, len(timesteps), figsize=(2 * len(timesteps), 3))
-            ax = axes.flatten()
-            for col, t in enumerate(timesteps):
-                frame = trajtrue_denorm[t]  # (C, H, W)
-
-                vx = frame[0]
-                vy = frame[1]
-                data = np.sqrt(vx**2 + vy**2)
-                im = ax[col].imshow(data.numpy(), cmap="viridis", origin="lower")
-                ax[col].set_xticks([])
-                ax[col].set_yticks([])
-
-                ax[col].set_title(f"t={t}", fontsize=11)
-                if col == 0:
-                    ax[col].set_ylabel(r"$\sqrt{x^2+y^2}$", fontsize=12, rotation=90, labelpad=20)
-
-            fig.suptitle(f"Ground truth radial velocity\nfor trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
-            #fig.supylabel(rf"$\sqrt{{x^2+y^2}}$", rotation=90)
-            plt.tight_layout(w_pad=0.05, h_pad=0.05)
-            plt.savefig(f'scripts/temp/target_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png', dpi=600)
-            del fig, axes, ax
-
-            timesteps = [5, 6, 7, (T - 5) // 3 + 5, 2 * (T - 5) // 3 + 5, T - 1]
-
-            fig, axes = plt.subplots(5, len(timesteps), figsize=(2 * len(timesteps), 12))
-            #fig.suptitle(f"Radial velocity components for trajectory {traj_idx} from dataset {DATASET_NAME}", fontsize=16)
-            row = 0
-              # (T, C, H, W)
-            for col, t in enumerate(timesteps):
-                frame = trajtrue_denorm[t]  # (C, H, W)
-
-                vx = frame[0]
-                vy = frame[1]
-                data = np.sqrt(vx**2 + vy**2)
-                im = axes[row, col].imshow(data.numpy(), cmap="viridis", origin="lower")
-                axes[row,col].set_xticks([])
-                axes[row, col].set_yticks([])
-
-                axes[row, col].set_title(f"t={t}", fontsize=12)
-                if col == 0:
-                    axes[row, col].set_ylabel("GT", fontsize=12, rotation=0, labelpad=20)
-
-            
-            for row in range(1, 5):
-                traj_denorm = results[row-1][3].squeeze()  # (T, C, H, W)
-                for col, t in enumerate(timesteps):
-                    frame = traj_denorm[t]  # (C, H, W)
-
-                    vx = frame[0]
-                    vy = frame[1]
-                    data = np.sqrt(vx**2 + vy**2)
-                    im = axes[row, col].imshow(data.numpy(), cmap="viridis", origin="lower")
-                    axes[row,col].set_xticks([])
-                    axes[row, col].set_yticks([])
-                    #if row == 4:
-                        #axes[row, col].set_xlabel(f"Timestep {t}", fontsize=12)
-                        #axes[row, col].set_title(f"t={t}", fontsize=11)
-                    if col == 0:
-                        axes[row, col].set_ylabel(f"{results[row-1][0]}", fontsize=12, rotation=0, labelpad=20)
-                    error = results[row-1][5][t]
-                    axes[row, col].text(
-                        0.98, 0.98,
-                        f"Error: {error:.4f}",
-                        transform=axes[row, col].transAxes,
-                        ha="right",
-                        va="top",
-                        fontsize=12,
-                        bbox=dict(facecolor="white", alpha=0.4, edgecolor="none")
-                    )
-
-            fig.suptitle(f"Radial velocity of model predictions\nfor trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
-            fig.supylabel(rf"$\sqrt{{x^2+y^2}}$", rotation=90)
-            plt.tight_layout(w_pad=0.2, h_pad=0.2)
-            plt.savefig(f'scripts/temp/preds_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png', dpi=600)
-
-            # ------------------------------------------------------------------
-            # Vorticity plots
-            # ------------------------------------------------------------------
-            def compute_vorticity(frame):
-                # frame: (C, H, W) with channels [vx, vy, ...]
-                vx = frame[0].numpy()
-                vy = frame[1].numpy()
-                dvy_dx = np.gradient(vy, axis=1)   # d(vy)/dx  -> along W
-                dvx_dy = np.gradient(vx, axis=0)   # d(vx)/dy  -> along H
-                return dvy_dx - dvx_dy
-
-            # --- single-row ground-truth vorticity panel ---
-            timesteps = [0, 1, 2, (T) // 3, 2 * (T) // 3, T - 1]
-
-            fig, axes = plt.subplots(1, len(timesteps), figsize=(2 * len(timesteps), 3))
-            ax = axes.flatten()
-            for col, t in enumerate(timesteps):
-                frame = trajtrue_denorm[t]  # (C, H, W)
-                vort = compute_vorticity(frame)
-                vmax = np.abs(vort).max()
-                im = ax[col].imshow(vort, cmap="viridis", origin="lower")
-                ax[col].set_xticks([])
-                ax[col].set_yticks([])
-
-                ax[col].set_title(f"t={t}", fontsize=11)
-                if col == 0:
-                    ax[col].set_ylabel(r"$\omega$", fontsize=12, rotation=90, labelpad=20)
-
-            fig.suptitle(f"Ground truth vorticity\nfor trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
-            #fig.supylabel(r"$\omega = \partial_x v_y - \partial_y v_x$", rotation=90)
-            plt.tight_layout(w_pad=0.05, h_pad=0.05)
-            plt.savefig(f'scripts/temp/vort_target_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png', dpi=600)
-            del fig, axes, ax
-
-            # --- 5-row ground-truth + model-prediction vorticity panel ---
-            timesteps = [5, 6, 7, (T - 5) // 3 + 5, 2 * (T - 5) // 3 + 5, T - 1]
-
-            fig, axes = plt.subplots(5, len(timesteps), figsize=(2 * len(timesteps), 12))
-            row = 0
-            for col, t in enumerate(timesteps):
-                frame = trajtrue_denorm[t]  # (C, H, W)
-                vort = compute_vorticity(frame)
-                vmax = np.abs(vort).max()
-                im = axes[row, col].imshow(vort, cmap="viridis", origin="lower")
-                axes[row, col].set_xticks([])
-                axes[row, col].set_yticks([])
-
-                axes[row, col].set_title(f"t={t}", fontsize=12)
-                if col == 0:
-                    axes[row, col].set_ylabel("GT", fontsize=12, rotation=0, labelpad=20)
-
-            for row in range(1, 5):
-                traj_denorm = results[row - 1][3].squeeze()  # (T, C, H, W)
-                for col, t in enumerate(timesteps):
-                    frame = traj_denorm[t]  # (C, H, W)
-                    vort = compute_vorticity(frame)
-                    vmax_row = np.abs(vort).max()
-                    im = axes[row, col].imshow(vort, cmap="viridis", origin="lower")
-                    axes[row, col].set_xticks([])
-                    axes[row, col].set_yticks([])
-                    if col == 0:
-                        axes[row, col].set_ylabel(f"{results[row - 1][0]}", fontsize=12, rotation=0, labelpad=20)
-                    error = results[row - 1][5][t]
-                    axes[row, col].text(
-                        0.98, 0.98,
-                        f"Error: {error:.4f}",
-                        transform=axes[row, col].transAxes,
-                        ha="right",
-                        va="top",
-                        fontsize=12,
-                        bbox=dict(facecolor="white", alpha=0.4, edgecolor="none")
-                    )
-
-            fig.suptitle(f"Vorticity of model predictions\nfor trajectory {results[0][1]} from dataset {cd.datasets[dsplit_idx - 1]['name']}", fontsize=24)
-            fig.supylabel(r"$\omega$", rotation=90)
-            plt.tight_layout(w_pad=0.2, h_pad=0.2)
-            plt.savefig(f'scripts/temp/vort_preds_{cd.datasets[dsplit_idx - 1]['name']}_{results[0][1]}.png', dpi=600)
-            #raise NotImplementedError("Temporary stop for debugging.")
         print(f"Done with dataset {dsplit_idx}")
