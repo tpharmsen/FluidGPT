@@ -1,30 +1,17 @@
-// Array of all slide files to load, in order.
-const slideFiles = [
-  'slides/01-title.html',
-  'slides/02-agenda.html',
-  'slides/03-divider.html',
-  'slides/04-content.html',
-  'slides/05-stats.html',
-  'slides/06-navierstokes.html',
-  'slides/07-researchquestions.html',
-  'slides/08-datasets.html',
-  'slides/09-models.html',
-  'slides/10-training.html',
-  'slides/11-results.html',
-];
+
+
 async function loadSlides() {
   const stage = document.getElementById('stage');
   
+  const response = await fetch("slides/slideslist.json");
+  const slideFiles = await response.json(); 
+
   // 1. Always load slides first so they are never invisible
   for (const file of slideFiles) {
-    try {
-      const response = await fetch(file);
-      const html = await response.text();
-      stage.insertAdjacentHTML('beforeend', html);
-    } catch (err) {
-      console.error(`Failed to load ${file}`, err);
-    }
-  }
+    const response = await fetch(`slides/${file}`);
+    const html = await response.text();
+    stage.insertAdjacentHTML("beforeend", html);
+}
   
   // 2. Fire up presentation controls right away so keys/dots work immediately
   initPresentation();
@@ -79,6 +66,7 @@ function initPresentation() {
     dots.forEach((d, i) => d.classList.toggle('active', i === current));
     
     // Update top progress bar width
+    document.getElementById('slide-counter').textContent = `${current + 1} / ${total}`;
     document.getElementById('progress-fill').style.width = `${((current + 1) / total) * 100}%`;
   }
   

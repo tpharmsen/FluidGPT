@@ -23,7 +23,8 @@ if [ $? -ne 0 ]; then
 fi
 
 # Convert DVI to SVG
-dvisvgm --font-format=woff "${BASE_NAME}.dvi" -o "$SVG_FILE"
+#dvisvgm --font-format=woff "${BASE_NAME}.dvi" -o "$SVG_FILE"
+dvisvgm --no-fonts "${BASE_NAME}.dvi" -o "$SVG_FILE"
 
 if [ $? -ne 0 ]; then
     echo "SVG conversion failed."

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025/Debian) (preloaded format=latex 2026.5.21)  14 JUL 2026 17:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025/Debian) (preloaded format=latex 2026.6.4)  15 JUL 2026 02:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -446,35 +446,25 @@ File: l3backend-dvips.def 2025-10-09 L3 backend support: dvips
 (./FM-alt.aux)
 \openout1 = `FM-alt.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-
-Overfull \hbox (31.83397pt too wide) in paragraph at lines 79--79
- [][][]\OT1/cmr/bx/n/14.4 Input[] 
- []
-
-
-Overfull \hbox (44.26726pt too wide) in paragraph at lines 429--429
- [][][]\OT1/cmr/bx/n/14.4 Output[] 
- []
-
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <14.4> on input line 442.
+(Font)              <14.4> on input line 443.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 442.
-[1
+(Font)              <7> on input line 443.
+ [1
 
 ] (./FM-alt.aux)
  ***********
@@ -484,11 +474,11 @@ L3 programming layer <2026-01-19>
  ) 
 Here is how much of TeX's memory you used:
  21985 strings out of 467534
- 502994 string characters out of 5422164
- 1773947 words of memory out of 5000000
+ 502994 string characters out of 5422165
+ 1773950 words of memory out of 5000000
  50662 multiletter control sequences out of 15000+600000
  631694 words of font info for 53 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  117i,11n,121p,410b,1350s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on FM-alt.dvi (1 page, 357600 bytes).
+Output written on FM-alt.dvi (1 page, 357628 bytes).

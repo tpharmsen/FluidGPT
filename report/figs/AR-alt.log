@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025/Debian) (preloaded format=latex 2026.5.21)  14 JUL 2026 17:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025/Debian) (preloaded format=latex 2026.6.4)  15 JUL 2026 02:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -443,7 +443,7 @@ File: l3backend-dvips.def 2025-10-09 L3 backend support: dvips
 \g__pdfannot_backend_link_int=\count310
 \g__pdfannot_backend_link_sf_int=\count311
 )
-No file AR-alt.aux.
+(./AR-alt.aux)
 \openout1 = `AR-alt.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 47.
@@ -460,21 +460,11 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 47.
 LaTeX Font Info:    ... okay on input line 47.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 47.
 LaTeX Font Info:    ... okay on input line 47.
-
-Overfull \hbox (31.83397pt too wide) in paragraph at lines 78--78
- [][][]\OT1/cmr/bx/n/14.4 Input[] 
- []
-
-
-Overfull \hbox (44.26726pt too wide) in paragraph at lines 428--428
- [][][]\OT1/cmr/bx/n/14.4 Output[] 
- []
-
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <14.4> on input line 614.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 614.
-[1
+ [1
 
 ] (./AR-alt.aux)
  ***********
@@ -483,12 +473,12 @@ L3 programming layer <2026-01-19>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 21543 strings out of 467534
- 492217 string characters out of 5422164
- 1696367 words of memory out of 5000000
- 50222 multiletter control sequences out of 15000+600000
+ 21546 strings out of 467534
+ 492262 string characters out of 5422165
+ 1696333 words of memory out of 5000000
+ 50223 multiletter control sequences out of 15000+600000
  631694 words of font info for 53 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  117i,10n,121p,410b,1350s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on AR-alt.dvi (1 page, 325592 bytes).
+Output written on AR-alt.dvi (1 page, 325584 bytes).
