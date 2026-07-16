@@ -301,13 +301,11 @@ def rollout_prb(front, model, steps, int_steps, from_frame, noisetype='puregauss
         sigma_space = kwargs.get("sigma_space", 1.0)
     model.eval()
     preds = []
-    saved_xt = []
 
     #preds.append(front)
     with torch.no_grad():
         xt = front.clone()
         preds.append(front[:,:,:from_frame])
-        saved_xt.append(xt.detach().cpu().numpy().copy())
         
         #print('\ntest\n')
         #print(steps)
@@ -320,7 +318,6 @@ def rollout_prb(front, model, steps, int_steps, from_frame, noisetype='puregauss
 
                 #print(pred.shape)
                 xt = xt.clone() + (1 / int_steps) * pred.clone()
-                saved_xt.append(xt.detach().cpu().numpy().copy())
             preds.append(xt[:,:,from_frame:].clone())
             if noisetype == "puregaussian":
                 xt = torch.cat((xt[:, :, -from_frame:], torch.randn([xt.shape[0], xt.shape[1], xt.shape[2] - from_frame, xt.shape[3], xt.shape[4]]).to(xt.device)), dim=2)
@@ -382,9 +379,6 @@ def rollout_prb(front, model, steps, int_steps, from_frame, noisetype='puregauss
             else:
                 raise ValueError(f"Unknown noisetype {noisetype}")
             #print(xt.shape)
-        saved_xt = np.stack(saved_xt)
-        np.savez_compressed("xt_trajectory.npz", xt=saved_xt)
-        raise NotImplementedError("This function is not fully implemented yet. The saved trajectory is stored in 'xt_trajectory.npz'.")
     preds = torch.cat(preds, dim=2)
     return preds
 
