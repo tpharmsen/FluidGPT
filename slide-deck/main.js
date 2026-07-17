@@ -60,23 +60,115 @@ function initPresentation() {
   // Core Render Function
   function render(){
     slides.forEach((s, i) => {
-      s.classList.toggle('is-active', i === current);
+      const isActive = i === current;
+      s.classList.toggle('is-active', isActive);
       s.classList.toggle('is-prev', i < current);
+
+      // Play/pause videos based on which slide is active
+      s.querySelectorAll('.slide-video').forEach(video => {
+        if (isActive) {
+          video.play().catch(err => console.log("Autoplay prevented:", err));
+        } else {
+          video.pause();
+          video.currentTime = 0;
+        }
+      });
     });
+
     dots.forEach((d, i) => d.classList.toggle('active', i === current));
-    
-    // Update top progress bar width
     document.getElementById('slide-counter').textContent = `${current + 1} / ${total}`;
     document.getElementById('progress-fill').style.width = `${((current + 1) / total) * 100}%`;
   }
   
   // Navigation Controls
+  const ZOOM_SCALE = 2.2;   // was effectively 3 (300%) before — lower = shallower zoom, more context per cell
+  const ANIM_MS = 380;
+
+  let zoomStep = -1; // -1 = whole slide, 0-8 = zoomed cell index
+
+  function getZoomCells() {
+    return slides[current].querySelectorAll('.zoom-cell');
+  }
+
+  // Maps a 0/1/2 row or col index to a background-position % for the given zoom scale
+  function cellPosition(idx, scale) {
+    const centerFraction = (idx + 0.5) / 3;
+    return (centerFraction * scale - 0.5) / (scale - 1) * 100;
+  }
+
+  function getFinalBoxRect() {
+    const w = window.innerWidth * 0.8;
+    const h = window.innerHeight * 0.8;
+    return { left: (window.innerWidth - w) / 2, top: (window.innerHeight - h) / 2, width: w, height: h };
+  }
+
+  function applyCropStyle(rect, bgSize, bgPos, withTransition) {
+    zoomCrop.style.transition = withTransition
+      ? `left ${ANIM_MS}ms ease, top ${ANIM_MS}ms ease, width ${ANIM_MS}ms ease, height ${ANIM_MS}ms ease, background-size ${ANIM_MS}ms ease, background-position ${ANIM_MS}ms ease`
+      : 'none';
+    zoomCrop.style.left = rect.left + 'px';
+    zoomCrop.style.top = rect.top + 'px';
+    zoomCrop.style.width = rect.width + 'px';
+    zoomCrop.style.height = rect.height + 'px';
+    zoomCrop.style.backgroundSize = bgSize;
+    zoomCrop.style.backgroundPosition = bgPos;
+  }
+
+  // fromImageRect: pass the source <img>'s rect only when opening from the flat slide (zoomStep -1 -> 0)
+  function openZoomCell(cell, fromImageRect) {
+    const img = cell.closest('.zoom-grid').querySelector('img');
+    const posX = cellPosition(+cell.dataset.col, ZOOM_SCALE);
+    const posY = cellPosition(+cell.dataset.row, ZOOM_SCALE);
+    const finalRect = getFinalBoxRect();
+
+    zoomCrop.style.backgroundImage = `url('${img.src}')`;
+    zoomOverlay.classList.add('is-open');
+
+    if (fromImageRect) {
+      // Start the crop box exactly on top of the real image, unzoomed — so the animation
+      // reads as "the image itself growing into the frame," not a modal popping in.
+      applyCropStyle(fromImageRect, '100% 100%', '0% 0%', false);
+      void zoomCrop.offsetHeight; // force reflow so the start state registers before we transition
+    }
+    applyCropStyle(finalRect, `${ZOOM_SCALE * 100}% ${ZOOM_SCALE * 100}%`, `${posX}% ${posY}%`, true);
+  }
+
+  function closeZoomAnimated(toImageRect) {
+    applyCropStyle(toImageRect, '100% 100%', '0% 0%', true);
+    setTimeout(() => zoomOverlay.classList.remove('is-open'), ANIM_MS);
+  }
+
   function goTo(i){
     current = Math.max(0, Math.min(total - 1, i));
+    zoomStep = -1;
+    zoomOverlay.classList.remove('is-open');
     render();
   }
-  function next(){ if (current < total - 1) goTo(current + 1); }
-  function prev(){ if (current > 0) goTo(current - 1); }
+
+  function next(){
+    const cells = getZoomCells();
+    if (cells.length && zoomStep < cells.length - 1) {
+      const openingFresh = zoomStep === -1;
+      zoomStep++;
+      openZoomCell(cells[zoomStep], openingFresh ? slides[current].querySelector('.zoom-grid img').getBoundingClientRect() : null);
+      return;
+    }
+    if (current < total - 1) goTo(current + 1);
+  }
+
+  function prev(){
+    const cells = getZoomCells();
+    if (zoomStep >= 0) {
+      zoomStep--;
+      if (zoomStep === -1) {
+        closeZoomAnimated(slides[current].querySelector('.zoom-grid img').getBoundingClientRect());
+      } else {
+        openZoomCell(cells[zoomStep], null);
+      }
+      return;
+    }
+    if (current > 0) goTo(current - 1);
+  }
 
   // Click Zones
   document.getElementById('zone-next').addEventListener('click', next);
@@ -101,9 +193,15 @@ function initPresentation() {
     touchX = null;
   });
 
+  const zoomOverlay = document.getElementById('zoom-overlay');
+  const zoomCrop = document.getElementById('zoom-crop');
+  let isZoomed = false;
+
   // Initial render call
   render();
 }
 
+
 // Boot the application
 loadSlides();
+

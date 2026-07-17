@@ -254,3 +254,36 @@ h2{
   user-select: none;
   pointer-events: none;
 }
+
+/* zoom stuff */
+
+.zoom-cells {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.zoom-cell {
+  cursor: zoom-in;
+  /* uncomment to debug hotspot alignment: */
+  /* outline: 1px solid red; */
+}
+
+#zoom-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 9999;
+}
+#zoom-overlay.is-open {
+  display: block;
+}
+#zoom-crop {
+  position: fixed;
+  background-repeat: no-repeat;
+  border-radius: 4px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
