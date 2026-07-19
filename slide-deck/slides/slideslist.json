@@ -13,11 +13,14 @@
   "075-flowmatching.html",
   "077-flowmatching.html",
   "079-researchquestions.html",
-  "080-datasets.html",
+  "085-datasets.html",
+  "086-datasets.html",
   "090-models.html",
+  "092-models.html",
   "093-models.html",
   "096-models.html",
   "100-training.html",
+  "105-training.html",
   "110-results.html",
   "111-results.html",
   "112-results.html",
@@ -29,5 +32,6 @@
   "118-results.html",
   "119-results.html",
   "120-results.html",
-  "121-results.html"
+  "121-results.html",
+  "125-results.html"
 ]

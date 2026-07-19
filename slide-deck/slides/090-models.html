@@ -1,17 +1,18 @@
-<section class="slide" style="display: flex; align-items: center; justify-content: space-between; gap: 40px;">
-  
-  <!-- Left Side: Content -->
-  <div style="flex: 1;">
-    <div class="kicker">Model Architecture</div>
-    <h2>Custom Space-then-time Windowed Attention</h2>
-  </div>
-
-  <!-- Right Side: Figure (Width restricted to 45% of the slide) -->
-  <figure style="flex: 0 0 45%; margin: 0; text-align: center;">
-    <img src="figs/BlockExplainerAll-alt.svg" style="width: 100%; height: auto;">
-    <figcaption style="margin-top: 15px; font-size: 14px; color: var(--ink-dim);">
-      Factorized space-then-time attention
-    </figcaption>
-  </figure>
-
+<section class="slide">
+  <div class="kicker">Models</div>
+  <h2>Model-specific Challenges</h2>
+  <ul class="bullets">
+    <li><b><span class="dim">Generalisation</span></li>
+    <li><b><span class="dim">Temporal Stability</span></li>
+      <ul class="sub-bullets"> 
+        <li><b><span class="dim">Native long-horizon in- and output</span></li>
+        <li><b><span class="dim">Capturing distribution of future states</span></li>
+      </ul>
+    <li><b><span class="dim">Efficiency</span></li>
+      <ul class="sub-bullets"> 
+        <li><b><span class="dim">Computational efficiency</span></li>
+        <li><b><span class="dim">High sample-efficiency</span></li>
+      </ul>
+    <li><b><span class="dim">Common backbone for comparability</span></li>
+  </ul>
 </section>

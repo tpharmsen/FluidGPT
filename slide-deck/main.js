@@ -91,8 +91,15 @@ function initPresentation() {
   }
 
   // Maps a 0/1/2 row or col index to a background-position % for the given zoom scale
-  function cellPosition(idx, scale) {
-    const centerFraction = (idx + 0.5) / 3;
+  function cellPosition(idx, scale, horizontal = false) {
+    let centerFraction = (idx + 0.5) / 3;
+
+    if (horizontal) {
+      const pull = 0.08; // 0 = original, 0.1 = stronger pull inward
+      if (idx === 0) centerFraction += pull;
+      if (idx === 2) centerFraction -= pull;
+    }
+
     return (centerFraction * scale - 0.5) / (scale - 1) * 100;
   }
 
@@ -117,7 +124,7 @@ function initPresentation() {
   // fromImageRect: pass the source <img>'s rect only when opening from the flat slide (zoomStep -1 -> 0)
   function openZoomCell(cell, fromImageRect) {
     const img = cell.closest('.zoom-grid').querySelector('img');
-    const posX = cellPosition(+cell.dataset.col, ZOOM_SCALE);
+    const posX = cellPosition(+cell.dataset.col, ZOOM_SCALE, true);
     const posY = cellPosition(+cell.dataset.row, ZOOM_SCALE);
     const finalRect = getFinalBoxRect();
 

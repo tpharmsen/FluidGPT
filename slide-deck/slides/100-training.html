@@ -1,14 +1,23 @@
 <section class="slide">
   <div class="kicker">Training & Validation</div>
-  <h2>Amira dataset sample</h2>
-
-  <figure style="margin-top: 30px; text-align: right;">
-    <video class="slide-video" width="900" loop muted playsinline>
-      <source src="anims/anim_Velocity Magnitude_amira_0.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-    <figcaption style="margin-top: 15px; font-size: 14px; color: var(--ink-dim);">
-      Factorized space-then-time attention
-    </figcaption>
-  </figure>
+  <h2>Training & Validation-specific Challenges</h2>
+  <ul class="bullets">
+    <li><b><span class="dim">Software</span></li>
+      <ul class="sub-bullets"> 
+        <li><b><span class="dim">Distributed training</span></li>
+        <li><b><span class="dim">Compatability with SLURM-based and containerized platforms</span></li>
+        <li><b><span class="dim">Pre-processing</span></li>
+      </ul>
+    <li><b><span class="dim">Hardware</span></li>
+      <ul class="sub-bullets"> 
+        <li><b><span class="dim">Storage</span></li>
+        <li><b><span class="dim">High interconnect</span></li>
+        <li><b><span class="dim">Compute power: NVIDIA DGX B200</span></li>
+      </ul>
+    <li><b><span class="dim">Validation Metrics</span></li>
+      <ul class="sub-bullets"> 
+        <li><b><span class="dim">Single-point estimates</span></li>
+        <li><b><span class="dim">Spectral fidelity</span></li>
+      </ul>
+  </ul>
 </section>
