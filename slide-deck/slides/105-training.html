@@ -1,60 +1,135 @@
 <section class="slide">
   <div class="kicker">Training & Validation</div>
-  <h2>NVIDIA DGX B200 Unified AI platform</h2>
+  <h2>NVIDIA DGX B200 Unified AI Platform</h2>
 
   <div style="
-      display: flex;
-      height: calc(100% - 5rem);
-      gap: 3rem;
-      margin-top: 1.5rem;
+      display:flex;
+      flex-direction:column;
+      height:calc(100% - 5rem);
+      gap:1.5rem;
+      margin-top:1.5rem;
   ">
-    <!-- Left column -->
+
+    <!-- ================= TOP ================= -->
     <div style="
-        flex: 1;
-        display: flex;
-        align-items: flex-start;
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        gap:1rem;
     ">
-      <ul style="
-          font-size: 1.2rem;
-          line-height: 1.7;
-          margin: 0;
-          padding-left: 1.5rem;
+
+      <!-- Bullet points -->
+      <div style="flex:1.6;">
+        <ul style="
+            font-size:1.2rem;
+            line-height:1.8;
+            margin:0;
+            padding-left:1.5rem;
+        ">
+          <li><b>8 Blackwell GPUs:</b> Up to $144 * 10^{15}$ FLOPS</li>
+          <li><b>Containerization</b> using Docker</li>
+          <li><b>Two NVIDIA certificates</b> --------------------> </li>
+        </ul>
+      </div>
+
+      <!-- Small placeholders -->
+      <div style="
+          width:440px;
+          display:flex;
+          flex-direction:row;
+          gap:1rem;
       ">
-        <li><b>B200 Blackwell chips:</b> Example explanation.</li>
-        <li><b>Containerization using Docker:</b> Example explanation.</li>
-        <li><b>2 Nvidia certificates:</b> Example explanation.</li>
-      </ul>
+
+        <div style="
+            height:150px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:0.9rem;
+        ">
+          <img
+            src="figs/nvidia-cert1.png"
+            alt="NVIDIA Certificate 1"
+            style="
+              width:100%;
+              height:100%;
+              object-fit:contain;
+            "
+          >
+          
+        </div>
+
+        <div style="
+            height:150px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:0.9rem;
+        ">
+          <img
+            src="figs/nvidia-cert2.png"
+            alt="NVIDIA Certificate 2"
+            style="
+              width:100%;
+              height:100%;
+              object-fit:contain;
+            "
+          >
+        </div>
+
+      </div>
+
     </div>
 
-    <!-- Right column -->
+    <!-- ================= BOTTOM ================= -->
     <div style="
-        width: 42%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        transform: translateY(-12rem);
-
+        flex:1;
+        display:flex;
+        align-items:center;
+        justify-content:center;
     ">
-      <img
-        src="figs/nvidia-dgx-b200-1.svg"
-        alt="Attention mechanism visualization"
-        style="
-          width: 100%;
-          max-height: 30vh;
-          object-fit: contain;
-        "
-      >
 
-      <img
-        src="/figs/nvidia-dgx-b200-2.svg"
-        alt="Swin Transformer architecture"
-        style="
-          width: 100%;
-          max-height: 40vh;
-          object-fit: contain;
-        "
-      >
+      <!-- Figure 1 -->
+      <div style="
+          flex:1;
+          text-align:center;
+      ">
+        <h3 style="margin-bottom:0.5rem;">
+          Inference Performance
+        </h3>
+
+        <img
+          src="figs/nvidia-dgx-b200-1.svg"
+          alt="Inference Performance"
+          style="
+            width:100%;
+            height:340px;
+            object-fit:contain;
+          "
+        >
+      </div>
+
+      <!-- Figure 2 -->
+      <div style="
+          flex:1;
+          text-align:center;
+      ">
+        <h3 style="margin-bottom:0.5rem;">
+          Training Performance
+        </h3>
+
+        <img
+          src="figs/nvidia-dgx-b200-2.svg"
+          alt="Training Performance"
+          style="
+            width:100%;
+            height:340px;
+            object-fit:contain;
+          "
+        >
+      </div>
+
     </div>
+
   </div>
 </section>
