@@ -1,60 +1,46 @@
 <section class="slide">
   <div class="kicker">Related Work</div>
-  <h2>Transformer models</h2>
+  <h2>Self-attention and transformer models</h2>
 
   <div style="
+      flex: 1;
       display: flex;
-      height: calc(100% - 5rem);
-      gap: 3rem;
-      margin-top: 1.5rem;
+      align-items: flex-start;
   ">
-    <!-- Left column -->
-    <div style="
-        flex: 1;
-        display: flex;
-        align-items: flex-start;
-    ">
-      <ul style="
-          font-size: 1.2rem;
-          line-height: 1.7;
-          margin: 0;
-          padding-left: 1.5rem;
-      ">
-        <li><b>Tokenization:</b> Example explanation.</li>
-        <li><b>QKV Matrices:</b> Example explanation.</li>
-        <li><b>Generalisability:</b> Example explanation.</li>
-      </ul>
-    </div>
+    <ul class="bullets">
+      <li><b>Tokenization:</b> Encode input sequences into high-dimensional vectors.</li>
+      <li><b>Self-attention:</b> Update token representations on context using QKV matrices.</li>
+      <li><b>Generalizability</b> to complex datasets</li>
+    </ul>
+  </div>
 
-    <!-- Right column -->
-    <div style="
-        width: 42%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        transform: translateY(-12rem);
 
-    ">
-      <img
-        src="figs/attention-inverted.png"
-        alt="Attention mechanism visualization"
-        style="
-          width: 100%;
-          max-height: 30vh;
-          object-fit: contain;
-        "
-      >
+  <div style="
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+  ">
+    <img
+      src="figs/attention-inverted.png"
+      alt="Attention mechanism visualization"
+      style="
+        width: 100%;
+        max-height: 30vh;
+        object-fit: contain;
+      "
+    >
 
-      <img
-        src="/figs/swin-edit.png"
-        alt="Swin Transformer architecture"
-        style="
-          width: 100%;
-          max-height: 40vh;
-          object-fit: contain;
-        "
-      >
-    </div>
+    <img
+      src="/figs/swin-edit.png"
+      alt="Swin Transformer architecture"
+      style="
+        width: 100%;
+        max-height: 40vh;
+        object-fit: contain;
+      "
+    >
+
   </div>
 </section>

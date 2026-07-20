@@ -1,27 +1,24 @@
-<section class="slide" style="display: flex; align-items: center; justify-content: space-between; gap: 40px;">
-  
-  <!-- Left Side: Content -->
-  <div style="flex: 1;">
-    <div class="kicker">Models</div>
-    <h2>Custom Space-then-time Windowed Attention</h2>
-    $$
-      
-      f_{\theta}:
-      \underbrace{\mathbf{S}_{t-4:t}}_{\text{5 previous states}}
-      \;\mapsto\;
-      \underbrace{\mathbf{S}_{t+1:t+5}}_{\text{5 future states}}.
-      
-    $$
-  </div>
-  <!-- Right Side: Figure (Width restricted to 45% of the slide) -->
+<section class="slide" >
+  <div class="kicker">Models</div>
+  <h2>Custom Attention Block</h2>
+
+  <ul class="bullets">
+    <li>
+      \(\mathcal{M}_{\theta}:\underbrace{\mathbf{S}_{t-4:t}}_{\text{5 previous states}}
+      \mapsto
+      \underbrace{\mathbf{S}_{t+1:t+5}}_{\text{5 future states}}\)
+    </li>
+    <li><b>Space-then-time attention:</b> First attends to spatial features (Swin) then temporal dependencies.</li>
+    <li><b>Efficient:</b> Reduces computational complexity while maintaining performance compared to all-at-once attention.*</li>
+  </ul>
+
   <figure style="flex: 0 0 45%; margin: 0; text-align: center;">
-    <img src="figs/BlockExplainerAll-alt.svg" style="width: 80%; height: auto;">
-  More informed on historical state
-  Efficient and suffers negligible performance loss compared to expensive full attention. 
+    <img src="figs/BlockExplainerAll-alt.svg" style="width: 60%; height: auto;">
+
   </figure>
-    <!-- Reference footer -->
-  <div style="width: 100%; text-align: center; font-size: 12px; color: var(--ink-dim);">
-    Source: Liu et al. (2025), <em>BCAT: A Block Causal Transformer for PDE Foundation Models for Fluid Dynamics</em>.
+  
+  <div style="width: 100%; text-align: left; font-size: 12px; color: var(--ink-dim);">
+    * Source: Liu et al. (2025), <em>BCAT: A Block Causal Transformer for PDE Foundation Models for Fluid Dynamics</em>.
   </div>
 
 </section>

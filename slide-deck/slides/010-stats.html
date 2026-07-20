@@ -1,28 +1,66 @@
 <section class="slide">
   <div class="kicker">Motivation</div>
-  <h2>The cost, in numbers</h2>
-  
-  <div class="stat-row">
-    <div class="stat hot">
-      <div class="num">4.2h</div>
-      <div class="label">PER RANS SIMULATION</div>
+  <h2>Computational Cost</h2>
+
+  <div style="
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:120px;
+    margin-top:40px;
+    align-items:start;
+  ">
+
+    <!-- Left column -->
+    <div style="display:flex; flex-direction:column; align-items:left;">
+      <div class="stat hot">
+        <div class="num">4.2h</div>
+        <div class="label">PDE SIMULATION</div>
+      </div>
+
+      <div style="
+        margin-top:30px;
+        color:rgba(255,255,255,0.7);
+        font-size:16px;
+        line-height:1.5;
+        text-align:left;
+      ">
+        <strong>Traditional Numerical Solvers</strong> require iterative,
+        sequential time-stepping over dense meshes to solve the
+        Navier-Stokes equations.
+      </div>
     </div>
-    <div class="stat cool">
-      <div class="num">&lt;1s</div>
-      <div class="label">TARGET SURROGATE INFERENCE</div>
+
+    <!-- Right column -->
+    <div style="display:flex; flex-direction:column; align-items:left;">
+      <div class="stat cool">
+        <div class="num">&lt;1s</div>
+        <div class="label">SURROGATE INFERENCE</div>
+      </div>
+
+      <div style="
+        margin-top:30px;
+        color:rgba(255,255,255,0.7);
+        font-size:16px;
+        line-height:1.5;
+        text-align:left;
+      ">
+        <strong>Surrogates</strong> bypass iterative steps via a single,
+        fully parallelized GPU forward pass, achieving a
+        <strong>~15,000x theoretical speedup</strong> for real-time
+        engineering design cycles.
+      </div>
     </div>
+
   </div>
 
-  <div class="comparison-details" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 30px; text-align: left;">
-    <div class="details-left" style="color: rgba(255,255,255,0.7); font-size: 16px; line-height: 1.5;">
-      <p><strong>Traditional Numerical Solvers:</strong> Bound by the CFL stability condition, requiring iterative, sequential time-stepping over dense meshes to solve the Navier-Stokes equations.</p>
-    </div>
-    <div class="details-right" style="color: rgba(255,255,255,0.7); font-size: 16px; line-height: 1.5;">
-      <p><strong>Surrogates:</strong> Bypass iterative steps via a single, fully parallelized GPU forward pass, unlocking a <strong>~15,000x theoretical speedup</strong> for real-time engineering design cycles.</p>
-    </div>
-  </div>
-
-  <div class="source" style="margin-top: 40px; font-size: 12px; color: rgba(255,255,255,0.6); font-family: monospace; text-align: left;">
-    SOURCE: LI ET AL. "FOURIER NEURAL OPERATOR FOR PARAMETRIC PDES" (ICLR) & PATHAK ET AL. "FOURCASTNET" (ACM)
+  <div class="source" style="
+    margin-top:40px;
+    font-size:12px;
+    color:rgba(255,255,255,0.6);
+    font-family:monospace;
+    text-align:left;
+  ">
+    SOURCE: LI ET AL. "FOURIER NEURAL OPERATOR FOR PARAMETRIC PDES" (ICLR) &
+    PATHAK ET AL. "FOURCASTNET" (ACM)
   </div>
 </section>
