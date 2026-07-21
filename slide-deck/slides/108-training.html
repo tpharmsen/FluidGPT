@@ -1,12 +1,12 @@
 <section class="slide">
-  <div class="kicker">Validation Methodology</div>
-  <h2>Error Metric &amp; Evaluation Protocol</h2>
+  <div class="kicker">Training & Validation</div>
+  <h2>Single-point evaluation & Corresponding Metric</h2>
 
   <ul class="bullets">
     <li><b>Relative Absolute Error (RAE)</b>
       <ul class="sub-bullets">
         <li>Primary pointwise, scale-invariant error metric</li>
-        <li><code>RAE = (1/N) &sum;ᵢ |yᵢ &minus; ŷᵢ| / |yᵢ|</code></li>
+        <li>\(\text{RAE} = \frac{1}{N}\sum_{i=1}^{N} \frac{ \left| y_i - \hat{y}_i \right| }{\left| y_i \right|}\) </li>
         <li>Summed over all spatial &amp; temporal dimensions of the predicted timeblock</li>
         <li>Computed in <code>float32</code> precision for accurate error measurement</li>
       </ul>
@@ -14,9 +14,8 @@
 
     <li><b>Single-Step Validation</b>
       <ul class="sub-bullets">
-        <li>5 ground-truth input timesteps &rarr; predict next timeblock (no feedback)</li>
-        <li>Isolates transition accuracy, avoids error accumulation</li>
-        <li>Metric: average per-sample error over next 5 predicted timesteps</li>
+        <li>5 ground-truth input timesteps &rarr; predict next timeblock</li>
+        <li>All possible input output-pairs are considered </li>
       </ul>
     </li>
 
@@ -24,15 +23,7 @@
       <ul class="sub-bullets">
         <li>Auto-regressive: predictions recursively fed back as inputs</li>
         <li>Errors computed at every timestep of the rollout horizon</li>
-        <li>Includes non-natural initialization step &rarr; tests OOD robustness</li>
-      </ul>
-    </li>
-
-    <li><b>Flow-Matching Sampling</b>
-      <ul class="sub-bullets">
-        <li>16 stochastic samples per input (8 for <code>amira</code>)</li>
-        <li>20-step Euler integration of velocity field over flow-time t<sub>f</sub></li>
-        <li>Errors aggregated across all drawn samples</li>
+        <li>Starts from non-natural initialization step</li>
       </ul>
     </li>
   </ul>

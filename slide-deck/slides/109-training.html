@@ -1,30 +1,31 @@
 <section class="slide">
-  <div class="kicker">Validation Methodology</div>
-  <h2>Spectral Diagnostics</h2>
+  <div class="kicker">Training & Validation</div>
+  <h2>Spectral Analysis & Corresponding Metric</h2>
 
-  <ul class="bullets">
-    <li><b>Motivation</b>
-      <ul class="sub-bullets">
-        <li>Pointwise error alone can't capture physical fidelity in turbulent flows</li>
-        <li>Assesses energy &amp; enstrophy cascade across scales (wavenumber k)</li>
-        <li>Excludes <code>pdebench-comp</code> (compressible, lacks incompressibility/pressure info)</li>
+  <div class="columns">
+    <div class="col-left">
+      <ul class="bullets">
+        <li>Pointwise error can't capture whether diverging predictions still reproduce the underlying physics of turbulent flows</li>
+        <li>Assesses whether models correctly reproduce the scale distribution of energy & enstrophy across wavenumber \(k\)</li>
+        <li>Each trajectory has its own ground-truth reference spectrum at time \(t\) &rarr; need for aggregation metric</li>
+        <li>Applied to energy spectrum \(E_n(k)\) and enstrophy spectrum \(Z_n(k)\)</li>
+        <li><b>Flowmatching Sampling</b>
+          <ul class="sub-bullets">
+            <li>16 rollout samples per input</li>
+            <li>20-step Euler integration of velocity field over flow-time \(t_f\)</li>
+          </ul>
+        </li>
+        <li>Excludes pdebench-comp due to insufficient data</li>
       </ul>
-    </li>
+    </div>
 
-    <li><b>Weighted Spectral Error Ratio</b>
-      <ul class="sub-bullets">
-        <li>Spectral ratio: <code>R<sub>n,m</sub>(k) = E<sup>pred</sup><sub>n,m</sub>(k) / E<sup>ref</sup><sub>n</sub>(k)</code></li>
-        <li>Energy weighting: <code>w<sub>n</sub>(k) = E<sup>ref</sup><sub>n</sub>(k) / &sum;ⱼ E<sup>ref</sup><sub>j</sub>(k)</code></li>
-        <li>Weighted error: <code>&epsilon;<sub>n,m</sub>(k) = w<sub>n</sub>(k) &middot; |R<sub>n,m</sub>(k) &minus; 1|</code></li>
-        <li>Generalized error: <code>&epsilon;&#772;(k) = (1/M) &sum;ₙ &sum;ₘ &epsilon;<sub>n,m</sub>(k)</code></li>
+    <div class="col-right">
+      <ul class="bullets">  
+        <li> At each time \(t\), for trajectory \(n\) and sample \(m\):</li>
+        <li>\( R_{n,m}(k) = \dfrac{E^{\mathrm{pred}}_{n,m}(k)}{E^{\mathrm{ref}}_n(k)} \)</li>
+        <li>\( w_n(k) = \dfrac{E^{\mathrm{ref}}_n(k)}{\sum_{j=1}^{N} E^{\mathrm{ref}}_j(k)} \)</li>
+        <li>\( \bar{\epsilon}(k) = \dfrac{1}{N M} \sum_{n=1}^{N} \sum_{m=1}^{M} w_n(k)\left|R_{n,m}(k)-1\right| \)</li>
       </ul>
-    </li>
-
-    <li><b>Applied to</b>
-      <ul class="sub-bullets">
-        <li>Kinetic energy spectrum E<sub>n</sub>(k)</li>
-        <li>Enstrophy spectrum Z<sub>n</sub>(k) (same procedure, E &rarr; Z)</li>
-      </ul>
-    </li>
-  </ul>
+    </div>
+  </div>
 </section>

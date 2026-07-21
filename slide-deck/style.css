@@ -287,3 +287,6 @@ h2{
   border-radius: 4px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
+
+.columns { display: flex; gap: 2rem; }
+.col-left, .col-right { flex: 1; }

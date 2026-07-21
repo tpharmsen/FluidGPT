@@ -1,0 +1,33 @@
+<section class="slide">
+  <div class="kicker">Models</div>
+  <h2>Our 4 models</h2>
+
+  <div style="position: relative; display: grid; grid-template-columns: 260px 1fr 1fr; grid-template-rows: 100px 1fr 1fr; width: 100%; max-width: 1100px; margin: 2.5rem auto 0 auto;">
+
+    <!-- big plus lines, spanning almost the entire grid -->
+    <div style="position: absolute; top: 0; bottom: 0; left: 260px; width: 3px; background: currentColor; opacity: 0.5;"></div>
+    <div style="position: absolute; left: 0; right: 0; top: 100px; height: 3px; background: currentColor; opacity: 0.5;"></div>
+
+    <!-- row 1: corner + column headers -->
+    <div></div>
+    <div style="display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 1.6rem; padding: 1rem 1.5rem;">Deterministic</div>
+    <div style="display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 1.6rem; padding: 1rem 1.5rem;">Probabilistic</div>
+
+    <!-- row 2: patch size 4 + values -->
+    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem 1rem 0; font-weight: 600; font-size: 1.3rem; white-space: nowrap;">
+      <img src="figs/grid4.png" alt="Patch size 4" style="width: 190px; height: 95px; object-fit: cover; border-radius: 6px;" />
+      <span>Patch size 4<br>+<br>model depth 3</span>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: center; padding: 3.5rem 1.5rem; font-weight: 600; font-size: 2rem;">AR-d3</div>
+    <div style="display: flex; align-items: center; justify-content: center; padding: 3.5rem 1.5rem; font-weight: 600; font-size: 2rem;">FM-d3</div>
+
+    <!-- row 3: patch size 8 + values -->
+    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem 1.5rem 1rem 0; font-weight: 600; font-size: 1.3rem; white-space: nowrap;">
+      <img src="figs/grid8.png" alt="Patch size 8" style="width: 190px; height: 95px; object-fit: cover; border-radius: 6px;" />
+      <span>Patch size 8<br>+<br>model depth 2</span>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: center; padding: 3.5rem 1.5rem; font-weight: 600; font-size: 2rem;">AR-d2</div>
+    <div style="display: flex; align-items: center; justify-content: center; padding: 3.5rem 1.5rem; font-weight: 600; font-size: 2rem;">FM-d2</div>
+
+  </div>
+</section>

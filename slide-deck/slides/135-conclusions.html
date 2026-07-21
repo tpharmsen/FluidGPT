@@ -1,25 +1,11 @@
 <section class="slide">
   <div class="kicker">Results</div>
   <h2>Conclusions</h2>
+  On the majority of datasets:<br>
   <ul class="bullets">
-    <li><b>RQ1: Single-step accuracy</b> <span class="dim">flow matching outperforms the deterministic baseline on nearly all datasets</span></li>
+    <li><b>RQ1: Single-step accuracy</b> <span class="dim">flow matching outperforms the deterministic baseline</span></li>
     <li><b>RQ2: Rollout stability</b> <span class="dim">probabilistic models accumulate error more slowly over long horizons</span></li>
     <li><b>RQ3: Spectral consistency</b> <span class="dim">flow matching reproduces energy and enstrophy spectra more accurately</span></li>
-    <li><b>Summary</b> <span class="dim">learning a distribution over future states drives the advantage, though it depends on the prior matching the data's frequency content</span></li>
-    <li><b>Limitations 
-      <ul class="sub-bullets">
-        <li><b>Prior definition</b> <span class="dim">a fixed, non-adapted prior limits performance on high-frequency, sharply-varying fields</span></li>
-        <li><b>Unobserved forcing</b> <span class="dim">no model receives external body-forcing information, capping rollout accuracy where such forcing is active</span></li>
-        <li><b>Comparability of models</b> <span class="dim">shared architecture aids fairness, but each formulation has its own tuning space, leaving part of the gap unexplained</span></li>
-        <li><b>Compressible spectral diagnostics</b> <span class="dim">velocity-only predictions cannot yield energy or enstrophy spectra for the compressible dataset</span></li>
-    <li><b>Future work</b> 
-      <ul class="sub-bullets">
-        <li>data-dependent priors</li>
-        <li>forcing terms as symbolic input</li>
-        <li>hyperparameter tuning</li>
-        <li>discretized grid & obstructed flow & density input & pressure input</li>
-        <li>validation/fine-tuning to new flow regimes</li>
-      </ul>
-    </li>
+    <li><b>Summary</b> <span class="dim">learning a distribution over future states yields a significant advantage, though it depends on the prior matching the data's frequency content</span></li>
   </ul>
 </section>
