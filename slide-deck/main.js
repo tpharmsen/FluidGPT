@@ -81,7 +81,7 @@ function initPresentation() {
   }
   
   // Navigation Controls
-  const ZOOM_SCALE = 2.2;   // was effectively 3 (300%) before — lower = shallower zoom, more context per cell
+  const ZOOM_SCALE = 2.6;   // was effectively 3 (300%) before — lower = shallower zoom, more context per cell
   const ANIM_MS = 380;
 
   let zoomStep = -1; // -1 = whole slide, 0-8 = zoomed cell index

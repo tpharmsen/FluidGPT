@@ -275,7 +275,7 @@ h2{
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.85);
+  background: #080e13;
   z-index: 9999;
 }
 #zoom-overlay.is-open {
@@ -285,7 +285,7 @@ h2{
   position: fixed;
   background-repeat: no-repeat;
   border-radius: 4px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  box-shadow: 0 20px 60px rgba(0,0,0,1);
 }
 
 .columns { display: flex; gap: 2rem; }
