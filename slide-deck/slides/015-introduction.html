@@ -2,9 +2,8 @@
   <div class="kicker">Motivation</div>
   <h2>Why surrogates are faster</h2>
   <ul class="bullets">
-    <li><b>Amortized inference cost</b> <span class="dim">replaces iterative numerical solvers with a single feed-forward pass</span></li>
-    <li><b>CFL condition independence</b> <span class="dim">allows jumping large temporal intervals without stability loss</span></li>
-    <li><b>Global context mapping</b> <span class="dim">captures full-domain spatial dependencies instantly, unlike localized, stencil-based PDE grid solvers</span></li>
-    <li><b>Massive native parallelism</b> <span class="dim">leverages GPU architectures directly rather than complex sequential CPU operations</span></li>
+    <li><b>Shortcut inference</b> <span class="dim">replaces iterative numerical solvers with a single forward pass of a neural network</span></li>
+    <li><b>Global context mapping</b> <span class="dim">captures full-domain spatial dependencies instantly, unlike localized PDE grid solvers</span></li>
+    <li><b>Hardware parallelism</b> <span class="dim">leverages GPU architectures directly rather than sequential CPU operations</span></li>
   </ul>
 </section>
