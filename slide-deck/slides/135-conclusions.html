@@ -2,9 +2,24 @@
   <div class="kicker">Results</div>
   <h2>Conclusions</h2>
   <ul class="bullets">
-    <li><b>Amortized inference cost</b> <span class="dim">replaces iterative numerical solvers with a single feed-forward pass</span></li>
-    <li><b>CFL condition independence</b> <span class="dim">allows jumping large temporal intervals without stability loss</span></li>
-    <li><b>Global context mapping</b> <span class="dim">captures full-domain spatial dependencies instantly, unlike localized, stencil-based PDE grid solvers</span></li>
-    <li><b>Massive native parallelism</b> <span class="dim">leverages GPU architectures directly rather than complex sequential CPU operations</span></li>
+    <li><b>RQ1: Single-step accuracy</b> <span class="dim">flow matching outperforms the deterministic baseline on nearly all datasets</span></li>
+    <li><b>RQ2: Rollout stability</b> <span class="dim">probabilistic models accumulate error more slowly over long horizons</span></li>
+    <li><b>RQ3: Spectral consistency</b> <span class="dim">flow matching reproduces energy and enstrophy spectra more accurately</span></li>
+    <li><b>Summary</b> <span class="dim">learning a distribution over future states drives the advantage, though it depends on the prior matching the data's frequency content</span></li>
+    <li><b>Limitations 
+      <ul class="sub-bullets">
+        <li><b>Prior definition</b> <span class="dim">a fixed, non-adapted prior limits performance on high-frequency, sharply-varying fields</span></li>
+      <li><b>Limitation: unobserved forcing</b> <span class="dim">no model receives external body-forcing information, capping rollout accuracy where such forcing is active</span></li>
+      <li><b>Limitation: comparability of models</b> <span class="dim">shared architecture aids fairness, but each formulation has its own tuning space, leaving part of the gap unexplained</span></li>
+      <li><b>Limitation: compressible spectral diagnostics</b> <span class="dim">velocity-only predictions can't yield energy or enstrophy spectra for the compressible dataset</span></li>
+    <li><b>Future work
+      <ul class="sub-bullets">
+        <li>data-dependent priors</li>
+        <li>forcing terms as symbolic input</li>
+        <li>hyperparameter tuning</li>
+        <li>discretized grid & obstructed flow & density input & pressure input</li>
+        <li>validation/fine-tuning to new flow regimes</li>
+      </ul>
+    </b> 
   </ul>
 </section>
