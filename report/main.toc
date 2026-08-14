@@ -134,6 +134,6 @@
 \contentsline {section}{\numberline {8.4}Future Work}{49}{section.8.4}%
 \contentsline {chapter}{\numberline {A}Appendix}{54}{appendix.A}%
 \contentsline {section}{\numberline {A.1}Trajectory-specific prediction visualizations in radial velocity components}{54}{section.A.1}%
-\contentsline {section}{\numberline {A.2}Trajectory-specific prediction visualizations in vorticity components}{144}{section.A.2}%
-\contentsline {section}{\numberline {A.3}Spectral Energy analysis specific to datasets}{234}{section.A.3}%
-\contentsline {section}{\numberline {A.4}Spectral Enstrophy analysis specific to datasets}{238}{section.A.4}%
+\contentsline {section}{\numberline {A.2}Trajectory-specific prediction visualizations in vorticity components}{81}{section.A.2}%
+\contentsline {section}{\numberline {A.3}Spectral Energy analysis specific to datasets}{108}{section.A.3}%
+\contentsline {section}{\numberline {A.4}Spectral Enstrophy analysis specific to datasets}{112}{section.A.4}%
