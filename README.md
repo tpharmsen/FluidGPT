@@ -1,5 +1,7 @@
 # FluidGPT
-Foundational modelling for Navier-Stokes, Auto-regressive (deterministic) approach VS (probabilistic) One-shot Flowmatching approach
+Foundational modelling for Navier-Stokes, Auto-regressive (deterministic) approach VS (probabilistic) Flowmatching approach
+
+Underneath are some old personal notes...
 
 conda activate grad312
 python src/train.py --CB [] -- CD [] --CM [] --CT [] --out folder --name wandb_name
